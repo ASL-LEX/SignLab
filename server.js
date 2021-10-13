@@ -98,7 +98,6 @@ async function createAdminUser(err, userInput) {
 }
 
 async function setSecurityRules() {
-  const securityRules = admin.securityRules();
   const src = "rules_version = '2';\n" +
     `
     service cloud.firestore {
@@ -118,12 +117,28 @@ async function setSecurityRules() {
       }
     }
     `
+    const storageSrc =`rules_version = '2';
+      service firebase.storage {
+        match /b/{bucket}/o {
+          match /users/{user=**} {
+            allow read, create, update: if request.auth.uid == user;
+            allow read, write: if request.auth.token.name == 'admin';
+          }
+        }
+      }
+    `;
   try {
+    const securityRules = admin.securityRules();
     const rulesFile = securityRules.createRulesFileFromSource('firestore.rules', src);
-    securityRules.createRuleset(rulesFile)
+    const storageRules = securityRules.createRulesFileFromSource('storage.rules', storageSrc);
+    await securityRules.createRuleset(rulesFile)
       .then((ruleSet) =>  securityRules.releaseFirestoreRuleset(ruleSet))
-      .then(() => console.log("Done"))
-      .catch((error) => console.log("Error updating ruleset: ".red + error));
+      .then(() => console.log("Created firebase firestore rules"))
+      .catch((error) => console.log("Error updating firestore ruleset: ".red + error));
+    await securityRules.createRuleset(storageRules)
+      .then((ruleSet) => securityRules.releaseStorageRuleset(ruleSet))
+      .then(() => console.log("Created firebase storage rules"))
+      .catch((error) => console.log("Error updating storage ruleset: ".red + error));
   } catch(error) {
     console.log(error);
   }
