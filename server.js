@@ -6,17 +6,12 @@ const prompt = require('prompt');
 const colors = require('colors');
 const app = express();
 const port = process.env.PORT || 8080;
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-
-prompt.message = "";
-prompt.delimiter = "";
-
 const adminAuth = admin.auth();
 const db = admin.firestore();
-
+let userEmail;
 const emailSchema = {
   properties: {
     email: {
@@ -45,13 +40,16 @@ const passwordCreationSchema = {
     }
   }
 }
-console.log('Welcome! Let\'s set up an administrative user'.magenta)
 
-prompt.start();
+function initializeNewUser() {
+  prompt.message = "";
+  prompt.delimiter = "";
+  console.log('Welcome! Let\'s set up an administrative user'.magenta)
 
-prompt.get(emailSchema, checkNewEmail);
-
-let userEmail;
+  prompt.start();
+  prompt.get(emailSchema, checkNewEmail);
+}
+/* User Creation Stuff */
 async function checkNewEmail(err, userInput) {
   // first check if user already exists and exit if this is the case
   try {
@@ -99,12 +97,36 @@ async function createAdminUser(err, userInput) {
   }
 }
 
+async function setSecurityRules() {
+  const securityRules = admin.securityRules();
+  const src = "rules_version = '2';\n" +
+    `
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        function isAdmin() {
+          return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+        }
+        // allow access to user document if is user OR if is admin user
+        match /users/{userDoc=**} {
+          allow read, create, update: if request.auth.uid == userDoc.id || isAdmin();
+          allow delete: if isAdmin();
+        }
+        match /resources/{resourceDoc} {
+          allow read, update: if request.auth.uid != null;
+          allow create, delete: if isAdmin();
+        }
+      }
+    }
+    `
+  try {
+    const rulesFile = securityRules.createRulesFileFromSource('firestore.rules', src);
+    securityRules.createRuleset(rulesFile)
+      .then((ruleSet) =>  securityRules.releaseFirestoreRuleset(ruleSet))
+      .then(() => console.log("Done"))
+      .catch((error) => console.log("Error updating ruleset: ".red + error));
+  } catch(error) {
+    console.log(error);
+  }
+}
 
-
-
-// app.get('/', (req, res) => {
-//   res.send('Server up and running');
-// });
-
-
-// app.listen(port, () => {console.log('server listening on port ' + port)});
+setSecurityRules();
