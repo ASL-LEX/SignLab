@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'admin-server';
+  title = 'Sign Lab Back-end Initialization Demo';
 }
