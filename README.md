@@ -11,14 +11,14 @@ Make sure that you have the following installed:
  Then clone or download this repository.
  
 ## Create a Firebase account
-In order to build and deploy this project, you must have a Firebase project. To get started with one, click  [here](firebase.google.com) and follow the step-by-step instructions.
+In order to build and deploy this project, you must have a Firebase project. To get started with one, click  [here](www.firebase.google.com), then "Get Started", and follow the step-by-step instructions to Create a Project.
 > **Note**: Make sure that your Firebase Project name is the unique name you want to use for your application
 
-Once your project has been successfully created, you will be redirected to console.firebase.google.com. From there, get to the project settings by clicking the gear icon in the left navigation menu.
+Once your project has been successfully created, you will be redirected to `console.firebase.google.com`. From there, get to the project settings by clicking the gear icon in the left navigation menu.
 
 ### Initializing an app on the Firebase Console
 1. Click the **</>** icon under *Your apps*
-2. Follow the prompts to "Add Firebase to your web app". Replace the `firebaseConfig` constant inside the **`firebaseConfig.ts`** file with your own `firebaseConfig`, which will be displayed to you during the step-by-step app initialization process. 
+2. Follow the prompts to "Add Firebase to your web app". Replace the `firebaseConfig` constant inside the **`firebaseConfig.js`** file with your own `firebaseConfig`, which will be displayed to you during the step-by-step app initialization process. 
 3. Generate a service account
 		- Service accounts > Generate new private key
 		- Save the private key as **`ServiceAccountKey.json`** and put it inside your copy of this folder. **NEVER** share this key with anyone as it will compromise the security of your application.

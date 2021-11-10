@@ -4,9 +4,10 @@ const serviceAccount = require(serviceAccountPath);
 const express = require('express');
 const prompt = require('prompt');
 const colors = require('colors');
+const fc = require('./firebaseConfig');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "projecttest1-85278.appspot.com"
+  storageBucket:fc.storageBucket
 });
 const adminAuth = admin.auth();
 const db = admin.firestore();
