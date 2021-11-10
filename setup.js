@@ -1,13 +1,12 @@
-const serviceAccountPath = '../ServiceAccountKey.json';
+const serviceAccountPath = './ServiceAccountKey.json';
 const admin = require('firebase-admin');
 const serviceAccount = require(serviceAccountPath);
 const express = require('express');
 const prompt = require('prompt');
 const colors = require('colors');
-const app = express();
-const port = process.env.PORT || 8080;
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "projecttest1-85278.appspot.com"
 });
 const adminAuth = admin.auth();
 const db = admin.firestore();
@@ -44,7 +43,11 @@ const passwordCreationSchema = {
 function initializeNewUser() {
   prompt.message = "";
   prompt.delimiter = "";
-  console.log('Welcome! Let\'s set up an administrative user'.magenta)
+  console.log("| *********************************************************  |");
+  console.log('   Welcome! Let\'s set up an administrative user.'.magenta)
+  console.log('   Follow the remaining prompts to create a new admin account.'.magenta)
+  console.log('   Please press enter on your keyboard after you answer each prompt'.magenta)
+  console.log("| *********************************************************  |");
 
   prompt.start();
   prompt.get(emailSchema, checkNewEmail);
@@ -144,4 +147,17 @@ async function setSecurityRules() {
   }
 }
 
-setSecurityRules();
+setSecurityRules().then(() => {
+  prompt.get({
+    description: 'Would you like to create a new admin user? (y/n) ',
+    type: 'string',
+    required: true
+  }, (err, res) => {
+    if (res.question === 'y') {
+      initializeNewUser();
+    } else {
+      console.log('Okay. Have a nice day.'.green);
+      process.exit();
+    }
+  })
+});
