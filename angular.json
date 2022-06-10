@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "admin-server": {
+    "signlab": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "admin-server:build"
+            "browserTarget": "signlab:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "admin-server:build:production"
+              "browserTarget": "signlab:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "admin-server:build"
+            "browserTarget": "signlab:build"
           }
         },
         "test": {
@@ -107,16 +107,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "admin-server:serve"
+            "devServerTarget": "signlab:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "admin-server:serve:production"
+              "devServerTarget": "signlab:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "admin-server"
+  "defaultProject": "signlab"
 }
