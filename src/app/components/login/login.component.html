@@ -1,0 +1,27 @@
+<div class = "container">
+      <p class="title">
+        ASL-LEX
+        <br><br>
+        SignLab
+      </p>
+
+      <form style="margin-left: 1%;" (ngSubmit)="authenticateUser()">
+        <div>
+          <label for="email" class="label">Enter Participant Email</label><br>
+          <input #emailElement type="email" class="form-control" id="email" autocomplete="off" [formControl]="email"><br>
+        </div>
+        <div>
+          <label for="password" class="label">Enter Password</label><br>
+          <input #passwordElement type="password" class="form-control" id="password" autocomplete="off" [formControl]="pass" ><br>
+        </div>
+        <button mat-stroked-button class = "button" type="submit">Submit</button>
+      </form>
+
+      <p id="browserCompatibility">Note: This app is only supported in
+        <a href="https://www.google.com/chrome/">Chrome</a> (version > 49),
+        <a href="https://www.microsoft.com/en-us/edge">Edge</a> (version > 79),
+        <a href="https://www.mozilla.org/en-US/firefox/">Firefox</a> (version > 25)
+        <br>
+        If you encounter any issues, please try a different browser. If the issue persists, please contact the ASL-LEX team.
+      </p>
+</div>
