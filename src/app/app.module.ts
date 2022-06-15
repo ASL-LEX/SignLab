@@ -6,6 +6,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { MaterialModule } from './modules/material.module';
 
 // Components
 import { AppComponent } from './app.component';
@@ -34,6 +35,7 @@ import { environment } from '../environments/environment';
     AngularFireFunctionsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

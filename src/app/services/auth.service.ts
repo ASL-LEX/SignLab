@@ -54,7 +54,6 @@ export class AuthService {
     } catch(error) {
       console.debug(`Failed to authenticate with Firebase
                      Authentication Error: ${error}`);
-
       return null; // Authentication failed
     }
   }
