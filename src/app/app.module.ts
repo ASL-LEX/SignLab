@@ -15,7 +15,7 @@ import { LoginComponent } from './components/login/login.component';
 
 // Routing
 import { RouterModule } from "@angular/router";
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './modules/app-routing.module';
 
 import { environment } from '../environments/environment';
 

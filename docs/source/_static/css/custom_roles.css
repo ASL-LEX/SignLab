@@ -1,0 +1,9 @@
+.missing-info {
+  color: red;
+  font-style: italic;
+}
+
+.todo {
+  color: blue;
+  font-style: italic;
+}
