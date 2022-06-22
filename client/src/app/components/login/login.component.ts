@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   /** Field for the users email */
-  email = new FormControl('');
+  username = new FormControl('');
   /** Field of the users password */
   pass = new FormControl('');
 
@@ -23,19 +23,19 @@ export class LoginComponent {
    */
   async authenticateUser(): Promise<void> {
     // Don't try to login if email and password are not present
-    if(!this.email.value || !this.pass.value) {
-      alert('Please enter email and password');
+    if(!this.username.value || !this.pass.value) {
+      alert('Please enter username and password');
       return;
     }
 
     // Attempt to login
-    const user = await this.authService.authenticate(this.email.value, this.pass.value)
+    const user = await this.authService.authenticate(this.username.value, this.pass.value)
 
     if(user) {
       // TODO: Reroute to dashboard
       console.log('Success');
     } else {
-      alert('Email or password is invalid');
+      alert('Username or password is invalid');
     }
   }
 }

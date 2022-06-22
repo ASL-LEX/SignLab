@@ -15,15 +15,6 @@ const main = async function () {
   const options = { relativeTo: __dirname };
   const server = await Glue.compose(Manifest.get('/'), options);
 
-  server.views({
-    engines: { handlebars: require('handlebars') },
-    path: './server/web/templates',
-    layout: 'layout',
-    layoutPath: './server/web/layouts',
-    partialsPath: './server/web/partials',
-    helpersPath: './server/web/helpers'
-  });
-
   await server.start();
 
   if (!Fs.existsSync('server/permission-config.json')){

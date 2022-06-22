@@ -17,7 +17,13 @@ describe('LoginComponent', () => {
     authSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
     authSpy.authenticate.and.callFake(async (username: string, password: string) => {
       if(username == validUsername && password == validPassword) {
-        return 'bob';
+          return {
+            email: 'bob@bu.edu',
+            name: 'bob',
+            roles: [],
+            username: 'bob',
+            _id: 'sadlkfj'
+          }
       }
       return null;
     });
@@ -36,13 +42,13 @@ describe('LoginComponent', () => {
   it(`should have fields for username and password`, () => {
     // Make sure the expected fields are present
     const compiled = login.nativeElement;
-    expect(compiled.querySelector('input#email')).toBeTruthy();
+    expect(compiled.querySelector('input#username')).toBeTruthy();
     expect(compiled.querySelector('input#password')).toBeTruthy();
   });
 
   it(`should call authentication login`, () => {
     // Pass in valid authentication credentials
-    login.componentInstance.email.setValue(validUsername);
+    login.componentInstance.username.setValue(validUsername);
     login.componentInstance.pass.setValue(validPassword);
     login.componentInstance.authenticateUser();
 

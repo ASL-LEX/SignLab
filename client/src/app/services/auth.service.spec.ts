@@ -4,27 +4,19 @@ describe('AuthService', () => {
   let service: AuthService;
 
   // Valid credentials for the mocked object
-  const validUsername = 'test@bu.edu';
+  const validUsername = 'test';
   const validPassword = 'password';
 
   // Invalid credentials for the mocked object
-  const invalidUsername = 'bad@bu.edu';
+  const invalidUsername = 'bad';
   const invalidPassword = 'not';
 
   beforeEach(() => {
-    // Make spy for the authentication service
-    const spy = jasmine.createSpyObj('AngularFireAuth', ['signInWithEmailAndPassword']);
-    spy.signInWithEmailAndPassword.and.callFake((username: string, password: string) => {
-      if(username == validUsername && password == validPassword) {
-        // Return a valid user with a known uid
-        return {
-          user: {
-            uid: 'bob'
-          }
-        }
-      }
-      throw new Error();
-    });
+    // Make spy for the authentication service, this one will always not
+    // authenticate
+    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise']);
+    spy.post.and.returnValue(spy);
+    spy.toPromise.and.callFake(() => { throw new Error(); });
 
     // Create unit under test
     service = new AuthService(spy);
@@ -55,8 +47,24 @@ describe('AuthService', () => {
 
   // Valid username and password combo should work
   it('should authorize valid credentials', async () => {
+    // Make a spy that will authenticate
+    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise'])
+    spy.post.and.returnValue(spy);
+    spy.toPromise.and.returnValue({
+      authHeader: 'test',
+      user: {
+        email: 'bob@bu.edu',
+        name: 'bob',
+        roles: [],
+        username: 'bob',
+        _id: 'sadlkfj'
+      }
+    });
+    service = new AuthService(spy);
+
     const result = await service.authenticate(validUsername, validPassword);
-    expect(result).toEqual('bob');
+    expect(result).not.toEqual(null);
+    expect(result?.username).toEqual('bob');
 
     // At this point should be authenticated
     expect(service.isAuthenticated()).toEqual(true);

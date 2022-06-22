@@ -69,8 +69,10 @@
     "nodemon": "1.x.x",
     "npm-run": "^4.1.2",
     "pre-commit": "1.x.x",
+    "prompt-sync": "^4.2.0",
     "promptly": "2.x.x",
-    "proxyquire": "1.x.x"
+    "proxyquire": "1.x.x",
+    "yargs": "^17.5.1"
   },
   "pre-commit": [
     "lint"

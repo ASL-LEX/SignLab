@@ -95,12 +95,12 @@ const config = {
     }
   },
   passwordComplexity: {
-    min: 8,
+    min: 4,
     max: 32,
     lowerCase: 1,
-    upperCase: 1,
-    numeric: 1,
-    symbol: 1,
+    upperCase: 0,
+    numeric: 0,
+    symbol: 0,
     requirementCount: 3
   },
   roles:[
