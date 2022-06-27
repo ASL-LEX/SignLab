@@ -514,6 +514,8 @@ const register = function (server, options) {
         assign: 'canChangeRoles',
         method: function (request, h){
 
+          console.log('here');
+
           return h.continue;
           /*User.highestRole(request.auth.credentials.user.roles) >= User.highestRole({ [request.params.role]: true }) ?
             reply(true) :

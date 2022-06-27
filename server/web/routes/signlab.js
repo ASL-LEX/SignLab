@@ -15,7 +15,18 @@ const register = function (server, _serverOptions) {
       auth: false
     },
     handler: (_request, reply) => {
-      return reply.redirect(`${server.info.uri}/index.html`);
+      return reply.redirect(`index.html`);
+    }
+  });
+
+  server.route({
+    method: 'GET',
+    path: '/admin',
+    options: {
+      auth: false
+    },
+    handler: (_request, reply) => {
+      return reply.redirect(`index.html`);
     }
   });
 

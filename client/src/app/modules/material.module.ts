@@ -9,11 +9,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {  from  } from 'rxjs';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 
-const MaterialComponents = [
-  MatButtonModule
-];
 
 @NgModule({
   imports: [
@@ -26,7 +25,10 @@ const MaterialComponents = [
     MatCheckboxModule,
     MatAutocompleteModule,
     MatGridListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatTableModule
   ],
   exports: [
     MatButtonModule,
@@ -38,7 +40,10 @@ const MaterialComponents = [
     MatCheckboxModule,
     MatAutocompleteModule,
     MatGridListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatTabsModule
   ],
  })
 export class MaterialModule { }

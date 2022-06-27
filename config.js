@@ -105,9 +105,12 @@ const config = {
   },
   roles:[
     {
-      name: 'analyst',
+      name: 'tagging',
       accessLevel: '1',
-      type: 'groupAdmin'
+    },
+    {
+      name: 'recording',
+      accessLevel: '1',
     },
     {
       name: 'clinician',

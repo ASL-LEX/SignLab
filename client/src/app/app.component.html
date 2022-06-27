@@ -1,8 +1,12 @@
-<nav>
-  <ul>
-    <li><a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login Component</a></li>
-    <li><a routerLink="/dash" routerLinkActive="active" ariaCurrentWhenActive="page">Dashboard Component</a></li>
-  </ul>
-</nav>
+<mat-toolbar class="navbar">
+  <div>SignLab</div>
+    <div>
+      <a mat-button>Tagging</a>
+      <a mat-button>Record Response</a>
+      <a mat-button routerLink='/admin'>Admin</a>
+      <a mat-button routerLink='/login'>Login</a>
+    </div>
+</mat-toolbar>
+
 <!-- The routed views render in the <router-outlet>-->
 <router-outlet></router-outlet>

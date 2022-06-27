@@ -1,3 +1,4 @@
 {
-  "ignore": ["./client/", "*.json", "*.md", "*.html", "*.handlerbars", "*.css", "docs/"]
+  "ignore": ["./client/", "*.json", "*.md", "*.html", "*.handlerbars", "*.css",
+             "docs/", ".git"]
 }

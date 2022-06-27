@@ -22,7 +22,7 @@ yargs
         return;
       }
       // Create the new user
-      await User.connect({ uri: config.get('/hapiMongoModels/mongodb/uri')})
+      await User.connect({ uri: config.get('/hapiMongoModels/mongodb/uri'), db: 'anchor'})
       const user = await User.create(argv.username, argv.password, argv.email, argv.name);
       console.log(`Created new user: ${user}`);
       return;
