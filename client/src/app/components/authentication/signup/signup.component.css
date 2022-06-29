@@ -1,13 +1,11 @@
-.container {
-  margin-top: 19%;
-  margin-left: 10%;
+.signup-container {
+  width: 100%;
 }
 
-.title {
-  font-size: 40px;
-  font-family: sans-serif;
-  padding: 1%;
-  margin-bottom: 1%;
+.signup-card {
+  max-width: 30%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .label {
@@ -54,13 +52,14 @@
   border-radius: 5px;
 }
 
-.button_back:hover{
+.button_back:hover {
   background-color: grey;
   color: black;
 }
 
-#username, #password{
-  width: 30%
+input {
+  width: 70%;
+  margin: 1rem;
 }
 
 #browserCompatibility {

@@ -69,4 +69,41 @@ describe('AuthService', () => {
     // At this point should be authenticated
     expect(service.isAuthenticated()).toEqual(true);
   });
+
+  // User availability testing, not-available
+  it('should be able to know when username and email is not available', async () => {
+    // Make a spy that "knows" of a used email and username
+    const spy = jasmine.createSpyObj('HttpClient', ['get', 'toPromise']);
+    spy.get.and.returnValue(spy);
+    spy.toPromise.and.returnValue({ username: false, email: false });
+    service = new AuthService(spy);
+
+    const result = await service.isUserAvailable('bob', 'bob@bu.edu');
+    expect(result).toEqual({username: false, email: false});
+  });
+
+  // User availability testing, fully available
+  it('should be able to know when a username and email is available', async () => {
+    // Make a spy that believe every username and email is available
+    const spy = jasmine.createSpyObj('HttpClient', ['get', 'toPromise']);
+    spy.get.and.returnValue(spy);
+    spy.toPromise.and.returnValue({ username: true, email: true });
+    service = new AuthService(spy);
+
+    const result = await service.isUserAvailable('bob', 'bob@bu.edu');
+    expect(result).toEqual({ username: true, email: true });
+  });
+
+  // User signup should return valid user
+  it('should be able to get back a valid user on signup', async () => {
+    // Make a spy that will return back an expected user
+    const user = { email: 'bob@bu.edu', name: 'bob', roles: [], username: 'bob', _id: '1' };
+    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise']);
+    spy.post.and.returnValue(spy);
+    spy.toPromise.and.returnValue(user);
+    service = new AuthService(spy);
+
+    const result = await service.signup(user.name, user.email, user.username, 'bobby');
+    expect(result).toEqual(user);
+  });
 });

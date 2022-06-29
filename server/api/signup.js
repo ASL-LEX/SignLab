@@ -116,61 +116,48 @@ const register = function (server, options) {
     }
   });
 
+  /**
+   * Get the requirements for signup. This currently is the complexity of
+   * the password which is required.
+   */
   server.route({
-    method: 'POST',
-    path: '/available',
+    method: 'GET',
+    path: '/api/signup/requirements',
     options: {
+      tags: ['api','auth'],
+      description: 'Get the signup requirements',
       auth: false,
-      validate: {
-        payload: {
-          email: Joi.string().email().lowercase().optional(),
-          username: Joi.string().token().lowercase().optional()
-        }
-      },
-      pre: [{
-        assign: 'vaildInput',
-        method: function (request, h) {
-
-          const username = request.payload.username;
-          const email = request.payload.email;
-
-          if (!username && !email) {
-            throw Boom.badRequest('invaild submission, submit username and/or email');
-          }
-          return h.continue;
-        }
-      }]
     },
-    handler: async function (request, h) {
-
-      const username = request.payload.username;
-      const user1 = await User.findOne({ username });
-
-      if (user1 && username) {
-        throw Boom.conflict('username already in use');
-      }
-
-      const email = request.payload.email;
-      const user2 = await User.findOne({ email });
-
-      if (user2 && email) {
-        throw Boom.conflict('email already in use');
-      }
-
-      if (user1 && !user2) {
-        return { email:false, username:true };
-      }
-      else if (!user1 && user2) {
-        return { email:true, username:false };
-      }
-      else if (user1 && user2) {
-        return { email:true, username:true };
-      }
-
-      return { email:false, username:false };
+    handler: (_request, _h) => {
+      return Config.get('/passwordComplexity');
     }
   });
 
+  /**
+   * Get if the given username is available
+   */
+  server.route({
+    method: 'GET',
+    path: '/api/signup/available',
+    options: {
+      description: 'Find out if the given email and username is available',
+      auth: false,
+      validate: {
+        query: {
+          username: Joi.string(),
+          email: Joi.string()
+        }
+      },
+    },
+    handler: async function (request, _h) {
+      const usernameAvailable = (await User.findOne({ username: request.query.username })) == null;
+      const emailAvailable = (await User.findOne({ email: request.query.email })) == null;
+      return {
+        username: usernameAvailable,
+        email: emailAvailable
+      };
+    }
+  });
 };
 
 module.exports = {

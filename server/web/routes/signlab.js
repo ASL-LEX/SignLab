@@ -30,6 +30,17 @@ const register = function (server, _serverOptions) {
     }
   });
 
+  server.route({
+    method: 'GET',
+    path: '/auth',
+    options: {
+      auth: false
+    },
+    handler: (_request, reply) => {
+      return reply.redirect(`index.html`);
+    }
+  });
+
   // The Angular resources (Javascript, css, etc)
   server.route({
     method: 'GET',

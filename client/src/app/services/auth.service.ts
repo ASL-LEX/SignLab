@@ -1,10 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/user';
+import{ ComplexityOptions } from 'joi-password-complexity';
 
 interface UserCredentials {
   authHeader: string;
   user: User;
+}
+
+/**
+ * Represents availability of the username and email
+ */
+interface UserAvailability {
+  username: boolean;
+  email: boolean;
 }
 
 /**
@@ -65,6 +74,72 @@ export class AuthService {
       console.debug(`Failed to authenticate user`);
       return null;
     }
+  }
+
+  /**
+   * Get the password complexity requirements. These are the requirements that
+   * must be meet for the password to be considered valid.
+   *
+   * NOTE: Currently this works by getting the password complexity from the
+   *       server and wraps up the data as an object. Ideally this may be done
+   *       with some shared schema. Or this request should instead check the
+   *       complexity of the password and return any error message to the
+   *       user
+   *
+   * @return Password complexity requirements
+   */
+  public async getPasswordComplexity(): Promise<ComplexityOptions> {
+    const result = await this.http.get<ComplexityOptions>(`http://localhost:9000/api/signup/requirements`).toPromise();
+
+    // Throw an error if the response does not come back with the requirements
+    if(!result) {
+      throw new Error('Failed to get password requirements from server');
+    }
+    return result;
+  }
+
+  /**
+   * Check to see if the given username and email combination is available
+   *
+   * @param username The username to check the availability of
+   * @param email The email to check the availability of
+   * @return Availability info
+   */
+  public async isUserAvailable(username: string, email: string): Promise<UserAvailability> {
+    const options = { params: { username: username, email: email } };
+    const result =
+      await this.http.get<UserAvailability>(`http://localhost:9000/api/signup/available`, options).toPromise();
+    if(!result) {
+      throw new Error('Failed to get user availability information');
+    }
+    return result;
+  }
+
+  /**
+   * Attempt to signup the given user. Will throw an error on failure. On
+   * success will return the newly created user.
+   *
+   * NOTE: This throws an error since all other validation should be handled
+   *       before this point. Therefore any error thrown should be unexpected.
+   *
+   * @param name The name of the new user
+   * @param email The email of the new user
+   * @param username The username of the new user
+   * @param password The password the user will use
+   * @return The newly created user
+   */
+  public async signup(name: string, email: string, username: string, password: string): Promise<User> {
+    const request = {
+      name: name,
+      email: email,
+      username: username,
+      password: password
+    };
+    const result = await this.http.post<User>(`http://localhost:9000/api/signup`, request).toPromise();
+    if(!result) {
+      throw new Error(`Failed to signup user`);
+    }
+    return result;
   }
 
   /**

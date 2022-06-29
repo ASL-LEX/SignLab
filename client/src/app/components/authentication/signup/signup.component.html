@@ -1,0 +1,49 @@
+<div class = "signup-container">
+  <mat-card class="signup-card">
+    <form [formGroup]="signupForm" class="signup-form" (ngSubmit)="signup()">
+
+      <!-- Name field -->
+      <label for="name" class="label">Name</label><br>
+      <input #nameElement type="username" class="form-control" id="name" autocomplete="off" formControlName="name"><br>
+      <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+        <div *ngIf="name?.errors?.['required']">
+          Name is required
+        </div>
+      </div>
+
+      <!-- Email field -->
+      <label for="email" class="label">Email</label><br>
+      <input #emailElement type="username" class="form-control" id="email" autocomplete="off" formControlName="email"><br>
+      <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+        <div *ngIf="email?.errors?.['required']">
+          Email is required
+        </div>
+      </div>
+
+      <!-- Username field -->
+      <label for="username" class="label">Username</label><br>
+      <input #usernameElement type="username" class="form-control" id="username" autocomplete="off" formControlName="username"><br>
+      <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="alert alert-danger">
+        <div *ngIf="username?.errors?.['required']">
+          Username is required
+        </div>
+      </div>
+
+      <!-- Password field -->
+      <label for="password" class="label">Enter Password</label><br>
+      <input #passwordElement type="password" class="form-control" id="password" autocomplete="off" formControlName="pass" ><br>
+      <div *ngIf="pass?.invalid && (pass?.dirty || pass?.touched)" class="alert alert-danger">
+        {{pass!.errors!.complexity}}
+      </div>
+
+      <!-- Confirm password field -->
+      <label for="confirmPass" class="label">Retype Password</label><br>
+      <input #confirmPasswordElement type="password" class="form-control" id="confirmPassword" autocomplete="off" formControlName="confirmPass" ><br>
+      <div *ngIf="signupForm.errors?.['mustMatch'] && (confirmPass?.dirty || confirmPass?.touched)" class="alert alert-danger">
+        Passwords don't match
+      </div>
+
+      <button mat-stroked-button class="button" type="submit" [disabled]="!signupForm.valid">Submit</button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,11 @@
+<div class = "login-container">
+  <mat-card class="login-card">
+    <form class="login-form" (ngSubmit)="authenticateUser()">
+      <label for="username" class="label">Enter Participant Username</label><br>
+      <input #usernameElement type="username" class="form-control" id="username" autocomplete="off" [formControl]="username"><br>
+      <label for="password" class="label">Enter Password</label><br>
+      <input #passwordElement type="password" class="form-control" id="password" autocomplete="off" [formControl]="pass" ><br>
+      <button mat-stroked-button class = "button" type="submit">Submit</button>
+    </form>
+  </mat-card>
+</div>

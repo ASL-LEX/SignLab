@@ -9,10 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // Components
 import { AppComponent } from './app.component';
 import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/authentication/login/login.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { UserControlComponent } from './components/admin-dashboard/user-control/user-control.component';
 import { VideoControlComponent } from './components/admin-dashboard/video-control/video-control.component';
+import { AuthenticateComponent } from './components/authentication/authenticate.component';
+import { SignupComponent } from './components/authentication/signup/signup.component';
 
 // Routing
 import { RouterModule } from "@angular/router";
@@ -25,7 +27,9 @@ import { AppRoutingModule } from './modules/app-routing.module';
     LoginComponent,
     AdminDashboardComponent,
     UserControlComponent,
-    VideoControlComponent
+    VideoControlComponent,
+    AuthenticateComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
