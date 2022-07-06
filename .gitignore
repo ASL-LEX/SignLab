@@ -10,7 +10,7 @@
 /bazel-out
 
 # dependencies
-/node_modules
+node_modules
 
 # profiling files
 chrome-profiler-events*.json
@@ -43,7 +43,7 @@ yarn-error.log
 testem.log
 /typings
 ServiceAccountKey.json
-/server/backups/**
+/server/src/backups/**
 !/server/backups/.gitkeep
 *.dtmp
 *.bkp

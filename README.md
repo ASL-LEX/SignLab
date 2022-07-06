@@ -1,66 +1,71 @@
-# SignLab Demo
+# SignLab
 
-## Prerequisites
+## Introduction
 
-Make sure that you have the following installed:
+SignLab is a tool for tagging short video clips. The most common use case
+is a researcher starting a dedicated instance of SignLab, uploading a
+series of videos with meta data for tagging, adding users to SignLab to
+assist in tagging, then having exporting the tagged data for further
+processing.
 
-> Node.js [Download](https://nodejs.org/en/download/)
+:warning: Further documentation on usage to come
 
-> Angular [Download](https://angular.io/cli)
+## Code Organization
 
- Then clone or download this repository.
+The code base is made up of an Angular front end (stored in `client/` folder)
+and a Hapi backend (stored in `server/` folder). A Dockerfile and Docker
+compose file is provided for packing up the application.
 
-## Create a Firebase account
-In order to build and deploy this project, you must have a Firebase project. To get started with one, click  [here](www.firebase.google.com), then "Get Started", and follow the step-by-step instructions to Create a Project.
-> **Note**: Make sure that your Firebase Project name is the unique name you want to use for your application
+The Angular front end is heavily coupled to the Hapi backend. Most of the
+logic is contained within the backend with the Angular front end acting
+just as an interface to the backend. The system workes by having the Hapi
+backend serve the compiled Angular front end as a static webpage.
 
-Once your project has been successfully created, you will be redirected to `console.firebase.google.com`. From there, get to the project settings by clicking the gear icon in the left navigation menu.
+The Hapi backend is based on a project [Anchor](https://github.com/hicsail/anchor)
+which provides a template for a Hapi + MongoDB server. Part of what is included
+from Anchor is a system for managing users, user roles, user authentication,
+MongoDB data access, static webpage serving, emailing service, and various
+other helpful tools. All of these features are build using existing common
+tools and just packaged up in a form that is easy to include in any backend.
 
-### Initializing an app on the Firebase Console
-1. Click the **</>** icon under *Your apps*
-2. Follow the prompts to "Add Firebase to your web app". Replace the `firebaseConfig` constant inside the **`firebaseConfig.js`** file with your own `firebaseConfig`, which will be displayed to you during the step-by-step app initialization process.
-3. Generate a service account
-		- Service accounts > Generate new private key
-		- Save the private key as **`ServiceAccountKey.json`** and put it inside your copy of this folder. **NEVER** share this key with anyone as it will compromise the security of your application.
+## Running the Code for Development
 
-## Database, Storage, and Admin User Setup
-#### Setting up security rules and administrative user account for the application
-1. Open your terminal.
-2. cd into your copy of this folder.
-3. type `npm run setup` and follow the command-line prompts
+The following steps will get you setup so you can test SignLab locally and
+test out changes in real time.
 
+1. (One time) Install packages for the client side and the server side.
 
-## Deployment
-### Whew! Now you can deploy the application and get started. How do we do that?
-You can accomplish this easily through Firebase Hosting. For more information, click [here](https://firebase.google.com/docs/hosting/quickstart). For the purposes of this application, however, you can set it up through the following commands in your terminal:
-> Note: for each of these steps, follow the prompts.
-1. **`firebase login`**
-2. **`firebase init hosting`**
-    1. *What do you want to use as your public directory?* **dist/prod**
-    2. *Configure as a single-page app (rewrite all urls to /index.html)?* **yes**
-    3. *Set up automatic builds and deploys with GitHub?* **No**
+```bash
+cd client
+npm install
+cd ../server
+npm install
+```
 
-    Verify that the `firebase.json` file looks like this:
-    ```
-    {
-      "hosting": {
-        "public": "dist/prod",
-        "ignore": [
-          "firebase.json",
-          "**/.*",
-          "**/node_modules/**"
-        ],
-        "rewrites": [
-          {
-            "source": "**",
-            "destination": "/index.html"
-          }
-        ]
-      }
-    }
-    ```
-3. `firebase deploy --only hosting`
+2. (Each time) Start up a MongoDB instance using the `mongod` command. Below is
+an example.
 
-    **Your project will now be live! Navigate to it to check it out.**
+```bash
+mongod --dbpath ~/data/signlab
+```
 
+3. (One time) Run the first time setup script for the Hapi backend.
 
+```bash
+cd server/
+node first-time-setup.js
+```
+
+4. (Each time) Start the Hapi backend
+
+```bash
+cd server/
+npm start
+```
+
+5. (Each time) Have the Angular code build as changes take place
+
+```bash
+cd client/
+ng build --watch
+```
