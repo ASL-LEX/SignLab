@@ -47,8 +47,9 @@ const register = function (server, options) {
   });
 
   server.auth.strategy('jwt', 'jwt', {
-    key: Config.get('/authSecret'),
-    verifyOptions: { algorithms: ['HS256'] },
+      key: Config.get('/authSecret'),
+      verifyOptions: { algorithms: ['HS256']
+    },
     validate: async function (decoded, request) {
 
       const token = await Token.findOne({ tokenId: decoded, active: true });
@@ -85,16 +86,18 @@ const register = function (server, options) {
 
 
   server.auth.strategy('session', 'cookie', {
-    password: Config.get('/authSecret'),
-    cookie: 'AuthCookie',
-    isSecure: false,
-    clearInvalid: true,
+    cookie: {
+      name: 'AuthCookie',
+      password: Config.get('/authSecret'),
+      isSecure: false,
+      clearInvalid: true,
+      path: '/',
+      ttl: 60000 * 30, //30 Minutes
+    },
     keepAlive: true,
-    ttl: 60000 * 30, //30 Minutes
     redirectTo: '/login',
     //appendNext: 'returnUrl',
     validateFunc: async function (request, data) {
-
       const id = data._id;
       const key = data.key;
 
@@ -158,8 +161,8 @@ const getPermissions = async function (request, userRoles) {
 module.exports = {
   name: 'auth',
   dependencies: [
-    'hapi-auth-basic',
-    'hapi-auth-cookie',
+    '@hapi/basic',
+    '@hapi/cookie',
     'hapi-auth-jwt2',
     'hapi-anchor-model'
   ],

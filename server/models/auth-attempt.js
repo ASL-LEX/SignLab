@@ -56,7 +56,7 @@ AuthAttempt.schema = Joi.object({
   ip: Joi.string().required(),
   os: Joi.string().required(),
   username: Joi.string().lowercase().required(),
-  createdAt: Joi.date().default(new Date(), 'time of creation')
+  createdAt: Joi.date().default(new Date())
 });
 
 AuthAttempt.routes = Hoek.applyToDefaults(AnchorModel.routes, {

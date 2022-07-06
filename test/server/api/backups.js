@@ -3,13 +3,13 @@ const AnchorApi = require('../../../server/anchor/anchor-api');
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const BackupApi = require('../../../server/api/backups');
 const Backup = require('../../../server/models/backup');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -59,7 +59,10 @@ lab.experiment('POST /api/backups', () => {
     request = {
       method: 'POST',
       url: '/api/backups',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'simple'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -117,7 +120,10 @@ lab.experiment('DELETE /api/backups/{id}', () => {
     request = {
       method: 'DELETE',
       url: '/api/backups/{id}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'simple'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }

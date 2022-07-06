@@ -2,14 +2,14 @@
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Mailer = require('../../../server/mailer');
 const Manifest = require('../../../manifest');
 const Signup = require('../../../server/api/signup');
 const User = require('../../../server/models/user');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -104,7 +104,7 @@ lab.experiment('POST /api/signup', () => {
       name: 'arezoo',
       email: 'asadeg02@bu.edu',
       username: 'asadeg02',
-      password: 'juststringspasswrod'
+      password: 'ju'
     };
 
     const response = await server.inject(request);

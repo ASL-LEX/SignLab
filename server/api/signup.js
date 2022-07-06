@@ -51,12 +51,9 @@ const register = function (server, options) {
 
           const complexityOptions = Config.get('/passwordComplexity');
 
-          try {
-            await Joi.validate(request.payload.password, new PasswordComplexity(complexityOptions));
-          }
-          catch (err) {
-
-            throw Boom.conflict('Password does not meet complexity standards');
+          const complexityCheck = (new PasswordComplexity(complexityOptions)).validate(request.payload.password);
+          if(complexityCheck.error) {
+           throw Boom.conflict('Password does not meet complexity standards');
           }
           return h.continue;
         }
@@ -98,7 +95,7 @@ const register = function (server, options) {
       const session = await Session.create(doc);
 
       const credentials = session._id + ':' + session.key;
-      const authHeader = 'Basic ' + new Buffer(credentials).toString('base64');
+      const authHeader = 'Basic ' + Buffer.from(credentials).toString('base64');
 
       //request.cookieAuth.set(session);
       const result = {
@@ -143,10 +140,10 @@ const register = function (server, options) {
       description: 'Find out if the given email and username is available',
       auth: false,
       validate: {
-        query: {
+        query: Joi.object({
           username: Joi.string(),
           email: Joi.string()
-        }
+        })
       },
     },
     handler: async function (request, _h) {

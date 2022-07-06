@@ -167,7 +167,6 @@ const register = function (server, options) {
     });
 
     Archive.on('error', (err) => {
-
       return err;
     });
 

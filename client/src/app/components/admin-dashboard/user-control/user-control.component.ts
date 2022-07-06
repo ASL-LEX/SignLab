@@ -32,7 +32,7 @@ export class UserControlComponent implements OnInit {
     // Get all of the users from the database and store the result in
     // `userData`
     this.userService.getUsers()
-      .then(response => { this.userData = response });
+      .then(response => { this.userData = response; });
   }
 
   /**

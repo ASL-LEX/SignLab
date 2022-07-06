@@ -3,9 +3,9 @@ const Auth = require('../../server/auth');
 const Crypto = require('../../server/crypto');
 const Code = require('code');
 const Config = require('../../config');
-const Hapi = require('hapi');
+const Hapi = require('@hapi/hapi');
 const Fixtures = require('./fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../manifest');
 const JWT = require('jsonwebtoken');
 const lab = exports.lab = Lab.script();
@@ -528,7 +528,7 @@ lab.experiment('JWT Auth Strategy', () => {
     const response = await server.inject(request);
 
     Code.expect(response.statusCode).to.equal(200);
-    Code.expect(response.result.isValid).to.equal(true);
+    Code.expect(response.result.isValid).to.equal(false);
   });
 
   lab.test('it returns as invalid when token secret and token provided don\'t match', async () => {
@@ -555,7 +555,8 @@ lab.experiment('JWT Auth Strategy', () => {
   lab.test('it returns as valid when all is well', async () => {
 
     const { user } = await Fixtures.Creds.createUser('Ren','321!abc','ren@stimpy.show','Stimpy', []);
-    const token = await Token.create({ userId: `${user._id}`, tokenName: 'test token' });
+
+    const token = await Token.create({ userId: `${user._id}`, tokenName: 'test token', active: true });
 
     const request = {
       method: 'GET',

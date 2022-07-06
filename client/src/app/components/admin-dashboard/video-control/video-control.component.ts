@@ -6,14 +6,18 @@ const VIDEO_DATA = [
     view: 'some_url',
     duration: 3,
     isEnabled: true,
-    isTagged: false
+    responderID: 'bob',
+    tag: '',
   },
   {
     prompt: 'tree',
     view: 'some_url',
     duration: 5,
     isEnabled: true,
-    isTagged: true
+    isTagged: true,
+    responderID: 'sam',
+    tag: 'bark',
+    tagger: 'mary'
   },
   {
     prompt: 'sand',
@@ -21,6 +25,9 @@ const VIDEO_DATA = [
     duration: 5,
     isEnabled: true,
     isTagged: true,
+    responderID: 'matt',
+    tag: 'desert',
+    tagger: 'brian'
   }
 ];
 
@@ -34,7 +41,8 @@ const VIDEO_DATA = [
   styleUrls: ['./video-control.component.css']
 })
 export class VideoControlComponent {
-  // TODO: Get roles dynamically from server
-  displayedColumns = ['prompt', 'view', 'duration', 'isEnabled', 'isTagged'];
+  // TODO: Expose UI for what headers to show
+  displayedColumns = ['prompt', 'view', 'tag', 'duration', 'isEnabled', 'isTagged',
+                      'responderID', 'tagger'];
   videoData = VIDEO_DATA;
 }

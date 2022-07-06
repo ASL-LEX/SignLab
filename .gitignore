@@ -43,7 +43,10 @@ yarn-error.log
 testem.log
 /typings
 ServiceAccountKey.json
-/server/backups
+/server/backups/**
+!/server/backups/.gitkeep
+*.dtmp
+*.bkp
 
 # System Files
 .DS_Store

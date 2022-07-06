@@ -3,7 +3,7 @@ const Backup = require('../../../server/models/backup');
 const Code = require('code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 
 const lab = exports.lab = Lab.script();
 const config = Config.get('/hapiAnchorModel/mongodb');

@@ -19,10 +19,10 @@ const register = function (server, options) {
       description: 'Log in with username and password.',
       auth: false,
       validate: {
-        payload: {
+        payload: Joi.object({
           username: Joi.string().lowercase().required(),
           password: Joi.string().required()
-        }
+        })
       },
       plugins: {
         'hapi-auth-cookie': {
@@ -108,9 +108,9 @@ const register = function (server, options) {
     path: '/api/login/forgot',
     options: {
       validate: {
-        payload: {
+        payload: Joi.object({
           email: Joi.string().email().lowercase().required()
-        }
+        })
       },
       pre: [{
         assign: 'user',
@@ -263,11 +263,11 @@ const register = function (server, options) {
       description: 'Verify Key to reset new password',
       auth: false,
       validate: {
-        payload: {
+        payload: Joi.object({
           key: Joi.string().required(),
           email: Joi.string().email().lowercase().required(),
           password: Joi.string().required()
-        }
+        })
       },
       pre: [{
         assign: 'user',

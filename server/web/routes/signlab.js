@@ -59,6 +59,6 @@ const register = function (server, _serverOptions) {
 
 module.exports = {
   name: 'web-signlab',
-  dependencies: ['inert'],
+  dependencies: ['@hapi/inert'],
   register
 };

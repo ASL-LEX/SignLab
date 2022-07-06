@@ -17,11 +17,11 @@ const register = function (server, options) {
         strategies: ['simple', 'session']
       },
       validate: {
-        query: {
+        query: Joi.object({
           term: Joi.string(),
           _type: Joi.string(),
           q: Joi.string()
-        }
+        })
       }
     },
     handler: async function (request, h) {
@@ -99,10 +99,9 @@ const register = function (server, options) {
 
             const complexityOptions = Config.get('/passwordComplexity');
 
-            try {
-              await Joi.validate(request.payload.password, new PasswordComplexity(complexityOptions));
-            }
-            catch (err) {
+            const complexityCheck = (new PasswordComplexity(complexityOptions)).validate(request.payload.password);
+
+            if(complexityCheck.error) {
               throw Boom.conflict('Password does not meet complexity standards');
             }
 
@@ -133,14 +132,14 @@ const register = function (server, options) {
         scope: PermissionConfigTable.PUT['/api/users/{id}'] || ['root']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000')
-        },
-        payload: {
+        }),
+        payload: Joi.object({
           username: Joi.string().token().lowercase().required(),
           email: Joi.string().email().lowercase().required(),
           name: Joi.string().required()
-        }
+        })
       },
       pre: [
         {
@@ -191,7 +190,9 @@ const register = function (server, options) {
         }
       };
 
-      const user = await User.findByIdAndUpdate(id, update);
+      const options = { returnDocument: 'after' };
+
+      const user = await User.findByIdAndUpdate(id, update, options);
 
       if (!user) {
         throw Boom.notFound('Document not found.');
@@ -210,13 +211,13 @@ const register = function (server, options) {
         scope: PermissionConfigTable.PUT['/api/users/{id}/participation'] || ['root']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000')
-        },
-        payload: {
+        }),
+        payload: Joi.object({
           inStudy: Joi.boolean().required(),
           studyID: Joi.number().required()
-        }
+        })
       }
     },
     handler: function (request, h) {
@@ -248,7 +249,7 @@ const register = function (server, options) {
         strategies: ['simple', 'session']
       },
       validate: {
-        payload: {
+        payload: Joi.object({
           username: Joi.string().token().lowercase().required(),
           email: Joi.string().email().lowercase().required(),
           name: Joi.string().required(),
@@ -258,7 +259,7 @@ const register = function (server, options) {
           phone: Joi.string().allow('').optional(),
           height: Joi.number().optional(),
           weight: Joi.number().optional()
-        }
+        })
       },
       pre: [
         {
@@ -335,12 +336,12 @@ const register = function (server, options) {
         scope: PermissionConfigTable.PUT['/api/users/{id}/password'] || ['root']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000')
-        },
-        payload: {
+        }),
+        payload: Joi.object({
           password: Joi.string().required()
-        }
+        })
       },
       pre: [
         {
@@ -356,12 +357,9 @@ const register = function (server, options) {
           method: async function (request, h) {
 
             const complexityOptions = Config.get('/passwordComplexity');
+            const complexityCheck = await (new PasswordComplexity(complexityOptions)).validate(request.payload.password);
 
-            try {
-              await Joi.validate(request.payload.password, new PasswordComplexity(complexityOptions));
-            }
-            catch (err) {
-
+            if(complexityCheck.error) {
               throw Boom.conflict('Password does not meet complexity standards');
             }
 
@@ -421,9 +419,9 @@ const register = function (server, options) {
         strategies: ['simple', 'session']
       },
       validate: {
-        payload: {
+        payload: Joi.object({
           password: Joi.string().required()
-        }
+        })
       },
       pre: [{
         assign: 'password',
@@ -439,11 +437,9 @@ const register = function (server, options) {
 
           const complexityOptions = Config.get('/passwordComplexity');
 
-          try {
-            await Joi.validate(request.payload.password, new PasswordComplexity(complexityOptions));
-          }
-          catch (err) {
+          const complexityCheck = (new PasswordComplexity(complexityOptions)).validate(request.payload.password);
 
+          if(complexityCheck.error) {
             throw Boom.conflict('Password does not meet complexity standards');
           }
 
@@ -476,9 +472,9 @@ const register = function (server, options) {
         scope: PermissionConfigTable.DELETE['/api/users/{id}'] || ['root']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000')
-        }
+        })
       }
     },
     handler: async function (request, h) {
@@ -502,13 +498,13 @@ const register = function (server, options) {
         strategies: ['simple', 'jwt', 'session']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000'),
           role: Joi.string().valid(...(Config.get('/roles').map((role) => {
 
             return role.name;
           })))
-        }
+        })
       },
       pre: [{
         assign: 'canChangeRoles',
@@ -585,13 +581,13 @@ const register = function (server, options) {
         strategies: ['simple', 'jwt', 'session']
       },
       validate: {
-        params: {
+        params: Joi.object({
           id: Joi.string().invalid('000000000000000000000000'),
           role: Joi.string().valid(...(Config.get('/roles').map((role) => {
 
             return role.name;
           })))
-        }
+        })
       },
       pre: [{
         assign: 'canChangeRoles',

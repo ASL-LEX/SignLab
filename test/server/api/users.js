@@ -3,13 +3,13 @@ const AnchorApi = require('../../../server/anchor/anchor-api');
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const User = require('../../../server/models/user');
 const UserApi = require('../../../server/api/users');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -62,7 +62,10 @@ lab.experiment('POST /api/users', () => {
     request = {
       method: 'POST',
       url: '/api/users',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -105,7 +108,7 @@ lab.experiment('POST /api/users', () => {
       name: 'user1',
       email: 'user1@stimpy.show',
       username: 'user1',
-      password: 'allstrings'
+      password: 'all'
     };
 
     const response = await server.inject(request);
@@ -141,7 +144,10 @@ lab.experiment('PUT /api/users/{id}', () => {
     request = {
       method: 'PUT',
       url: '/api/users/{id}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -228,7 +234,10 @@ lab.experiment('PUT /api/users/{id}/password', () => {
     request = {
       method: 'PUT',
       url: '/api/users/{id}/password',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -240,7 +249,7 @@ lab.experiment('PUT /api/users/{id}/password', () => {
     request.url = '/api/users/555555555555555555555555/password';
 
     request.payload = {
-      password: 'allstrings'
+      password: 'all'
     };
 
     const response = await server.inject(request);
@@ -288,7 +297,10 @@ lab.experiment('PUT /api/users/my/password', () => {
     request = {
       method: 'PUT',
       url: '/api/users/my/password',
-      credentials: authenticatedAdmin,
+      auth: {
+        credentials: authenticatedAdmin,
+        strategy: 'simple'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedAdmin.session._id, authenticatedAdmin.session.key)
       }
@@ -298,7 +310,7 @@ lab.experiment('PUT /api/users/my/password', () => {
   lab.test('it returns HTTP 409 when password does not meet complexity standard', async () => {
 
     request.payload = {
-      password: 'allstrings'
+      password: 'all'
     };
 
     const response = await server.inject(request);
@@ -330,7 +342,10 @@ lab.experiment('DELETE /api/users/{id}', () => {
     request = {
       method: 'DELETE',
       url: '/api/users/{id}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }

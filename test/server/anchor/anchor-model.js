@@ -1,6 +1,6 @@
 'use strict';
 const Joi = require('joi');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Code = require('code');
 const AnchorModel = require('../../../server/anchor/anchor-model');
 const Mongodb = require('mongodb');
@@ -11,7 +11,9 @@ const config = {
     uri: 'mongodb://localhost:27017',
     db: 'anchor-models-test'
   },
-  options: {}
+  options: {
+    useUnifiedTopology: true
+  }
 };
 
 lab.experiment('Connections', () => {
@@ -35,7 +37,7 @@ lab.experiment('Connections', () => {
       db: 'pill'
     };
 
-    await Code.expect(AnchorModel.connect(connection)).to.reject();
+    Code.expect(AnchorModel.connect(connection)).to.reject();
   });
 
   lab.test('it connects to multiple databases', async () => {
@@ -113,14 +115,11 @@ lab.experiment('Instance construction', () => {
         foo: Joi.string().default('foozball'),
         bar: Joi.string().default('barzball'),
         baz: Joi.string().default('bazzball')
-      }).default(() => {
-
-        return {
-          foo: 'llabzoof',
-          bar: 'llabzrab',
-          baz: 'llabzzab'
-        };
-      }, 'default stuff')
+      }).default({
+        foo: 'llabzoof',
+        bar: 'llabzrab',
+        baz: 'llabzzab'
+      })
     });
 
     const instance1 = new DummyModel({
@@ -879,9 +878,7 @@ lab.experiment('Proxy methods', () => {
     };
     const testDocs = await DummyModel.insertOne(document);
     const id = testDocs[0]._id;
-    const update = {
-      name: 'New Name'
-    };
+    const update = { $set: { name: 'New Name' } };
     const result = await DummyModel.findByIdAndUpdate(id, update);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -897,9 +894,7 @@ lab.experiment('Proxy methods', () => {
 
     const testDocs = await DummyModel.insertOne(document);
     const id = testDocs[0]._id;
-    const update = {
-      name: 'New Name'
-    };
+    const update = { $set: { name: 'New Name' } };
     const result = await DummyModel.findByIdAndUpdate(id, update);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -914,12 +909,8 @@ lab.experiment('Proxy methods', () => {
     };
     const testDocs = await DummyModel.insertOne(document);
     const id = testDocs[0]._id;
-    const update = {
-      name: 'New Name'
-    };
-    const options = {
-      returnOriginal: false
-    };
+    const update = { $set:  { name: 'New Name' } };
+    const options = {};
     const result = await DummyModel.findByIdAndUpdate(id, update, options);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -934,7 +925,7 @@ lab.experiment('Proxy methods', () => {
     await DummyModel.insertOne(document);
 
     const filter = { name: 'Ren' };
-    const update = { name: 'New Name' };
+    const update = { $set: { name: 'New Name' } };
     const result = await DummyModel.findOneAndUpdate(filter, update);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -951,7 +942,7 @@ lab.experiment('Proxy methods', () => {
     await DummyModel.insertOne(document);
 
     const filter = { name: 'Ren' };
-    const update = { name: 'New Name' };
+    const update = { $set: { name: 'New Name' } };
     const result = await DummyModel.findOneAndUpdate(filter, update);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -968,8 +959,8 @@ lab.experiment('Proxy methods', () => {
     await DummyModel.insertOne(document);
 
     const filter = { name: 'Ren' };
-    const update = { name: 'New Name' };
-    const options = { returnOriginal: true };
+    const update = { $set: { name: 'New Name'} };
+    const options = { };
     const result = await DummyModel.findOneAndUpdate(filter, update, options);
 
     Code.expect(result).to.be.an.instanceOf(DummyModel);
@@ -1009,7 +1000,7 @@ lab.experiment('Proxy methods', () => {
       isCool: true
     };
     const options = {
-      returnOriginal: true
+      returnDocument: 'after'
     };
     const result = await DummyModel.findOneAndReplace(filter, doc, options);
 

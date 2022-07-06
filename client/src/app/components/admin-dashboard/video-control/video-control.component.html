@@ -37,13 +37,31 @@
     <ng-container matColumnDef="isTagged">
       <th mat-header-cell *matHeaderCellDef> Tagged </th>
       <td mat-cell *matCellDef="let video">
-        <mat-checkbox [(ngModel)]="video.isTagged" disabled></mat-checkbox>
+        <mat-checkbox [(ngModel)]="video.tag" disabled></mat-checkbox>
       </td>
     </ng-container>
+
+    <!-- Person who recorded the video -->
+    <ng-container matColumnDef="responderID">
+      <th mat-header-cell *matHeaderCellDef> Video Recorder </th>
+      <td mat-cell *matCellDef="let video"> {{video.responderID}} </td>
+    </ng-container>
+
+    <!-- Tag associated with the video -->
+    <ng-container matColumnDef="tag">
+      <th mat-header-cell *matHeaderCellDef> Tag </th>
+      <td mat-cell *matCellDef="let video"> {{video.tag}} </td>
+    </ng-container>
+
+    <!-- Person who tagged the video -->
+    <ng-container matColumnDef="tagger">
+      <th mat-header-cell *matHeaderCellDef> Tagger </th>
+      <td mat-cell *matCellDef="let video"> {{video.tagger}} </td>
+    </ng-container>
+
+
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
-
 </div>

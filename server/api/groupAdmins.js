@@ -95,11 +95,11 @@ const register = function (server, options) {
         strategies: ['simple', 'session']
       },
       validate: {
-        query: {
+        query: Joi.object({
           term: Joi.string(),
           _type: Joi.string(),
           q: Joi.string()
-        }
+        })
       }
     },
     handler: async function (request, h) {
@@ -139,12 +139,12 @@ const register = function (server, options) {
         scope: PermissionConfigTable.GET['/api/groupAdmins/'] || ['root']
       },
       validate: {
-        query: {
+        query: Joi.object({
           fields: Joi.string(),
           sort: Joi.string().default('_id'),
           limit: Joi.number().default(20),
           page: Joi.number().default(1)
-        }
+        })
       }
     },
     handler: async function (request, h) {
@@ -179,12 +179,12 @@ const register = function (server, options) {
         strategies: ['simple', 'session']
       },
       validate: {
-        query: {
+        query: Joi.object({
           fields: Joi.string(),
           sort: Joi.string().default('_id'),
           limit: Joi.number().default(20),
           page: Joi.number().default(1)
-        }
+        })
       }
     },
     handler: async function (request, h) {

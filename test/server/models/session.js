@@ -3,7 +3,7 @@ const Code = require('code');
 const Config = require('../../../config');
 const Crypto = require('../../../server/crypto');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const Session = require('../../../server/models/session');
 
 const lab = exports.lab = Lab.script();

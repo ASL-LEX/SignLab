@@ -3,14 +3,14 @@ const Auth = require('../../../server/auth');
 const AuthAttempt = require('../../../server/models/auth-attempt');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Login = require('../../../server/api/login');
 const Mailer = require('../../../server/mailer');
 const Manifest = require('../../../manifest');
 const User = require('../../../server/models/user');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();

@@ -3,8 +3,8 @@ const AnchorApi = require('../../../server/anchor/anchor-api');
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const Mailer = require('../../../server/mailer');
 const Invite = require('../../../server/models/invite');
@@ -12,8 +12,8 @@ const InviteApi = require('../../../server/api/invites');
 const User = require('../../../server/models/user');
 const Signup = require('../../../server/api/signup');
 const Session = require('../../../server/models/session');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -66,6 +66,8 @@ lab.after(async () => {
   await server.stop();
 });
 
+// POST not currently supported
+/*
 lab.experiment('POST /api/invites', () => {
 
   const Mailer_sendEmail = Mailer.sendEmail;
@@ -81,7 +83,10 @@ lab.experiment('POST /api/invites', () => {
         email: 'newSailor@bu.edu',
         description: 'this is a test invitation'
       },
-      credentials:authenticatedRoot,
+      auth: {
+        credentials:authenticatedRoot,
+        strategy: 'simple'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(session._id, session.key)
       }
@@ -124,6 +129,8 @@ lab.experiment('POST /api/invites', () => {
     Code.expect(response.result).to.be.an.instanceOf(Invite);
   });
 });
+
+*/
 
 /*lab.experiment('POST /api/invites/{id}',  () => {
 

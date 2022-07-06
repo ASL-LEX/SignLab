@@ -3,13 +3,13 @@ const AnchorApi = require('../../../server/anchor/anchor-api');
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const SessionApi = require('../../../server/api/sessions');
 const Session = require('../../../server/models/session');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -60,7 +60,10 @@ lab.experiment('DELETE /api/sessions/my/{id}', () => {
     request = {
       method: 'DELETE',
       url: '/api/sessions/my/{id}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }

@@ -3,7 +3,7 @@ const Event = require('../../../server/models/event');
 const Code = require('code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 
 
 const lab = exports.lab = Lab.script();
@@ -26,7 +26,7 @@ lab.experiment('Event Model', () => {
 
   lab.test('it returns a new instance when create succeeds', async () => {
 
-    const event = await Event.create('eventName', 'userID');
+    const event = await Event.create({ name: 'eventName', userId: 'userID' });
     Code.expect(event).to.be.an.instanceOf(Event);
 
   });

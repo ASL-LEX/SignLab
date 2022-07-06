@@ -456,7 +456,7 @@ const register = function (server,serverOptions) {
         method: function (request,h) {
 
           const model = request.pre.model;
-          const { error, value } = Joi.validate(request.query,model.routes.getMy.query);
+          const { error, value } = model.routes.getMy.query.validate(request.query);
           if (error) {
             throw Boom.badRequest('Query not validated');
           }
@@ -617,7 +617,7 @@ const register = function (server,serverOptions) {
         method: function (request,h) {// TODO: need to figuer out a ay for query validations of datatbles
 
           const model = request.pre.model;
-          const { error, value } = Joi.validate(request.query, model.routes.getAll.query);
+          const { error, value } = model.routes.getAll.query.validate(request.query);
           if (error) {
             throw Boom.badRequest('Query not validated');
           }

@@ -1,5 +1,5 @@
 'use strict';
-const Glue = require('glue');
+const Glue = require('@hapi/glue');
 const Manifest = require('./manifest');
 const InitPC = require('./server/helper/initPermissionConfigFile');
 const Fs = require('fs');

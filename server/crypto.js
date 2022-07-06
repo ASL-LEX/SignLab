@@ -1,6 +1,6 @@
 'use strict';
 const Bcrypt = require('bcrypt');
-const UUID = require('uuid/v4');
+const { v4: UUID } = require('uuid');
 
 class Crypto {
 

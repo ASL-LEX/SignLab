@@ -3,7 +3,7 @@ const Invite = require('../../../server/models/invite');
 const Code = require('code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 
 const lab = exports.lab = Lab.script();
 const config = Config.get('/hapiAnchorModel/mongodb');
@@ -31,7 +31,7 @@ lab.experiment('Invite Model', () => {
     const description = 'This is a test invitation';
 
 
-    const invite = await Invite.create(name, email, description, userId);
+    const invite = await Invite.create({ name, email, description, userId });
 
     Code.expect(invite).to.be.an.instanceOf(Invite);
     Code.expect(invite.email).to.equal('test@gmail.com');

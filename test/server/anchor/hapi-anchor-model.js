@@ -1,7 +1,7 @@
 'use strict';
 const Code = require('code');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Fs = require('fs');
 const Proxyquire = require('proxyquire');
 

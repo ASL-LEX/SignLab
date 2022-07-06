@@ -82,8 +82,9 @@ class AnchorModel {
    * @param {string} [name=default] - an optional string to identify the connection. Used to support multiple connections along with the with(name) method.
    * @returns {Promise}
    */
-  static async connect(connection, options = {}, name = 'default') {
+  static async connect(connection, options = { }, name = 'default') {
 
+    options.useUnifiedTopology = true; // Required to silence depricated warning
     const client = await Mongodb.MongoClient.connect(connection.uri, options);
 
     AnchorModel.clients[name] = client;
@@ -105,7 +106,7 @@ class AnchorModel {
     const db = dbFromArgs(args);
     const collection = db.collection(this.collectionName);
 
-    return collection.count.apply(collection, args);
+    return collection.countDocuments.apply(collection, args);
   }
 
   /**
@@ -317,9 +318,7 @@ class AnchorModel {
     const collection = db.collection(this.collectionName);
     const id = args.shift();
     const update = args.shift();
-    const defaultOptions = {
-      returnOriginal: false
-    };
+    const defaultOptions = {};
     if (this.timestamps) {
       if (update.$set) {
         update.$set.updatedAt = new Date();
@@ -387,9 +386,7 @@ class AnchorModel {
     const collection = db.collection(this.collectionName);
     const filter = args.shift();
     const doc = args.shift();
-    const defaultOptions = {
-      returnOriginal: false
-    };
+    const defaultOptions = {};
     const options = Hoek.applyToDefaults(defaultOptions, args.pop() || {});
 
     args.push(filter);
@@ -417,9 +414,7 @@ class AnchorModel {
     const collection = db.collection(this.collectionName);
     const filter = args.shift();
     const doc = args.shift();
-    const defaultOptions = {
-      returnOriginal: false
-    };
+    const defaultOptions = {};
     if (this.timestamps) {
       if (doc.$set) {
         doc.$set.updatedAt = new Date();
@@ -880,13 +875,11 @@ class AnchorModel {
   }
 
   static validate(input) {
-
-    return Joi.validate(input, this.schema);
+    return this.schema.validate(input);
   }
 
   validate() {
-
-    return Joi.validate(this, this.constructor.schema);
+    return this.constructor.schema.validate(this);
   }
 
   static with(name) {
@@ -1001,11 +994,11 @@ AnchorModel.routes = {
   getAll: {
     auth:true,
     disabled: false,
-    query: {
+    query: Joi.object({
       sort: Joi.string().default('_id'),
       limit: Joi.number().default(20),
       page: Joi.number().default(1)
-    },
+    }),
     scope: DefaultScopes,
     handler: async (request,h) => {
 
@@ -1077,11 +1070,11 @@ AnchorModel.routes = {
   getMy: {
     auth:true,
     disabled: false,
-    query: {
+    query: Joi.object({
       sort: Joi.string().default('_id'),
       limit: Joi.number().default(20),
       page: Joi.number().default(1)
-    },
+    }),
     scope: DefaultScopes,
     handler: async (request,h) => {
 

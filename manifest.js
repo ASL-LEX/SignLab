@@ -22,19 +22,19 @@ const manifest = {
   register: {
     plugins: [
       {
-        plugin:'inert'
+        plugin:'@hapi/inert'
       },
       {
-        plugin: 'vision'
-      },
-      {
-        plugin: 'hapi-auth-cookie'
+        plugin: '@hapi/cookie'
       },
       {
         plugin: 'hapi-auth-jwt2'
       },
       {
-        plugin: 'hapi-auth-basic'
+        plugin: '@hapi/basic'
+      },
+      {
+        plugin: '@hapi/vision'
       },
       {
         plugin: 'hapi-remote-address'
@@ -48,9 +48,6 @@ const manifest = {
       },
       {
         plugin: './server/anchor/anchor-api'
-      },
-      {
-        plugin: './server/anchor/anchor-web-route'
       },
       {
         plugin: './server/anchor/hapi-anchor-api'
@@ -90,7 +87,7 @@ const manifest = {
             description: `Anchor API`
           },
           grouping: 'tags',
-          sortTags: 'name',
+          sortTags: 'alpha',
           tags: [
             {
               name: 'anchor-api',

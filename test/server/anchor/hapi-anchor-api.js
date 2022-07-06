@@ -1,8 +1,8 @@
 'use strict';
 const Auth = require('../../../server/auth');
 const Code = require('code');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Fs = require('fs');
 const Manifest = require('../../../manifest');
 const Proxyquire = require('proxyquire');

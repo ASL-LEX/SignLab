@@ -3,13 +3,13 @@ const AnchorApi = require('../../../server/anchor/anchor-api');
 const Auth = require('../../../server/auth');
 const Code = require('code');
 const Fixtures = require('../fixtures');
-const Hapi = require('hapi');
-const Lab = require('lab');
+const Hapi = require('@hapi/hapi');
+const Lab = require('@hapi/lab');
 const Manifest = require('../../../manifest');
 const EventApi = require('../../../server/api/events');
 const Event = require('../../../server/models/event');
-const HapiAuthBasic = require('hapi-auth-basic');
-const HapiAuthCookie = require('hapi-auth-cookie');
+const HapiAuthBasic = require('@hapi/basic');
+const HapiAuthCookie = require('@hapi/cookie');
 const HapiAuthJWT = require('hapi-auth-jwt2');
 
 const lab = exports.lab = Lab.script();
@@ -59,7 +59,10 @@ lab.experiment('POST /api/events/{name}', () => {
     request = {
       method: 'POST',
       url: '/api/events/{name}',
-      credentials:authenticatedRoot,
+      auth: {
+        credentials:authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -92,7 +95,10 @@ lab.experiment('GET /api/events/name/{name}', () => {
     request = {
       method: 'GET',
       url: '/api/events/name/{name}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -106,7 +112,7 @@ lab.experiment('GET /api/events/name/{name}', () => {
 
   lab.test('it returns HTTP 200 when all is well', async () => {
 
-    const event = await Event.create('test event', authenticatedRoot.user._id.toString());
+    const event = await Event.create({ name: 'test event', userId: authenticatedRoot.user._id.toString() });
 
     request.url = '/api/events/name/' + event.name;
 
@@ -128,7 +134,10 @@ lab.experiment('GET /api/events/user/{userId}', () => {
     request = {
       method: 'GET',
       url: '/api/events/user/{userId}',
-      credentials: authenticatedRoot,
+      auth: {
+        credentials: authenticatedRoot,
+        strategy: 'basic'
+      },
       headers: {
         authorization: Fixtures.Creds.authHeader(authenticatedRoot.session._id, authenticatedRoot.session.key)
       }
@@ -142,7 +151,7 @@ lab.experiment('GET /api/events/user/{userId}', () => {
 
   lab.test('it returns HTTP 200 when all is well', async () => {
 
-    await Event.create('test event', authenticatedRoot.user._id.toString());
+    await Event.create({ name: 'test event', userId: authenticatedRoot.user._id.toString() });
 
     request.url = '/api/events/user/' + authenticatedRoot.user._id.toString();
 

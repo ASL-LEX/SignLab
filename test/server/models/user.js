@@ -2,7 +2,7 @@
 const Code = require('code');
 const Config = require('../../../config');
 const Fixtures = require('../fixtures');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 const User = require('../../../server/models/user');
 
 const lab = exports.lab = Lab.script();
