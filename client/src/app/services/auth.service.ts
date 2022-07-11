@@ -59,7 +59,7 @@ export class AuthService {
     const credentials = { username: username, password: password };
 
     try {
-      const response = await this.http.post<UserCredentials>(`http://localhost:9000/api/login`, credentials, {}).toPromise();
+      const response = await this.http.post<User>(`http://localhost:3000/api/auth/login`, credentials, {}).toPromise();
 
       // If the object is invalid, assumed failed login attempt
       if(response === undefined) {
@@ -68,8 +68,7 @@ export class AuthService {
       }
 
       // Store the authorization information and return the user
-      this.userCredentials = response;
-      return response.user;
+      return response;
     } catch(error) {
       console.debug(`Failed to authenticate user`);
       return null;
@@ -89,7 +88,7 @@ export class AuthService {
    * @return Password complexity requirements
    */
   public async getPasswordComplexity(): Promise<ComplexityOptions> {
-    const result = await this.http.get<ComplexityOptions>(`http://localhost:9000/api/signup/requirements`).toPromise();
+    const result = await this.http.get<ComplexityOptions>(`http://localhost:3000/api/auth/complexity`).toPromise();
 
     // Throw an error if the response does not come back with the requirements
     if(!result) {
@@ -108,10 +107,11 @@ export class AuthService {
   public async isUserAvailable(username: string, email: string): Promise<UserAvailability> {
     const options = { params: { username: username, email: email } };
     const result =
-      await this.http.get<UserAvailability>(`http://localhost:9000/api/signup/available`, options).toPromise();
+      await this.http.get<UserAvailability>(`http://localhost:3000/api/auth/availability`, options).toPromise();
     if(!result) {
       throw new Error('Failed to get user availability information');
     }
+
     return result;
   }
 
@@ -135,7 +135,7 @@ export class AuthService {
       username: username,
       password: password
     };
-    const result = await this.http.post<User>(`http://localhost:9000/api/signup`, request).toPromise();
+    const result = await this.http.post<User>(`http://localhost:3000/api/auth/signup`, request).toPromise();
     if(!result) {
       throw new Error(`Failed to signup user`);
     }

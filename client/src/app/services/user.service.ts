@@ -3,11 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 
 
-/** The expected format for data to be from getting all users */
-interface UserGetResult {
-  data: User[]
-}
-
 /**
  * This service provides the ability to interact with user information
  * that may be stored on the server
@@ -23,14 +18,14 @@ export class UserService {
    * @return The list of users in the system
    */
   async getUsers(): Promise<User[]> {
-    const response = await this.http.get<UserGetResult>(`http://localhost:9000/api/table/users`).toPromise();
+    const response = await this.http.get<User[]>(`http://localhost:3000/api/users`).toPromise();
 
     // If no response received, return empty list
     if(!response) {
       return [];
     }
 
-    return response.data;
+    return response;
   }
 
   /**
@@ -43,7 +38,7 @@ export class UserService {
    * @return True on success, false otherwise
    */
   async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
-    const targetURL = `http://localhost:9000/api/users/${role}/${user._id}`;
+    const targetURL = `http://localhost:3000/api/users/${role}/${user._id}`;
 
     // Try to make the change
     try {
