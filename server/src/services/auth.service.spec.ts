@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserIdentification, UserSignup } from 'src/dtos/user.dto';
+import { UserSignup } from '../../../shared/dtos/user.dto';
 import { User } from '../schemas/user.schema';
 import { AuthService } from './auth.service';
 
@@ -11,13 +11,19 @@ const testUser: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   password: 'bobby',
-  roles: new Map<string, boolean>([['admin', true]]),
+  roles: {
+    admin: true,
+    tagging: true,
+    recording: true,
+    accessing: true
+  }
 };
+
 
 // Test interface for user storage
 const userModel = {
   // Find that supports looking up by username or email
-  findOne(params) {
+  findOne(params: any) {
     let user: User | null = null;
     if (params.username == testUser.username) {
       user = testUser;
@@ -128,11 +134,17 @@ describe('AuthService', () => {
 
   describe('signup()', () => {
     it('should return a user after signup', async () => {
-      const newUser: UserSignup = {
+      const newUser = {
         username: 'sam',
         email: 'sam@bu.edu',
         name: 'sam',
         password: 'sammy',
+        roles: {
+          admin: false,
+          tagging: false,
+          recording: false,
+          accessing: false
+        }
       };
       const result = await authService.signup(newUser);
       expect(result).toEqual(newUser);

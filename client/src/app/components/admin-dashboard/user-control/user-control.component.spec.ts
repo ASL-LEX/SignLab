@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks, tick } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { MaterialModule } from "src/app/modules/material.module";
 import { UserService } from "src/app/services/user.service";
@@ -9,14 +9,24 @@ describe('UserControlComponent', () => {
     {
       email: 'bob@bu.edu',
       name: 'bob',
-      roles: { admin: false, tagging: true },
       username: 'bob',
+      roles: {
+        admin: false,
+        tagging: true,
+        recording: false,
+        accessing: false,
+      },
       _id: '10'
     },
     {
       email: 'test@bu.edu',
       name: 'test',
-      roles: { tagging: true, recording: true },
+      roles: {
+        admin: true,
+        tagging: true,
+        recording: false,
+        accessing: false,
+      },
       username: 'test',
       _id: '11'
     }
@@ -50,38 +60,6 @@ describe('UserControlComponent', () => {
   it('grabs the users from the user service', () => {
     userControl.detectChanges(); // Have ngOnInit run
 
-    expect(userServiceSpy.getUsers).toHaveBeenCalled()
+    expect(userServiceSpy.getUsers).toHaveBeenCalled();
   });
-
-
-  it('displays all of the users correctly', fakeAsync(async () => {
-    // Have ngOnInit run
-    userControl.detectChanges();
-
-    flushMicrotasks();
-
-    userControl.detectChanges();
-
-    // Make sure all rows in the table are generated
-    const compiled = userControl.debugElement.nativeElement;
-    const rows = compiled.querySelectorAll('tbody tr');
-    expect(rows.length).toBe(exampleUserData.length);
-
-    // Make sure the check boxes match the roles
-    tick();
-    userControl.detectChanges();
-
-    // First user
-    const firstUserChecks = rows[0].querySelectorAll('input');
-    expect(firstUserChecks[0].getAttribute('aria-checked')).toBe('false'); // Admin
-    expect(firstUserChecks[1].getAttribute('aria-checked')).toBe('true'); // Tagging
-    expect(firstUserChecks[2].getAttribute('aria-checked')).toBe('false'); // Recording
-
-    // Second user
-    const secondUserChecks = rows[1].querySelectorAll('input');
-    expect(secondUserChecks[0].getAttribute('aria-checked')).toBe('false'); // Admin
-    expect(secondUserChecks[1].getAttribute('aria-checked')).toBe('true'); // Tagging
-    expect(secondUserChecks[2].getAttribute('aria-checked')).toBe('true'); // Recording
-  }));
-
 });

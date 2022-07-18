@@ -26,13 +26,17 @@
     "@nestjs/mongoose": "^9.1.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/serve-static": "^2.2.2",
+    "@types/unzipper": "^0.10.5",
     "connect-mongo": "^4.6.0",
+    "csv-parser": "^3.0.0",
     "express-session": "^1.17.3",
     "joi-password-complexity": "^5.1.0",
+    "jsonschema": "^1.4.1",
     "mongoose": "^6.4.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

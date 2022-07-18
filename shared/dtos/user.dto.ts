@@ -32,3 +32,19 @@ export interface UserAvailability {
   username: boolean;
   email: boolean;
 }
+
+/**
+ * Representation of all information on a User
+ */
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  username: string;
+  roles: {
+    admin: boolean;
+    tagging: boolean;
+    recording: boolean;
+    accessing: boolean;
+  }
+}

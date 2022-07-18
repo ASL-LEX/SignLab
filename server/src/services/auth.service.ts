@@ -6,7 +6,7 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from '../dtos/user.dto';
+} from '../../../shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
 
 /**
@@ -79,7 +79,15 @@ export class AuthService {
    */
   public async signup(userSignup: UserSignup): Promise<User> {
     // TODO: Hash password before saving
-    return this.userModel.create(userSignup);
+    let user = { roles: {} };
+    Object.assign(user, userSignup);
+    user.roles = {
+      admin: false,
+      tagging: false,
+      recording: false,
+      accessing: false,
+    };
+    return this.userModel.create(user);
   }
 
   /**
@@ -100,7 +108,7 @@ export class AuthService {
 
     // Check all roles
     for (const role of roles) {
-      if (user.roles.get(role)) {
+      if (user.roles[role]) {
         return true;
       }
     }

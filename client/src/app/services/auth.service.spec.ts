@@ -51,14 +51,11 @@ describe('AuthService', () => {
     const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise'])
     spy.post.and.returnValue(spy);
     spy.toPromise.and.returnValue({
-      authHeader: 'test',
-      user: {
-        email: 'bob@bu.edu',
-        name: 'bob',
-        roles: [],
-        username: 'bob',
-        _id: 'sadlkfj'
-      }
+      email: 'bob@bu.edu',
+      name: 'bob',
+      roles: new Map<string, boolean>(),
+      username: 'bob',
+      _id: 'sadlkfj'
     });
     service = new AuthService(spy);
 
@@ -97,7 +94,18 @@ describe('AuthService', () => {
   // User signup should return valid user
   it('should be able to get back a valid user on signup', async () => {
     // Make a spy that will return back an expected user
-    const user = { email: 'bob@bu.edu', name: 'bob', roles: [], username: 'bob', _id: '1' };
+    const user = {
+      email: 'bob@bu.edu',
+      name: 'bob',
+      roles: {
+        admin: false,
+        tagging: false,
+        recording: false,
+        accessing: false,
+      },
+      username: 'bob',
+      _id: '1'
+    };
     const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise']);
     spy.post.and.returnValue(spy);
     spy.toPromise.and.returnValue(user);

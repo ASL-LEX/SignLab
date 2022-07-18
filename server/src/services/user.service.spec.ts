@@ -10,7 +10,12 @@ const testUsers: User[] = [
     email: 'bob@bu.edu',
     username: 'bob',
     password: 'bobby',
-    roles: new Map<string, boolean>([['admin', true]]),
+    roles: {
+      admin: true,
+      tagging: false,
+      recording: false,
+      accessing: false,
+    }
   },
   {
     _id: '2',
@@ -18,10 +23,12 @@ const testUsers: User[] = [
     email: 'sam@bu.edu',
     username: 'sam',
     password: 'sammy',
-    roles: new Map<string, boolean>([
-      ['admin', false],
-      ['tagging', true],
-    ]),
+    roles: {
+      admin: true,
+      tagging: true,
+      recording: true,
+      accessing: true,
+    }
   },
 ];
 

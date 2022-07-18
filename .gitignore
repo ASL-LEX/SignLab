@@ -43,8 +43,8 @@ yarn-error.log
 testem.log
 /typings
 ServiceAccountKey.json
-/server/src/backups/**
-!/server/backups/.gitkeep
+/server/upload/**
+!/server/upload/.gitkeep
 *.dtmp
 *.bkp
 

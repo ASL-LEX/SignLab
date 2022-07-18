@@ -4,8 +4,8 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from 'src/dtos/user.dto';
-import { User } from 'src/schemas/user.schema';
+} from '../../../../shared/dtos/user.dto';
+import { User } from '../../schemas/user.schema';
 import { AuthService } from '../../services/auth.service';
 import { AuthController } from './auth.controller';
 
@@ -26,7 +26,12 @@ const testUser: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   password: 'bobby',
-  roles: new Map<string, boolean>([['admin', true]]),
+  roles: {
+    admin: true,
+    tagging: false,
+    recording: false,
+    accessing: false,
+  },
 };
 
 const mockAuthService = {

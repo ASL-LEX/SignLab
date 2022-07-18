@@ -1,0 +1,41 @@
+<div class="response-grid">
+  <!-- Button to upload responses -->
+  <button mat-mini-fab aria-label="Add more responses" (click)="openUploadDialog()">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+  <label>Upload Responses</label>
+
+  <!-- Responses table view -->
+  <table mat-table [dataSource]="responseData" class="mat-elevation-z8">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- TODO: Add tool tip help for each column -->
+
+    <!-- View Column -->
+    <ng-container matColumnDef="view">
+      <th mat-header-cell *matHeaderCellDef> View </th>
+      <td mat-cell *matCellDef="let response">
+        <button mat-raised-button (click)='viewResponse(response.videoURL)'>Inspect</button>
+      </td>
+    </ng-container>
+
+    <!-- Enabled Column -->
+    <ng-container matColumnDef="isEnabled">
+      <th mat-header-cell *matHeaderCellDef> Enabled </th>
+      <td mat-cell *matCellDef="let response">
+        <mat-checkbox [(ngModel)]="response.enabled"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Person who recorded the response -->
+    <ng-container matColumnDef="responderID">
+      <th mat-header-cell *matHeaderCellDef> Responser ID </th>
+      <td mat-cell *matCellDef="let response"> {{response.responderID}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

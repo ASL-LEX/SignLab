@@ -1,0 +1,21 @@
+<div>
+  <form>
+    <div>
+      <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload>
+      <button mat-raised-button (click)='csvUpload.click()'>Upload CSV</button>
+    </div>
+    <div>
+      <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload>
+      <button mat-raised-button (click)='zipUpload.click()' [disabled]="!csvUploadComplete">Upload Videos (ZIP)</button>
+    </div>
+    <p>
+    {{ uploadStatusMessage }}
+    </p>
+
+    <ul>
+      <li *ngFor="let error of errorLocations">
+        <p>{{ error.place }}: {{ error.message }}</p>
+      </li>
+    </ul>
+  </form>
+</div>

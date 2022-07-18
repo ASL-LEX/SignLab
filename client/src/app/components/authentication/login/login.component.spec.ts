@@ -20,7 +20,12 @@ describe('LoginComponent', () => {
           return {
             email: 'bob@bu.edu',
             name: 'bob',
-            roles: [],
+            roles: {
+              admin: false,
+              tagging: false,
+              recording: false,
+              accessing: false,
+            },
             username: 'bob',
             _id: 'sadlkfj'
           }

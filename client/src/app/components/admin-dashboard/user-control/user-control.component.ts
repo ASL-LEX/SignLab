@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { User } from '../../../models/user';
+import { User } from '../../../../../../shared/dtos/user.dto';
 
 /**
  * The User Control view allows admins the ability to edit user permissions
@@ -51,7 +51,8 @@ export class UserControlComponent implements OnInit {
    * @param role The role to update
    * @param hasRole If the user should have the role or not
    */
-  async updateRole(user: User, role: string, hasRole: boolean): Promise<void> {
+  async updateRole(user: User, role: 'admin' | 'tagging' | 'recording' | 'accessing',
+                   hasRole: boolean): Promise<void> {
     const result = await this.userService.changeRole(user, role, hasRole);
 
     // If the role update failed, revert the checkbox

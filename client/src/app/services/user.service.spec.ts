@@ -2,24 +2,32 @@ import { UserService } from "./user.service";
 
 describe('UserService', () => {
   // Test user response data for testing
-  const exampleUserData = {
-    data: [
-      {
-        email: 'bob@bu.edu',
-        name: 'bob',
-        roles: { tagging: true, admin: false },
-        username: 'bob',
-        _id: '10'
+  const exampleUserData = [
+    {
+      email: 'bob@bu.edu',
+      name: 'bob',
+      username: 'bob',
+      roles: {
+        admin: false,
+        tagging: true,
+        recording: true,
+        accessing: false,
       },
-      {
-        email: 'test@bu.edu',
-        name: 'test',
-        roles: { recording: true, tagging: false },
-        username: 'test',
-        _id: '11'
-      }
-    ]
-  };
+      _id: '10'
+    },
+    {
+      email: 'test@bu.edu',
+      name: 'test',
+      roles: {
+        admin: false,
+        tagging: false,
+        recording: false,
+        accessing: false
+      },
+      username: 'test',
+      _id: '11'
+    }
+  ];
 
   // Test to make sure the users can be pulled successfully
   it('should get users', async () => {
@@ -33,7 +41,7 @@ describe('UserService', () => {
 
     // Ensure the same users are gotten back
     const result = await service.getUsers();
-    expect(result).toEqual(exampleUserData.data);
+    expect(result).toEqual(exampleUserData);
   });
 
   // Adding and removing roles should target the correct REST operations
@@ -47,14 +55,14 @@ describe('UserService', () => {
     const service = new UserService(spy);
 
     // Test adding a role to the user
-    let result = await service.changeRole(exampleUserData.data[0], "tagging", true);
+    let result = await service.changeRole(exampleUserData[0], "tagging", true);
     expect(result).toBeTrue();
-    expect(spy.put).toHaveBeenCalledWith('http://localhost:9000/api/users/tagging/10', null);
+    expect(spy.put).toHaveBeenCalledWith('http://localhost:3000/api/users/tagging/10', null);
 
     // Test deleting a role from the user
-    result = await service.changeRole(exampleUserData.data[0], "tagging", false);
+    result = await service.changeRole(exampleUserData[0], "tagging", false);
     expect(result).toBeTrue();
-    expect(spy.delete).toHaveBeenCalledWith('http://localhost:9000/api/users/tagging/10');
+    expect(spy.delete).toHaveBeenCalledWith('http://localhost:3000/api/users/tagging/10');
   });
 
   // Errors should return false
@@ -68,7 +76,7 @@ describe('UserService', () => {
     const service = new UserService(spy);
 
     // Test trying to change a role
-    const result = await service.changeRole(exampleUserData.data[0], "tagging", true);
+    const result = await service.changeRole(exampleUserData[0], "tagging", true);
     expect(result).toBeFalse();
   });
 

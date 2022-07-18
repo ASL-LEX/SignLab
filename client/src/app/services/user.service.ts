@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../models/user';
-
+import { User } from '../../../../shared/dtos/user.dto';
 
 /**
  * This service provides the ability to interact with user information

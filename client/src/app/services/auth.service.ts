@@ -1,20 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user';
+import { User, UserAvailability, UserCredentials } from '../../../../shared/dtos/user.dto';
 import{ ComplexityOptions } from 'joi-password-complexity';
 
-interface UserCredentials {
-  authHeader: string;
-  user: User;
-}
-
-/**
- * Represents availability of the username and email
- */
-interface UserAvailability {
-  username: boolean;
-  email: boolean;
-}
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -24,13 +12,13 @@ interface UserAvailability {
 export class AuthService {
 
   /** The logged in user information, or null if the user isn't authenticated */
-  userCredentials: UserCredentials | null;
+  currentUser: User | null
 
   /**
    * Make a new instance of the authentication service.
    */
   constructor(private http: HttpClient) {
-    this.userCredentials = null;
+    this.currentUser = null;
   }
 
 
@@ -40,7 +28,7 @@ export class AuthService {
    * @return True if the system is currently authenticated
    */
   public isAuthenticated(): boolean {
-    return this.userCredentials != null;
+    return this.currentUser != null;
   }
 
   /**
@@ -68,6 +56,7 @@ export class AuthService {
       }
 
       // Store the authorization information and return the user
+      this.currentUser = response;
       return response;
     } catch(error) {
       console.debug(`Failed to authenticate user`);

@@ -15,7 +15,7 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from '../../dtos/user.dto';
+} from '../../../../shared/dtos/user.dto';
 import { User } from '../../schemas/user.schema';
 
 const passwordValidator = require('joi-password-complexity');

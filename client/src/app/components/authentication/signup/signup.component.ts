@@ -127,7 +127,7 @@ export class SignupComponent implements OnInit {
     }
 
     // Attempt to signup the user
-    const result = this.authService.signup(this.name.value!, this.email.value!,
+    const _result = this.authService.signup(this.name.value!, this.email.value!,
                                            this.username.value!, this.pass.value!);
 
     // TODO: Redirect the user to the dashboard once the dashboard exists

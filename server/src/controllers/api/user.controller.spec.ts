@@ -9,7 +9,12 @@ const testUser1: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   password: 'bobby',
-  roles: new Map<string, boolean>([['admin', true]]),
+  roles: {
+    admin: true,
+    tagging: false,
+    recording: false,
+    accessing: false,
+  }
 };
 
 const testUser2: User = {
@@ -18,10 +23,12 @@ const testUser2: User = {
   email: 'sam@bu.edu',
   username: 'sam',
   password: 'sammy',
-  roles: new Map<string, boolean>([
-    ['admin', false],
-    ['tagging', true],
-  ]),
+  roles: {
+    admin: false,
+    tagging: true,
+    recording: false,
+    accessing: false,
+  }
 };
 
 // Test user service

@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from 'src/services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 /**
  * Interface that defined the necessary components in a session for handling

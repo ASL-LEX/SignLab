@@ -1,5 +1,22 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
+
+@Schema()
+export class Roles {
+  @Prop()
+  admin: boolean;
+
+  @Prop()
+  tagging: boolean;
+
+  @Prop()
+  recording: boolean;
+
+  @Prop()
+  accessing: boolean;
+}
+
+const RolesSchema = SchemaFactory.createForClass(Roles);
 
 @Schema()
 export class User {
@@ -17,8 +34,8 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({ type: mongoose.Schema.Types.Map })
-  roles: Map<string, boolean>;
+  @Prop({ type: RolesSchema })
+  roles: Roles;
 }
 
 export type UserDocument = User & Document;
