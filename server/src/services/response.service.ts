@@ -11,6 +11,11 @@ import { readdir } from 'fs/promises';
 import { join } from 'path';
 import { Response, ResponseDocument } from '../schemas/response.schema';
 import { SaveAttempt } from '../../../shared/dtos/response.dto';
+import { User } from '../schemas/user.schema';
+import { Study } from '../schemas/study.schema';
+import { StudyService } from './study.service';
+import { TagService } from './tag.service';
+import { Tag } from '../schemas/tag.schema';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -21,7 +26,71 @@ export class ResponseService {
     @InjectModel(ResponseUpload.name)
     private responseUploadModel: Model<ResponseUploadDocument>,
     @InjectModel(Response.name) private responseModel: Model<ResponseDocument>,
+    private studyService: StudyService,
+    private tagService: TagService
   ) {}
+
+  /**
+   * Assign the given user to tag the next untagged response for the given
+   * study. This will return the response that the user has to tag if a
+   * response is available, if no response is left untagged, then null is
+   * returned.
+   *
+   * If the user is already assigned a tag they have not completed, the
+   * incomplete tag is returned
+   *
+   * @param user The user to assign a response to tag
+   * @param study The study that the user is tagging for
+   * @return An object with the incomplete tag for the user to complete
+   */
+  async assignResponse(user: User, study: Study): Promise<Tag | null> {
+    // First check for an incomplete tag
+    const incompleteTag = await this.tagService.getIncompleteTag(user, study);
+    if (incompleteTag) {
+      return incompleteTag;
+    }
+
+    // Look up the next response in the study that doesn't have a tag yet and
+    // is enabled
+    const query = {
+      enabled: true
+    };
+    query[`hasTag.${study._id}`] = false;
+
+    // Mark the response as having a tag so other users don't attempt to
+    // tag the same response
+    const update = {
+      hasTag: { [study._id!]: true }
+    };
+
+    const response = await this.responseModel.findOneAndUpdate(query, update).exec();
+
+    // No remaining untagged responses for this study
+    if(!response) {
+      return null;
+    }
+
+    // Make a tag for the response
+    const tag = await this.tagService.createTag(user, response, study);
+
+    return tag;
+  }
+
+  /**
+   * Save the give tag for the response. Will first validate the `info`
+   * associated with the tag to ensure it matches the expected schema.
+   */
+  async addTag(tag: Tag) {
+    // First ensure the tag matches the expected schema
+    const validationResult = this.studyService.validate(tag);
+    if (validationResult.errors.length > 0) {
+      throw validationResult.errors;
+    }
+
+    // If the tag is valid, make as completed and save
+    tag.complete = true;
+    this.tagService.save(tag);
+  }
 
   /**
    * Handle the process of taking a stream of data and attempting to parse
@@ -95,6 +164,22 @@ export class ResponseService {
 
     // Go through each file and find the cooresponding ResponseUpload
     const files = await readdir('./upload/responses/');
+
+    // Get the IDs of all studys for constructing the map of responses to
+    // having a tag.
+    // This will generate the mapping between study IDs and the response
+    // having a tag for that study. When the response is first created it
+    // won't have an tag for any study, so the result will look something like
+    // {
+    //    'some MongoDB ID 1': false,
+    //    'some MongoDB ID 2': false,
+    //    'some MongoDB ID 3': false,
+    // }
+    // NOTE: This assumes that no new study will be made as responses are
+    //       being uploaded
+    const studies = await this.studyService.getStudies();
+    const studyMapping = new Map<string, boolean>(studies.map(study => [ study._id, false]));
+
     let count = 0;
     for (const file of files) {
       const filePath = join('./upload/response', file);
@@ -106,7 +191,7 @@ export class ResponseService {
       count += 1;
 
       // Search for cooresponding ResponseUpload
-      const saveResult = await this.saveResponse(file, filePath);
+      const saveResult = await this.saveResponse(file, filePath, studyMapping);
       if (saveResult.type == 'warning') {
         filesMissingData.push(file);
         continue;
@@ -167,10 +252,13 @@ export class ResponseService {
    *
    * @param filename The name of the file of the video
    * @param _filePath The path to the file including the name
+   * @param studyMapping The IDs for each study which need to be included when
+   *        making a response.
    */
   private async saveResponse(
     filename: string,
     _filePath: string,
+    studyMapping: Map<string, boolean>
   ): Promise<SaveAttempt> {
     // Try to find a cooresponding ResponseUpload based on filename
     const responseUpload = await this.responseUploadModel
@@ -193,6 +281,7 @@ export class ResponseService {
       responderID: responseUpload.responderID,
       enabled: true,
       meta: responseUpload.meta,
+      hasTag: studyMapping
     };
     await this.responseModel.create(response);
 
@@ -324,4 +413,5 @@ export class ResponseService {
 
     return transformed;
   }
+
 }

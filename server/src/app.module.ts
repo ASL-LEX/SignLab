@@ -11,6 +11,8 @@ import {
   DynamicSchemaSchema,
 } from './schemas/dyanmicschema.schema';
 import { Response, ResponseSchema } from './schemas/response.schema';
+import { Study, StudySchema } from './schemas/study.schema';
+import { Tag, TagSchema } from './schemas/tag.schema';
 
 // Modules
 import { Module } from '@nestjs/common';
@@ -30,6 +32,8 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ResponseService } from './services/response.service';
 import { SchemaService } from './services/schema.service';
+import { StudyService } from './services/study.service';
+import { TagService } from './services/tag.service';
 
 @Module({
   imports: [
@@ -41,6 +45,8 @@ import { SchemaService } from './services/schema.service';
       { name: ResponseUpload.name, schema: ResponseUploadSchema },
       { name: DynamicSchema.name, schema: DynamicSchemaSchema },
       { name: Response.name, schema: ResponseSchema },
+      { name: Study.name, schema: StudySchema },
+      { name: Tag.name, schema: TagSchema },
     ]),
     MongooseModule.forRoot('mongodb://localhost/signlab'),
   ],
@@ -55,6 +61,9 @@ import { SchemaService } from './services/schema.service';
     UserService,
     ResponseService,
     SchemaService,
+    ResponseService,
+    StudyService,
+    TagService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

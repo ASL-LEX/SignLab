@@ -4,6 +4,8 @@ import { Readable } from 'stream';
 import { ResponseUpload } from '../schemas/response-upload.schema';
 import { Response } from '../schemas/response.schema';
 import { ResponseService } from './response.service';
+import {StudyService} from './study.service';
+import {TagService} from './tag.service';
 
 /**
  * Example ResponseUpload model that expects data in the form below
@@ -125,6 +127,12 @@ const responseModel = {
   },
 };
 
+const studyService = {
+  getStudies() {
+    return [ 'study1', 'study2', 'study3' ];
+  }
+};
+
 /**
  * Mock the response schema since it indirectly gets a different module
  * declaration from the `app`
@@ -175,6 +183,14 @@ describe('ResponseService', () => {
         {
           provide: getModelToken(Response.name),
           useValue: responseModel,
+        },
+        {
+          provide: StudyService,
+          useValue: studyService
+        },
+        {
+          provide: TagService,
+          useValue: {}
         },
       ],
     }).compile();

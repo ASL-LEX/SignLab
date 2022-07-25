@@ -13,6 +13,16 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   /**
+   * Get user based on User ID. Will return null if no user with that ID is
+   * found.
+   */
+  async find(userID: string): Promise<User | null> {
+    return await this.userModel.findOne({
+      _id: userID
+    }).exec();
+  }
+
+  /**
    * Get all users in the system. This will return all user information.
    */
   async findAll(): Promise<User[]> {

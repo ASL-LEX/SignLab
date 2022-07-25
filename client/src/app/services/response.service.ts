@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Response } from '../models/response';
 import { SaveAttempt } from '../../../../shared/dtos/response.dto';
+import { Tag } from '../../../../shared/dtos/tag.dto';
 
 
 /**
@@ -55,5 +56,26 @@ export class ResponseService {
       return { type: 'error', message: 'Uknown error' };
     }
     return result;
+  }
+
+  /**
+   * Get the next response that needs to be tagged. This will return an
+   * incomplete tag for the user to complete.
+   */
+  async getNextUntaggedResponse(): Promise<Tag | null> {
+    // TODO: Determine the current user
+    const result  = await this.http.get<Tag | null>(`http://localhost:3000/api/response/assign?userID=62d1c3a08bad2d53bbe331c7&studyID=62dae1bef7ba9a50a2a33bdc`).toPromise();
+
+    return result ? result : null;
+  }
+
+  /**
+   * Attempt to apply the given tag to the associated response.
+   *
+   * @param tag The tag that is being applied
+   * @return Success or error
+   */
+  async addTag(tag: Tag) {
+    const response = await this.http.post<any>(`http://localhost:3000/api/response/tag`, tag, {}).toPromise();
   }
 }

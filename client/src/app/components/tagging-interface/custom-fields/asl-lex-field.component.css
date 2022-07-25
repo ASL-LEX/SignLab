@@ -1,0 +1,25 @@
+.sign-search {
+    margin: 10px;
+}
+
+.sign-search-result {
+    max-height: 500px;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.sign-search-table {
+    font-size: 24px;
+    overflow-y: scroll;
+    overflow-x: none;
+    max-height: 500px;
+    min-width: 200px;
+}
+
+.embedded-sign-video {
+    max-height: 100px;
+}
+
+tr.active {
+    background-color: lightblue;
+}

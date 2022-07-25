@@ -1,0 +1,9 @@
+.video-tag-container {
+    padding: 20px;
+}
+
+.video-tag-child {
+    width: 50%;
+    float: left;
+    padding: 20px;
+}
