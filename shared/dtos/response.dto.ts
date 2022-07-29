@@ -82,3 +82,11 @@ export interface Response {
    */
   hasTag: any;
 }
+
+/**
+ * Represents how metadata is shared.
+ */
+export interface MetadataDefinition {
+  name: string;
+  type: 'string' | 'number' | 'boolean';
+}

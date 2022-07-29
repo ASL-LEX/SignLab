@@ -79,6 +79,11 @@ export class AuthService {
    */
   public async signup(userSignup: UserSignup): Promise<User> {
     // TODO: Hash password before saving
+
+    // First user is always the owner
+    const numUsers = await this.userModel.count();
+    const isOwner = numUsers == 0;
+
     let user = { roles: {} };
     Object.assign(user, userSignup);
     user.roles = {
@@ -86,6 +91,7 @@ export class AuthService {
       tagging: false,
       recording: false,
       accessing: false,
+      owner: isOwner
     };
     return this.userModel.create(user);
   }
@@ -104,6 +110,11 @@ export class AuthService {
     const user = await this.userModel.findOne({ _id: id }).exec();
     if (!user) {
       return false;
+    }
+
+    // Owner can do anything
+    if(user.roles.owner) {
+      return true;
     }
 
     // Check all roles

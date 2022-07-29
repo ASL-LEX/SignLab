@@ -1,12 +1,22 @@
-<mat-toolbar class="navbar">
-  <div>ASL-LEX SignLab</div>
-    <div>
-      <a mat-button routerLink='/tag'>Tagging</a>
-      <a mat-button>Record Response</a>
-      <a mat-button routerLink='/admin'>Admin</a>
-      <a mat-button routerLink='/auth'>Login</a>
-    </div>
-</mat-toolbar>
+<div *ngIf="firstTimeSetup; then firstTimeSetupView else routerView"></div>
 
-<!-- The routed views render in the <router-outlet>-->
-<router-outlet></router-outlet>
+<!-- View project owner sees when setting up the application -->
+<ng-template #firstTimeSetupView>
+  <first-time-setup [onSetupComplete]='this.setupComplete'></first-time-setup>
+</ng-template>
+
+<!-- Normal view during SignLab usage -->
+<ng-template #routerView>
+  <mat-toolbar class="navbar">
+    <div>ASL-LEX SignLab</div>
+      <div>
+        <a mat-button routerLink='/tag'>Tagging</a>
+        <a mat-button>Record Response</a>
+        <a mat-button routerLink='/admin'>Admin</a>
+        <a mat-button routerLink='/auth'>Login</a>
+      </div>
+  </mat-toolbar>
+
+  <!-- The routed views render in the <router-outlet>-->
+  <router-outlet></router-outlet>
+</ng-template>

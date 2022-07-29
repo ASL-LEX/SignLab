@@ -15,16 +15,48 @@ import { ResponseService } from '../../services/response.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import { Response } from '../../schemas/response.schema';
-import { SaveAttempt } from '../../../../shared/dtos/response.dto';
+import { MetadataDefinition, SaveAttempt } from '../../../../shared/dtos/response.dto';
 import { Tag } from '../../schemas/tag.schema';
 import { UserService } from '../../services/user.service';
 import { StudyService } from '../../services/study.service';
+import { SchemaService } from 'src/services/schema.service';
 
 @Controller('/api/response')
 export class ResponseController {
   constructor(private responseService: ResponseService,
               private userService: UserService,
-              private studyService: StudyService) {}
+              private studyService: StudyService,
+              private schemaService: SchemaService) {}
+
+  /**
+   * Handle storing the metadata schema which will be stored for
+   * every response.
+   *
+   * NOTE: This is a one-time operation. Once the meta data is specified,
+   *       it cannot be changed.
+   */
+  @Post('/metadata')
+  // @Roles('owner')
+  async setMetadata(@Body() fields: MetadataDefinition[]) {
+    // If the schema already exists, throw an error
+    if (await this.schemaService.hasSchema('Response')) {
+      throw new HttpException('Response schema already exists', HttpStatus.BAD_REQUEST);
+    }
+
+    // Generate a JSON Schmea from the meta data
+    const schema = {
+      $id: 'Response',
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      type: 'object',
+      properties: { },
+      required: fields.map(field => field.name)
+    };
+    for(let field of fields) {
+      schema.properties[field.name] = { type: field.type };
+    }
+
+    this.schemaService.saveSchema('Response', schema);
+  }
 
   /**
    * Handles the process of uploading responses to SignLab. This process

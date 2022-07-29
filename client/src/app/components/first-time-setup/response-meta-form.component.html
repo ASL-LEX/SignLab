@@ -1,0 +1,43 @@
+<form [formGroup]="responseMetadataFormGroup" (ngSubmit)="submitMeta()">
+  <!-- User added number of field -->
+  <div>
+    <ng-container formArrayName="responseMetadata">
+      <ng-container *ngFor="let metadata of responseMetadata.controls; let idx=index">
+        <div [formGroupName]="idx">
+          <!-- Name of the metadata field -->
+          <mat-form-field appearance="fill">
+            <input matInput
+                   formControlName="name"
+                   placeholder="Metadata name">
+          </mat-form-field>
+
+          <!-- Type of the metadata -->
+          <mat-form-field appearance="fill">
+            <mat-select formControlName="type">
+              <mat-option value="string">String</mat-option>
+              <mat-option value="boolean">Boolean</mat-option>
+              <mat-option value="number">Number</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Delete option -->
+          <button mat-mini-fab (click)="deleteMetadata(idx)">
+            <mat-icon class="delete-btn">delete</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- Button to add another field -->
+    <button mat-mini-fab type="button" (click)="addMetaField()">
+      <mat-icon class="add-course-btn">add</mat-icon>
+    </button>
+
+    <p *ngIf="!responseMetadataFormGroup.valid">
+      Ensure each field has a name and type and make sure the name is unique.
+    </p>
+  </div>
+
+  <!-- Button to submit the form -->
+  <button mat-stroked-button type="submit" [disabled]="!responseMetadataFormGroup.valid">Submit</button>
+</form>

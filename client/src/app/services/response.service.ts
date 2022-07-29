@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Response } from '../models/response';
 import { SaveAttempt } from '../../../../shared/dtos/response.dto';
 import { Tag } from '../../../../shared/dtos/tag.dto';
+import {MetaDefinition} from '@angular/platform-browser';
 
 
 /**
@@ -11,6 +12,15 @@ import { Tag } from '../../../../shared/dtos/tag.dto';
 @Injectable({ providedIn: 'root' })
 export class ResponseService {
   constructor(private http: HttpClient) { }
+
+  /**
+   * Set the metadata that all responses will be expected to have.
+   */
+  async setMetadata(definitions: MetaDefinition[]) {
+    const result =
+      await this.http.post<any>(`http://localhost:3000/api/response/metadata`,
+                                 definitions).toPromise();
+  }
 
   /**
    * Get all responses.

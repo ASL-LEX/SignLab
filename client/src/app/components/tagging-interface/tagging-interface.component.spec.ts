@@ -56,7 +56,8 @@ describe('TaggingInterface', () => {
         admin: false,
         tagging: true,
         recording: false,
-        accessing: false
+        accessing: false,
+        owner: false
       }
     },
     complete: false,
@@ -113,7 +114,8 @@ describe('TaggingInterface', () => {
         admin: false,
         tagging: true,
         recording: false,
-        accessing: false
+        accessing: false,
+        owner: false
       }
     },
     complete: false,

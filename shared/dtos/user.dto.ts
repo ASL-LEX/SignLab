@@ -46,5 +46,6 @@ export interface User {
     tagging: boolean;
     recording: boolean;
     accessing: boolean;
+    owner: boolean;
   }
 }

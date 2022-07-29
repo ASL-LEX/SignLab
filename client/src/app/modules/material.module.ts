@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatIconModule,
     MatTableModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatStepperModule
   ],
   exports: [
     MatButtonModule,
@@ -49,7 +51,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatIconModule,
     MatTabsModule,
     MatDialogModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatStepperModule
   ],
  })
 export class MaterialModule { }

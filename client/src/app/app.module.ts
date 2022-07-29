@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+import { FlexModule } from '@angular/flex-layout/flex';
 
 // Components
 import { AppComponent } from './app.component';
@@ -20,7 +21,8 @@ import { SignupComponent } from './components/authentication/signup/signup.compo
 import { ResponseUploadDialog } from './components/admin-dashboard/response-control/response-upload-dialog.component';
 import { TaggingInterface } from './components/tagging-interface/tagging-interface.component';
 import { AslLexSignBankField } from './components/tagging-interface/custom-fields/asl-lex-field.component';
-import { FlexModule } from '@angular/flex-layout/flex';
+import { FirstTimeSetupComponent } from './components/first-time-setup/first-time-setup.component';
+import { ResponseMetaForm } from './components/first-time-setup/response-meta-form.component';
 
 // Routing
 import { RouterModule } from "@angular/router";
@@ -42,7 +44,9 @@ import { SafePipe } from './pipes/safe.pipe';
     ResponseUploadDialog,
     TaggingInterface,
     AslLexSignBankField,
-    SafePipe
+    FirstTimeSetupComponent,
+    SafePipe,
+    ResponseMetaForm
   ],
   imports: [
     BrowserModule,
@@ -55,7 +59,7 @@ import { SafePipe } from './pipes/safe.pipe';
     HttpClientModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
-    FlexModule
+    FlexModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

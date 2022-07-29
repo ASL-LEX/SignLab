@@ -15,7 +15,8 @@ const testUser: User = {
     admin: true,
     tagging: true,
     recording: true,
-    accessing: true
+    accessing: true,
+    owner: false
   }
 };
 
@@ -40,6 +41,10 @@ const userModel = {
         return user;
       },
     };
+  },
+
+  async count() {
+    return Promise.resolve(1)
   },
 
   async create(params: UserSignup) {
@@ -143,7 +148,8 @@ describe('AuthService', () => {
           admin: false,
           tagging: false,
           recording: false,
-          accessing: false
+          accessing: false,
+          owner: false
         }
       };
       const result = await authService.signup(newUser);

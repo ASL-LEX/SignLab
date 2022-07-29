@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
     AbstractControl, FormControl, FormGroup, ValidationErrors,
     ValidatorFn, Validators } from '@angular/forms';
 import { ComplexityOptions, default as passwordValidate } from 'joi-password-complexity';
+import { User } from '../../../../../../shared/dtos/user.dto';
 
 import { AuthService } from '../../../services/auth.service';
 
@@ -80,6 +81,9 @@ export class SignupComponent implements OnInit {
     mustMatch('pass', 'confirmPass')
   );
 
+  /** Callback which is called once the signup has taken place */
+  @Input() onUserSignup: (user: User) => void;
+
 
   constructor(private authService: AuthService) { }
 
@@ -127,9 +131,12 @@ export class SignupComponent implements OnInit {
     }
 
     // Attempt to signup the user
-    const _result = this.authService.signup(this.name.value!, this.email.value!,
+    const result = await this.authService.signup(this.name.value!, this.email.value!,
                                            this.username.value!, this.pass.value!);
 
-    // TODO: Redirect the user to the dashboard once the dashboard exists
+    // Run the callback for when the user has signed in
+    if (this.onUserSignup) {
+      this.onUserSignup(result);
+    }
   }
 }

@@ -102,6 +102,7 @@ describe('AuthService', () => {
         tagging: false,
         recording: false,
         accessing: false,
+        owner: false
       },
       username: 'bob',
       _id: '1'

@@ -12,6 +12,7 @@ describe('UserService', () => {
         tagging: true,
         recording: true,
         accessing: false,
+        owner: false,
       },
       _id: '10'
     },
@@ -22,7 +23,8 @@ describe('UserService', () => {
         admin: false,
         tagging: false,
         recording: false,
-        accessing: false
+        accessing: false,
+        owner: false
       },
       username: 'test',
       _id: '11'

@@ -56,6 +56,32 @@ export class SchemaService {
   }
 
   /**
+   * Save a schema into the database
+   */
+  async saveSchema(schemaType: string, value: any): Promise<void> {
+    const schema = await this.dynamicSchemaModel.create({
+      schemaName: schemaType,
+      schema: value
+    });
+
+    // If its in the cached schema map, update the cached map
+    if (this.schemaMap.has(schemaType)) {
+      this.schemaMap.set(schemaType, schema);
+    }
+  }
+
+  /**
+   * Check to see if the database has the given schema
+   */
+  async hasSchema(schemaType: string): Promise<boolean> {
+    const schema = await this.dynamicSchemaModel.findOne({
+      schemaName: schemaType
+    }).exec();
+
+    return schema !== null
+  }
+
+  /**
    * Attempts to read the schema from the cached map. If the schema is not
    * in the cached map, then try to get the schema from the database, if the
    * schema is not in the database, throw an error.

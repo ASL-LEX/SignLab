@@ -15,6 +15,7 @@ describe('UserControlComponent', () => {
         tagging: true,
         recording: false,
         accessing: false,
+        owner: false,
       },
       _id: '10'
     },
@@ -26,6 +27,7 @@ describe('UserControlComponent', () => {
         tagging: true,
         recording: false,
         accessing: false,
+        owner: false
       },
       username: 'test',
       _id: '11'

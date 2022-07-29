@@ -31,6 +31,7 @@ const testUser: User = {
     tagging: false,
     recording: false,
     accessing: false,
+    owner: false,
   },
 };
 

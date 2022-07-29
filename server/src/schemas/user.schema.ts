@@ -4,6 +4,9 @@ import { Document } from 'mongoose';
 @Schema()
 export class Roles {
   @Prop()
+  owner: boolean;
+
+  @Prop()
   admin: boolean;
 
   @Prop()
