@@ -2,12 +2,13 @@ import {
   Controller,
   Post,
   Get,
+  Put,
   UploadedFile,
   UseInterceptors,
-  Query,
   HttpException,
   HttpStatus,
-  Body
+  Body,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 // import { Roles } from 'src/decorators/roles.decorator';
@@ -16,17 +17,19 @@ import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import { Response } from '../../schemas/response.schema';
 import { MetadataDefinition, SaveAttempt } from '../../../../shared/dtos/response.dto';
-import { Tag } from '../../schemas/tag.schema';
-import { UserService } from '../../services/user.service';
+import { SchemaService } from '../../services/schema.service';
+import { ResponseUploadService } from '../../services/response-upload.service';
 import { StudyService } from '../../services/study.service';
-import { SchemaService } from 'src/services/schema.service';
+import { ResponseStudyService } from '../../services/responsestudy.service';
+import { ResponseStudy } from '../../../../shared/dtos/responsestudy.dto';
 
 @Controller('/api/response')
 export class ResponseController {
   constructor(private responseService: ResponseService,
-              private userService: UserService,
+              private schemaService: SchemaService,
+              private responseUploadService: ResponseUploadService,
               private studyService: StudyService,
-              private schemaService: SchemaService) {}
+              private responseStudyService: ResponseStudyService) {}
 
   /**
    * Handle storing the metadata schema which will be stored for
@@ -81,7 +84,7 @@ export class ResponseController {
     // TODO: Add error handling on file type
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
-    return await this.responseService.uploadResponseDataCSV(fileStream);
+    return await this.responseUploadService.uploadResponseDataCSV(fileStream);
   }
 
   /**
@@ -112,9 +115,19 @@ export class ResponseController {
     @UploadedFile() _file: Express.Multer.File,
   ): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
-    return await this.responseService.uploadResponseVideos(
+    const result = await this.responseUploadService.uploadResponseVideos(
       './upload/upload.zip',
     );
+
+    // Now create a ResponseStudy for each response for each study
+    if(result.responses) {
+      const studies = await this.studyService.getStudies();
+      await Promise.all(studies.map(async (study) => {
+        this.responseStudyService.createResponseStudies(result.responses, study);
+      }));
+    }
+
+    return result.saveResult;
   }
 
   /**
@@ -125,46 +138,45 @@ export class ResponseController {
     return await this.responseService.getAllResponses();
   }
 
-  /**
-   * Assign a response to a user for tagging. The user will be assigned a
-   * response to tag for a specific study. Once that user is assigned that
-   * response, no other users will be able to tag that response for the given
-   * study.
-   *
-   * If the user already has a response assigned for the study that they have
-   * yet to complete, this will return that incomplete tag.
+  /*
+   * Get the response studies for a specific study.
    */
-  @Get('/assign')
-  // @Roles('tagging')
-  async getAssignedResponse(@Query('userID') userID: string, @Query('studyID') studyID: string): Promise<Tag | null> {
-    // Try to find user from database
-    const user = await this.userService.find(userID);
-    if (!user) {
-      // User not found
-      throw new HttpException(`User with ID '${userID}' not found`, HttpStatus.BAD_REQUEST);
-    }
-
-    // Try to find the study from the database
+  @Get('/responsestudies')
+  async getResponseStudies(@Query('studyID') studyID: string): Promise<ResponseStudy[]> {
+    // Ensure that the service exists
     const study = await this.studyService.find(studyID);
-    if (!study) {
-      // Study not found
-      throw new HttpException(`Study with ID '${studyID}' not found`, HttpStatus.BAD_REQUEST);
+    if(!study) {
+      throw new HttpException(`The study with id ${studyID} does not exist`, HttpStatus.BAD_REQUEST);
     }
 
-    // Otherwise return the result of trying to assign the user a response to
-    // tag
-    return this.responseService.assignResponse(user, study);
+    return await this.responseStudyService.getResponseStudies(study);
   }
 
   /**
-   * Save the provided tag for the given response.
+   * Change if the response should be enabled as part of the study.
    */
-  @Post('/tag')
-  async tagResponse(@Body() tag: Tag) {
-    try {
-      await this.responseService.addTag(tag);
-    } catch(error) {
-      throw new HttpException('Tag failed validation', HttpStatus.BAD_REQUEST);
+  @Put('/enable')
+  async setResponseStudyEnable(@Body() changeRequest: { studyID: string, responseID: string, isPartOfStudy: boolean }): Promise<void> {
+    // Get the study and response
+    // TODO: Standardized this process of existence checking and querying
+    const study = await this.studyService.find(changeRequest.studyID);
+    if(!study) {
+      throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);
     }
+    const response = await this.responseService.find(changeRequest.responseID);
+    if(!response) {
+      throw new HttpException(`The response with id ${changeRequest.responseID} does not exist`, HttpStatus.BAD_REQUEST);
+    }
+
+    // This would be bad if the response study does not exist since the
+    // ResponseStudy should exist if the response and study both exist.
+    // This would either be a bug in the code, or someone was poking around the
+    // DB and did something bad.
+    const responseStudy = await this.responseStudyService.find(response, study);
+    if(!responseStudy) {
+      throw new HttpException(`Something went wrong trying to find the response study information`, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    this.responseStudyService.changePartOfStudy(responseStudy, changeRequest.isPartOfStudy);
   }
 }

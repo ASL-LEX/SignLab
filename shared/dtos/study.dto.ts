@@ -4,7 +4,7 @@
  */
 export interface Study {
   /** Unique identifier of the study in the SignLab instance */
-  _id: string;
+  _id?: string;
   /** The name of the study as a human readable identifier */
   name: string;
   /** Description explaining the goal of the studuy */
@@ -20,4 +20,17 @@ export interface Study {
     /** How the tag form should be displayed */
     uiSchema: any;
   }
+}
+
+/**
+ * What is required for making a new study. This includes the study
+ * information itself and the responses which will make up the training
+ * set
+ */
+export interface StudyCreation {
+  study: Study;
+  /** List of Response IDs which will be used for the training set */
+  trainingResponses: string[];
+  /** List of Response IDs which will be disabled for this study */
+  disabledResponses: string[];
 }

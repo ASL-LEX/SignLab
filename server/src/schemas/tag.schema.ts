@@ -41,6 +41,12 @@ export class Tag {
   complete: boolean;
 
   /**
+   * Represents if this tag was made by a user aas part of their training
+   */
+  @Prop()
+  isTraining: boolean;
+
+  /**
    * The information associated with the tag changes from study to study
    */
   @Prop({ type: mongoose.Schema.Types.Mixed })

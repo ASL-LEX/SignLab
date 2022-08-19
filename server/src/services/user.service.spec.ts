@@ -15,6 +15,7 @@ const testUsers: User[] = [
       tagging: false,
       recording: false,
       accessing: false,
+      owner: false,
     }
   },
   {
@@ -28,6 +29,7 @@ const testUsers: User[] = [
       tagging: true,
       recording: true,
       accessing: true,
+      owner: false,
     }
   },
 ];

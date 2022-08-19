@@ -57,14 +57,6 @@ export class Response {
   recorder?: User;
 
   /**
-   * Determines if the Response will be includeded in the studies. This
-   * allows researchers to disable videos they no longer want to be part of
-   * the study.
-   */
-  @Prop({ required: true })
-  enabled: boolean;
-
-  /**
    * Stores information specific to the research and decided by the researcher.
    */
   @Prop({
@@ -77,26 +69,6 @@ export class Response {
     },
   })
   meta: any;
-
-  /**
-   * Stores a mapping between study IDs and if this reponse has a tag
-   * related to that study.
-   *
-   * This allows for easier querying to find the next response that needs to
-   * be tagged based on study (frequently needed query). This does however
-   * mean this field needs to be updated for all responses when a new study
-   * is made (infrequent).
-   *
-   * The mapping is between a study ID and a boolean for if the response has
-   * that tag or not.
-   *
-   * NOTE: A response that has a tag doesn't necessarily have a completed
-   *       tag, a user could actively be completing the tag process which is
-   *       ok because this keeps a race condition from taking place with
-   *       two users trying to tag the same response at the same time.
-   */
-  @Prop({ type: mongoose.Schema.Types.Map })
-  hasTag: Map<string, boolean>;
 }
 
 export type ResponseDocument = Response & Document;

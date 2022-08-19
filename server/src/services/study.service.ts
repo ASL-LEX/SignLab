@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Study, StudyDocument } from '../schemas/study.schema';
 import { Model } from 'mongoose';
-import { Tag } from 'src/schemas/tag.schema';
+import { Tag } from '../schemas/tag.schema';
 import { Validator, ValidatorResult } from 'jsonschema';
 
 @Injectable()
 export class StudyService {
-  constructor(@InjectModel(Study.name) private studyModel: Model<StudyDocument>) { }
+  constructor(@InjectModel(Study.name)
+              private studyModel: Model<StudyDocument>) { }
 
   /**
    * Get a study based on study ID. Will return null if the study with that
@@ -17,6 +18,14 @@ export class StudyService {
     return await this.studyModel.findOne({
       _id: studyID
     }).exec();
+  }
+
+  async exists(studyName: string) {
+    const result = await this.studyModel.findOne({
+      name: studyName
+    }).exec();
+
+    return result != null;
   }
 
   /**
@@ -35,5 +44,9 @@ export class StudyService {
     // TODO: Should pull the expected schema directly from the database
     const results = validator.validate(tag.info, tag.study.tagSchema.dataSchema);
     return results;
+  }
+
+  async createStudy(study: Study): Promise<Study> {
+    return await this.studyModel.create(study);
   }
 }

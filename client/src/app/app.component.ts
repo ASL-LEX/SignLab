@@ -1,5 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
-import {BackendService} from './services/backend.service';
+import { BackendService } from './core/services/backend.service';
 
 @Component({
   selector: 'app-root',

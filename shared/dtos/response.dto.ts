@@ -42,6 +42,7 @@ export interface SaveAttempt {
  * single entity the is tagged in the system.
  */
 export interface Response {
+  _id?: string;
   /**
    * Way to uniquely identify the response in the system. This is a user
    * defined value.
@@ -67,20 +68,10 @@ export interface Response {
    */
   responderID?: string;
   /**
-   * This is a flag that represents if the response is enabled in the SignLab
-   * system and therefore able to be tagged.
-   */
-  enabled: boolean;
-  /**
    * This defines any additional meta data which is specific to the instance
    * of SignLab and can thus change instance to instance
    */
   meta: any;
-  /**
-   * This is a mapping between study's and if the response has a tag for
-   * the given study.
-   */
-  hasTag: any;
 }
 
 /**

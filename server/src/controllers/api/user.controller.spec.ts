@@ -14,6 +14,7 @@ const testUser1: User = {
     tagging: false,
     recording: false,
     accessing: false,
+    owner: false,
   }
 };
 
@@ -28,6 +29,7 @@ const testUser2: User = {
     tagging: true,
     recording: false,
     accessing: false,
+    owner: false,
   }
 };
 

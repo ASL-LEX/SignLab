@@ -1,8 +1,10 @@
 {
   "compileOnSave": false,
-
-
   "compilerOptions": {
+    "paths": {
+      "@admin-dashboad/*": ["app/src/admin-dashboard"],
+      "@shared/*": ["app/src/shared"]
+    },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

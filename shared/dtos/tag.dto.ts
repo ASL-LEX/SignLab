@@ -17,6 +17,8 @@ export interface Tag {
   user: User;
   /** Represents if the user has completed the tag */
   complete: boolean;
+  /** Determines if this tag is part of a users training or a full tag */
+  isTraining: boolean;
   /** The data that makes up the tag, depends on the schema of the study */
   info: any;
 }

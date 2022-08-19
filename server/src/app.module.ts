@@ -13,6 +13,7 @@ import {
 import { Response, ResponseSchema } from './schemas/response.schema';
 import { Study, StudySchema } from './schemas/study.schema';
 import { Tag, TagSchema } from './schemas/tag.schema';
+import { ResponseStudy, ResponseStudySchema } from './schemas/responsestudy.schema';
 
 // Modules
 import { Module } from '@nestjs/common';
@@ -24,6 +25,8 @@ import { AppController } from './app.controller';
 import { AuthController } from './controllers/api/auth.controller';
 import { UserController } from './controllers/api/user.controller';
 import { ResponseController } from './controllers/api/response.controller';
+import { StudyController } from './controllers/api/study.controller';
+import { TagController } from './controllers/api/tag.controller';
 
 // Services
 import { APP_GUARD } from '@nestjs/core';
@@ -34,6 +37,8 @@ import { ResponseService } from './services/response.service';
 import { SchemaService } from './services/schema.service';
 import { StudyService } from './services/study.service';
 import { TagService } from './services/tag.service';
+import { ResponseStudyService } from './services/responsestudy.service';
+import { ResponseUploadService } from './services/response-upload.service';
 
 @Module({
   imports: [
@@ -47,6 +52,7 @@ import { TagService } from './services/tag.service';
       { name: Response.name, schema: ResponseSchema },
       { name: Study.name, schema: StudySchema },
       { name: Tag.name, schema: TagSchema },
+      { name: ResponseStudy.name, schema: ResponseStudySchema },
     ]),
     MongooseModule.forRoot('mongodb://localhost/signlab'),
   ],
@@ -55,6 +61,8 @@ import { TagService } from './services/tag.service';
     AuthController,
     UserController,
     ResponseController,
+    StudyController,
+    TagController
   ],
   providers: [
     AuthService,
@@ -64,6 +72,8 @@ import { TagService } from './services/tag.service';
     ResponseService,
     StudyService,
     TagService,
+    ResponseStudyService,
+    ResponseUploadService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

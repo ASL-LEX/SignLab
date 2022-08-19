@@ -1,0 +1,51 @@
+<h2>{{ activeStudy?.name }}</h2>
+
+<div fxLayout fxFlex>
+  <!-- Sidebar View -->
+  <mat-list fxFlex="15">
+    <mat-list-item>
+      <button mat-stroked-button class="nav-button" (click)="setActiveView('responses')">
+        Responses Control
+      </button>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item>
+      <button mat-stroked-button class="nav-button" (click)="setActiveView('users')">
+        User Access Control
+      </button>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item>
+      <button mat-stroked-button class="nav-button" (click)="setActiveView('tags')">
+        Tags
+      </button>
+    </mat-list-item>
+
+    <mat-divider></mat-divider>
+
+    <mat-list-item>
+      <button mat-stroked-button class="nav-button" (click)="openStudySelectDialog()">
+        Change Study <mat-icon>swap_vert</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+
+  <!-- Main view -->
+  <div fxFlex="85" [ngSwitch]="activeView">
+    <!-- TODO: Have the study ID be dynamically inserted -->
+    <response-study-table
+      *ngSwitchCase="'responses'"
+       [study]="activeStudy">
+    </response-study-table>
+
+    <user-study-control *ngSwitchCase="'users'"></user-study-control>
+
+    <div *ngSwitchCase="'tags'">
+      Tags
+    </div>
+  </div>
+</div>
