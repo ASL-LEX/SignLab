@@ -84,14 +84,14 @@ export class AuthService {
     const numUsers = await this.userModel.count();
     const isOwner = numUsers == 0;
 
-    let user = { roles: {} };
+    const user = { roles: {} };
     Object.assign(user, userSignup);
     user.roles = {
       admin: false,
       tagging: false,
       recording: false,
       accessing: false,
-      owner: isOwner
+      owner: isOwner,
     };
     return this.userModel.create(user);
   }
@@ -113,7 +113,7 @@ export class AuthService {
     }
 
     // Owner can do anything
-    if(user.roles.owner) {
+    if (user.roles.owner) {
       return true;
     }
 

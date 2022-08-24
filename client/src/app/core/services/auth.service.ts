@@ -32,6 +32,18 @@ export class AuthService {
   }
 
   /**
+   * Get the current user. If there is no logged in user, this will throw
+   * an error.
+   */
+  get user(): User {
+    if(!this.isAuthenticated()) {
+      throw new Error('No authenticated user');
+    } else {
+      return this.currentUser!;
+    }
+  }
+
+  /**
    * Autheticate the user using the username and password. This will authenticate
    * against the Anchor backend
    *

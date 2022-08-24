@@ -61,7 +61,7 @@ export class SchemaService {
   async saveSchema(schemaType: string, value: any): Promise<void> {
     const schema = await this.dynamicSchemaModel.create({
       schemaName: schemaType,
-      schema: value
+      schema: value,
     });
 
     // If its in the cached schema map, update the cached map
@@ -74,11 +74,13 @@ export class SchemaService {
    * Check to see if the database has the given schema
    */
   async hasSchema(schemaType: string): Promise<boolean> {
-    const schema = await this.dynamicSchemaModel.findOne({
-      schemaName: schemaType
-    }).exec();
+    const schema = await this.dynamicSchemaModel
+      .findOne({
+        schemaName: schemaType,
+      })
+      .exec();
 
-    return schema !== null
+    return schema !== null;
   }
 
   /**

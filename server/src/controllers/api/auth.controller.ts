@@ -17,6 +17,8 @@ import {
   UserSignup,
 } from '../../../../shared/dtos/user.dto';
 import { User } from '../../schemas/user.schema';
+import { StudyService } from '../../services/study.service';
+import { UserStudyService } from '../../services/userstudy.service';
 
 const passwordValidator = require('joi-password-complexity');
 
@@ -33,7 +35,11 @@ export class AuthController {
     requirementCount: 3,
   };
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private studyService: StudyService,
+    private userStudyService: UserStudyService,
+  ) {}
 
   /**
    * Endpoint to attempt to login. Logging in will attempt to find the
@@ -110,6 +116,17 @@ export class AuthController {
       );
     }
 
-    return this.authService.signup(userSignup);
+    const user = await this.authService.signup(userSignup);
+
+    // Make a user study for each study
+    const studies = await this.studyService.getStudies();
+
+    await Promise.all(
+      studies.map((study) => {
+        return this.userStudyService.create(user, study);
+      }),
+    );
+
+    return user;
   }
 }

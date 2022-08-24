@@ -42,10 +42,13 @@
        [study]="activeStudy">
     </response-study-table>
 
-    <user-study-control *ngSwitchCase="'users'"></user-study-control>
+    <user-study-control
+      *ngSwitchCase="'users'"
+      [study]="activeStudy!"></user-study-control>
 
     <div *ngSwitchCase="'tags'">
-      Tags
+      <!-- TODO: Have this be a table view with an export option -->
+      <button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>
     </div>
   </div>
 </div>

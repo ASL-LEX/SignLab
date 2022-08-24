@@ -13,7 +13,10 @@ import {
 import { Response, ResponseSchema } from './schemas/response.schema';
 import { Study, StudySchema } from './schemas/study.schema';
 import { Tag, TagSchema } from './schemas/tag.schema';
-import { ResponseStudy, ResponseStudySchema } from './schemas/responsestudy.schema';
+import {
+  ResponseStudy,
+  ResponseStudySchema,
+} from './schemas/responsestudy.schema';
 
 // Modules
 import { Module } from '@nestjs/common';
@@ -39,6 +42,8 @@ import { StudyService } from './services/study.service';
 import { TagService } from './services/tag.service';
 import { ResponseStudyService } from './services/responsestudy.service';
 import { ResponseUploadService } from './services/response-upload.service';
+import { UserStudy, UserStudySchema } from './schemas/userstudy.schema';
+import { UserStudyService } from './services/userstudy.service';
 
 @Module({
   imports: [
@@ -53,6 +58,7 @@ import { ResponseUploadService } from './services/response-upload.service';
       { name: Study.name, schema: StudySchema },
       { name: Tag.name, schema: TagSchema },
       { name: ResponseStudy.name, schema: ResponseStudySchema },
+      { name: UserStudy.name, schema: UserStudySchema },
     ]),
     MongooseModule.forRoot('mongodb://localhost/signlab'),
   ],
@@ -62,7 +68,7 @@ import { ResponseUploadService } from './services/response-upload.service';
     UserController,
     ResponseController,
     StudyController,
-    TagController
+    TagController,
   ],
   providers: [
     AuthService,
@@ -74,6 +80,7 @@ import { ResponseUploadService } from './services/response-upload.service';
     TagService,
     ResponseStudyService,
     ResponseUploadService,
+    UserStudyService,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

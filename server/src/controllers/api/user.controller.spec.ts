@@ -15,7 +15,7 @@ const testUser1: User = {
     recording: false,
     accessing: false,
     owner: false,
-  }
+  },
 };
 
 const testUser2: User = {
@@ -30,7 +30,7 @@ const testUser2: User = {
     recording: false,
     accessing: false,
     owner: false,
-  }
+  },
 };
 
 // Test user service

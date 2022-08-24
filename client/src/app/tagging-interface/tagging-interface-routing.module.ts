@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { TaggingInterface } from './components/tagging-interface.component';
+import {TaggingLanding} from './components/tagging-landing.component';
 
 const routes: Routes = [
-  { path: '', component: TaggingInterface },
+  { path: '', component: TaggingLanding },
 ];
 
 @NgModule({

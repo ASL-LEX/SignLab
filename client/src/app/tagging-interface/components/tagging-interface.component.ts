@@ -1,16 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ResponseService } from '../../core/services/response.service';
 import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { MatDialog } from '@angular/material/dialog';
-import { StudySelectDialog } from '../../admin-dashboard/components/studies-control/study-select-dialog.component';
 import { Study } from '../../../../../shared/dtos/study.dto';
-import { StudyService } from '../../core/services/study.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'tagging-interface',
   template: `
-    <button mat-stroked-button (click)="openStudySelectDialog()">Select Study</button>
-
     <div *ngIf="hasRemainingTags; then tagInterface else noTagsMessage"></div>
 
     <!-- Tag Form -->
@@ -26,13 +22,22 @@ import { StudyService } from '../../core/services/study.service';
       <mat-card>
         <mat-card-title>No Responses Untagged</mat-card-title>
         <mat-card-content>
-          All responses have been tagged so far, come back later
+
+          <!-- Training "no more tags" message -->
+          <div *ngIf="isTraining">
+            Training complete, notify your admin for further access to the study
+          </div>
+
+          <!-- Normal tagging "no more tags" message -->
+          <div *ngIf="!isTraining">
+            All responses have been tagged so far, come back later
+          </div>
         </mat-card-content>
       </mat-card>
     </ng-template>
-  `,
+  `
 })
-export class TaggingInterface implements OnInit {
+export class TaggingInterface implements OnChanges, OnInit {
   /** The tag to be completed */
   tag: Tag;
   /**
@@ -40,45 +45,32 @@ export class TaggingInterface implements OnInit {
    * display to the user that all videos have been taged
    */
   hasRemainingTags: boolean = false;
-  /** The available studies */
-  studies: Study[] = [];
-  /** The study the user is currently taking part in */
-  activeStudy: Study | null = null;
+  /** The current study that tagging is taking place for */
+  @Input() study: Study;
+  /** Flag that determines if the tagging is being done or training or not */
+  @Input() isTraining = false;
 
   constructor(private responseService: ResponseService,
-              private dialog: MatDialog,
-              private studyService: StudyService) {}
+              private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.studyService.getStudies()
-      .then(studies => {
-        this.studies = studies;
-        if (this.studies.length > 0) {
-          this.activeStudy = this.studies[0];
-          this.getNextTag();
-        }
-      });
+    this.getNextTag();
   }
 
-  /** Open the study select view */
-  openStudySelectDialog() {
-    const dialogOpenParams = {
-      width: '400px',
-      data: {
-        studies: this.studies,
-        activeStudy: this.activeStudy,
-        newStudyOption: false
-      }
-    };
+  /** Handle changes made to the input */
+  ngOnChanges(changes: SimpleChanges) {
+    // Changes to study
+    if(changes.study) {
+      this.study = changes.study.currentValue;
+    }
 
-    this.dialog.open(StudySelectDialog, dialogOpenParams)
-      .afterClosed()
-      .subscribe((selectedStudy: any) => {
-        if(selectedStudy && selectedStudy.data) {
-          this.activeStudy = selectedStudy.data;
-          this.getNextTag();
-        }
-      });
+    // Changes to isTraining
+    if(changes.isTraining) {
+      this.isTraining = changes.isTraining.currentValue;
+    }
+
+    // Update the current tag shown
+    this.getNextTag();
   }
 
   /**
@@ -88,7 +80,8 @@ export class TaggingInterface implements OnInit {
    * the user.
    */
   async getNextTag() {
-    const tag = await this.responseService.getNextUntaggedResponse(this.activeStudy!);
+    const tag =
+      await this.responseService.getNextUntaggedResponse(this.authService.user, this.study, this.isTraining);
 
     // No more tags for this study
     if (!tag) {
@@ -107,7 +100,7 @@ export class TaggingInterface implements OnInit {
   async formSubmit(tag: Tag) {
     try {
       // Add on the tag data
-      await this.responseService.addTag(tag);
+      await this.responseService.addTag(tag, this.isTraining);
 
       // Get next tag to complete
       this.getNextTag();

@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatStepperModule,
     MatInputModule,
-    CommonModule
+    CommonModule,
+    MatProgressBarModule
   ],
   exports: [
     MatButtonModule,
@@ -58,7 +60,8 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatStepperModule,
     MatInputModule,
-    CommonModule
+    CommonModule,
+    MatProgressBarModule
   ],
  })
 export class MaterialModule { }

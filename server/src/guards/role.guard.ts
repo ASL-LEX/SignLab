@@ -44,6 +44,6 @@ export class RolesGuard implements CanActivate {
     }
 
     // Otherwise, see if the user is authorized to access this endpoint
-    return await this.authService.isAuthorized(session.userID, requiredRoles);
+    return this.authService.isAuthorized(session.userID, requiredRoles);
   }
 }

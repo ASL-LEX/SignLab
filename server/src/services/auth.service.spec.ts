@@ -16,10 +16,9 @@ const testUser: User = {
     tagging: true,
     recording: true,
     accessing: true,
-    owner: false
-  }
+    owner: false,
+  },
 };
-
 
 // Test interface for user storage
 const userModel = {
@@ -44,13 +43,28 @@ const userModel = {
   },
 
   async count() {
-    return Promise.resolve(1)
+    return Promise.resolve(1);
   },
 
   async create(params: UserSignup) {
     return params;
   },
 };
+
+/**
+ * Mock the response schema since it indirectly gets a different module
+ * declaration from the `app`
+ */
+jest.mock('../schemas/response.schema', () => ({
+  Response: () => {
+    return { name: 'Response' };
+  },
+}));
+jest.mock('../schemas/response-upload.schema', () => ({
+  ResponseUpload: () => {
+    return { name: 'Response' };
+  },
+}));
 
 describe('AuthService', () => {
   // Service being tested
@@ -149,8 +163,8 @@ describe('AuthService', () => {
           tagging: false,
           recording: false,
           accessing: false,
-          owner: false
-        }
+          owner: false,
+        },
       };
       const result = await authService.signup(newUser);
       expect(result).toEqual(newUser);

@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ResponseUpload, ResponseUploadDocument } from '../schemas/response-upload.schema';
+import {
+  ResponseUpload,
+  ResponseUploadDocument,
+} from '../schemas/response-upload.schema';
 import { ResponseService } from './response.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';
@@ -19,17 +22,17 @@ const unzipper = require('unzipper');
  * during the upload.
  */
 export interface ResponseUploadResult {
-  responses?: Response[],
-  saveResult: SaveAttempt
-};
+  responses?: Response[];
+  saveResult: SaveAttempt;
+}
 
 @Injectable()
 export class ResponseUploadService {
   constructor(
     @InjectModel(ResponseUpload.name)
     private responseUploadModel: Model<ResponseUploadDocument>,
-    private responseService: ResponseService
-  ) { }
+    private responseService: ResponseService,
+  ) {}
 
   /**
    * Handle the process of taking a stream of data and attempting to parse
@@ -122,7 +125,7 @@ export class ResponseUploadService {
         filesMissingData.push(file);
         continue;
       }
-      if(saveResult.responses) {
+      if (saveResult.responses) {
         responsesCreated.push(saveResult.responses[0]);
       }
     }
@@ -133,7 +136,7 @@ export class ResponseUploadService {
         saveResult: {
           type: 'warning',
           message: 'No response videos found in ZIP, no responses saved',
-        }
+        },
       };
     }
 
@@ -162,7 +165,7 @@ export class ResponseUploadService {
 
     return {
       responses: responsesCreated,
-      saveResult: result
+      saveResult: result,
     };
   }
 
@@ -193,7 +196,7 @@ export class ResponseUploadService {
         saveResult: {
           type: 'warning',
           message: `Response upload not found for ${filename}`,
-        }
+        },
       };
     }
 
@@ -218,8 +221,8 @@ export class ResponseUploadService {
     return {
       responses: [response],
       saveResult: {
-        type: 'success'
-      }
+        type: 'success',
+      },
     };
   }
 
@@ -250,8 +253,9 @@ export class ResponseUploadService {
     responseUpload.filename = responseUpload.filename.trim();
 
     // Make sure the ResponseUpload ID is unique
-    const responseExists = (await this.responseService.responseExists(responseUpload.responseID)) ||
-                           (await this.responseUploadExists(responseUpload.responseID))
+    const responseExists =
+      (await this.responseService.responseExists(responseUpload.responseID)) ||
+      (await this.responseUploadExists(responseUpload.responseID));
     if (responseExists) {
       return {
         type: 'error',
@@ -328,6 +332,4 @@ export class ResponseUploadService {
       };
     }
   }
-
-
 }

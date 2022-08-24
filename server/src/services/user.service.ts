@@ -17,9 +17,11 @@ export class UserService {
    * found.
    */
   async find(userID: string): Promise<User | null> {
-    return await this.userModel.findOne({
-      _id: userID
-    }).exec();
+    return this.userModel
+      .findOne({
+        _id: userID,
+      })
+      .exec();
   }
 
   /**
@@ -37,7 +39,7 @@ export class UserService {
    * @return True if the user exists (and can thus have a role added) false otherwise
    */
   async addRole(role: string, id: string): Promise<boolean> {
-    return await this.setHasRole(role, id, true);
+    return this.setHasRole(role, id, true);
   }
 
   /**
@@ -48,7 +50,7 @@ export class UserService {
    * @return True if the user exists and the role was remvoed
    */
   async removeRole(role: string, id: string): Promise<boolean> {
-    return await this.setHasRole(role, id, false);
+    return this.setHasRole(role, id, false);
   }
 
   /**

@@ -16,7 +16,7 @@ const testUsers: User[] = [
       recording: false,
       accessing: false,
       owner: false,
-    }
+    },
   },
   {
     _id: '2',
@@ -30,7 +30,7 @@ const testUsers: User[] = [
       recording: true,
       accessing: true,
       owner: false,
-    }
+    },
   },
 ];
 

@@ -4,7 +4,8 @@ import { Tag } from '../../../../../shared/dtos/tag.dto';
 import { ResponseService } from '../../core/services/response.service';
 import { TaggingInterface } from './tagging-interface.component';
 import { StudyService } from '../../core/services/study.service';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthService } from '../../core/services/auth.service';
 
 describe('TaggingInterface', () => {
   // Unit under test
@@ -123,6 +124,12 @@ describe('TaggingInterface', () => {
     }
   };
 
+  const authSpy = {
+    get user() {
+      return testTag1.user;
+    }
+  };
+
   beforeEach(() => {
     responseSpy = jasmine.createSpyObj('ResponseService',
                                        ['getNextUntaggedResponse', 'addTag']);
@@ -134,7 +141,8 @@ describe('TaggingInterface', () => {
       imports: [ SharedModule, BrowserAnimationsModule ],
       providers: [
         { provide: ResponseService, useValue: responseSpy },
-        { provide: StudyService, useValue: studySpy }
+        { provide: StudyService, useValue: studySpy },
+        { provide: AuthService, useValue: authSpy }
       ]
     });
 

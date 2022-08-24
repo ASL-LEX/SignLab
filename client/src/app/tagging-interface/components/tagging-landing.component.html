@@ -1,0 +1,72 @@
+<div *ngIf="activeStudy == null; then noStudies else studyView"></div>
+
+<ng-template #noStudies>
+  <mat-card>
+    <mat-card-title>No Studies</mat-card-title>
+    <mat-card-content>
+      No studies currently available, check back later
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #studyView>
+  <mat-card *ngIf="userStudy">
+    <mat-card-title>Study: {{activeStudy!.name}}</mat-card-title>
+    <mat-card-content>
+      <div *ngIf="activeView == 'info'">
+        <!-- Study Selection -->
+        <button mat-stroked-button (click)="openStudySelectDialog()">Change Study</button>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+
+          <!-- Tagging Information View -->
+          <div>
+            <h2>Study Tagging</h2>
+
+            <!-- Message displayed if the user cannot tag in this study -->
+            <p *ngIf="!userStudy!.hasAccessToStudy">
+              You do not have access to tag in this study. Make sure you have
+              completed training and have been given access by an administator.
+            </p>
+
+            <!-- Navigation into tagging -->
+            <button mat-stroked-button
+              (click)="setView('tagging')"
+              [disabled]="!userStudy!.hasAccessToStudy">Enter Tagging</button>
+          </div>
+
+          <!-- Training Information View -->
+          <div>
+            <h2>Study Training</h2>
+
+            <!-- Message displayed when training is complete -->
+            <p *ngIf="userStudy!.trainingResponseStudies.length == 0">
+              Training complete, notify your administrator of the completion
+              of your training.
+            </p>
+
+            <button mat-stroked-button
+              (click)="setView('training')"
+              [disabled]="userStudy!.trainingResponseStudies.length == 0">Enter Training</button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeView == 'tagging'">
+        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <tagging-interface
+          [study]="activeStudy!"
+        ></tagging-interface>
+      </div>
+
+      <div *ngIf="activeView == 'training'">
+        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+
+        <tagging-interface
+          [study]="activeStudy!"
+          [isTraining]="true"></tagging-interface>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+

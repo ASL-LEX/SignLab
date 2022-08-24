@@ -16,7 +16,10 @@ import { ResponseService } from '../../services/response.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import { Response } from '../../schemas/response.schema';
-import { MetadataDefinition, SaveAttempt } from '../../../../shared/dtos/response.dto';
+import {
+  MetadataDefinition,
+  SaveAttempt,
+} from '../../../../shared/dtos/response.dto';
 import { SchemaService } from '../../services/schema.service';
 import { ResponseUploadService } from '../../services/response-upload.service';
 import { StudyService } from '../../services/study.service';
@@ -25,11 +28,13 @@ import { ResponseStudy } from '../../../../shared/dtos/responsestudy.dto';
 
 @Controller('/api/response')
 export class ResponseController {
-  constructor(private responseService: ResponseService,
-              private schemaService: SchemaService,
-              private responseUploadService: ResponseUploadService,
-              private studyService: StudyService,
-              private responseStudyService: ResponseStudyService) {}
+  constructor(
+    private responseService: ResponseService,
+    private schemaService: SchemaService,
+    private responseUploadService: ResponseUploadService,
+    private studyService: StudyService,
+    private responseStudyService: ResponseStudyService,
+  ) {}
 
   /**
    * Handle storing the metadata schema which will be stored for
@@ -43,7 +48,10 @@ export class ResponseController {
   async setMetadata(@Body() fields: MetadataDefinition[]) {
     // If the schema already exists, throw an error
     if (await this.schemaService.hasSchema('Response')) {
-      throw new HttpException('Response schema already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Response schema already exists',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // Generate a JSON Schmea from the meta data
@@ -51,10 +59,10 @@ export class ResponseController {
       $id: 'Response',
       $schema: 'https://json-schema.org/draft/2020-12/schema',
       type: 'object',
-      properties: { },
-      required: fields.map(field => field.name)
+      properties: {},
+      required: fields.map((field) => field.name),
     };
-    for(let field of fields) {
+    for (const field of fields) {
       schema.properties[field.name] = { type: field.type };
     }
 
@@ -84,7 +92,7 @@ export class ResponseController {
     // TODO: Add error handling on file type
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
-    return await this.responseUploadService.uploadResponseDataCSV(fileStream);
+    return this.responseUploadService.uploadResponseDataCSV(fileStream);
   }
 
   /**
@@ -120,11 +128,16 @@ export class ResponseController {
     );
 
     // Now create a ResponseStudy for each response for each study
-    if(result.responses) {
+    if (result.responses) {
       const studies = await this.studyService.getStudies();
-      await Promise.all(studies.map(async (study) => {
-        this.responseStudyService.createResponseStudies(result.responses, study);
-      }));
+      await Promise.all(
+        studies.map(async (study) => {
+          this.responseStudyService.createResponseStudies(
+            result.responses,
+            study,
+          );
+        }),
+      );
     }
 
     return result.saveResult;
@@ -135,37 +148,55 @@ export class ResponseController {
    */
   @Get('/')
   async getResponses(): Promise<Response[]> {
-    return await this.responseService.getAllResponses();
+    return this.responseService.getAllResponses();
   }
 
   /*
    * Get the response studies for a specific study.
    */
   @Get('/responsestudies')
-  async getResponseStudies(@Query('studyID') studyID: string): Promise<ResponseStudy[]> {
+  async getResponseStudies(
+    @Query('studyID') studyID: string,
+  ): Promise<ResponseStudy[]> {
     // Ensure that the service exists
     const study = await this.studyService.find(studyID);
-    if(!study) {
-      throw new HttpException(`The study with id ${studyID} does not exist`, HttpStatus.BAD_REQUEST);
+    if (!study) {
+      throw new HttpException(
+        `The study with id ${studyID} does not exist`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    return await this.responseStudyService.getResponseStudies(study);
+    return this.responseStudyService.getResponseStudies(study);
   }
 
   /**
    * Change if the response should be enabled as part of the study.
    */
   @Put('/enable')
-  async setResponseStudyEnable(@Body() changeRequest: { studyID: string, responseID: string, isPartOfStudy: boolean }): Promise<void> {
+  async setResponseStudyEnable(
+    @Body()
+    changeRequest: {
+      studyID: string;
+      responseID: string;
+      isPartOfStudy: boolean;
+    },
+  ): Promise<void> {
     // Get the study and response
     // TODO: Standardized this process of existence checking and querying
     const study = await this.studyService.find(changeRequest.studyID);
-    if(!study) {
-      throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);
+    if (!study) {
+      throw new HttpException(
+        `The study with id ${changeRequest.studyID} does not exist`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
     const response = await this.responseService.find(changeRequest.responseID);
-    if(!response) {
-      throw new HttpException(`The response with id ${changeRequest.responseID} does not exist`, HttpStatus.BAD_REQUEST);
+    if (!response) {
+      throw new HttpException(
+        `The response with id ${changeRequest.responseID} does not exist`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // This would be bad if the response study does not exist since the
@@ -173,10 +204,16 @@ export class ResponseController {
     // This would either be a bug in the code, or someone was poking around the
     // DB and did something bad.
     const responseStudy = await this.responseStudyService.find(response, study);
-    if(!responseStudy) {
-      throw new HttpException(`Something went wrong trying to find the response study information`, HttpStatus.INTERNAL_SERVER_ERROR);
+    if (!responseStudy) {
+      throw new HttpException(
+        `Something went wrong trying to find the response study information`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
-    this.responseStudyService.changePartOfStudy(responseStudy, changeRequest.isPartOfStudy);
+    this.responseStudyService.changePartOfStudy(
+      responseStudy,
+      changeRequest.isPartOfStudy,
+    );
   }
 }

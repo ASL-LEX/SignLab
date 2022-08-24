@@ -58,7 +58,7 @@ export class ResponseUpload {
     validate: {
       validator: async (value: any) => {
         const schemaService = app.get(SchemaService);
-        return await schemaService.validate('Response', value);
+        return schemaService.validate('Response', value);
       },
     },
   })

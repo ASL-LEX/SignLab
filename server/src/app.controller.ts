@@ -1,12 +1,17 @@
-import { Controller, Get, Response, Param, StreamableFile } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Response,
+  Param,
+  StreamableFile,
+} from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { SchemaService } from './services/schema.service';
 
 @Controller()
 export class AppController {
-
-  constructor(private schemaService: SchemaService) { }
+  constructor(private schemaService: SchemaService) {}
 
   @Get()
   clientUI(@Response() res: any) {
@@ -14,13 +19,18 @@ export class AppController {
   }
 
   @Get('/media/:filename')
-  videoURL(@Response({ passthrough: true }) res: any, @Param('filename') filename: string) {
-     const file = createReadStream(join(process.cwd(), `upload/responses/${filename}`));
+  videoURL(
+    @Response({ passthrough: true }) res: any,
+    @Param('filename') filename: string,
+  ) {
+    const file = createReadStream(
+      join(process.cwd(), `upload/responses/${filename}`),
+    );
 
-     res.set({
-       'Content-Type': 'video/webm'
-     });
-     return new StreamableFile(file);
+    res.set({
+      'Content-Type': 'video/webm',
+    });
+    return new StreamableFile(file);
   }
 
   /**
@@ -33,7 +43,7 @@ export class AppController {
   @Get('/api/first')
   async isFirstTime() {
     return {
-      isFirstTimeSetup: !(await this.schemaService.hasSchema('Response'))
-    }
+      isFirstTimeSetup: !(await this.schemaService.hasSchema('Response')),
+    };
   }
 }

@@ -20,11 +20,19 @@ export class ResponseStudy {
   _id?: string;
 
   /** The response that this entity maps to */
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: Response.name })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Response.name,
+  })
   response: Response;
 
   /** The study that this entity maps to */
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: Study.name })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Study.name,
+  })
   study: Study;
 
   /**

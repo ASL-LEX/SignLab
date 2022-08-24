@@ -11,14 +11,14 @@ export class ResponseService {
   ) {}
 
   async find(responseID: string): Promise<Response | null> {
-    return await this.responseModel.findOne({ _id: responseID }).exec();
+    return this.responseModel.findOne({ _id: responseID }).exec();
   }
 
   /**
    * Get all responses from the database
    */
   async getAllResponses(): Promise<Response[]> {
-    return await this.responseModel.find({}).exec();
+    return this.responseModel.find({}).exec();
   }
 
   /**
@@ -35,6 +35,6 @@ export class ResponseService {
   }
 
   async createResponse(response: Response): Promise<Response> {
-    return await this.responseModel.create(response);
+    return this.responseModel.create(response);
   }
 }

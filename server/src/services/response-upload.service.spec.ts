@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ResponseStudy} from '../schemas/responsestudy.schema';
+import { ResponseStudy } from '../schemas/responsestudy.schema';
 import { Readable } from 'stream';
 import { ResponseUpload } from '../schemas/response-upload.schema';
 import { ResponseService } from './response.service';
@@ -126,8 +126,8 @@ const responseService = {
 
 const studyService = {
   getStudies() {
-    return [ 'study1', 'study2', 'study3' ];
-  }
+    return ['study1', 'study2', 'study3'];
+  },
 };
 
 /**
@@ -179,19 +179,19 @@ describe('ResponseService', () => {
         },
         {
           provide: getModelToken(ResponseStudy.name),
-          useValue: {}
+          useValue: {},
         },
         {
           provide: StudyService,
-          useValue: studyService
+          useValue: studyService,
         },
         {
           provide: TagService,
-          useValue: {}
+          useValue: {},
         },
         {
           provide: ResponseService,
-          useValue: responseService
+          useValue: responseService,
         },
       ],
     }).compile();
@@ -205,14 +205,18 @@ describe('ResponseService', () => {
         `This is garbage and now good no commas for you`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('error');
     });
 
     it('should not allow empty CSV', async () => {
       const testInput = Readable.from(['']);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('error');
       expect(result.message).toContain('No responses found in CSV');
     });
@@ -224,7 +228,9 @@ describe('ResponseService', () => {
          1,example.mp4,tree`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('error');
     });
 
@@ -235,7 +241,9 @@ describe('ResponseService', () => {
          1,2,example.mp4,tree,butterfly`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('error');
       expect(result.message).toContain('Failed to parse CSV');
     });
@@ -248,7 +256,9 @@ describe('ResponseService', () => {
         1,3,example.mp4,bread`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('error');
       expect(result.where[0].message).toContain('already exists');
     });
@@ -262,14 +272,18 @@ describe('ResponseService', () => {
          7,8,another.mp4,water`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(testInput);
+      const result = await responseUploadService.uploadResponseDataCSV(
+        testInput,
+      );
       expect(result.type).toEqual('success');
     });
   });
 
   describe('uploadResponseVideos()', () => {
     it('should give warning on a ZIP file with not content', async () => {
-      const result = await responseUploadService.uploadResponseVideos('empty.zip');
+      const result = await responseUploadService.uploadResponseVideos(
+        'empty.zip',
+      );
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain('No response videos found');
@@ -332,7 +346,9 @@ describe('ResponseService', () => {
         };
       });
 
-      const result = await responseUploadService.uploadResponseVideos('all_good.zip');
+      const result = await responseUploadService.uploadResponseVideos(
+        'all_good.zip',
+      );
 
       expect(result.saveResult.type).toEqual('success');
     });

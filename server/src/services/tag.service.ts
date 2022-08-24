@@ -8,7 +8,7 @@ import { Response } from '../schemas/response.schema';
 
 @Injectable()
 export class TagService {
-  constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>) { };
+  constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>) {}
 
   /**
    * Make a new tag for the given user, study, and response. When the tag is
@@ -20,15 +20,73 @@ export class TagService {
    * @return A new tag
    */
   async createTag(user: User, response: Response, study: Study): Promise<Tag> {
-    return await this.tagModel.create({
+    return this.tagModel.create({
       response: response,
       study: study,
       user: user,
-      complete: false
+      complete: false,
+      isTraining: false,
     });
   }
 
-   /**
+  /**
+   * Make a new training tag. When this tag is created it is considered
+   * incomplete.
+   */
+  async createTrainingTag(
+    user: User,
+    response: Response,
+    study: Study,
+  ): Promise<Tag> {
+    const result = await (
+      await this.tagModel.create({
+        response: response,
+        study: study,
+        user: user,
+        complete: false,
+        isTraining: true,
+      })
+    ).populate('response');
+
+    return result;
+  }
+
+  /**
+   * Get all the tags for the given study that are complete.
+   *
+   * @param study The study to search for
+   */
+  async getCompleteTags(study: Study): Promise<Tag[]> {
+    return this.tagModel
+      .find({
+        study: study._id!,
+        complete: true,
+        isTraining: false,
+      })
+      .populate('user')
+      .populate('study')
+      .populate('response')
+      .exec();
+  }
+
+  /**
+   * Get all complete training tags for a given user and study
+   */
+  async getCompleteTrainingTags(user: User, study: Study): Promise<Tag[]> {
+    return this.tagModel
+      .find({
+        study: study._id!,
+        complete: true,
+        isTraining: true,
+        user: user._id,
+      })
+      .populate('user')
+      .populate('study')
+      .populate('response')
+      .exec();
+  }
+
+  /**
    * Find a response and tag that the given user has yet to complete for
    * the given study. If the user does not have an incomplete tag, then null
    * is returned.
@@ -37,11 +95,35 @@ export class TagService {
    * @param study The study that tag is associated with
    */
   async getIncompleteTag(user: User, study: Study): Promise<Tag | null> {
+    return this.getIncompleteTagGeneric(user, study, false);
+  }
+
+  /**
+   * Find a response and tag for the given user that was incomplete as part
+   * of the training for a specific study.
+   */
+  async getIncompleteTrainingTag(
+    user: User,
+    study: Study,
+  ): Promise<Tag | null> {
+    return this.getIncompleteTagGeneric(user, study, true);
+  }
+
+  /**
+   * Find a response and tag that the user has yet to complete either
+   * from the normal data set or the training data set.
+   */
+  private async getIncompleteTagGeneric(
+    user: User,
+    study: Study,
+    fromTrainingSet: boolean,
+  ): Promise<Tag | null> {
     const incompleteTag = await this.tagModel
       .findOne({
         user: user._id,
         study: study._id,
-        complete: false
+        complete: false,
+        isTraining: fromTrainingSet,
       })
       .populate('user')
       .populate('response')
@@ -57,6 +139,6 @@ export class TagService {
    * @param tag The tag to update
    */
   async save(tag: Tag) {
-    await this.tagModel.findOneAndUpdate({_id: tag._id}, tag).exec();
+    await this.tagModel.findOneAndUpdate({ _id: tag._id }, tag).exec();
   }
 }

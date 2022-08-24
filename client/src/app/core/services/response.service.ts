@@ -1,10 +1,11 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SaveAttempt, Response } from '../../../../../shared/dtos/response.dto';
 import { ResponseStudy } from '../../../../../shared/dtos/responsestudy.dto';
 import { Tag } from '../../../../../shared/dtos/tag.dto';
 import { MetaDefinition } from '@angular/platform-browser';
 import { Study } from '../../../../../shared/dtos/study.dto';
+import { User } from '../../../../../shared/dtos/user.dto';
 
 /**
  * Handle access and modifications make to responses.
@@ -85,9 +86,17 @@ export class ResponseService {
    * Get the next response that needs to be tagged. This will return an
    * incomplete tag for the user to complete.
    */
-  async getNextUntaggedResponse(study: Study): Promise<Tag | null> {
+  async getNextUntaggedResponse(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
     // TODO: Determine the current user
-    const result  = await this.http.get<Tag | null>(`http://localhost:3000/api/tag/assign?userID=62ec12c6b79f2697e0c2ab7a&studyID=${study._id!}`).toPromise();
+    let result = null;
+
+    const query = { params: { userID: user._id, studyID: study._id! } };
+
+    if(isTraining) {
+      result = await this.http.get<Tag | null>(`http://localhost:3000/api/tag/nextTraining`, query).toPromise();
+    } else {
+      result = await this.http.get<Tag | null>(`http://localhost:3000/api/tag/assign`, query).toPromise();
+    }
 
     return result ? result : null;
   }
@@ -98,8 +107,12 @@ export class ResponseService {
    * @param tag The tag that is being applied
    * @return Success or error
    */
-  async addTag(tag: Tag) {
-    const response = await this.http.post<any>(`http://localhost:3000/api/tag/complete`, tag, {}).toPromise();
+  async addTag(tag: Tag, isTraining: boolean) {
+    if(isTraining) {
+      await this.http.post<any>(`http://localhost:3000/api/tag/completeTraining`, tag, {}).toPromise();
+    } else {
+      await this.http.post<any>(`http://localhost:3000/api/tag/complete`, tag, {}).toPromise();
+    }
   }
 
   /**

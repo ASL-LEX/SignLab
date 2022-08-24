@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { Study } from '../../schemas/study.schema';
+import { StudyService } from '../../services/study.service';
 import {
   UserAvailability,
   UserCredentials,
@@ -8,6 +10,7 @@ import {
 import { User } from '../../schemas/user.schema';
 import { AuthService } from '../../services/auth.service';
 import { AuthController } from './auth.controller';
+import { UserStudyService } from '../../services/userstudy.service';
 
 // Test values which are used for testing authentication
 const validCredentials: UserCredentials = {
@@ -65,6 +68,31 @@ const mockAuthService = {
   },
 };
 
+const mockStudyService = {
+  async getStudies(): Promise<Study[]> {
+    return [];
+  },
+};
+
+const mockUserStudyService = {
+  async create(_user: User, _study: Study) {},
+};
+
+/**
+ * Mock the response schema since it indirectly gets a different module
+ * declaration from the `app`
+ */
+jest.mock('../../schemas/response.schema', () => ({
+  Response: () => {
+    return { name: 'Response' };
+  },
+}));
+jest.mock('../../schemas/response-upload.schema', () => ({
+  ResponseUpload: () => {
+    return { name: 'Response' };
+  },
+}));
+
 describe('AuthController', () => {
   // Controller being tested
   let authController: AuthController;
@@ -76,6 +104,14 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: StudyService,
+          useValue: mockStudyService,
+        },
+        {
+          provide: UserStudyService,
+          useValue: mockUserStudyService,
         },
       ],
     }).compile();
