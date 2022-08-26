@@ -55,9 +55,7 @@ describe('ResponseNewStudyTable', () => {
     responseSpy.getResponses.and.returnValue(Promise.resolve(exampleResponseData));
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule
-      ],
+      imports: [SharedModule],
       declarations: [
         ResponseNewStudyTable,
         ResponseTableCoreComponent

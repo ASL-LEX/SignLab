@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-// import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '../../decorators/roles.decorator';
 import { ResponseService } from '../../services/response.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
@@ -44,7 +44,7 @@ export class ResponseController {
    *       it cannot be changed.
    */
   @Post('/metadata')
-  // @Roles('owner')
+  @Roles('owner')
   async setMetadata(@Body() fields: MetadataDefinition[]) {
     // If the schema already exists, throw an error
     if (await this.schemaService.hasSchema('Response')) {
@@ -84,6 +84,7 @@ export class ResponseController {
    *         error messages
    */
   @Post('/upload/csv')
+  @Roles('admin')
   @UseInterceptors(FileInterceptor('file'))
   // @Roles('admin')
   async uploadCSV(
@@ -107,7 +108,7 @@ export class ResponseController {
    *         error messages.
    */
   @Post('/upload/zip')
-  // @Roles('admin')
+  @Roles('admin')
   @UseInterceptors(
     FileInterceptor('file', {
       // @Roles('admin')
@@ -147,6 +148,7 @@ export class ResponseController {
    * Get all response information
    */
   @Get('/')
+  @Roles('admin')
   async getResponses(): Promise<Response[]> {
     return this.responseService.getAllResponses();
   }
@@ -155,6 +157,7 @@ export class ResponseController {
    * Get the response studies for a specific study.
    */
   @Get('/responsestudies')
+  @Roles('admin')
   async getResponseStudies(
     @Query('studyID') studyID: string,
   ): Promise<ResponseStudy[]> {
@@ -174,6 +177,7 @@ export class ResponseController {
    * Change if the response should be enabled as part of the study.
    */
   @Put('/enable')
+  @Roles('admin')
   async setResponseStudyEnable(
     @Body()
     changeRequest: {

@@ -6,6 +6,7 @@ import {
   HttpException,
   Post,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user.service';
 import { StudyService } from '../../services/study.service';
@@ -13,6 +14,7 @@ import { TagService } from '../../services/tag.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
 import { Tag } from '../../../../shared/dtos/tag.dto';
 import { UserStudyService } from '../../services/userstudy.service';
+import { TagGuard } from '../../guards/tag.guard';
 
 @Controller('/api/tag')
 export class TagController {
@@ -34,6 +36,7 @@ export class TagController {
    * 3. Otherwise create a new tag for the user to complete
    */
   @Get('/assign')
+  @UseGuards(TagGuard)
   async getNextTag(
     @Query('userID') userID: string,
     @Query('studyID') studyID: string,
@@ -151,6 +154,7 @@ export class TagController {
    * first validate that the fields in the tag match the expected schema.
    */
   @Post('/complete')
+  @UseGuards(TagGuard)
   async completeTag(@Body() tag: Tag) {
     // First validate tag against study's schema
     const validationResults = this.studyService.validate(tag);

@@ -16,6 +16,7 @@ import { StudyCreation } from '../../../../shared/dtos/study.dto';
 import { UserStudy } from '../../schemas/userstudy.schema';
 import { UserStudyService } from '../../services/userstudy.service';
 import { UserService } from '../../services/user.service';
+import { Roles } from '../../decorators/roles.decorator';
 
 @Controller('/api/study')
 export class StudyController {
@@ -30,6 +31,7 @@ export class StudyController {
    * Get all of the studies
    */
   @Get('/')
+  @Roles('admin')
   async getStudies(): Promise<Study[]> {
     return this.studyService.getStudies();
   }
@@ -38,6 +40,7 @@ export class StudyController {
    * Deterine if a study with the given name exists
    */
   @Get('/exists')
+  @Roles('admin')
   async studyExists(@Query('studyName') studyName: string): Promise<boolean> {
     return this.studyService.exists(studyName);
   }
@@ -47,6 +50,7 @@ export class StudyController {
    * study.
    */
   @Get('/users')
+  @Roles('admin')
   async getUserStudies(
     @Query('studyID') studyID: string,
   ): Promise<UserStudy[]> {
@@ -90,6 +94,7 @@ export class StudyController {
    * Change if the given user will have tagging access on the given study.
    */
   @Put('/user/enable')
+  @Roles('admin')
   async changeUserAccess(
     @Body()
     changeRequest: {
@@ -126,6 +131,7 @@ export class StudyController {
    * newly created study.
    */
   @Post('/create')
+  @Roles('admin')
   async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(studyCreation.study.name);

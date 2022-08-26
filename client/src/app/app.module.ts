@@ -12,6 +12,7 @@ import { CoreModule } from './core/core.module';
 
 // Components
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home.component';
 
 // Routing
 import { RouterModule } from "@angular/router";
@@ -20,6 +21,7 @@ import { RouterModule } from "@angular/router";
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

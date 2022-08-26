@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../core/services/auth.service';
 
@@ -27,7 +28,7 @@ export class LoginComponent {
   /** Field of the users password */
   pass = new FormControl('');
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   /**
    * Called when the form is submitted. Will attempt to authenticate the user
@@ -44,8 +45,7 @@ export class LoginComponent {
     const user = await this.authService.authenticate(this.username.value, this.pass.value)
 
     if(user) {
-      // TODO: Reroute to dashboard
-      console.log('Success');
+      this.router.navigate(['/']);
     } else {
       alert('Username or password is invalid');
     }

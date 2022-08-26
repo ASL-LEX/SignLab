@@ -44,6 +44,7 @@ import { ResponseStudyService } from './services/responsestudy.service';
 import { ResponseUploadService } from './services/response-upload.service';
 import { UserStudy, UserStudySchema } from './schemas/userstudy.schema';
 import { UserStudyService } from './services/userstudy.service';
+import { TagGuard } from './guards/tag.guard';
 
 @Module({
   imports: [
@@ -81,6 +82,7 @@ import { UserStudyService } from './services/userstudy.service';
     ResponseStudyService,
     ResponseUploadService,
     UserStudyService,
+    TagGuard,
     {
       provide: APP_GUARD,
       useClass: RolesGuard,

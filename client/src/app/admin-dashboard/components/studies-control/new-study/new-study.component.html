@@ -1,4 +1,17 @@
-<mat-stepper linear="true">
+<div *ngIf="studyCreated">
+  <mat-card>
+    <mat-card-title>Study Created Successfully</mat-card-title>
+    <mat-card-content>
+      <div>
+        <p>Study created successfully</p>
+        <button mat-stroked-button (click)="redirectToAdmin()">Click to Continue</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<mat-stepper linear="true" *ngIf="!studyCreated">
 
   <!-- Required Study Metadata -->
   <mat-step label="Study Identification">

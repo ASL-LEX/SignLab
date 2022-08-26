@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { AuthService } from './core/services/auth.service';
 import { BackendService } from './core/services/backend.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class AppComponent implements OnInit {
    */
   firstTimeSetup = false;
 
-  constructor(private ngZone: NgZone, private backend: BackendService) {
+  constructor(private ngZone: NgZone, private backend: BackendService, public authService: AuthService) {
     this.setupComplete = this.setupComplete.bind(this);
   }
 

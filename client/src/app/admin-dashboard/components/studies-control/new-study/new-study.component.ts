@@ -9,6 +9,7 @@ import { fileListControlRendererTester, FileListField } from '../../../../shared
 import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
 import { JsonSchema } from '@jsonforms/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'new-study',
@@ -29,6 +30,8 @@ export class NewStudyComponent {
   markedDisabledChange(newSet: Set<string>) { this.markedDisabled = newSet; }
   /** Handle changes to marked training */
   markedTrainingChange(newSet: Set<string>) { this.markedTraining = newSet; }
+  /** Boolean that is updated when the study is completed */
+  studyCreated = false;
 
   /** The fields that will be part of the tag */
   tagFields: TagField[] = [];
@@ -47,7 +50,7 @@ export class NewStudyComponent {
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' }
   ];
 
-  constructor(private studyService: StudyService, private dialog: MatDialog) { }
+  constructor(private studyService: StudyService, private dialog: MatDialog, private router: Router) { }
 
   /** Add a field to the tag */
   addTagField(tagFieldType: TagFieldType) {
@@ -108,6 +111,7 @@ export class NewStudyComponent {
       trainingResponses: Array.from(this.markedTraining),
       disabledResponses: Array.from(this.markedDisabled)
     });
+    this.studyCreated = true;
   }
 
   /** Display the tag form preview in a popup dialog */
@@ -121,6 +125,10 @@ export class NewStudyComponent {
         renderers: this.renderers
       }
     });
+  }
+
+  redirectToAdmin() {
+    this.router.navigate(['/admin']);
   }
 
   /** Make the JSON Forms schema */

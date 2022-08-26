@@ -87,7 +87,7 @@ export class AuthService {
     const user = { roles: {} };
     Object.assign(user, userSignup);
     user.roles = {
-      admin: false,
+      admin: isOwner,
       tagging: false,
       recording: false,
       accessing: false,

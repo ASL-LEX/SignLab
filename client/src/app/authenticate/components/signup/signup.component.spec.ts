@@ -1,6 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { SignupComponent } from "./signup.component";
 import { AuthService } from '../../../core/services/auth.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('SignupComponent', () => {
   // Test password complexity requirements
@@ -27,6 +28,7 @@ describe('SignupComponent', () => {
     authSpy.isUserAvailable.and.returnValue(Promise.resolve({username: true, email: true}));
 
     TestBed.configureTestingModule({
+      imports: [ RouterTestingModule ],
       declarations: [ SignupComponent ],
       providers: [
         { provide: AuthService, useValue: authSpy }

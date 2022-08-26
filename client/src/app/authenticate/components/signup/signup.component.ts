@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
     AbstractControl, FormControl, FormGroup, ValidationErrors,
     ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ComplexityOptions, default as passwordValidate } from 'joi-password-complexity';
 import { User } from '../../../../../../shared/dtos/user.dto';
 
@@ -85,7 +86,7 @@ export class SignupComponent implements OnInit {
   @Input() onUserSignup: (user: User) => void;
 
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     // Get the password requirements
@@ -137,6 +138,8 @@ export class SignupComponent implements OnInit {
     // Run the callback for when the user has signed in
     if (this.onUserSignup) {
       this.onUserSignup(result);
+    } else {
+      this.router.navigate(['/']);
     }
   }
 }
