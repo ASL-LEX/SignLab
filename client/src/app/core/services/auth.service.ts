@@ -1,14 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User, UserAvailability } from '../../../../../shared/dtos/user.dto';
 import{ ComplexityOptions } from 'joi-password-complexity';
+import { SignLabHttpClient } from './http.service';
 
 
 /**
  * This handles the user level authentication logic. This exposes an interface
  * for authenticating the user and logging the user out.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class AuthService {
 
   /** The logged in user information, or null if the user isn't authenticated */
@@ -17,7 +17,7 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private http: HttpClient) {
+  constructor(private signLab: SignLabHttpClient) {
     this.currentUser = null;
   }
 
@@ -59,13 +59,7 @@ export class AuthService {
     const credentials = { username: username, password: password };
 
     try {
-      const response = await this.http.post<User>(`http://localhost:3000/api/auth/login`, credentials, {}).toPromise();
-
-      // If the object is invalid, assumed failed login attempt
-      if(response === undefined) {
-        console.error("Invalid login reponse");
-        return null;
-      }
+      const response = await this.signLab.post<User>('api/auth/login', credentials, {});
 
       // Store the authorization information and return the user
       this.currentUser = response;
@@ -89,13 +83,7 @@ export class AuthService {
    * @return Password complexity requirements
    */
   public async getPasswordComplexity(): Promise<ComplexityOptions> {
-    const result = await this.http.get<ComplexityOptions>(`http://localhost:3000/api/auth/complexity`).toPromise();
-
-    // Throw an error if the response does not come back with the requirements
-    if(!result) {
-      throw new Error('Failed to get password requirements from server');
-    }
-    return result;
+    return this.signLab.get<ComplexityOptions>('api/auth/complexity');
   }
 
   /**
@@ -107,13 +95,7 @@ export class AuthService {
    */
   public async isUserAvailable(username: string, email: string): Promise<UserAvailability> {
     const options = { params: { username: username, email: email } };
-    const result =
-      await this.http.get<UserAvailability>(`http://localhost:3000/api/auth/availability`, options).toPromise();
-    if(!result) {
-      throw new Error('Failed to get user availability information');
-    }
-
-    return result;
+    return this.signLab.get<UserAvailability>('api/auth/availability', options);
   }
 
   /**
@@ -136,11 +118,7 @@ export class AuthService {
       username: username,
       password: password
     };
-    const result = await this.http.post<User>(`http://localhost:3000/api/auth/signup`, request).toPromise();
-    if(!result) {
-      throw new Error(`Failed to signup user`);
-    }
-    return result;
+    return this.signLab.post<User>('api/auth/signup', request);
   }
 
   /**

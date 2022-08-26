@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { User } from '../../../../../shared/dtos/user.dto';
+import { SignLabHttpClient } from './http.service';
 
 /**
  * This service provides the ability to interact with user information
  * that may be stored on the server
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class UserService {
-  constructor(private http: HttpClient) { }
+  constructor(private signLab: SignLabHttpClient) { }
 
   /**
    * Get back all of the users. If the result is malformed or no users are in
@@ -17,14 +17,7 @@ export class UserService {
    * @return The list of users in the system
    */
   async getUsers(): Promise<User[]> {
-    const response = await this.http.get<User[]>(`http://localhost:3000/api/users`).toPromise();
-
-    // If no response received, return empty list
-    if(!response) {
-      return [];
-    }
-
-    return response;
+    return this.signLab.get<User[]>('api/users');
   }
 
   /**
@@ -37,14 +30,14 @@ export class UserService {
    * @return True on success, false otherwise
    */
   async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
-    const targetURL = `http://localhost:3000/api/users/${role}/${user._id}`;
+    const targetURL = `api/users/${role}/${user._id}`;
 
     // Try to make the change
     try {
       if(hasRole) {
-        await this.http.put<any>(targetURL, null).toPromise();
+        await this.signLab.put<any>(targetURL, null);
       } else {
-        await this.http.delete<any>(targetURL).toPromise();
+        await this.signLab.delete<any>(targetURL);
       }
       return true;
     } catch(error) {

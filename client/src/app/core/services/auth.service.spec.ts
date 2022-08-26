@@ -14,9 +14,8 @@ describe('AuthService', () => {
   beforeEach(() => {
     // Make spy for the authentication service, this one will always not
     // authenticate
-    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise']);
-    spy.post.and.returnValue(spy);
-    spy.toPromise.and.callFake(() => { throw new Error(); });
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
+    spy.post.and.callFake(() => { throw new Error(); });
 
     // Create unit under test
     service = new AuthService(spy);
@@ -48,9 +47,8 @@ describe('AuthService', () => {
   // Valid username and password combo should work
   it('should authorize valid credentials', async () => {
     // Make a spy that will authenticate
-    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise'])
-    spy.post.and.returnValue(spy);
-    spy.toPromise.and.returnValue({
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post'])
+    spy.post.and.returnValue({
       email: 'bob@bu.edu',
       name: 'bob',
       roles: new Map<string, boolean>(),
@@ -70,9 +68,8 @@ describe('AuthService', () => {
   // User availability testing, not-available
   it('should be able to know when username and email is not available', async () => {
     // Make a spy that "knows" of a used email and username
-    const spy = jasmine.createSpyObj('HttpClient', ['get', 'toPromise']);
-    spy.get.and.returnValue(spy);
-    spy.toPromise.and.returnValue({ username: false, email: false });
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
+    spy.get.and.returnValue({ username: false, email: false });
     service = new AuthService(spy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
@@ -82,9 +79,8 @@ describe('AuthService', () => {
   // User availability testing, fully available
   it('should be able to know when a username and email is available', async () => {
     // Make a spy that believe every username and email is available
-    const spy = jasmine.createSpyObj('HttpClient', ['get', 'toPromise']);
-    spy.get.and.returnValue(spy);
-    spy.toPromise.and.returnValue({ username: true, email: true });
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
+    spy.get.and.returnValue({ username: true, email: true });
     service = new AuthService(spy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
@@ -108,9 +104,8 @@ describe('AuthService', () => {
       username: 'bob',
       _id: '1'
     };
-    const spy = jasmine.createSpyObj('HttpClient', ['post', 'toPromise']);
-    spy.post.and.returnValue(spy);
-    spy.toPromise.and.returnValue(user);
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
+    spy.post.and.returnValue(user);
     service = new AuthService(spy);
 
     const result = await service.signup(user.name, user.email, user.username, 'bobby');

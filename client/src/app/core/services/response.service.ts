@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SaveAttempt, Response } from '../../../../../shared/dtos/response.dto';
 import { ResponseStudy } from '../../../../../shared/dtos/responsestudy.dto';
@@ -6,21 +5,20 @@ import { Tag } from '../../../../../shared/dtos/tag.dto';
 import { MetaDefinition } from '@angular/platform-browser';
 import { Study } from '../../../../../shared/dtos/study.dto';
 import { User } from '../../../../../shared/dtos/user.dto';
+import { SignLabHttpClient } from './http.service';
 
 /**
  * Handle access and modifications make to responses.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ResponseService {
-  constructor(private http: HttpClient) { }
+  constructor(private signLab: SignLabHttpClient) { }
 
   /**
    * Set the metadata that all responses will be expected to have.
    */
   async setMetadata(definitions: MetaDefinition[]) {
-    const result =
-      await this.http.post<any>(`http://localhost:3000/api/response/metadata`,
-                                 definitions).toPromise();
+    this.signLab.post<any>('api/response/metadata', definitions);
   }
 
   /**
@@ -29,11 +27,7 @@ export class ResponseService {
    * @return List of responses
    */
   async getResponses(): Promise<Response[]> {
-    const result = await this.http.get<Response[]>(`http://localhost:3000/api/response/`).toPromise();
-    if (!result) {
-      return [];
-    }
-    return result;
+    return this.signLab.get<Response[]>('api/response/');
   }
 
   /**
@@ -41,12 +35,7 @@ export class ResponseService {
    * response is used in a study.
    */
   async getResponseStudies(studyID: string): Promise<ResponseStudy[]> {
-    const result = await this.http.get<ResponseStudy[]>(`http://localhost:3000/api/response/responsestudies`, { params: { 'studyID': studyID } }).toPromise();
-
-    if(!result) {
-      return [];
-    }
-    return result;
+    return this.signLab.get<ResponseStudy[]>('api/response/responsestudies', { params: { 'studyID': studyID } });
   }
 
   /**
@@ -59,12 +48,7 @@ export class ResponseService {
     const form = new FormData();
     form.append('file', file);
 
-    const result = await this.http.post<any>(`http://localhost:3000/api/response/upload/csv`, form).toPromise();
-
-    if (!result) {
-      return { type: 'error', message: 'Unknown error' };
-    }
-    return result;
+    return this.signLab.post<SaveAttempt>('api/response/upload/csv', form);
   }
 
   /**
@@ -74,12 +58,7 @@ export class ResponseService {
     const form = new FormData();
     form.append('file', file);
 
-    const result = await this.http.post<SaveAttempt>(`http://localhost:3000/api/response/upload/zip`, form).toPromise();
-
-    if(!result) {
-      return { type: 'error', message: 'Uknown error' };
-    }
-    return result;
+    return this.signLab.post<SaveAttempt>('api/response/upload/zip', form);
   }
 
   /**
@@ -87,18 +66,13 @@ export class ResponseService {
    * incomplete tag for the user to complete.
    */
   async getNextUntaggedResponse(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
-    // TODO: Determine the current user
-    let result = null;
-
     const query = { params: { userID: user._id, studyID: study._id! } };
 
     if(isTraining) {
-      result = await this.http.get<Tag | null>(`http://localhost:3000/api/tag/nextTraining`, query).toPromise();
+      return this.signLab.get<Tag | null>('api/tag/nextTraining', query);
     } else {
-      result = await this.http.get<Tag | null>(`http://localhost:3000/api/tag/assign`, query).toPromise();
+      return this.signLab.get<Tag | null>('api/tag/assign', query);
     }
-
-    return result ? result : null;
   }
 
   /**
@@ -107,11 +81,11 @@ export class ResponseService {
    * @param tag The tag that is being applied
    * @return Success or error
    */
-  async addTag(tag: Tag, isTraining: boolean) {
+  async addTag(tag: Tag, isTraining: boolean): Promise<void> {
     if(isTraining) {
-      await this.http.post<any>(`http://localhost:3000/api/tag/completeTraining`, tag, {}).toPromise();
+      return this.signLab.post<any>('api/tag/completeTraining', tag, {});
     } else {
-      await this.http.post<any>(`http://localhost:3000/api/tag/complete`, tag, {}).toPromise();
+      return this.signLab.post<any>('api/tag/complete', tag, {});
     }
   }
 
@@ -125,12 +99,12 @@ export class ResponseService {
    * @return True if the change took place successfully
    */
   async setUsedInStudy(responseID: string, usedInStudy: boolean, studyID: string): Promise<boolean> {
-    const targetURL = `http://localhost:3000/api/response/enable`;
+    const targetURL = 'api/response/enable';
     const requestBody = { responseID: responseID, studyID: studyID, isPartOfStudy: usedInStudy };
     try {
-      await this.http.put<any>(targetURL, requestBody).toPromise();
+      await this.signLab.put<any>(targetURL, requestBody);
     } catch(error) {
-      console.log('Failed to update the user role');
+      console.debug('Failed to update the user role');
       return false;
     }
     return true;
