@@ -1,12 +1,16 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { StudyService } from '../.../../../../../core/services/study.service';
-import { Study } from '../../../../../../../shared/dtos/study.dto';
-import  {UserStudy } from '../../../../../../../shared/dtos/userstudy.dto';
+import { Study } from 'shared/dtos/study.dto';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { SharedModule } from '../../../../shared/shared.module';
 import { UserStudyComponent } from './user-study-control.component';
 
 describe('UserStudyComponent', () => {
-
   const testStudy: Study = {
     _id: '1',
     name: 'Test',
@@ -14,8 +18,8 @@ describe('UserStudyComponent', () => {
     instructions: 'Just do it',
     tagSchema: {
       dataSchema: {},
-      uiSchema: {}
-    }
+      uiSchema: {},
+    },
   };
 
   const testUserStudyData: UserStudy[] = [
@@ -32,12 +36,12 @@ describe('UserStudyComponent', () => {
           tagging: false,
           recording: false,
           accessing: false,
-          owner: false
-        }
+          owner: false,
+        },
       },
       study: testStudy,
       trainingResponseStudies: [],
-      hasAccessToStudy: false
+      hasAccessToStudy: false,
     },
     {
       _id: '2',
@@ -52,12 +56,12 @@ describe('UserStudyComponent', () => {
           tagging: false,
           recording: false,
           accessing: false,
-          owner: false
-        }
+          owner: false,
+        },
       },
       study: testStudy,
       trainingResponseStudies: [],
-      hasAccessToStudy: false
+      hasAccessToStudy: false,
     },
     {
       _id: '3',
@@ -72,13 +76,13 @@ describe('UserStudyComponent', () => {
           tagging: false,
           recording: false,
           accessing: false,
-          owner: false
-        }
+          owner: false,
+        },
       },
       study: testStudy,
       trainingResponseStudies: [],
-      hasAccessToStudy: true
-    }
+      hasAccessToStudy: true,
+    },
   ];
 
   let studySpy: jasmine.SpyObj<StudyService>;
@@ -86,20 +90,19 @@ describe('UserStudyComponent', () => {
   let userStudyComponent: ComponentFixture<UserStudyComponent>;
 
   beforeEach(fakeAsync(() => {
-    studySpy = jasmine.createSpyObj('StudyService', ['changeAccessToStudy', 'getUserStudies']);
+    studySpy = jasmine.createSpyObj('StudyService', [
+      'changeAccessToStudy',
+      'getUserStudies',
+    ]);
     studySpy.changeAccessToStudy.and.returnValue(Promise.resolve(true));
-    studySpy.getUserStudies.and.returnValue(Promise.resolve(JSON.parse(JSON.stringify(testUserStudyData))));
+    studySpy.getUserStudies.and.returnValue(
+      Promise.resolve(JSON.parse(JSON.stringify(testUserStudyData)))
+    );
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule
-      ],
-      declarations: [
-        UserStudyComponent
-      ],
-      providers: [
-        { provide: StudyService, useValue: studySpy }
-      ]
+      imports: [SharedModule],
+      declarations: [UserStudyComponent],
+      providers: [{ provide: StudyService, useValue: studySpy }],
     });
 
     userStudyComponent = TestBed.createComponent(UserStudyComponent);
@@ -121,7 +124,7 @@ describe('UserStudyComponent', () => {
 
     // Check the state of the toggles
     const toggleStates: boolean[] = [];
-    for(const toggle of toggles) {
+    for (const toggle of toggles) {
       toggleStates.push(toggle.getAttribute('aria-checked') == 'true');
     }
 
@@ -132,7 +135,9 @@ describe('UserStudyComponent', () => {
     const compiled = userStudyComponent.nativeElement;
 
     // Get the toggle associated with an enabled response
-    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
+    const enabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[0];
     enabledToggle.click();
 
     userStudyComponent.detectChanges();
@@ -141,14 +146,19 @@ describe('UserStudyComponent', () => {
 
     const expectedCallParam = JSON.parse(JSON.stringify(testUserStudyData[0]));
     expectedCallParam.hasAccessToStudy = true;
-    expect(studySpy.changeAccessToStudy).toHaveBeenCalledWith(expectedCallParam, true);
+    expect(studySpy.changeAccessToStudy).toHaveBeenCalledWith(
+      expectedCallParam,
+      true
+    );
   }));
 
   it('should allow removing access to a study', fakeAsync(() => {
     const compiled = userStudyComponent.nativeElement;
 
     // Get the toggle associated with an enabled response
-    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[2];
+    const enabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[2];
     enabledToggle.click();
 
     userStudyComponent.detectChanges();
@@ -157,6 +167,9 @@ describe('UserStudyComponent', () => {
 
     const expectedCallParam = JSON.parse(JSON.stringify(testUserStudyData[2]));
     expectedCallParam.hasAccessToStudy = false;
-    expect(studySpy.changeAccessToStudy).toHaveBeenCalledWith(expectedCallParam, false);
+    expect(studySpy.changeAccessToStudy).toHaveBeenCalledWith(
+      expectedCallParam,
+      false
+    );
   }));
 });

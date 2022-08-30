@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { Actions, RankedTester, rankWith, composeWithUi, ControlElement } from '@jsonforms/core';
+import {
+  Actions,
+  RankedTester,
+  rankWith,
+  composeWithUi,
+  ControlElement,
+} from '@jsonforms/core';
 
 /**
  * This component allows users to provide a series of values in the form of
@@ -20,11 +26,18 @@ import { Actions, RankedTester, rankWith, composeWithUi, ControlElement } from '
   selector: 'file-list',
   template: `
     <div>
-      <input type="file" style="display: none" (change)='fileSelect($event)' #fileUpload>
-      <button mat-raised-button (click)='fileUpload.click()'>Upload Options</button>
+      <input
+        type="file"
+        style="display: none"
+        (change)="fileSelect($event)"
+        #fileUpload
+      />
+      <button mat-raised-button (click)="fileUpload.click()">
+        Upload Options
+      </button>
       <mat-error>{{ error }}</mat-error>
     </div>
-  `
+  `,
 })
 export class FileListField extends JsonFormsControl {
   /**
@@ -35,10 +48,10 @@ export class FileListField extends JsonFormsControl {
   fileSelect(event: any) {
     // Read in the file
     const file = event.target.files[0];
-    const  fileReader = new FileReader();
+    const fileReader = new FileReader();
     fileReader.onload = () => {
       // Extract the lines from the file
-      if(fileReader.result === null) {
+      if (fileReader.result === null) {
         return;
       }
       const lines = (fileReader.result as string).split(/\r?\n/);
@@ -46,12 +59,12 @@ export class FileListField extends JsonFormsControl {
       // Filter out empty lines and duplicates
       const existing = new Set<string>();
       const options = lines
-        .filter(line => {
+        .filter((line) => {
           const shouldInclude = line.length > 0 && !existing.has(line);
           existing.add(line);
           return shouldInclude;
         })
-        .map(line => {
+        .map((line) => {
           return line.trim();
         });
 
@@ -74,8 +87,10 @@ export class FileListField extends JsonFormsControl {
 export const fileListControlRendererTester: RankedTester = rankWith(
   10,
   (uischema, _schema, _rootSchema) => {
-    return uischema.options != undefined &&
-           uischema.options.customType != undefined &&
-           uischema.options.customType == 'file-list';
+    return (
+      uischema.options != undefined &&
+      uischema.options.customType != undefined &&
+      uischema.options.customType == 'file-list'
+    );
   }
 );

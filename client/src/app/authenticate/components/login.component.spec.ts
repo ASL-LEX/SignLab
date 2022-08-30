@@ -1,6 +1,6 @@
-import { LoginComponent } from "./login.component";
+import { LoginComponent } from './login.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService } from "../../core/services/auth.service";
+import { AuthService } from '../../core/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('LoginComponent', () => {
@@ -16,8 +16,9 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     // Make spy for authentication service
     authSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
-    authSpy.authenticate.and.callFake(async (username: string, password: string) => {
-      if(username == validUsername && password == validPassword) {
+    authSpy.authenticate.and.callFake(
+      async (username: string, password: string) => {
+        if (username == validUsername && password == validPassword) {
           return {
             email: 'bob@bu.edu',
             name: 'bob',
@@ -30,19 +31,18 @@ describe('LoginComponent', () => {
               owner: false,
             },
             username: 'bob',
-            _id: 'sadlkfj'
-          }
+            _id: 'sadlkfj',
+          };
+        }
+        return null;
       }
-      return null;
-    });
+    );
 
     // Setup login component
     TestBed.configureTestingModule({
-      imports: [ RouterTestingModule ],
-      declarations: [ LoginComponent ],
-      providers: [
-        { provide: AuthService, useValue: authSpy }
-      ],
+      imports: [RouterTestingModule],
+      declarations: [LoginComponent],
+      providers: [{ provide: AuthService, useValue: authSpy }],
     });
 
     login = TestBed.createComponent(LoginComponent);
@@ -62,7 +62,10 @@ describe('LoginComponent', () => {
     login.componentInstance.authenticateUser();
 
     // Ensure that authentication has been called
-    expect(authSpy.authenticate).toHaveBeenCalledWith(validUsername, validPassword);
+    expect(authSpy.authenticate).toHaveBeenCalledWith(
+      validUsername,
+      validPassword
+    );
 
     // TODO: Test changes to page after authentication takes place
   });

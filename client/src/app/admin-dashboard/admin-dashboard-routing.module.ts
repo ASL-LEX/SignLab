@@ -6,11 +6,11 @@ import { NewStudyComponent } from './components/studies-control/new-study/new-st
 
 const routes: Routes = [
   { path: '', component: AdminDashboardComponent },
-  { path: 'new_study', component: NewStudyComponent }
+  { path: 'new_study', component: NewStudyComponent },
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(routes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class AdminDashboardRoutingModule { }
+export class AdminDashboardRoutingModule {}

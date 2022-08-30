@@ -4,8 +4,14 @@ import { TagField, TagFieldType } from '../../../../models/tag-field';
 import { NewStudyMeta } from '../../../models/new-study';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
-import { aslLexSignBankControlRendererTester, AslLexSignBankField } from '../../../../shared/components/custom-fields/asl-lex-field.component';
-import { fileListControlRendererTester, FileListField } from '../../../../shared/components/custom-fields/file-list.component';
+import {
+  aslLexSignBankControlRendererTester,
+  AslLexSignBankField,
+} from '../../../../shared/components/custom-fields/asl-lex-field.component';
+import {
+  fileListControlRendererTester,
+  FileListField,
+} from '../../../../shared/components/custom-fields/file-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
 import { JsonSchema } from '@jsonforms/core';
@@ -14,22 +20,28 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'new-study',
   templateUrl: './new-study.component.html',
-  styleUrls: ['./new-study.component.css']
+  styleUrls: ['./new-study.component.css'],
 })
 export class NewStudyComponent {
   /** The study metadata information */
   studyMetadata: NewStudyMeta | null = null;
   /** Handles changes to study metadata */
-  requiredDataChange(studyMetadata: NewStudyMeta | null) { this.studyMetadata = studyMetadata; }
+  requiredDataChange(studyMetadata: NewStudyMeta | null) {
+    this.studyMetadata = studyMetadata;
+  }
 
   /** The selected responses' IDs that will be disabled for this study */
   markedDisabled = new Set<string>();
   /** The selected responses' IDs that will be used for training */
   markedTraining = new Set<string>();
   /** Handle changes to marked disabled */
-  markedDisabledChange(newSet: Set<string>) { this.markedDisabled = newSet; }
+  markedDisabledChange(newSet: Set<string>) {
+    this.markedDisabled = newSet;
+  }
   /** Handle changes to marked training */
-  markedTrainingChange(newSet: Set<string>) { this.markedTraining = newSet; }
+  markedTrainingChange(newSet: Set<string>) {
+    this.markedTraining = newSet;
+  }
   /** Boolean that is updated when the study is completed */
   studyCreated = false;
 
@@ -38,19 +50,30 @@ export class NewStudyComponent {
   /** The renderers used for the tag fields */
   renderers = [
     ...angularMaterialRenderers,
-    { tester: aslLexSignBankControlRendererTester, renderer: AslLexSignBankField },
-    { tester: fileListControlRendererTester, renderer: FileListField }
+    {
+      tester: aslLexSignBankControlRendererTester,
+      renderer: AslLexSignBankField,
+    },
+    { tester: fileListControlRendererTester, renderer: FileListField },
   ];
   /** Possible tag options */
   tagFieldOptions = [
     { type: TagFieldType.AslLex, name: 'ASL-LEX Sign', icon: 'accessibility' },
-    { type: TagFieldType.Autocomplete, name: 'Autocomplete', icon: 'text_format' },
+    {
+      type: TagFieldType.Autocomplete,
+      name: 'Autocomplete',
+      icon: 'text_format',
+    },
     { type: TagFieldType.BooleanOption, name: 'Boolean Option', icon: 'flag' },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
-    { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' }
+    { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
   ];
 
-  constructor(private studyService: StudyService, private dialog: MatDialog, private router: Router) { }
+  constructor(
+    private studyService: StudyService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   /** Add a field to the tag */
   addTagField(tagFieldType: TagFieldType) {
@@ -65,34 +88,34 @@ export class NewStudyComponent {
   /** Make a new study based on form data */
   async makeNewStudy() {
     // Ensure required data filled out
-    if(this.studyMetadata == null) {
+    if (this.studyMetadata == null) {
       alert('Please fill in the required fields for the study');
       return;
     }
 
     // Ensure the study name is unique
-    if(await this.studyService.studyExists(this.studyMetadata.name)) {
+    if (await this.studyService.studyExists(this.studyMetadata.name)) {
       alert(`The study with name ${this.studyMetadata.name} already exists`);
       return;
     }
 
     // Make sure there is at least one field
-    if(this.tagFields.length == 0) {
+    if (this.tagFields.length == 0) {
       alert('Please add at least once field for the tag form');
       return;
     }
 
     // Ensure each field is complete and each field has a unique name
     const names = new Set<string>();
-    for(let tagField of this.tagFields) {
+    for (const tagField of this.tagFields) {
       // Field is incomplete
-      if(!tagField.isValid) {
+      if (!tagField.isValid) {
         alert('Please completly fill out all tag fields');
         return;
       }
 
       // Field has a duplicated name
-      if(names.has(tagField.getFieldName())) {
+      if (names.has(tagField.getFieldName())) {
         alert('Ensure each field has a unique name');
         return;
       }
@@ -106,10 +129,10 @@ export class NewStudyComponent {
         name: this.studyMetadata.name,
         description: this.studyMetadata.description,
         instructions: this.studyMetadata.instructions,
-        tagSchema: schema
+        tagSchema: schema,
       },
       trainingResponses: Array.from(this.markedTraining),
-      disabledResponses: Array.from(this.markedDisabled)
+      disabledResponses: Array.from(this.markedDisabled),
     });
     this.studyCreated = true;
   }
@@ -122,8 +145,8 @@ export class NewStudyComponent {
       data: {
         previewDataSchema: jsonForms.dataSchema,
         previewUiSchema: jsonForms.uiSchema,
-        renderers: this.renderers
-      }
+        renderers: this.renderers,
+      },
     });
   }
 
@@ -132,30 +155,27 @@ export class NewStudyComponent {
   }
 
   /** Make the JSON Forms schema */
-  private produceJSONForm(): { dataSchema: JsonSchema, uiSchema: any} {
+  private produceJSONForm(): { dataSchema: JsonSchema; uiSchema: any } {
     // Construct the data schema and UI schema
-    const dataSchema: { type: string, properties: any, required: string[] } = {
+    const dataSchema: { type: string; properties: any; required: string[] } = {
       type: 'object',
-      properties: { },
-      required: []
+      properties: {},
+      required: [],
     };
-    const uiSchema: { type: string, elements: any[] } = {
+    const uiSchema: { type: string; elements: any[] } = {
       type: 'VerticalLayout',
-      elements: []
+      elements: [],
     };
 
-    for(let tagField of this.tagFields) {
+    for (const tagField of this.tagFields) {
       dataSchema.properties = {
         ...dataSchema.properties,
-        ...tagField.asDataProperty()
+        ...tagField.asDataProperty(),
       };
-      if(tagField.isRequired()) {
+      if (tagField.isRequired()) {
         dataSchema.required.push(tagField.getFieldName());
       }
-      uiSchema.elements = [
-        ...uiSchema.elements,
-        ...tagField.asUIProperty()
-      ];
+      uiSchema.elements = [...uiSchema.elements, ...tagField.asUIProperty()];
     }
 
     return { dataSchema: dataSchema, uiSchema: uiSchema };

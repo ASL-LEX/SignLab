@@ -13,7 +13,6 @@ import { NewStudyComponent } from './components/studies-control/new-study/new-st
 import { TagFieldComponent } from './components/studies-control/new-study/tag-field.component';
 import { RequiredInfoComponent } from './components/studies-control/new-study/required-info.component';
 
-
 import { UserStudyComponent } from './components/studies-control/user-study-control/user-study-control.component';
 
 // Modules
@@ -22,7 +21,6 @@ import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ResponseTableModule } from '../response-table/response-table.module';
 import { TagFormPreviewDialog } from './components/studies-control/new-study/tag-form-preview.component';
-
 
 @NgModule({
   declarations: [
@@ -36,13 +34,9 @@ import { TagFormPreviewDialog } from './components/studies-control/new-study/tag
     TagFieldComponent,
     UserStudyComponent,
     RequiredInfoComponent,
-    TagFormPreviewDialog
+    TagFormPreviewDialog,
   ],
-  imports: [
-    AdminDashboardRoutingModule,
-    SharedModule,
-    ResponseTableModule
-  ],
+  imports: [AdminDashboardRoutingModule, SharedModule, ResponseTableModule],
   providers: [],
 })
-export class AdminDashboardModule { }
+export class AdminDashboardModule {}

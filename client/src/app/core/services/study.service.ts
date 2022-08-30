@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Study, StudyCreation } from '../../../../../shared/dtos/study.dto';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { User } from '../../../../../shared/dtos/user.dto';
-import { UserStudy } from '../../../../../shared/dtos/userstudy.dto';
+import { Study, StudyCreation } from 'shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
+import { User } from 'shared/dtos/user.dto';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { SignLabHttpClient } from './http.service';
 
 @Injectable()
 export class StudyService {
-  constructor(private signLab: SignLabHttpClient) { }
+  constructor(private signLab: SignLabHttpClient) {}
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {
     return this.signLab.post<any>('api/study/create', studyCreation, {});
@@ -51,7 +51,9 @@ export class StudyService {
    * Get the training tags associated with the given user study
    */
   async getTrainingTags(userStudy: UserStudy): Promise<Tag[]> {
-    const query = { params: { studyID: userStudy.study._id!, userID: userStudy.user._id } };
+    const query = {
+      params: { studyID: userStudy.study._id!, userID: userStudy.user._id },
+    };
     return this.signLab.get<Tag[]>('api/tag/training', query);
   }
 
@@ -60,14 +62,21 @@ export class StudyService {
    *
    * On success returns true, otherwise returns false
    */
-  async changeAccessToStudy(userStudy: UserStudy, hasAcccess: boolean): Promise<boolean> {
+  async changeAccessToStudy(
+    userStudy: UserStudy,
+    hasAcccess: boolean
+  ): Promise<boolean> {
     const targetURL = 'api/study/user/enable';
-    const requestBody = { studyID: userStudy.study._id!, userID: userStudy.user._id, hasAccess: hasAcccess };
+    const requestBody = {
+      studyID: userStudy.study._id!,
+      userID: userStudy.user._id,
+      hasAccess: hasAcccess,
+    };
 
     try {
       await this.signLab.put<any>(targetURL, requestBody);
       return true;
-    } catch(error) {
+    } catch (error) {
       console.error(error);
       return false;
     }

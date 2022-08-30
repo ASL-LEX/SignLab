@@ -18,13 +18,9 @@ interface CoreConfig {
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    HttpClientModule
-  ]
+  imports: [CommonModule, HttpClientModule],
 })
 export class CoreModule {
-
   static forRoot(coreConfig: CoreConfig): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
@@ -38,10 +34,11 @@ export class CoreModule {
         AdminAuthGuard,
         {
           provide: SignLabHttpClient,
-          useFactory: (http: HttpClient) => new SignLabHttpClient(http, coreConfig.baseUrl),
-          deps: [HttpClient]
-        }
-      ]
+          useFactory: (http: HttpClient) =>
+            new SignLabHttpClient(http, coreConfig.baseUrl),
+          deps: [HttpClient],
+        },
+      ],
     };
   }
 }

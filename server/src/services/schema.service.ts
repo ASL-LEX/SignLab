@@ -94,7 +94,7 @@ export class SchemaService {
   private async getSchema(schemaType: string): Promise<DynamicSchema> {
     // Check if its in the map
     if (this.schemaMap.has(schemaType)) {
-      return this.schemaMap.get(schemaType);
+      return this.schemaMap.get(schemaType)!;
     }
 
     // Otherwise try to read from the database and cache

@@ -1,43 +1,46 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {angularMaterialRenderers} from '@jsonforms/angular-material';
+import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { UISchemaElement, createAjv } from '@jsonforms/core';
-import { fileListControlRendererTester, FileListField } from '../../../../shared/components/custom-fields/file-list.component';
+import {
+  fileListControlRendererTester,
+  FileListField,
+} from '../../../../shared/components/custom-fields/file-list.component';
 import { TagField } from '../../../../models/tag-field';
 
 @Component({
   selector: 'tag-field',
   template: `
     <mat-card>
-    <mat-card-title>{{field.data.fieldName || "Empty"}}</mat-card-title>
-    <mat-card-subtitle>{{field.kindDisplay}}</mat-card-subtitle>
-    <mat-card-content>
-      <jsonforms
-        [data]='{}'
-        [schema]='schema'
-        [uischema]='uischema'
-        [renderers]='renderers'
-        (dataChange)='setData($event)'
-        (errors)='handleErrors($event)'
-        [ajv]='ajv'
-      ></jsonforms>
-    </mat-card-content>
-  </mat-card>
-  `
+      <mat-card-title>{{ field.data.fieldName || 'Empty' }}</mat-card-title>
+      <mat-card-subtitle>{{ field.kindDisplay }}</mat-card-subtitle>
+      <mat-card-content>
+        <jsonforms
+          [data]="{}"
+          [schema]="schema"
+          [uischema]="uischema"
+          [renderers]="renderers"
+          (dataChange)="setData($event)"
+          (errors)="handleErrors($event)"
+          [ajv]="ajv"
+        ></jsonforms>
+      </mat-card-content>
+    </mat-card>
+  `,
 })
 export class TagFieldComponent implements OnInit {
   renderers = [
     ...angularMaterialRenderers,
-    { tester: fileListControlRendererTester, renderer: FileListField }
+    { tester: fileListControlRendererTester, renderer: FileListField },
   ];
   data: any = {};
 
   schema = {};
   uischema: UISchemaElement = {
-    type: 'object'
+    type: 'object',
   };
   ajv = createAjv({
     schemaId: 'id',
-    allErrors: true
+    allErrors: true,
   });
 
   @Input() field: TagField;

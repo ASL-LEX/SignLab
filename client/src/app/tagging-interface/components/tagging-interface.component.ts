@@ -1,20 +1,23 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ResponseService } from '../../core/services/response.service';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'tagging-interface',
   template: `
-    <div *ngIf="hasRemainingTags; then tagInterface else noTagsMessage"></div>
+    <div *ngIf="hasRemainingTags; then tagInterface; else noTagsMessage"></div>
 
     <!-- Tag Form -->
     <ng-template #tagInterface>
-      <tagging-form
-        [tag]="tag"
-        (tagOutput)="formSubmit($event)"
-      ></tagging-form>
+      <tagging-form [tag]="tag" (tagOutput)="formSubmit($event)"></tagging-form>
     </ng-template>
 
     <!-- Message displayed when all tags have been complete -->
@@ -22,7 +25,6 @@ import { AuthService } from '../../core/services/auth.service';
       <mat-card>
         <mat-card-title>No Responses Untagged</mat-card-title>
         <mat-card-content>
-
           <!-- Training "no more tags" message -->
           <div *ngIf="isTraining">
             Training complete, notify your admin for further access to the study
@@ -35,7 +37,7 @@ import { AuthService } from '../../core/services/auth.service';
         </mat-card-content>
       </mat-card>
     </ng-template>
-  `
+  `,
 })
 export class TaggingInterface implements OnChanges, OnInit {
   /** The tag to be completed */
@@ -44,14 +46,16 @@ export class TaggingInterface implements OnChanges, OnInit {
    * Flag that represents there are more tags to be completed. Changing it will
    * display to the user that all videos have been taged
    */
-  hasRemainingTags: boolean = false;
+  hasRemainingTags = false;
   /** The current study that tagging is taking place for */
   @Input() study: Study;
   /** Flag that determines if the tagging is being done or training or not */
   @Input() isTraining = false;
 
-  constructor(private responseService: ResponseService,
-              private authService: AuthService) {}
+  constructor(
+    private responseService: ResponseService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.getNextTag();
@@ -60,12 +64,12 @@ export class TaggingInterface implements OnChanges, OnInit {
   /** Handle changes made to the input */
   ngOnChanges(changes: SimpleChanges) {
     // Changes to study
-    if(changes.study) {
+    if (changes.study) {
       this.study = changes.study.currentValue;
     }
 
     // Changes to isTraining
-    if(changes.isTraining) {
+    if (changes.isTraining) {
       this.isTraining = changes.isTraining.currentValue;
     }
 
@@ -80,8 +84,11 @@ export class TaggingInterface implements OnChanges, OnInit {
    * the user.
    */
   async getNextTag() {
-    const tag =
-      await this.responseService.getNextUntaggedResponse(this.authService.user, this.study, this.isTraining);
+    const tag = await this.responseService.getNextUntaggedResponse(
+      this.authService.user,
+      this.study,
+      this.isTraining
+    );
 
     // No more tags for this study
     if (!tag) {
@@ -104,8 +111,10 @@ export class TaggingInterface implements OnChanges, OnInit {
 
       // Get next tag to complete
       this.getNextTag();
-    } catch(error) {
-      alert('Please fill out all required fields following the instructions for each field');
+    } catch (error) {
+      alert(
+        'Please fill out all required fields following the instructions for each field'
+      );
     }
   }
 }

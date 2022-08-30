@@ -14,10 +14,10 @@ describe('ResponseMetaForm', () => {
     responseSpy = jasmine.createSpyObj('ResponseService', ['setMetadata']);
 
     TestBed.configureTestingModule({
-      declarations: [ ResponseMetaForm ],
+      declarations: [ResponseMetaForm],
       providers: [
         { provide: ResponseService, useValue: responseSpy },
-        FormBuilder
+        FormBuilder,
       ],
     });
 
@@ -47,13 +47,19 @@ describe('ResponseMetaForm', () => {
     // Ensure there is now a text box displaying an error
     const textBox = responseForm.nativeElement.querySelector('p');
     expect(textBox).toBeTruthy();
-    expect(textBox.textContent).toContain('Ensure each field has a name and type and make sure the name is unique.');
+    expect(textBox.textContent).toContain(
+      'Ensure each field has a name and type and make sure the name is unique.'
+    );
 
     // Make sure the form is considered invalid
-    expect(responseForm.componentInstance.responseMetadataFormGroup.valid).toBeFalse();
+    expect(
+      responseForm.componentInstance.responseMetadataFormGroup.valid
+    ).toBeFalse();
   });
 
   it('should consider an empty form to be valid', () => {
-    expect(responseForm.componentInstance.responseMetadataFormGroup.valid).toBeTrue();
+    expect(
+      responseForm.componentInstance.responseMetadataFormGroup.valid
+    ).toBeTrue();
   });
 });

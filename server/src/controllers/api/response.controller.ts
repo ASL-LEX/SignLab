@@ -16,15 +16,12 @@ import { ResponseService } from '../../services/response.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import { Response } from '../../schemas/response.schema';
-import {
-  MetadataDefinition,
-  SaveAttempt,
-} from '../../../../shared/dtos/response.dto';
+import { MetadataDefinition, SaveAttempt } from 'shared/dtos/response.dto';
 import { SchemaService } from '../../services/schema.service';
 import { ResponseUploadService } from '../../services/response-upload.service';
 import { StudyService } from '../../services/study.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
-import { ResponseStudy } from '../../../../shared/dtos/responsestudy.dto';
+import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 
 @Controller('/api/response')
 export class ResponseController {
@@ -63,7 +60,7 @@ export class ResponseController {
       required: fields.map((field) => field.name),
     };
     for (const field of fields) {
-      schema.properties[field.name] = { type: field.type };
+      (schema.properties as any)[field.name] = { type: field.type };
     }
 
     this.schemaService.saveSchema('Response', schema);

@@ -17,13 +17,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home.component';
 
 // Routing
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-  ],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     RouterModule,
@@ -33,9 +30,9 @@ import { RouterModule } from "@angular/router";
     HttpClientModule,
     AdminDashboardModule,
     FirstTimeSetupModule,
-    CoreModule.forRoot({ baseUrl: environment.baseUrl })
+    CoreModule.forRoot({ baseUrl: environment.baseUrl }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StudyService } from '../../core/services/study.service';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { StudySelectDialog } from '../../admin-dashboard/components/studies-control/study-select-dialog.component';
 import { AuthService } from '../../core/services/auth.service';
-import { UserStudy } from '../../../../../shared/dtos/userstudy.dto';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
   selector: 'tagging-landing',
-  templateUrl: './tagging-landing.component.html'
+  templateUrl: './tagging-landing.component.html',
 })
 export class TaggingLanding implements OnInit {
   /** The available studies */
@@ -20,9 +20,11 @@ export class TaggingLanding implements OnInit {
   /** The representation of the user for the specific study */
   userStudy: UserStudy | null = null;
 
-  constructor(private studyService: StudyService,
-              private dialog: MatDialog,
-              private authService: AuthService) { }
+  constructor(
+    private studyService: StudyService,
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadStudies();
@@ -35,15 +37,16 @@ export class TaggingLanding implements OnInit {
       data: {
         studies: this.studies,
         activeStudy: this.activeStudy,
-        newStudyOption: false
-      }
+        newStudyOption: false,
+      },
     };
 
-    this.dialog.open(StudySelectDialog, dialogOpenParams)
+    this.dialog
+      .open(StudySelectDialog, dialogOpenParams)
       .afterClosed()
       .subscribe((selectedStudy: any) => {
         // Update the active study
-        if(selectedStudy && selectedStudy.data) {
+        if (selectedStudy && selectedStudy.data) {
           this.activeStudy = selectedStudy.data;
           this.updateUserInformation();
         }
@@ -59,15 +62,17 @@ export class TaggingLanding implements OnInit {
    * Get the user for the currently selected study
    */
   private async updateUserInformation() {
-    if(!this.activeStudy) {
+    if (!this.activeStudy) {
       console.debug('No active study');
       return;
     }
 
     const user = this.authService.user;
-    this.userStudy = await this.studyService.getUserStudy(user, this.activeStudy);
+    this.userStudy = await this.studyService.getUserStudy(
+      user,
+      this.activeStudy
+    );
   }
-
 
   /**
    * Load in the studies and set the active study to the first study or

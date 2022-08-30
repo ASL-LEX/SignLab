@@ -49,7 +49,7 @@ import { TagGuard } from './guards/tag.guard';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../../dist/prod'),
+      rootPath: join(__dirname, '../../dist/'),
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },

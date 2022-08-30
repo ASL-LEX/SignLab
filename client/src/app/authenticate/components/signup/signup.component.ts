@@ -1,13 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import {
-    AbstractControl, FormControl, FormGroup, ValidationErrors,
-    ValidatorFn, Validators } from '@angular/forms';
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { ComplexityOptions, default as passwordValidate } from 'joi-password-complexity';
-import { User } from '../../../../../../shared/dtos/user.dto';
+import {
+  ComplexityOptions,
+  default as passwordValidate,
+} from 'joi-password-complexity';
+import { User } from 'shared/dtos/user.dto';
 
 import { AuthService } from '../../../core/services/auth.service';
-
 
 /**
  * Custom form validator which ensures the password complexity meets
@@ -15,12 +22,14 @@ import { AuthService } from '../../../core/services/auth.service';
  */
 function complexityValidator(complexity: ComplexityOptions): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const result = passwordValidate(complexity, 'password').validate(control.value);
-    if(result.error) {
+    const result = passwordValidate(complexity, 'password').validate(
+      control.value
+    );
+    if (result.error) {
       return { complexity: result.error.message };
     }
     return null;
-  }
+  };
 }
 
 /**
@@ -37,14 +46,14 @@ function mustMatch(firstControl: string, secondControl: string): ValidatorFn {
     const second = formGroup.get(secondControl);
 
     // If the form controls don't exist, throw an error
-    if(!first) {
+    if (!first) {
       throw new Error(`${firstControl} does not exist in Form`);
     }
-    if(!second) {
+    if (!second) {
       throw new Error(`${secondControl} does not exist in Form`);
     }
 
-    if(first.value != second.value) {
+    if (first.value != second.value) {
       return { mustMatch: true };
     }
 
@@ -58,13 +67,13 @@ function mustMatch(firstControl: string, secondControl: string): ValidatorFn {
  * considered valid.
  */
 function alwaysInvalid(_control: AbstractControl) {
-    return { alwaysInvalid: true };
+  return { alwaysInvalid: true };
 }
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
   /** The form group for the signup */
@@ -77,7 +86,7 @@ export class SignupComponent implements OnInit {
       // the password field can only be validated after the complexity is
       // retrieved and added to the field
       pass: new FormControl('', [alwaysInvalid]),
-      confirmPass: new FormControl('', [Validators.required])
+      confirmPass: new FormControl('', [Validators.required]),
     },
     mustMatch('pass', 'confirmPass')
   );
@@ -85,22 +94,33 @@ export class SignupComponent implements OnInit {
   /** Callback which is called once the signup has taken place */
   @Input() onUserSignup: (user: User) => void;
 
-
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     // Get the password requirements
     this.authService.getPasswordComplexity().then((passwordComplexity) => {
       // Add the password complexity validator
-      this.signupForm.get('pass')?.setValidators(complexityValidator(passwordComplexity));
+      this.signupForm
+        .get('pass')
+        ?.setValidators(complexityValidator(passwordComplexity));
     });
   }
 
-  get name() { return this.signupForm.get('name')!; }
-  get email() { return this.signupForm.get('email')!; }
-  get username() { return this.signupForm.get('username')!; }
-  get pass() { return this.signupForm.get('pass')!; }
-  get confirmPass() { return this.signupForm.get('confirmPass')!; }
+  get name() {
+    return this.signupForm.get('name')!;
+  }
+  get email() {
+    return this.signupForm.get('email')!;
+  }
+  get username() {
+    return this.signupForm.get('username')!;
+  }
+  get pass() {
+    return this.signupForm.get('pass')!;
+  }
+  get confirmPass() {
+    return this.signupForm.get('confirmPass')!;
+  }
 
   /**
    * Called when the form is submitted. Will attempt to authenticate the user
@@ -108,32 +128,38 @@ export class SignupComponent implements OnInit {
    */
   async signup(): Promise<void> {
     // Don't attempt to signup if the form is invalid
-    if(this.signupForm.invalid) {
+    if (this.signupForm.invalid) {
       alert('Please complete the signup form');
       return;
     }
 
     // See if the username and email is available
-    const availability =
-        await this.authService.isUserAvailable(this.username.value!, this.email.value!);
+    const availability = await this.authService.isUserAvailable(
+      this.username.value!,
+      this.email.value!
+    );
 
     // If the username/email is not available, notify the user and
     // don't attempt to signup
     let message = '';
-    if(!availability.username) {
+    if (!availability.username) {
       message += `${this.username.value!} is not an available username\n`;
     }
-    if(!availability.email) {
+    if (!availability.email) {
       message += `${this.email.value!} is not an available email`;
     }
-    if(message != '') {
+    if (message != '') {
       alert(message);
       return;
     }
 
     // Attempt to signup the user
-    const result = await this.authService.signup(this.name.value!, this.email.value!,
-                                           this.username.value!, this.pass.value!);
+    const result = await this.authService.signup(
+      this.name.value!,
+      this.email.value!,
+      this.username.value!,
+      this.pass.value!
+    );
 
     // Run the callback for when the user has signed in
     if (this.onUserSignup) {

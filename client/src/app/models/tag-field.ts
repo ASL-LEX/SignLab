@@ -8,7 +8,7 @@ export enum TagFieldType {
   Autocomplete,
   BooleanOption,
   FreeText,
-  Numeric
+  Numeric,
 }
 
 /**
@@ -34,12 +34,12 @@ export abstract class TagField {
   /** How to display the field kind in a human readable format */
   kindDisplay: string;
   /** The unique name for this field, how the field is identified */
-  name: string = '';
+  name = '';
   /**
    * Helper flag which is used when producing the JSON Forms representation
    * of the whole Tag form
    */
-  isValid: boolean = false;
+  isValid = false;
   /**
    * The data which comes from the JSON Forms from this field, parsed to
    * produce the portion of the JSON Forms that is used to describe the
@@ -61,7 +61,7 @@ export abstract class TagField {
    * Factory method to get a given tag field
    */
   static getTagField(tagFieldType: TagFieldType): TagField {
-    switch(tagFieldType) {
+    switch (tagFieldType) {
       case TagFieldType.AslLex:
         return new AslLexField();
       case TagFieldType.Autocomplete:
@@ -86,7 +86,7 @@ export abstract class TagField {
   }
 
   getDescription(): string {
-      return this.data.shortDescription || '';
+    return this.data.shortDescription || '';
   }
 
   /**
@@ -102,18 +102,22 @@ export abstract class TagField {
       type: 'object',
       properties: {
         fieldName: {
-          type: 'string'
+          type: 'string',
         },
         shortDescription: {
-          type: 'string'
+          type: 'string',
         },
         ...this.getFieldSpecificProperties(),
         required: {
-          type: 'boolean'
-        }
+          type: 'boolean',
+        },
       },
-      required: ['fieldName', 'shortDescription', ...this.getRequiredFieldProperties()]
-    }
+      required: [
+        'fieldName',
+        'shortDescription',
+        ...this.getRequiredFieldProperties(),
+      ],
+    };
   }
 
   /**
@@ -126,7 +130,7 @@ export abstract class TagField {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/fieldName'
+          scope: '#/properties/fieldName',
         },
         {
           type: 'Control',
@@ -135,9 +139,9 @@ export abstract class TagField {
         ...this.getFieldSpecificUiSchema(),
         {
           type: 'Control',
-          scope: '#/properties/required'
-        }
-      ]
+          scope: '#/properties/required',
+        },
+      ],
     };
   }
 
@@ -149,7 +153,6 @@ export abstract class TagField {
   protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
     return {};
   }
-
 
   /**
    * This is a list of property names that are required fields
@@ -181,9 +184,9 @@ export abstract class TagField {
     return {
       [this.getFieldName()]: {
         type: this.type,
-        description: this.getDescription()
-      }
-    }
+        description: this.getDescription(),
+      },
+    };
   }
 
   /**
@@ -207,9 +210,9 @@ export abstract class TagField {
         type: 'Control',
         scope: `#/properties/${this.getFieldName()}`,
         options: {
-          showUnfocusedDescription: true
-        }
-      }
+          showUnfocusedDescription: true,
+        },
+      },
     ];
   }
 }
@@ -235,10 +238,10 @@ class AslLexField extends TagField {
         scope: `#/properties/${this.getFieldName()}`,
         options: {
           customType: 'asl-lex',
-          showUnfocusedDescription: true
-        }
-      }
-    ]
+          showUnfocusedDescription: true,
+        },
+      },
+    ];
   }
 }
 
@@ -251,15 +254,15 @@ class AutocompleteField extends TagField {
    * The autocomplete field needs a list of options as a data field which
    * will later become the enum values in the tag field.
    */
-  protected getFieldSpecificProperties(): {[property: string]: JsonSchema;} {
+  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
     return {
       userOptions: {
         type: 'array',
         items: {
-          type: 'string'
-        }
-      }
-    }
+          type: 'string',
+        },
+      },
+    };
   }
 
   /**
@@ -273,10 +276,10 @@ class AutocompleteField extends TagField {
         type: 'Control',
         scope: '#/properties/userOptions',
         options: {
-          customType: 'file-list'
-        }
-      }
-    ]
+          customType: 'file-list',
+        },
+      },
+    ];
   }
 
   /**
@@ -289,13 +292,13 @@ class AutocompleteField extends TagField {
       [this.getFieldName()]: {
         type: this.type,
         description: this.getDescription(),
-        enum: [ ...this.data.userOptions ]
-      }
-    }
+        enum: [...this.data.userOptions],
+      },
+    };
   }
 
   protected getRequiredFieldProperties(): string[] {
-    return [ 'userOptions' ];
+    return ['userOptions'];
   }
 }
 
@@ -319,46 +322,46 @@ class NumericField extends TagField {
   /**
    * A Numeric field optionally allows a minimum and maximum value
    */
-  getFieldSpecificProperties(): {[property: string]: JsonSchema;} {
+  getFieldSpecificProperties(): { [property: string]: JsonSchema } {
     return {
       minimum: {
-        type: 'number'
+        type: 'number',
       },
       maximum: {
-        type: 'number'
-      }
-    }
+        type: 'number',
+      },
+    };
   }
 
   getFieldSpecificUiSchema(): any[] {
     return [
       {
         type: 'Control',
-        scope: '#/properties/minimum'
+        scope: '#/properties/minimum',
       },
       {
         type: 'Control',
-        scope: '#/properties/maximum'
-      }
-    ]
+        scope: '#/properties/maximum',
+      },
+    ];
   }
 
   asDataProperty(): JsonSchema {
     const schema: JsonSchema = {
       type: 'number',
-      description: this.getDescription()
+      description: this.getDescription(),
     };
 
-    if(this.data.minimum) {
+    if (this.data.minimum) {
       schema.minimum = this.data.minimum;
     }
 
-    if(this.data.maximum) {
+    if (this.data.maximum) {
       schema.maximum = this.data.maximum;
     }
 
     return {
-      [this.getFieldName()]: schema
+      [this.getFieldName()]: schema,
     };
   }
 }

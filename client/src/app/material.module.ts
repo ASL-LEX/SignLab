@@ -1,4 +1,4 @@
-import {  NgModule  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -18,7 +18,6 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
 
 @NgModule({
   imports: [
@@ -40,7 +39,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatStepperModule,
     MatInputModule,
     CommonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   exports: [
     MatButtonModule,
@@ -61,7 +60,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatStepperModule,
     MatInputModule,
     CommonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
- })
-export class MaterialModule { }
+})
+export class MaterialModule {}

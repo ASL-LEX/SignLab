@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {JsonSchema} from '@jsonforms/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { JsonSchema } from '@jsonforms/core';
 
 type TagPreviewInformation = {
-  previewDataSchema: JsonSchema,
-  previewUiSchema: any,
-  renderers: any
+  previewDataSchema: JsonSchema;
+  previewUiSchema: any;
+  renderers: any;
 };
 
 @Component({
@@ -20,18 +20,22 @@ type TagPreviewInformation = {
 
         <!-- The form itself -->
         <jsonforms
-          [schema]='data.previewDataSchema'
-          [renderers]='data.renderers'
-          [uischema]='data.previewUiSchema'
+          [schema]="data.previewDataSchema"
+          [renderers]="data.renderers"
+          [uischema]="data.previewUiSchema"
         ></jsonforms>
       </div>
-    <mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-stroked-button [mat-dialog-close]="true">Close</button>
-    </mat-dialog-actions>
-  `
+      <mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button mat-stroked-button [mat-dialog-close]="true">Close</button>
+        </mat-dialog-actions>
+      </mat-dialog-content></mat-dialog-content
+    >
+  `,
 })
 export class TagFormPreviewDialog {
-  constructor(@Inject(MAT_DIALOG_DATA)
-              public data: TagPreviewInformation) { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: TagPreviewInformation
+  ) {}
 }

@@ -9,15 +9,8 @@ import { TaggingForm } from './components/tagging-form.compont';
 import { TaggingLanding } from './components/tagging-landing.component';
 
 @NgModule({
-  declarations: [
-    TaggingInterface,
-    TaggingLanding,
-    TaggingForm
-  ],
-  imports: [
-    TaggingInterfaceRoutingModule,
-    SharedModule
-  ],
+  declarations: [TaggingInterface, TaggingLanding, TaggingForm],
+  imports: [TaggingInterfaceRoutingModule, SharedModule],
   providers: [],
 })
-export class TaggingInterfaceModule { }
+export class TaggingInterfaceModule {}

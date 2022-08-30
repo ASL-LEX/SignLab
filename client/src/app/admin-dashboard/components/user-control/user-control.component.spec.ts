@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { FormsModule } from "@angular/forms";
-import { MaterialModule } from "../../../material.module";
-import { UserService } from "../../../core/services/user.service";
-import { UserControlComponent } from "./user-control.component";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MaterialModule } from '../../../material.module';
+import { UserService } from '../../../core/services/user.service';
+import { UserControlComponent } from './user-control.component';
 
 describe('UserControlComponent', () => {
   const exampleUserData = [
@@ -18,7 +18,7 @@ describe('UserControlComponent', () => {
         accessing: false,
         owner: false,
       },
-      _id: '10'
+      _id: '10',
     },
     {
       email: 'test@bu.edu',
@@ -29,11 +29,11 @@ describe('UserControlComponent', () => {
         tagging: true,
         recording: false,
         accessing: false,
-        owner: false
+        owner: false,
       },
       username: 'test',
-      _id: '11'
-    }
+      _id: '11',
+    },
   ];
 
   // The user service spy for serving fake data
@@ -48,14 +48,9 @@ describe('UserControlComponent', () => {
 
     // Make the test component
     TestBed.configureTestingModule({
-      imports: [
-        MaterialModule,
-        FormsModule
-      ],
-      declarations: [ UserControlComponent ],
-      providers: [
-        { provide: UserService, useValue: userServiceSpy },
-      ]
+      imports: [MaterialModule, FormsModule],
+      declarations: [UserControlComponent],
+      providers: [{ provide: UserService, useValue: userServiceSpy }],
     });
 
     userControl = TestBed.createComponent(UserControlComponent);

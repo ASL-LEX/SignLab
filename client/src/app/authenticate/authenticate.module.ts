@@ -9,19 +9,9 @@ import { LoginComponent } from './components/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
-  declarations: [
-    AuthenticateComponent,
-    LoginComponent,
-    SignupComponent
-  ],
-  imports: [
-    SharedModule,
-    AuthenticateRoutingModule
-  ],
+  declarations: [AuthenticateComponent, LoginComponent, SignupComponent],
+  imports: [SharedModule, AuthenticateRoutingModule],
   providers: [],
-  exports: [
-    AuthenticateComponent,
-    SignupComponent
-  ]
+  exports: [AuthenticateComponent, SignupComponent],
 })
-export class AuthenticateModule { }
+export class AuthenticateModule {}

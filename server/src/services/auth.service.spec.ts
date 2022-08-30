@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserSignup } from '../../../shared/dtos/user.dto';
+import { UserSignup } from 'shared/dtos/user.dto';
 import { User } from '../schemas/user.schema';
 import { AuthService } from './auth.service';
 

@@ -7,24 +7,20 @@ import { NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { FlexModule } from '@angular/flex-layout/flex';
-import { MaterialModule } from '../material.module';  // TODO: Have this in shared
+import { MaterialModule } from '../material.module'; // TODO: Have this in shared
 import { FormsModule } from '@angular/forms';
 
 // Pipes
 import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
-  declarations: [
-    AslLexSignBankField,
-    FileListField,
-    SafePipe,
-  ],
+  declarations: [AslLexSignBankField, FileListField, SafePipe],
   imports: [
     FormsModule,
     MaterialModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
-    FlexModule
+    FlexModule,
   ],
   exports: [
     AslLexSignBankField,
@@ -35,6 +31,6 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     FlexModule,
-  ]
+  ],
 })
 export class SharedModule {}

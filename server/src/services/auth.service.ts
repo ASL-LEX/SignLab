@@ -6,7 +6,7 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from '../../../shared/dtos/user.dto';
+} from 'shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
 
 /**
@@ -119,7 +119,7 @@ export class AuthService {
 
     // Check all roles
     for (const role of roles) {
-      if (user.roles[role]) {
+      if ((user.roles as any)[role]) {
         return true;
       }
     }

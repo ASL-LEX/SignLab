@@ -1,10 +1,14 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { ResponseService } from '../../core/services/response.service';
 import { ResponseStudyTable } from './response-study-table.component';
-import { ResponseStudy } from '../../../../../shared/dtos/responsestudy.dto';
+import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 import { SharedModule } from '../../shared/shared.module';
 import { ResponseTableCoreComponent } from './response-table-core.component';
-
 
 describe('ResponseStudyTable', () => {
   const exampleResponseData: ResponseStudy[] = [
@@ -17,7 +21,7 @@ describe('ResponseStudyTable', () => {
         duration: 5,
         recordedInSignLab: false,
         responderID: '1',
-        meta: {}
+        meta: {},
       },
       study: {
         _id: '1',
@@ -26,12 +30,12 @@ describe('ResponseStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {}
-        }
+          uiSchema: {},
+        },
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false
+      hasTag: false,
     },
     {
       _id: '2',
@@ -42,7 +46,7 @@ describe('ResponseStudyTable', () => {
         duration: 5,
         recordedInSignLab: false,
         responderID: '1',
-        meta: {}
+        meta: {},
       },
       study: {
         _id: '1',
@@ -51,12 +55,12 @@ describe('ResponseStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {}
-        }
+          uiSchema: {},
+        },
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false
+      hasTag: false,
     },
     {
       _id: '3',
@@ -67,7 +71,7 @@ describe('ResponseStudyTable', () => {
         duration: 5,
         recordedInSignLab: false,
         responderID: '1',
-        meta: {}
+        meta: {},
       },
       study: {
         _id: '1',
@@ -76,14 +80,13 @@ describe('ResponseStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {}
-        }
+          uiSchema: {},
+        },
       },
       isPartOfStudy: true,
       isUsedForTraining: false,
-      hasTag: false
+      hasTag: false,
     },
-
   ];
 
   // Response service spy to serve fake data
@@ -92,23 +95,20 @@ describe('ResponseStudyTable', () => {
   let responseTable: ComponentFixture<ResponseStudyTable>;
 
   beforeEach(fakeAsync(() => {
-    responseSpy = jasmine.createSpyObj('ResponseService', ['getResponseStudies', 'setUsedInStudy']);
-    responseSpy.getResponseStudies.and.returnValue(Promise.resolve(JSON.parse(JSON.stringify(exampleResponseData))));
+    responseSpy = jasmine.createSpyObj('ResponseService', [
+      'getResponseStudies',
+      'setUsedInStudy',
+    ]);
+    responseSpy.getResponseStudies.and.returnValue(
+      Promise.resolve(JSON.parse(JSON.stringify(exampleResponseData)))
+    );
     responseSpy.setUsedInStudy.and.returnValue(Promise.resolve(true));
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule
-      ],
-      declarations: [
-        ResponseStudyTable,
-        ResponseTableCoreComponent
-      ],
-      providers: [
-        { provide: ResponseService, useValue: responseSpy }
-      ]
+      imports: [SharedModule],
+      declarations: [ResponseStudyTable, ResponseTableCoreComponent],
+      providers: [{ provide: ResponseService, useValue: responseSpy }],
     });
-
 
     responseTable = TestBed.createComponent(ResponseStudyTable);
     responseTable.componentInstance.study = exampleResponseData[0].study;
@@ -129,7 +129,7 @@ describe('ResponseStudyTable', () => {
 
     // Get the state of the toggles
     const toggleStates: boolean[] = [];
-    for(const toggle of toggles) {
+    for (const toggle of toggles) {
       toggleStates.push(toggle.getAttribute('aria-checked') == 'true');
     }
 
@@ -141,7 +141,9 @@ describe('ResponseStudyTable', () => {
     const compiled = responseTable.nativeElement;
 
     // Get the toggle associated with an enabled response
-    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[2];
+    const enabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[2];
     enabledToggle.click();
 
     responseTable.detectChanges();
@@ -155,7 +157,9 @@ describe('ResponseStudyTable', () => {
     const compiled = responseTable.nativeElement;
 
     // Get the toggle associated with an enabled response
-    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
+    const enabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[0];
     enabledToggle.click();
 
     responseTable.detectChanges();
@@ -172,7 +176,9 @@ describe('ResponseStudyTable', () => {
     responseTable.componentInstance.responseData[0].response._id = undefined;
 
     // Get the toggle associated with an enabled response
-    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
+    const enabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[0];
     enabledToggle.click();
 
     responseTable.detectChanges();

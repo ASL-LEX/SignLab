@@ -12,7 +12,7 @@ import { UserService } from '../../services/user.service';
 import { StudyService } from '../../services/study.service';
 import { TagService } from '../../services/tag.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
-import { Tag } from '../../../../shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import { UserStudyService } from '../../services/userstudy.service';
 import { TagGuard } from '../../guards/tag.guard';
 

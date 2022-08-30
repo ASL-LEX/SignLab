@@ -1,7 +1,10 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
-import { ResponseTableElement, ResponseTableToggleChange } from '../models/response-table-element';
+import {
+  ResponseTableElement,
+  ResponseTableToggleChange,
+} from '../models/response-table-element';
 
 /**
  * The ResponseTable displays response information and controls in a tabular
@@ -15,7 +18,7 @@ import { ResponseTableElement, ResponseTableToggleChange } from '../models/respo
 @Component({
   selector: 'response-table-core',
   templateUrl: './response-table-core.component.html',
-  styleUrls: ['./response-table-core.component.css']
+  styleUrls: ['./response-table-core.component.css'],
 })
 export class ResponseTableCoreComponent implements OnInit {
   /**
@@ -35,16 +38,17 @@ export class ResponseTableCoreComponent implements OnInit {
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
-  @Output() partOfTrainingChange = new EventEmitter<ResponseTableToggleChange>();
+  @Output() partOfTrainingChange =
+    new EventEmitter<ResponseTableToggleChange>();
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {}
 
   ngOnInit(): void {
     // Determine which additional controls should be displayed
-    if(this.displayStudyTrainingControls) {
+    if (this.displayStudyTrainingControls) {
       this.displayedColumns.push('studyTrainingControls');
     }
-    if(this.displayStudyEnableControls) {
+    if (this.displayStudyEnableControls) {
       this.displayedColumns.push('studyEnableControls');
     }
   }
@@ -52,7 +56,7 @@ export class ResponseTableCoreComponent implements OnInit {
   /** Handles displaying the response video in a popup dialog */
   viewResponse(videoURL: string): void {
     this.dialog.open(ResponseViewDialog, {
-      data: { videoURL: videoURL }
+      data: { videoURL: videoURL },
     });
   }
 }

@@ -1,6 +1,11 @@
 import { ResponseService } from '../../core/services/response.service';
-import { Response } from '../../../../../shared/dtos/response.dto';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Response } from 'shared/dtos/response.dto';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { ResponseNewStudyTable } from './response-new-study.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ResponseTableCoreComponent } from './response-table-core.component';
@@ -14,7 +19,7 @@ describe('ResponseNewStudyTable', () => {
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
-      meta: {}
+      meta: {},
     },
     {
       _id: '2',
@@ -23,7 +28,7 @@ describe('ResponseNewStudyTable', () => {
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
-      meta: {}
+      meta: {},
     },
     {
       _id: '3',
@@ -32,7 +37,7 @@ describe('ResponseNewStudyTable', () => {
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
-      meta: {}
+      meta: {},
     },
     {
       _id: '4',
@@ -41,8 +46,8 @@ describe('ResponseNewStudyTable', () => {
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
-      meta: {}
-    }
+      meta: {},
+    },
   ];
 
   // Response service spy to serve fake data
@@ -52,17 +57,14 @@ describe('ResponseNewStudyTable', () => {
 
   beforeEach(fakeAsync(() => {
     responseSpy = jasmine.createSpyObj('ResponseService', ['getResponses']);
-    responseSpy.getResponses.and.returnValue(Promise.resolve(exampleResponseData));
+    responseSpy.getResponses.and.returnValue(
+      Promise.resolve(exampleResponseData)
+    );
 
     TestBed.configureTestingModule({
       imports: [SharedModule],
-      declarations: [
-        ResponseNewStudyTable,
-        ResponseTableCoreComponent
-      ],
-      providers: [
-        { provide: ResponseService, useValue: responseSpy }
-      ]
+      declarations: [ResponseNewStudyTable, ResponseTableCoreComponent],
+      providers: [{ provide: ResponseService, useValue: responseSpy }],
     });
 
     responseTable = TestBed.createComponent(ResponseNewStudyTable);
@@ -81,32 +83,42 @@ describe('ResponseNewStudyTable', () => {
     const compiled = responseTable.nativeElement;
     spyOn(responseTable.componentInstance.markedDisabledChange, 'emit');
 
-    const disabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[1];
+    const disabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[1];
 
     disabledToggle.click();
 
     expect(responseTable.componentInstance.markedDisabled.size).toEqual(1);
     expect(responseTable.componentInstance.markedDisabled.has('1')).toBeTrue();
-    expect(responseTable.componentInstance.markedDisabledChange.emit).toHaveBeenCalled();
+    expect(
+      responseTable.componentInstance.markedDisabledChange.emit
+    ).toHaveBeenCalled();
   });
 
   it('should be able to mark a response as being part of the training set', () => {
     const compiled = responseTable.nativeElement;
     spyOn(responseTable.componentInstance.markedTrainingChange, 'emit');
 
-    const trainingToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
+    const trainingToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[0];
 
     trainingToggle.click();
 
     expect(responseTable.componentInstance.markedTraining.size).toEqual(1);
     expect(responseTable.componentInstance.markedTraining.has('1')).toBeTrue();
-    expect(responseTable.componentInstance.markedTrainingChange.emit).toHaveBeenCalled();
+    expect(
+      responseTable.componentInstance.markedTrainingChange.emit
+    ).toHaveBeenCalled();
   });
 
   it('should be able to swap back and forth marking a response as disabled', () => {
     const compiled = responseTable.nativeElement;
 
-    const disabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[1];
+    const disabledToggle = compiled.querySelectorAll(
+      'td mat-slide-toggle input'
+    )[1];
 
     // First click, should be marked as disabled
     disabledToggle.click();

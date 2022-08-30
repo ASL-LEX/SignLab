@@ -8,17 +8,9 @@ import { FirstTimeSetupComponent } from './components/first-time-setup.component
 import { ResponseMetaForm } from './components/response-meta-form/response-meta-form.component';
 
 @NgModule({
-  declarations: [
-    FirstTimeSetupComponent,
-    ResponseMetaForm
-  ],
-  imports: [
-    SharedModule,
-    AuthenticateModule
-  ],
+  declarations: [FirstTimeSetupComponent, ResponseMetaForm],
+  imports: [SharedModule, AuthenticateModule],
   providers: [],
-  exports: [
-    FirstTimeSetupComponent
-  ]
+  exports: [FirstTimeSetupComponent],
 })
-export class FirstTimeSetupModule { }
+export class FirstTimeSetupModule {}

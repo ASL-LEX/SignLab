@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { SaveAttempt, Response } from '../../../../../shared/dtos/response.dto';
-import { ResponseStudy } from '../../../../../shared/dtos/responsestudy.dto';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { SaveAttempt, Response } from 'shared/dtos/response.dto';
+import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import { MetaDefinition } from '@angular/platform-browser';
-import { Study } from '../../../../../shared/dtos/study.dto';
-import { User } from '../../../../../shared/dtos/user.dto';
+import { Study } from 'shared/dtos/study.dto';
+import { User } from 'shared/dtos/user.dto';
 import { SignLabHttpClient } from './http.service';
 
 /**
@@ -12,7 +12,7 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class ResponseService {
-  constructor(private signLab: SignLabHttpClient) { }
+  constructor(private signLab: SignLabHttpClient) {}
 
   /**
    * Set the metadata that all responses will be expected to have.
@@ -35,7 +35,9 @@ export class ResponseService {
    * response is used in a study.
    */
   async getResponseStudies(studyID: string): Promise<ResponseStudy[]> {
-    return this.signLab.get<ResponseStudy[]>('api/response/responsestudies', { params: { 'studyID': studyID } });
+    return this.signLab.get<ResponseStudy[]>('api/response/responsestudies', {
+      params: { studyID: studyID },
+    });
   }
 
   /**
@@ -65,10 +67,14 @@ export class ResponseService {
    * Get the next response that needs to be tagged. This will return an
    * incomplete tag for the user to complete.
    */
-  async getNextUntaggedResponse(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
+  async getNextUntaggedResponse(
+    user: User,
+    study: Study,
+    isTraining: boolean
+  ): Promise<Tag | null> {
     const query = { params: { userID: user._id, studyID: study._id! } };
 
-    if(isTraining) {
+    if (isTraining) {
       return this.signLab.get<Tag | null>('api/tag/nextTraining', query);
     } else {
       return this.signLab.get<Tag | null>('api/tag/assign', query);
@@ -82,7 +88,7 @@ export class ResponseService {
    * @return Success or error
    */
   async addTag(tag: Tag, isTraining: boolean): Promise<void> {
-    if(isTraining) {
+    if (isTraining) {
       return this.signLab.post<any>('api/tag/completeTraining', tag, {});
     } else {
       return this.signLab.post<any>('api/tag/complete', tag, {});
@@ -98,12 +104,20 @@ export class ResponseService {
    * @param studyID The ID of the study that this is being applied to
    * @return True if the change took place successfully
    */
-  async setUsedInStudy(responseID: string, usedInStudy: boolean, studyID: string): Promise<boolean> {
+  async setUsedInStudy(
+    responseID: string,
+    usedInStudy: boolean,
+    studyID: string
+  ): Promise<boolean> {
     const targetURL = 'api/response/enable';
-    const requestBody = { responseID: responseID, studyID: studyID, isPartOfStudy: usedInStudy };
+    const requestBody = {
+      responseID: responseID,
+      studyID: studyID,
+      isPartOfStudy: usedInStudy,
+    };
     try {
       await this.signLab.put<any>(targetURL, requestBody);
-    } catch(error) {
+    } catch (error) {
       console.debug('Failed to update the user role');
       return false;
     }

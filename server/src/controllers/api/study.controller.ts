@@ -12,7 +12,7 @@ import { ResponseService } from '../../services/response.service';
 import { Study } from '../../schemas/study.schema';
 import { StudyService } from '../../services/study.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
-import { StudyCreation } from '../../../../shared/dtos/study.dto';
+import { StudyCreation } from 'shared/dtos/study.dto';
 import { UserStudy } from '../../schemas/userstudy.schema';
 import { UserStudyService } from '../../services/userstudy.service';
 import { UserService } from '../../services/user.service';
@@ -151,11 +151,11 @@ export class StudyController {
     // Mark training and disabled responses
     await Promise.all([
       this.responseStudyService.markTraining(
-        newStudy._id,
+        newStudy._id!,
         studyCreation.trainingResponses,
       ),
       this.responseStudyService.markDisabled(
-        newStudy._id,
+        newStudy._id!,
         studyCreation.disabledResponses,
       ),
     ]);

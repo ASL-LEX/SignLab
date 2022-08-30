@@ -1,5 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormArray,
+  FormGroup,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ResponseService } from '../../../core/services/response.service';
 
 /**
@@ -9,7 +15,7 @@ function uniqueValidator(control: AbstractControl) {
   const formArray = control as FormArray;
   const set = new Set<string>();
 
-  for(let field of formArray.value) {
+  for (const field of formArray.value) {
     // If the field with the given name is already present, returrn an error
     if (set.has(field.name)) {
       return { mustBeUnique: true };
@@ -26,12 +32,15 @@ function uniqueValidator(control: AbstractControl) {
 export class ResponseMetaForm {
   /** Form that controls the fields of the metadata */
   responseMetadataFormGroup = this.formBuilder.group({
-    responseMetadata: this.formBuilder.array([], uniqueValidator)
+    responseMetadata: this.formBuilder.array([], uniqueValidator),
   });
   /** Callback for after the metadata has been submitted */
   @Input() onMetadataSubmit: () => void;
 
-  constructor(private formBuilder: FormBuilder, private responseService: ResponseService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private responseService: ResponseService
+  ) {}
 
   get responseMetadata() {
     return this.responseMetadataFormGroup.get('responseMetadata') as FormArray;
@@ -40,7 +49,7 @@ export class ResponseMetaForm {
   addMetaField() {
     const newForm: FormGroup = this.formBuilder.group({
       name: ['', Validators.required],
-      type: ['', Validators.required]
+      type: ['', Validators.required],
     });
     this.responseMetadata.push(newForm);
   }

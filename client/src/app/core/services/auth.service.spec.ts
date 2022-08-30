@@ -1,4 +1,4 @@
-import { AuthService } from "./auth.service";
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -15,7 +15,9 @@ describe('AuthService', () => {
     // Make spy for the authentication service, this one will always not
     // authenticate
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
-    spy.post.and.callFake(() => { throw new Error(); });
+    spy.post.and.callFake(() => {
+      throw new Error();
+    });
 
     // Create unit under test
     service = new AuthService(spy);
@@ -47,13 +49,13 @@ describe('AuthService', () => {
   // Valid username and password combo should work
   it('should authorize valid credentials', async () => {
     // Make a spy that will authenticate
-    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post'])
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
     spy.post.and.returnValue({
       email: 'bob@bu.edu',
       name: 'bob',
       roles: new Map<string, boolean>(),
       username: 'bob',
-      _id: 'sadlkfj'
+      _id: 'sadlkfj',
     });
     service = new AuthService(spy);
 
@@ -73,7 +75,7 @@ describe('AuthService', () => {
     service = new AuthService(spy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
-    expect(result).toEqual({username: false, email: false});
+    expect(result).toEqual({ username: false, email: false });
   });
 
   // User availability testing, fully available
@@ -99,16 +101,21 @@ describe('AuthService', () => {
         tagging: false,
         recording: false,
         accessing: false,
-        owner: false
+        owner: false,
       },
       username: 'bob',
-      _id: '1'
+      _id: '1',
     };
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
     spy.post.and.returnValue(user);
     service = new AuthService(spy);
 
-    const result = await service.signup(user.name, user.email, user.username, 'bobby');
+    const result = await service.signup(
+      user.name,
+      user.email,
+      user.username,
+      'bobby'
+    );
     expect(result).toEqual(user);
   });
 });

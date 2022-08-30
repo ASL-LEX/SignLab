@@ -15,7 +15,7 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from '../../../../shared/dtos/user.dto';
+} from 'shared/dtos/user.dto';
 import { User } from '../../schemas/user.schema';
 import { StudyService } from '../../services/study.service';
 import { UserStudyService } from '../../services/userstudy.service';

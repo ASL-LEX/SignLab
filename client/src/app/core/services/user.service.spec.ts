@@ -1,4 +1,4 @@
-import { UserService } from "./user.service";
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   // Test user response data for testing
@@ -15,7 +15,7 @@ describe('UserService', () => {
         accessing: false,
         owner: false,
       },
-      _id: '10'
+      _id: '10',
     },
     {
       email: 'test@bu.edu',
@@ -26,11 +26,11 @@ describe('UserService', () => {
         tagging: false,
         recording: false,
         accessing: false,
-        owner: false
+        owner: false,
       },
       username: 'test',
-      _id: '11'
-    }
+      _id: '11',
+    },
   ];
 
   // Test to make sure the users can be pulled successfully
@@ -56,12 +56,12 @@ describe('UserService', () => {
     const service = new UserService(spy);
 
     // Test adding a role to the user
-    let result = await service.changeRole(exampleUserData[0], "tagging", true);
+    let result = await service.changeRole(exampleUserData[0], 'tagging', true);
     expect(result).toBeTrue();
     expect(spy.put).toHaveBeenCalledWith('api/users/tagging/10', null);
 
     // Test deleting a role from the user
-    result = await service.changeRole(exampleUserData[0], "tagging", false);
+    result = await service.changeRole(exampleUserData[0], 'tagging', false);
     expect(result).toBeTrue();
     expect(spy.delete).toHaveBeenCalledWith('api/users/tagging/10');
   });
@@ -76,8 +76,11 @@ describe('UserService', () => {
     const service = new UserService(spy);
 
     // Test trying to change a role
-    const result = await service.changeRole(exampleUserData[0], "tagging", true);
+    const result = await service.changeRole(
+      exampleUserData[0],
+      'tagging',
+      true
+    );
     expect(result).toBeFalse();
   });
-
 });

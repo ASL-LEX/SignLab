@@ -10,16 +10,10 @@ import { ResponseTable } from './components/response-table.component';
     ResponseNewStudyTable,
     ResponseStudyTable,
     ResponseTableCoreComponent,
-    ResponseTable
+    ResponseTable,
   ],
-  imports: [
-    SharedModule
-  ],
-  exports: [
-    ResponseNewStudyTable,
-    ResponseStudyTable,
-    ResponseTable
-  ],
+  imports: [SharedModule],
+  exports: [ResponseNewStudyTable, ResponseStudyTable, ResponseTable],
   providers: [],
 })
-export class ResponseTableModule { }
+export class ResponseTableModule {}

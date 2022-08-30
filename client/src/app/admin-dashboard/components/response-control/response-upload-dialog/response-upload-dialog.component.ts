@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ResponseService } from '../../../../core/services/response.service';
-import { LocationInfo } from '../../../../../../../shared/dtos/response.dto';
+import { LocationInfo } from 'shared/dtos/response.dto';
 
 /**
  * Handles the UI to allow users to add new responses to SignLab.
@@ -8,7 +8,7 @@ import { LocationInfo } from '../../../../../../../shared/dtos/response.dto';
 @Component({
   selector: 'response-upload-dialog',
   templateUrl: './response-upload-dialog.component.html',
-  styleUrls: ['./response-upload-dialog.component.css']
+  styleUrls: ['./response-upload-dialog.component.css'],
 })
 export class ResponseUploadDialog {
   /**
@@ -63,7 +63,8 @@ export class ResponseUploadDialog {
       // Clear input field to allow for another upload attempt
       event.target.value = '';
     } else {
-      this.uploadStatusMessage = 'Response uploaded successfully, reload page to see new responses';
+      this.uploadStatusMessage =
+        'Response uploaded successfully, reload page to see new responses';
       this.errorLocations = [];
     }
   }

@@ -7,25 +7,23 @@ import { ResponseTableElement } from '../models/response-table-element';
  */
 @Component({
   selector: 'response-table',
-  template: `
-    <response-table-core
-      [responseData]="responseData"
-    ></response-table-core>`
+  template: ` <response-table-core
+    [responseData]="responseData"
+  ></response-table-core>`,
 })
 export class ResponseTable {
   responseData: ResponseTableElement[];
 
   constructor(responseService: ResponseService) {
     // Load in responses and convert them to ResponseTableElement(s)
-    responseService.getResponses()
-      .then(responses => {
-         this.responseData = responses.map((response) => {
-            return {
-              response: response,
-              isPartOfStudy: true,
-              isUsedForTraining: true
-            }
-          });
+    responseService.getResponses().then((responses) => {
+      this.responseData = responses.map((response) => {
+        return {
+          response: response,
+          isPartOfStudy: true,
+          isUsedForTraining: true,
+        };
       });
+    });
   }
 }

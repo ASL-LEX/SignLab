@@ -16,15 +16,16 @@ import { NewStudyMeta } from '../../../models/new-study';
       <mat-card-title>Study Information</mat-card-title>
       <mat-card-content>
         <jsonforms
-          [schema]='requiredDataSchema'
-          [uischema]='requiredDataUISchema'
-          [renderers]='requiredDataRenderers'
-          [ajv]='ajv'
-          (dataChange)='requiredFieldChange($event)'
-          (errors)='requiredDataErrorHandler($event)'></jsonforms>
+          [schema]="requiredDataSchema"
+          [uischema]="requiredDataUISchema"
+          [renderers]="requiredDataRenderers"
+          [ajv]="ajv"
+          (dataChange)="requiredFieldChange($event)"
+          (errors)="requiredDataErrorHandler($event)"
+        ></jsonforms>
       </mat-card-content>
     </mat-card>
-  `
+  `,
 })
 export class RequiredInfoComponent {
   /**
@@ -59,8 +60,8 @@ export class RequiredInfoComponent {
    * valid.
    */
   requiredDataErrorHandler(errors: any[]) {
-    const requiredDataValid = errors.length == 0
-    if(requiredDataValid) {
+    const requiredDataValid = errors.length == 0;
+    if (requiredDataValid) {
       this.requiredDataChange.emit(this.requiredData);
     } else {
       this.requiredDataChange.emit(null);
@@ -81,10 +82,10 @@ const JSON_FORMS_DATA_SCHEMA = {
       type: 'string',
     },
     instructions: {
-      type: 'string'
-    }
+      type: 'string',
+    },
   },
-  required: ['name', 'description', 'instructions']
+  required: ['name', 'description', 'instructions'],
 };
 
 /**
@@ -95,15 +96,15 @@ const JSON_FORMS_UI_SCHEMA = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/name'
+      scope: '#/properties/name',
     },
     {
       type: 'Control',
-      scope: '#/properties/description'
+      scope: '#/properties/description',
     },
     {
       type: 'Control',
-      scope: '#/properties/instructions'
-    }
-  ]
+      scope: '#/properties/instructions',
+    },
+  ],
 };

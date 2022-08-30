@@ -1,17 +1,26 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import { aslLexSignBankControlRendererTester, AslLexSignBankField } from '../../shared/components/custom-fields/asl-lex-field.component';
+import {
+  aslLexSignBankControlRendererTester,
+  AslLexSignBankField,
+} from '../../shared/components/custom-fields/asl-lex-field.component';
 import { createAjv } from '@jsonforms/core';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 
 @Component({
   selector: 'tagging-form',
   template: `
     <div fxLayout="row" fxLayoutAlign="space-around">
-
       <!-- Response Video View -->
       <div class="video-tag-child">
-        <video src="{{tag.response.videoURL}}" controls></video>
+        <video src="{{ tag.response.videoURL }}" controls></video>
       </div>
 
       <!-- Form View -->
@@ -20,17 +29,34 @@ import { Tag } from '../../../../../shared/dtos/tag.dto';
           [schema]="tag.study.tagSchema.dataSchema"
           [uischema]="tag.study.tagSchema.uiSchema"
           [renderers]="renderers"
-          [ajv]='ajv'
+          [ajv]="ajv"
           (dataChange)="formChange($event)"
-          (errors)="formErrorHandler($event)"></jsonforms>
-        <button mat-stroked-button (click)="formSubmit()" [disabled]="!formValid">Submit</button>
+          (errors)="formErrorHandler($event)"
+        ></jsonforms>
+        <button
+          mat-stroked-button
+          (click)="formSubmit()"
+          [disabled]="!formValid"
+        >
+          Submit
+        </button>
       </div>
     </div>
   `,
   styles: [
-    `.video-tag-container { padding: 20px; }`,
-    `.video-tag-child { width: 50%; float: left; padding: 20px; }`
-  ]
+    `
+      .video-tag-container {
+        padding: 20px;
+      }
+    `,
+    `
+      .video-tag-child {
+        width: 50%;
+        float: left;
+        padding: 20px;
+      }
+    `,
+  ],
 })
 export class TaggingForm implements OnChanges {
   /** The tag to complete */
@@ -40,11 +66,14 @@ export class TaggingForm implements OnChanges {
   /** The data collected in the form, the data format depends on the study */
   formData: any = {};
   /** Boolean that represents if the tag form is valid or not */
-  formValid: boolean = false;
+  formValid = false;
   /** Handles rendering different form fields */
   renderers = [
     ...angularMaterialRenderers,
-    { tester: aslLexSignBankControlRendererTester, renderer: AslLexSignBankField }
+    {
+      tester: aslLexSignBankControlRendererTester,
+      renderer: AslLexSignBankField,
+    },
   ];
   /** Configure how errors are presented */
   ajv = createAjv({ schemaId: 'id', allErrors: true });
@@ -58,7 +87,7 @@ export class TaggingForm implements OnChanges {
 
   /** Handles submission of the form */
   formSubmit() {
-    if(this.formValid) {
+    if (this.formValid) {
       this.tag.info = this.formData;
       this.tagOutput.emit(this.tag);
     }
@@ -71,7 +100,7 @@ export class TaggingForm implements OnChanges {
 
   /** Handles when the tag changes */
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.tag) {
+    if (changes.tag) {
       this.tag = changes.tag.currentValue;
     }
   }

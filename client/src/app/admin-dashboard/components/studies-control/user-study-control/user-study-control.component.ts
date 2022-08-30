@@ -1,35 +1,50 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import {StudyService} from 'src/app/core/services/study.service';
-import { Study } from '../../../../../../../shared/dtos/study.dto';
-import { UserStudy } from '../../../../../../../shared/dtos/userstudy.dto';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import { StudyService } from '../../../../core/services/study.service';
+import { Study } from 'shared/dtos/study.dto';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
   selector: 'user-study-control',
   templateUrl: './user-study-control.component.html',
-  styleUrls: ['./user-study-control.component.css' ]
+  styleUrls: ['./user-study-control.component.css'],
 })
 export class UserStudyComponent implements OnInit, OnChanges {
   @Input() study: Study;
-  displayedColumns = ['username', 'name', 'email', 'taggingTrainingResults', 'canTag'];
+  displayedColumns = [
+    'username',
+    'name',
+    'email',
+    'taggingTrainingResults',
+    'canTag',
+  ];
   userData: UserStudy[] = [];
 
-  constructor(private studyService: StudyService) { }
+  constructor(private studyService: StudyService) {}
 
   ngOnInit(): void {
     this.loadUserStudies();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.study) {
+    if (changes.study) {
       this.study = changes.study.currentValue;
       this.loadUserStudies();
     }
   }
 
   async changeAccessToStudy(userStudy: UserStudy, hasAccess: boolean) {
-    const result = await this.studyService.changeAccessToStudy(userStudy, hasAccess);
+    const result = await this.studyService.changeAccessToStudy(
+      userStudy,
+      hasAccess
+    );
 
-    if(!result) {
+    if (!result) {
       console.error('Failed to change permission on user study');
       userStudy.hasAccessToStudy = !hasAccess;
     }
@@ -44,17 +59,17 @@ export class UserStudyComponent implements OnInit, OnChanges {
   async downloadUserTraining(userStudy: UserStudy) {
     const tags = await this.studyService.getTrainingTags(userStudy);
 
-    const flattenedData = tags.map(tag => {
+    const flattenedData = tags.map((tag) => {
       return {
         responseID: tag.response.responseID,
         videoURL: tag.response.videoURL,
         study: tag.study.name,
         user: tag.user.username,
-        ...tag.info
-      }
+        ...tag.info,
+      };
     });
 
-    if(flattenedData.length == 0) {
+    if (flattenedData.length == 0) {
       alert('No training data');
       return;
     }
@@ -63,7 +78,8 @@ export class UserStudyComponent implements OnInit, OnChanges {
   }
 
   downloadFile(userStudy: UserStudy, data: any[]) {
-    const replacer = (_key: string, value: any) => (value === null ? '' : value); // specify how you want to handle null values here
+    const replacer = (_key: string, value: any) =>
+      value === null ? '' : value; // specify how you want to handle null values here
     const header = Object.keys(data[0]);
     const csv = data.map((row) =>
       header
@@ -86,7 +102,7 @@ export class UserStudyComponent implements OnInit, OnChanges {
 
   private async loadUserStudies() {
     // Do nothing if study is not defined
-    if(!this.study) {
+    if (!this.study) {
       return;
     }
 

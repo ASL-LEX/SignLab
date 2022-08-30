@@ -1,12 +1,16 @@
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import {
+  TestBed,
+  ComponentFixture,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { StudyService } from '../../core/services/study.service';
 import { TaggingLanding } from './tagging-landing.component';
 import { AuthService } from '../../core/services/auth.service';
-import { User } from '../../../../../shared/dtos/user.dto';
+import { User } from 'shared/dtos/user.dto';
 
 describe('TaggingLanding', () => {
-
   const testUser: User = {
     _id: '3',
     name: 'mary',
@@ -18,8 +22,8 @@ describe('TaggingLanding', () => {
       tagging: false,
       recording: false,
       accessing: false,
-      owner: false
-    }
+      owner: false,
+    },
   };
 
   const testStudy = {
@@ -29,43 +33,42 @@ describe('TaggingLanding', () => {
     instructions: 'You gotta',
     tagSchema: {
       dataSchema: {},
-      uiSchema: {}
-    }
+      uiSchema: {},
+    },
   };
 
   const testUserStudy = {
-      _id: '1',
-      user: testUser,
-      study: testStudy,
-      trainingResponseStudies: [],
-      hasAccessToStudy: false
+    _id: '1',
+    user: testUser,
+    study: testStudy,
+    trainingResponseStudies: [],
+    hasAccessToStudy: false,
   };
 
-  let authSpy = {
+  const authSpy = {
     get user() {
       return testUser;
-    }
+    },
   };
   let studySpy: jasmine.SpyObj<StudyService>;
   // Test component
   let taggingLanding: ComponentFixture<TaggingLanding>;
 
   beforeEach(fakeAsync(() => {
-    studySpy = jasmine.createSpyObj('StudyService', ['getUserStudy', 'getStudies']);
+    studySpy = jasmine.createSpyObj('StudyService', [
+      'getUserStudy',
+      'getStudies',
+    ]);
     studySpy.getUserStudy.and.returnValue(Promise.resolve(testUserStudy));
     studySpy.getStudies.and.returnValue(Promise.resolve([testStudy]));
 
     TestBed.configureTestingModule({
-      imports: [
-        SharedModule
-      ],
-      declarations: [
-        TaggingLanding
-      ],
+      imports: [SharedModule],
+      declarations: [TaggingLanding],
       providers: [
         { provide: AuthService, useValue: authSpy },
-        { provide: StudyService, useValue: studySpy }
-      ]
+        { provide: StudyService, useValue: studySpy },
+      ],
     });
 
     taggingLanding = TestBed.createComponent(TaggingLanding);
@@ -81,7 +84,9 @@ describe('TaggingLanding', () => {
 
     // Should have a message explaining to the user they don't have access
     const message = compiled.querySelector('div p');
-    expect(message.textContent).toContain('You do not have access to tag in this study.');
+    expect(message.textContent).toContain(
+      'You do not have access to tag in this study.'
+    );
 
     // The button to access the tagging interface should be disabled
     const button = compiled.querySelectorAll('mat-card-content div button')[1];
@@ -93,7 +98,9 @@ describe('TaggingLanding', () => {
 
     // Should have a message explaining to the user the next steps
     const message = compiled.querySelectorAll('div p')[1];
-    expect(message.textContent).toContain('Training complete, notify your administrator');
+    expect(message.textContent).toContain(
+      'Training complete, notify your administrator'
+    );
 
     // The button to access the training should be disabled
     const button = compiled.querySelectorAll('mat-card-content div button')[2];
@@ -128,12 +135,12 @@ describe('TaggingLanding', () => {
         duration: 3,
         recordedInSignLab: false,
         responderID: '1',
-        meta: {}
+        meta: {},
       },
       study: testStudy,
       isPartOfStudy: false,
       isUsedForTraining: true,
-      hasTag: false
+      hasTag: false,
     });
     taggingLanding.componentInstance.userStudy = withTrainingLeft;
 

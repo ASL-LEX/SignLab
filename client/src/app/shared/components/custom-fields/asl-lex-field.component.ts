@@ -1,8 +1,14 @@
-import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
+import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { Actions, RankedTester, rankWith, composeWithUi, ControlElement } from "@jsonforms/core";
-import { AslLexService, TagSearchResult } from "../../services/asl-lex.service";
-import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
+import {
+  Actions,
+  RankedTester,
+  rankWith,
+  composeWithUi,
+  ControlElement,
+} from '@jsonforms/core';
+import { AslLexService, TagSearchResult } from '../../services/asl-lex.service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 /**
  * This component is a custom renderer for JSON Forms that allows users to
@@ -13,24 +19,24 @@ import { debounceTime, distinctUntilChanged, Subject } from "rxjs";
 @Component({
   selector: 'asl-lex-sign-bank',
   templateUrl: './asl-lex-field.component.html',
-  styleUrls: ['./asl-lex-field.component.css']
+  styleUrls: ['./asl-lex-field.component.css'],
 })
 export class AslLexSignBankField extends JsonFormsControl {
   tagSearchResults: TagSearchResult[] = [];
   signSearchSubject = new Subject<string>();
-  signSearch: string = '';
-  selectedSignCode: string = '';
+  signSearch = '';
+  selectedSignCode = '';
 
-  constructor(jsonFormsService: JsonFormsAngularService,
-              private aslLexService: AslLexService,
-              private changeDetectorRef: ChangeDetectorRef) {
-
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    private aslLexService: AslLexService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     super(jsonFormsService);
 
     // Setup the ASL-LEX search handler
-    this.signSearchSubject.pipe(
-      debounceTime(500),
-      distinctUntilChanged())
+    this.signSearchSubject
+      .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((search: string) => {
         this.searchUpdate(search);
       });
@@ -71,8 +77,10 @@ export class AslLexSignBankField extends JsonFormsControl {
 export const aslLexSignBankControlRendererTester: RankedTester = rankWith(
   10,
   (uischema, _schema, _rootSchema) => {
-    return uischema.options != undefined &&
-           uischema.options.customType != undefined &&
-           uischema.options.customType == 'asl-lex';
+    return (
+      uischema.options != undefined &&
+      uischema.options.customType != undefined &&
+      uischema.options.customType == 'asl-lex'
+    );
   }
 );

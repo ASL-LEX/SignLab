@@ -1,8 +1,13 @@
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Tag } from 'shared/dtos/tag.dto';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { TaggingForm } from './tagging-form.compont';
 import { SharedModule } from '../../shared/shared.module';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TaggingForm', () => {
   const testTag1: Tag = {
@@ -12,7 +17,7 @@ describe('TaggingForm', () => {
       videoURL: '/media/video.mp4',
       recordedInSignLab: false,
       responderID: '1',
-      meta: { },
+      meta: {},
     },
     study: {
       _id: 'study1',
@@ -21,24 +26,24 @@ describe('TaggingForm', () => {
       instructions: 'Do your job',
       tagSchema: {
         dataSchema: {
-          type: "object",
+          type: 'object',
           properties: {
             name: {
-              type: "string"
-            }
+              type: 'string',
+            },
           },
-          required: ['name']
+          required: ['name'],
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name'
-            }
-          ]
-        }
-      }
+              scope: '#/properties/name',
+            },
+          ],
+        },
+      },
     },
     user: {
       _id: 'some user',
@@ -51,22 +56,20 @@ describe('TaggingForm', () => {
         tagging: true,
         recording: false,
         accessing: false,
-        owner: false
-      }
+        owner: false,
+      },
     },
     complete: false,
     isTraining: false,
-    info: {
-
-    }
+    info: {},
   };
 
   let taggingForm: ComponentFixture<TaggingForm>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaggingForm ],
-      imports: [ SharedModule, BrowserAnimationsModule ],
+      declarations: [TaggingForm],
+      imports: [SharedModule, BrowserAnimationsModule],
     });
 
     taggingForm = TestBed.createComponent(TaggingForm);

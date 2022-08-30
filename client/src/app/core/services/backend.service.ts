@@ -8,13 +8,15 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class BackendService {
-  constructor(private signLab: SignLabHttpClient) { }
+  constructor(private signLab: SignLabHttpClient) {}
 
   /**
    * Determine if the application is in the "first time setup mode" or not.
    */
   async isInFirstTimeSetup(): Promise<boolean> {
-    const result = await this.signLab.get<{isFirstTimeSetup: boolean}>('api/first');
+    const result = await this.signLab.get<{ isFirstTimeSetup: boolean }>(
+      'api/first'
+    );
     return result.isFirstTimeSetup;
   }
 }

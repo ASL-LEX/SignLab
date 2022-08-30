@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../core/services/user.service';
-import { User } from '../../../../../../shared/dtos/user.dto';
+import { User } from 'shared/dtos/user.dto';
 
 /**
  * The User Control view allows admins the ability to edit user permissions
@@ -10,14 +10,21 @@ import { User } from '../../../../../../shared/dtos/user.dto';
 @Component({
   selector: 'user-control',
   templateUrl: './user-control.component.html',
-  styleUrls: ['./user-control.component.css']
+  styleUrls: ['./user-control.component.css'],
 })
 export class UserControlComponent implements OnInit {
   // TODO: Get roles dynamically from server
   /** Columns to display in the user view */
-  displayedColumns = ['username', 'name', 'email', 'isAdmin', 'isTagging',
-                      'isRecording', 'taggingTrainingComplete',
-                      'recordingTrainingComplete'];
+  displayedColumns = [
+    'username',
+    'name',
+    'email',
+    'isAdmin',
+    'isTagging',
+    'isRecording',
+    'taggingTrainingComplete',
+    'recordingTrainingComplete',
+  ];
   /** Stores the current list of all users, is exposed in the user control view */
   userData: User[] = [];
 
@@ -26,13 +33,14 @@ export class UserControlComponent implements OnInit {
    *
    * @param userService The service which is used to get all of the users
    */
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     // Get all of the users from the database and store the result in
     // `userData`
-    this.userService.getUsers()
-      .then(response => { this.userData = response; });
+    this.userService.getUsers().then((response) => {
+      this.userData = response;
+    });
   }
 
   /**
@@ -51,12 +59,15 @@ export class UserControlComponent implements OnInit {
    * @param role The role to update
    * @param hasRole If the user should have the role or not
    */
-  async updateRole(user: User, role: 'admin' | 'tagging' | 'recording' | 'accessing',
-                   hasRole: boolean): Promise<void> {
+  async updateRole(
+    user: User,
+    role: 'admin' | 'tagging' | 'recording' | 'accessing',
+    hasRole: boolean
+  ): Promise<void> {
     const result = await this.userService.changeRole(user, role, hasRole);
 
     // If the role update failed, revert the checkbox
-    if(!result) {
+    if (!result) {
       user.roles[role] = !hasRole;
       alert('Failed to update user role');
     }

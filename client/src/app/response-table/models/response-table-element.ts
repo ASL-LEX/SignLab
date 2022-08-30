@@ -1,4 +1,4 @@
-import { Response } from '../../../../../shared/dtos/response.dto';
+import { Response } from 'shared/dtos/response.dto';
 
 /**
  * Information that is needed to display the table. The `isPartOfStudy` and

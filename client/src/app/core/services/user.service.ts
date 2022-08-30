@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../../../../shared/dtos/user.dto';
+import { User } from 'shared/dtos/user.dto';
 import { SignLabHttpClient } from './http.service';
 
 /**
@@ -8,7 +8,7 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class UserService {
-  constructor(private signLab: SignLabHttpClient) { }
+  constructor(private signLab: SignLabHttpClient) {}
 
   /**
    * Get back all of the users. If the result is malformed or no users are in
@@ -29,18 +29,22 @@ export class UserService {
    * @param hasRole If the user will have the given role
    * @return True on success, false otherwise
    */
-  async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
+  async changeRole(
+    user: User,
+    role: string,
+    hasRole: boolean
+  ): Promise<boolean> {
     const targetURL = `api/users/${role}/${user._id}`;
 
     // Try to make the change
     try {
-      if(hasRole) {
+      if (hasRole) {
         await this.signLab.put<any>(targetURL, null);
       } else {
         await this.signLab.delete<any>(targetURL);
       }
       return true;
-    } catch(error) {
+    } catch (error) {
       console.log('Failed to update the user role');
       console.log(error);
       return false;

@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { StudyService } from '../services/study.service';
 import { UserStudyService } from '../services/userstudy.service';
 import { UserService } from '../services/user.service';
@@ -8,16 +14,21 @@ import { UserService } from '../services/user.service';
  */
 @Injectable()
 export class TagGuard implements CanActivate {
-  constructor(private userService: UserService,
-              private studyService: StudyService,
-              private userStudyService: UserStudyService) {}
+  constructor(
+    private userService: UserService,
+    private studyService: StudyService,
+    private userStudyService: UserStudyService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const query = context.switchToHttp().getRequest().query;
 
     // Ensure the correct parameters are provided
-    if(query.userID == undefined || query.studyID == undefined) {
-      throw new HttpException('userID and studyID must be present', HttpStatus.BAD_REQUEST);
+    if (query.userID == undefined || query.studyID == undefined) {
+      throw new HttpException(
+        'userID and studyID must be present',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // TODO: This logic is repeated in the functions that make use of this

@@ -1,6 +1,11 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import { ResponseService } from '../../core/services/response.service';
 import { TaggingInterface } from './tagging-interface.component';
 import { StudyService } from '../../core/services/study.service';
@@ -19,7 +24,7 @@ describe('TaggingInterface', () => {
       videoURL: '/media/video.mp4',
       recordedInSignLab: false,
       responderID: '1',
-      meta: { },
+      meta: {},
     },
     study: {
       _id: 'study1',
@@ -28,24 +33,24 @@ describe('TaggingInterface', () => {
       instructions: 'Do your job',
       tagSchema: {
         dataSchema: {
-          type: "object",
+          type: 'object',
           properties: {
             name: {
-              type: "string"
-            }
+              type: 'string',
+            },
           },
-          required: ['name']
+          required: ['name'],
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name'
-            }
-          ]
-        }
-      }
+              scope: '#/properties/name',
+            },
+          ],
+        },
+      },
     },
     user: {
       _id: 'some user',
@@ -58,14 +63,12 @@ describe('TaggingInterface', () => {
         tagging: true,
         recording: false,
         accessing: false,
-        owner: false
-      }
+        owner: false,
+      },
     },
     complete: false,
     isTraining: false,
-    info: {
-
-    }
+    info: {},
   };
 
   const testTag2: Tag = {
@@ -75,7 +78,7 @@ describe('TaggingInterface', () => {
       videoURL: '/media/another-video.mp4',
       recordedInSignLab: false,
       responderID: '1',
-      meta: { },
+      meta: {},
     },
     study: {
       _id: 'study1',
@@ -84,24 +87,24 @@ describe('TaggingInterface', () => {
       instructions: 'Do your job',
       tagSchema: {
         dataSchema: {
-          type: "object",
+          type: 'object',
           properties: {
             name: {
-              type: "string"
-            }
+              type: 'string',
+            },
           },
-          required: ['name']
+          required: ['name'],
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name'
-            }
-          ]
-        }
-      }
+              scope: '#/properties/name',
+            },
+          ],
+        },
+      },
     },
     user: {
       _id: 'some user',
@@ -114,36 +117,36 @@ describe('TaggingInterface', () => {
         tagging: true,
         recording: false,
         accessing: false,
-        owner: false
-      }
+        owner: false,
+      },
     },
     complete: false,
     isTraining: false,
-    info: {
-
-    }
+    info: {},
   };
 
   const authSpy = {
     get user() {
       return testTag1.user;
-    }
+    },
   };
 
   beforeEach(() => {
-    responseSpy = jasmine.createSpyObj('ResponseService',
-                                       ['getNextUntaggedResponse', 'addTag']);
-    const studySpy = jasmine.createSpyObj('StudyService', [ 'getStudies' ]);
+    responseSpy = jasmine.createSpyObj('ResponseService', [
+      'getNextUntaggedResponse',
+      'addTag',
+    ]);
+    const studySpy = jasmine.createSpyObj('StudyService', ['getStudies']);
     studySpy.getStudies.and.returnValue(Promise.resolve([]));
 
     TestBed.configureTestingModule({
-      declarations: [ TaggingInterface ],
-      imports: [ SharedModule, BrowserAnimationsModule ],
+      declarations: [TaggingInterface],
+      imports: [SharedModule, BrowserAnimationsModule],
       providers: [
         { provide: ResponseService, useValue: responseSpy },
         { provide: StudyService, useValue: studySpy },
-        { provide: AuthService, useValue: authSpy }
-      ]
+        { provide: AuthService, useValue: authSpy },
+      ],
     });
 
     tagInterface = TestBed.createComponent(TaggingInterface);
@@ -165,9 +168,10 @@ describe('TaggingInterface', () => {
     expect(card.textContent).toContain('All responses have been tagged so far');
   }));
 
-
   it('should handle submitting one tag and getting no more tags', fakeAsync(() => {
-    responseSpy.getNextUntaggedResponse.and.returnValue(Promise.resolve(testTag1));
+    responseSpy.getNextUntaggedResponse.and.returnValue(
+      Promise.resolve(testTag1)
+    );
     responseSpy.addTag.and.resolveTo();
 
     // Have ngOnInit run and let changes take place

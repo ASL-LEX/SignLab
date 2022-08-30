@@ -1,6 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ResponseService } from '../../core/services/response.service';
-import { ResponseTableElement, ResponseTableToggleChange } from '../models/response-table-element';
+import {
+  ResponseTableElement,
+  ResponseTableToggleChange,
+} from '../models/response-table-element';
 
 /**
  * The ResponseNewStudyTable provides the response study table view for the
@@ -15,39 +18,36 @@ import { ResponseTableElement, ResponseTableToggleChange } from '../models/respo
  */
 @Component({
   selector: 'response-new-study',
-  template: `
-    <response-table-core
-      [displayStudyEnableControls]="true"
-      [displayStudyTrainingControls]="true"
-      [responseData]="responseData"
-      (partOfStudyChange)="markResponseAsEnabled($event)"
-      (partOfTrainingChange)="markResponseAsTraining($event)"
-    ></response-table-core>`
+  template: ` <response-table-core
+    [displayStudyEnableControls]="true"
+    [displayStudyTrainingControls]="true"
+    [responseData]="responseData"
+    (partOfStudyChange)="markResponseAsEnabled($event)"
+    (partOfTrainingChange)="markResponseAsTraining($event)"
+  ></response-table-core>`,
 })
 export class ResponseNewStudyTable {
   /** Set of response IDs that should be marked as disabled for the study */
   markedDisabled = new Set<string>();
-  @Output() markedDisabledChange = new EventEmitter<Set<string>>;
+  @Output() markedDisabledChange = new EventEmitter<Set<string>>();
   /** Set of response IDs that should be marked as used for training for the study */
   markedTraining = new Set<string>();
-  @Output() markedTrainingChange = new EventEmitter<Set<string>>;
-
+  @Output() markedTrainingChange = new EventEmitter<Set<string>>();
 
   /** The response information to display */
   responseData: ResponseTableElement[];
 
   constructor(responseService: ResponseService) {
     // Load in responses and convert them to ResponseTableElement(s)
-    responseService.getResponses()
-      .then(responses => {
-         this.responseData = responses.map((response) => {
-            return {
-              response: response,
-              isUsedForTraining: false,
-              isPartOfStudy: true
-            }
-          });
+    responseService.getResponses().then((responses) => {
+      this.responseData = responses.map((response) => {
+        return {
+          response: response,
+          isUsedForTraining: false,
+          isPartOfStudy: true,
+        };
       });
+    });
   }
 
   /**
@@ -58,7 +58,11 @@ export class ResponseNewStudyTable {
    * disabled responses is maintained.
    */
   markResponseAsEnabled(resTableChange: ResponseTableToggleChange): void {
-    this.modifySet(this.markedDisabled, resTableChange.responseElem, !resTableChange.option);
+    this.modifySet(
+      this.markedDisabled,
+      resTableChange.responseElem,
+      !resTableChange.option
+    );
     this.markedDisabledChange.emit(this.markedDisabled);
   }
 
@@ -67,7 +71,11 @@ export class ResponseNewStudyTable {
    * this study.
    */
   markResponseAsTraining(resTableChange: ResponseTableToggleChange): void {
-    this.modifySet(this.markedTraining, resTableChange.responseElem, resTableChange.option);
+    this.modifySet(
+      this.markedTraining,
+      resTableChange.responseElem,
+      resTableChange.option
+    );
     this.markedTrainingChange.emit(this.markedTraining);
   }
 
@@ -75,13 +83,17 @@ export class ResponseNewStudyTable {
    * Helper function which ensures that the response ID is present then
    * either adds for removes that ID to a set.
    */
-  private modifySet(set: Set<string>, responseElem: ResponseTableElement, shouldBeInSet: boolean): void {
-    if(!responseElem.response._id) {
+  private modifySet(
+    set: Set<string>,
+    responseElem: ResponseTableElement,
+    shouldBeInSet: boolean
+  ): void {
+    if (!responseElem.response._id) {
       console.error('Response Table Element lacks ID');
       return;
     }
 
-    if(shouldBeInSet) {
+    if (shouldBeInSet) {
       set.add(responseElem.response._id);
     } else {
       set.delete(responseElem.response._id);

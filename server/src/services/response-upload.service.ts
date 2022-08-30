@@ -7,7 +7,7 @@ import {
 import { ResponseService } from './response.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';
-import { SaveAttempt } from '../../../shared/dtos/response.dto';
+import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
 import { readdir } from 'fs/promises';
 import { join } from 'path';
@@ -22,7 +22,7 @@ const unzipper = require('unzipper');
  * during the upload.
  */
 export interface ResponseUploadResult {
-  responses?: Response[];
+  responses: Response[];
   saveResult: SaveAttempt;
 }
 
@@ -62,7 +62,10 @@ export class ResponseUploadService {
             message:
               'Error found in the CSV, please fix the error and reupload the CSV',
             where: [
-              { place: `Line ${lineNumber}`, message: saveResult.message },
+              {
+                place: `Line ${lineNumber}`,
+                message: saveResult.message ? saveResult.message : '',
+              },
             ],
           };
         }
@@ -133,6 +136,7 @@ export class ResponseUploadService {
     // No files found, return a warning
     if (count == 0) {
       return {
+        responses: [],
         saveResult: {
           type: 'warning',
           message: 'No response videos found in ZIP, no responses saved',
@@ -193,6 +197,7 @@ export class ResponseUploadService {
       .exec();
     if (!responseUpload) {
       return {
+        responses: [],
         saveResult: {
           type: 'warning',
           message: `Response upload not found for ${filename}`,
@@ -319,7 +324,7 @@ export class ResponseUploadService {
       await this.responseUploadModel.validate(obj);
       // Validate ran successfully, return no errors
       return { type: 'success' };
-    } catch (error) {
+    } catch (error: any) {
       // Parse out the errors into a human readable format
       let errorMessage = '';
       for (const validationError in error.errors) {

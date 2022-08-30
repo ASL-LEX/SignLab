@@ -6,7 +6,7 @@ import {
   UserCredentials,
   UserIdentification,
   UserSignup,
-} from '../../../../shared/dtos/user.dto';
+} from 'shared/dtos/user.dto';
 import { User } from '../../schemas/user.schema';
 import { AuthService } from '../../services/auth.service';
 import { AuthController } from './auth.controller';
