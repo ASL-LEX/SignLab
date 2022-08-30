@@ -1,28 +1,14 @@
-######################### Build the Angular Client ############################
-FROM node:18-alpine AS angular-builder
-WORKDIR /usr/src/client
-COPY client ./
-
-# Install npm packages and compile the Angular code
-RUN npm install @angular/cli && npm install && npm run build
-###############################################################################
-
-
-########################## Setup the Server ###################################
 FROM node:18-alpine AS signlab
 
-# Copy over the server source to the container
+# Copy over the source
 WORKDIR /usr/src/signlab
-COPY . /usr/src/signlab/
+COPY . .
 
-# Copy over the build Angular code
-COPY --from=angular-builder /usr/src/dist/ ./dist
-RUN apk update
+# Install required packages and build for prod
+RUN apk update && \
+    npm install && \
+    npm run build:prod
 
-#Needed to connect to MongoDB
-RUN apk add netcat-openbsd
-RUN cd server && npm install
+EXPOSE 3000
 
-EXPOSE 9000
-
-CMD sh docker_run.sh
+CMD npm run start:prod

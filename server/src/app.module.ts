@@ -22,6 +22,7 @@ import {
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 // Controllers
 import { AppController } from './app.controller';
@@ -45,9 +46,15 @@ import { ResponseUploadService } from './services/response-upload.service';
 import { UserStudy, UserStudySchema } from './schemas/userstudy.schema';
 import { UserStudyService } from './services/userstudy.service';
 import { TagGuard } from './guards/tag.guard';
+import { ConfigService } from '@nestjs/config';
+
+const ENV_FILE = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : `.env.local`;
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ENV_FILE
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../dist/'),
     }),
@@ -61,7 +68,13 @@ import { TagGuard } from './guards/tag.guard';
       { name: ResponseStudy.name, schema: ResponseStudySchema },
       { name: UserStudy.name, schema: UserStudySchema },
     ]),
-    MongooseModule.forRoot('mongodb://localhost/signlab'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGO_URI')
+      }),
+      inject: [ConfigService]
+    })
   ],
   controllers: [
     AppController,

@@ -3,11 +3,13 @@ services:
   mongo:
     image: mongo
     ports: ["27017:27017"]
+    volumes:
+      - ./db:/data/db
   signlab:
     build: .
     restart: always
     depends_on:
       - mongo
-    ports: ["9000:9000"]
+    ports: ["3000:3000"]
     environment:
-      - NODE_ENV='local'
+      - NODE_ENV=docker
