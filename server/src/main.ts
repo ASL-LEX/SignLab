@@ -11,8 +11,6 @@ export let app: INestApplication;
 async function bootstrap() {
   app = await NestFactory.create(AppModule);
 
-  console.log(app.get(ConfigService).get<string>('MONGO_URI'));
-
   // TODO: Load secret from config
   app.use(
     session({

@@ -10,8 +10,9 @@ import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
 import { readdir } from 'fs/promises';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
+import { BucketStorage } from './bucket/bucket.service';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -32,6 +33,7 @@ export class ResponseUploadService {
     @InjectModel(ResponseUpload.name)
     private responseUploadModel: Model<ResponseUploadDocument>,
     private responseService: ResponseService,
+    private bucketService: BucketStorage,
   ) {}
 
   /**
@@ -205,12 +207,18 @@ export class ResponseUploadService {
       };
     }
 
+    // Move the file into the bucket
+    const uploadResult = await this.bucketService.objectUpload(
+      `upload/responses/${responseUpload.filename}`,
+      `Responses/${basename(responseUpload.filename)}`,
+    );
+
     // Make a response entity
     // TODO: Determine duration or have default on error
     // TODO: Replace video URL with location in bucket storage
     const newResponse: Response = {
       responseID: responseUpload.responseID,
-      videoURL: `/media/${filename}`,
+      videoURL: uploadResult.uri,
       recordedInSignLab: false,
       responderID: responseUpload.responderID,
       meta: responseUpload.meta,

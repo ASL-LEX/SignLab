@@ -47,13 +47,17 @@ import { UserStudy, UserStudySchema } from './schemas/userstudy.schema';
 import { UserStudyService } from './services/userstudy.service';
 import { TagGuard } from './guards/tag.guard';
 import { ConfigService } from '@nestjs/config';
+import { BucketStorage } from './services/bucket/bucket.service';
+import { BucketFactory } from './services/bucket/bucketfactory';
 
-const ENV_FILE = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : `.env.local`;
+const ENV_FILE = process.env.NODE_ENV
+  ? `.env.${process.env.NODE_ENV}`
+  : `.env.local`;
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ENV_FILE
+      envFilePath: ENV_FILE,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../dist/'),
@@ -71,10 +75,10 @@ const ENV_FILE = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : `.env.l
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI')
+        uri: configService.get<string>('MONGO_URI'),
       }),
-      inject: [ConfigService]
-    })
+      inject: [ConfigService],
+    }),
   ],
   controllers: [
     AppController,
@@ -96,6 +100,11 @@ const ENV_FILE = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : `.env.l
     ResponseUploadService,
     UserStudyService,
     TagGuard,
+    {
+      provide: BucketStorage,
+      useFactory: BucketFactory.getBucket,
+      inject: [ConfigService],
+    },
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
