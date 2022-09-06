@@ -1,5 +1,5 @@
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   Actions,
   RankedTester,
@@ -21,11 +21,15 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
   templateUrl: './asl-lex-field.component.html',
   styleUrls: ['./asl-lex-field.component.css'],
 })
-export class AslLexSignBankField extends JsonFormsControl {
+export class AslLexSignBankField extends JsonFormsControl implements OnInit {
   tagSearchResults: TagSearchResult[] = [];
   signSearchSubject = new Subject<string>();
   signSearch = '';
   selectedSignCode = '';
+  /** If the user can enter their own information in as a label */
+  allowCustomLabels = false;
+  /** Helps control the active state of the custom option */
+  customOptionSelected = false;
 
   constructor(
     jsonFormsService: JsonFormsAngularService,
@@ -42,6 +46,15 @@ export class AslLexSignBankField extends JsonFormsControl {
       });
   }
 
+  ngOnInit(): void {
+    super.ngOnInit();
+
+    // Check to see if the `allowCustomTags` is an option present on the
+    // JSON UI schema
+    this.allowCustomLabels = this.uischema.options != undefined &&
+                             this.uischema.options.allowCustomLabels;
+  }
+
   /**
    * Handles the selection of the tag to use from the user click. Will
    * update the search field with the selected sign's english tag.
@@ -49,10 +62,27 @@ export class AslLexSignBankField extends JsonFormsControl {
   selectSign(sign: TagSearchResult) {
     this.signSearch = sign.englishTag;
     this.selectedSignCode = sign.code;
+    this.customOptionSelected = false;
 
+    this.setLabelValue(`code: ${sign.code}`);
+  }
+
+  /**
+   * Handles if the user selected a custom response
+   */
+  selectCustomLabel(customLabel: string) {
+    this.customOptionSelected = true;
+
+    this.setLabelValue(`custom: ${customLabel}`);
+  }
+
+  /**
+   * Update the value of of this field
+   */
+  private setLabelValue(value: string) {
     // Update the value of the field via the JSON Forms backend
     const path = composeWithUi(this.uischema as ControlElement, this.path);
-    this.jsonFormsService.updateCore(Actions.update(path, () => sign.code));
+    this.jsonFormsService.updateCore(Actions.update(path, () => value));
     this.triggerValidation();
   }
 

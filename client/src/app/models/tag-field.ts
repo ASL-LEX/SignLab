@@ -227,6 +227,25 @@ class AslLexField extends TagField {
     super(TagFieldType.AslLex, 'ASL-LEX Sign', 'string');
   }
 
+  /** Option for custom labels */
+  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
+    return {
+      allowCustomLabels: {
+        type: 'boolean',
+      }
+    };
+  }
+
+  /** Option for custom labels */
+  protected getFieldSpecificUiSchema(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: '#/properties/allowCustomLabels'
+      }
+    ];
+  }
+
   /**
    * For properly displaying the ASL-LEX video options, override the
    * convertion to a UI property to include the custom type
@@ -238,6 +257,7 @@ class AslLexField extends TagField {
         scope: `#/properties/${this.getFieldName()}`,
         options: {
           customType: 'asl-lex',
+          allowCustomLabels: this.data.allowCustomLabels,
           showUnfocusedDescription: true,
         },
       },

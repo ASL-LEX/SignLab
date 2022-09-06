@@ -1,6 +1,7 @@
 <mat-form-field style="width: 100%">
   <!-- Input secion -->
-  <mat-label>ASL-LEX/SignBank</mat-label>
+  <mat-label>{{ label }}</mat-label>
+  <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
   <input
     matInput
     class="sign-search"
@@ -29,6 +30,24 @@
         <!-- English sign tag -->
         <td>
           {{ tagSearchResult.englishTag }}
+        </td>
+      </tr>
+
+      <!-- Option for custom sign -->
+      <tr
+        *ngIf="allowCustomLabels && signSearch != ''"
+        style="width: 100%"
+        (click)="selectCustomLabel(signSearch)"
+        [class.active]="customOptionSelected">
+
+        <!-- Custom icon -->
+        <td class="embedded-sign-video">
+          Custom Option
+        </td>
+
+        <!-- The user search text -->
+        <td>
+          {{ signSearch }}
         </td>
       </tr>
     </table>
