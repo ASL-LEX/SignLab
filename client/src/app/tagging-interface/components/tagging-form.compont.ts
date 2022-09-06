@@ -26,6 +26,7 @@ import { Tag } from 'shared/dtos/tag.dto';
       <!-- Form View -->
       <div class="video-tag-child">
         <jsonforms
+          [data]="tagData"
           [schema]="tag.study.tagSchema.dataSchema"
           [uischema]="tag.study.tagSchema.uiSchema"
           [renderers]="renderers"
@@ -102,6 +103,7 @@ export class TaggingForm implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.tag) {
       this.tag = changes.tag.currentValue;
+      this.tagData = {};
     }
   }
 }
