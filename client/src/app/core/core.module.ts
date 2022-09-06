@@ -27,8 +27,7 @@ export class CoreModule {
         AdminAuthGuard,
         {
           provide: SignLabHttpClient,
-          useFactory: (http: HttpClient) =>
-            new SignLabHttpClient(http),
+          useFactory: (http: HttpClient) => new SignLabHttpClient(http),
           deps: [HttpClient],
         },
       ],

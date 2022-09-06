@@ -52,13 +52,13 @@ import { BucketFactory } from './services/bucket/bucketfactory';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
-  ignoreEnvFile: true
+  ignoreEnvFile: true,
 });
 
 // If a specific environment is provided, load variables from there
-if(process.env.NODE_ENV) {
+if (process.env.NODE_ENV) {
   configModule = ConfigModule.forRoot({
-    envFilePath: `.env.${process.env.NODE_ENV}`
+    envFilePath: `.env.${process.env.NODE_ENV}`,
   });
 }
 

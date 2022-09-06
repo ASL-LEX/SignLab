@@ -44,7 +44,8 @@ export class ResponseControlComponent {
   constructor(private dialog: MatDialog) {}
 
   openUploadDialog() {
-    this.dialog.open(ResponseUploadDialog)
+    this.dialog
+      .open(ResponseUploadDialog)
       .afterClosed()
       .subscribe(() => {
         this.responseTableView.loadResponses();
