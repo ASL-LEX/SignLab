@@ -14,16 +14,18 @@ import { ResponseTableElement } from '../models/response-table-element';
 export class ResponseTable {
   responseData: ResponseTableElement[];
 
-  constructor(responseService: ResponseService) {
-    // Load in responses and convert them to ResponseTableElement(s)
-    responseService.getResponses().then((responses) => {
-      this.responseData = responses.map((response) => {
-        return {
-          response: response,
-          isPartOfStudy: true,
-          isUsedForTraining: true,
-        };
-      });
+  constructor(private responseService: ResponseService) {
+    this.loadResponses();
+  }
+
+  async loadResponses(): Promise<void> {
+    const responses = await this.responseService.getResponses();
+    this.responseData = responses.map((response) => {
+      return {
+        response: response,
+        isPartOfStudy: true,
+        isUsedForTraining: true,
+      };
     });
   }
 }
