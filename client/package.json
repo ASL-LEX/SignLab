@@ -6,7 +6,7 @@
     "build:dev": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
-    "test:dev": "ng test",
+    "test:watch": "ng test",
     "lint": "ng lint --fix",
     "e2e": "ng e2e",
     "setup": "node setup.js"
