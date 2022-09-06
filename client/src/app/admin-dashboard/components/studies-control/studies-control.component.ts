@@ -72,6 +72,7 @@ export class StudiesControlComponent {
         videoURL: tag.response.videoURL,
         study: tag.study.name,
         user: tag.user.username,
+        ...tag.response.meta,
         ...tag.info,
       };
     });
