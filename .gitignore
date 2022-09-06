@@ -54,3 +54,6 @@ Thumbs.db
 
 # Database
 /db
+
+# Secret
+/deployment.env

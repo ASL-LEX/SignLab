@@ -6,10 +6,10 @@ services:
     volumes:
       - ./db:/data/db
   signlab:
-    build: .
+    image: signlab
     restart: always
     depends_on:
       - mongo
     ports: ["3000:3000"]
-    environment:
-      - NODE_ENV=docker
+    env_file:
+      - deployment.env
