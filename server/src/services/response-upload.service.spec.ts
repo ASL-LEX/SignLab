@@ -172,7 +172,7 @@ jest.mock('fs/promises', () => ({
 const bucketService = {
   objectUpload(path: string, target: string): Promise<BucketFile> {
     return Promise.resolve({ name: path, uri: target });
-  }
+  },
 };
 
 describe('ResponseService', () => {

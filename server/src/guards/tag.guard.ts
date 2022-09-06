@@ -28,11 +28,10 @@ export class TagGuard implements CanActivate {
     let userID: string | undefined = undefined;
     let studyID: string | undefined = undefined;
 
-    if(query.userID && query.studyID) {
+    if (query.userID && query.studyID) {
       userID = query.userID;
       studyID = query.studyID;
-    }
-    else if(body.user && body.study) {
+    } else if (body.user && body.study) {
       userID = body.user._id;
       studyID = body.study._id;
     }

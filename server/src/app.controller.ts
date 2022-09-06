@@ -34,10 +34,13 @@ export class AppController {
         'Content-Type': 'video/webm',
       });
       return new StreamableFile(file);
-    } catch(error: any) {
+    } catch (error: any) {
       console.error(error);
 
-      throw new HttpException(`Failed to access the requested file ${filename}`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        `Failed to access the requested file ${filename}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

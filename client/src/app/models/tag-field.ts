@@ -232,7 +232,7 @@ class AslLexField extends TagField {
     return {
       allowCustomLabels: {
         type: 'boolean',
-      }
+      },
     };
   }
 
@@ -241,8 +241,8 @@ class AslLexField extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/allowCustomLabels'
-      }
+        scope: '#/properties/allowCustomLabels',
+      },
     ];
   }
 
