@@ -2,7 +2,7 @@
   "name": "client",
   "scripts": {
     "ng": "ng",
-    "start:dev": "ng build --watch",
+    "start:watch": "ng build --watch",
     "build:dev": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",

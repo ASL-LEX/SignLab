@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start:dev": "npm run build:dev --workspace=client && npm run start:dev --workspace=server",
+    "start:watch": "concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client'",
     "build:prod": "npm run build:prod --workspaces --if-present",
     "start:prod": "npm run start:prod --workspace=server",
     "lint": "npm run lint --workspaces --if-present"
@@ -19,5 +20,8 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0"
+  },
+  "dependencies": {
+    "concurrently": "^7.4.0"
   }
 }
