@@ -121,3 +121,27 @@ describe('User Login', () => {
       });
   });
 });
+
+describe('User Signup', () => {
+  // Used for checking alert messages
+  let alertStub: SinonStub;
+
+  before(() => {
+    cy.resetDB();
+    cy.firstTimeSetup();
+  });
+
+  beforeEach(() => {
+    alertStub = cy.stub();
+    cy.on('window:alert', alertStub);
+
+    cy.visit('/auth');
+    cy
+      .get('div[role="tab"]')
+      .contains('Signup')
+      .click();
+  });
+
+  it('should be able to navigate to signup page', () => {
+  });
+});
