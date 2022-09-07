@@ -121,7 +121,7 @@ describe('AuthController', () => {
 
   describe('login()', () => {
     it('should return null for an invalid username + password', async () => {
-      const session = {};
+      const session: any = {};
       const result = await authController.login(invalidCredentials, session);
 
       // Expect the result to be null
@@ -132,7 +132,7 @@ describe('AuthController', () => {
     });
 
     it('should return null for invalid username + valid password', async () => {
-      const session = {};
+      const session: any = {};
       const result = await authController.login(
         {
           username: invalidCredentials.username,
@@ -149,7 +149,7 @@ describe('AuthController', () => {
     });
 
     it('should return null for valid username + invalid password', async () => {
-      const session = {};
+      const session: any = {};
       const result = await authController.login(
         {
           username: validCredentials.username,
@@ -166,7 +166,7 @@ describe('AuthController', () => {
     });
 
     it('should return user for valid username + valid password', async () => {
-      const session = {};
+      const session: any = {};
       const result = await authController.login(validCredentials, session);
 
       // Should be the `testUser`

@@ -51,8 +51,9 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
 
     // Check to see if the `allowCustomTags` is an option present on the
     // JSON UI schema
-    this.allowCustomLabels = this.uischema.options != undefined &&
-                             this.uischema.options.allowCustomLabels;
+    this.allowCustomLabels =
+      this.uischema.options != undefined &&
+      this.uischema.options.allowCustomLabels;
   }
 
   /**

@@ -41,7 +41,6 @@ export class ResponseController {
    *       it cannot be changed.
    */
   @Post('/metadata')
-  @Roles('owner')
   async setMetadata(@Body() fields: MetadataDefinition[]) {
     // If the schema already exists, throw an error
     if (await this.schemaService.hasSchema('Response')) {

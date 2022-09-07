@@ -7,6 +7,7 @@ import { ResponseService } from './response.service';
 import { StudyService } from './study.service';
 import { TagService } from './tag.service';
 import { ResponseUploadService } from './response-upload.service';
+import { BucketStorage, BucketFile } from './bucket/bucket.service';
 
 /**
  * Example ResponseUpload model that expects data in the form below
@@ -22,7 +23,7 @@ import { ResponseUploadService } from './response-upload.service';
  * ```
  */
 const responseUploadFindOneMock = jest.fn((params: any) => {
-  let result = null;
+  let result: any = null;
 
   if (params.responseID.trim() == '2') {
     result = {
@@ -63,7 +64,7 @@ const responseUploadModel = {
 
   async validate(params: any) {
     // Make sure all fields present
-    const result = { errors: {} };
+    const result: any = { errors: {} };
     if (!params.responderID) {
       result.errors['responserID'] = {
         properties: { message: 'responseID must be of type string' },
@@ -148,7 +149,7 @@ jest.mock('../schemas/response-upload.schema', () => ({
 /**
  * Mock file oriented operations
  */
-const readdirMock = jest.fn((_path) => {
+const readdirMock = jest.fn<string[], [string]>((_path) => {
   return [];
 });
 
@@ -164,6 +165,15 @@ jest.mock('fs/promises', () => ({
     return readdirMock(path);
   },
 }));
+
+/**
+ * Mock file bucket upload
+ */
+const bucketService = {
+  objectUpload(path: string, target: string): Promise<BucketFile> {
+    return Promise.resolve({ name: path, uri: target });
+  },
+};
 
 describe('ResponseService', () => {
   // Service being tested
@@ -192,6 +202,10 @@ describe('ResponseService', () => {
         {
           provide: ResponseService,
           useValue: responseService,
+        },
+        {
+          provide: BucketStorage,
+          useValue: bucketService,
         },
       ],
     }).compile();
@@ -260,7 +274,7 @@ describe('ResponseService', () => {
         testInput,
       );
       expect(result.type).toEqual('error');
-      expect(result.where[0].message).toContain('already exists');
+      expect(result!.where![0].message).toContain('already exists');
     });
 
     it('should allow valid CSV', async () => {
@@ -317,7 +331,7 @@ describe('ResponseService', () => {
       });
 
       responseUploadFindOneMock.mockImplementation((params: any) => {
-        let result = null;
+        let result: any = null;
 
         if (params.filename == 'tree_response.mp4') {
           result = {

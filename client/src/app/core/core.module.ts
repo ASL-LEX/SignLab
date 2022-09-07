@@ -9,19 +9,12 @@ import { UserService } from './services/user.service';
 import { SignLabHttpClient } from './services/http.service';
 import { AdminAuthGuard, AuthenticatedGuard } from './guards/auth.guard';
 
-/**
- * Configuration values which are needed to setup the core services
- */
-interface CoreConfig {
-  baseUrl: string;
-}
-
 @NgModule({
   declarations: [],
   imports: [CommonModule, HttpClientModule],
 })
 export class CoreModule {
-  static forRoot(coreConfig: CoreConfig): ModuleWithProviders<CoreModule> {
+  static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [
@@ -34,8 +27,7 @@ export class CoreModule {
         AdminAuthGuard,
         {
           provide: SignLabHttpClient,
-          useFactory: (http: HttpClient) =>
-            new SignLabHttpClient(http, coreConfig.baseUrl),
+          useFactory: (http: HttpClient) => new SignLabHttpClient(http),
           deps: [HttpClient],
         },
       ],

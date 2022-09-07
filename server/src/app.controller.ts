@@ -4,6 +4,8 @@ import {
   Response,
   Param,
   StreamableFile,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
@@ -23,14 +25,23 @@ export class AppController {
     @Response({ passthrough: true }) res: any,
     @Param('filename') filename: string,
   ) {
-    const file = createReadStream(
-      join(process.cwd(), `upload/responses/${filename}`),
-    );
+    try {
+      const file = createReadStream(
+        join(process.cwd(), `upload/responses/${filename}`),
+      );
 
-    res.set({
-      'Content-Type': 'video/webm',
-    });
-    return new StreamableFile(file);
+      res.set({
+        'Content-Type': 'video/webm',
+      });
+      return new StreamableFile(file);
+    } catch (error: any) {
+      console.error(error);
+
+      throw new HttpException(
+        `Failed to access the requested file ${filename}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   /**

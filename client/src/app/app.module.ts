@@ -1,5 +1,3 @@
-import { environment } from '../environments/environment';
-
 // Modules
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -30,7 +28,7 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     AdminDashboardModule,
     FirstTimeSetupModule,
-    CoreModule.forRoot({ baseUrl: environment.baseUrl }),
+    CoreModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -22,9 +22,22 @@ export class TagGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const query = context.switchToHttp().getRequest().query;
+    const body = context.switchToHttp().getRequest().body;
+
+    // Try to pull out the userID from either the query or the body
+    let userID: string | undefined = undefined;
+    let studyID: string | undefined = undefined;
+
+    if (query.userID && query.studyID) {
+      userID = query.userID;
+      studyID = query.studyID;
+    } else if (body.user && body.study) {
+      userID = body.user._id;
+      studyID = body.study._id;
+    }
 
     // Ensure the correct parameters are provided
-    if (query.userID == undefined || query.studyID == undefined) {
+    if (userID == undefined || studyID == undefined) {
       throw new HttpException(
         'userID and studyID must be present',
         HttpStatus.BAD_REQUEST,
@@ -35,7 +48,7 @@ export class TagGuard implements CanActivate {
     //       guard, should see if there is a better approach that doesn't
     //       involve making the query again
     // Ensure the user exists
-    const user = await this.userService.find(query.userID);
+    const user = await this.userService.find(userID);
     if (!user) {
       throw new HttpException(
         `User with ID '${query.userID}' not found`,
@@ -44,7 +57,7 @@ export class TagGuard implements CanActivate {
     }
 
     // Ensure the study exists
-    const study = await this.studyService.find(query.studyID);
+    const study = await this.studyService.find(studyID);
     if (!study) {
       throw new HttpException(
         `Study with ID '${query.studyID}' not found`,

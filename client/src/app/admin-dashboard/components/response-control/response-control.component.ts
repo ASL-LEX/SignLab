@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ResponseTable } from '../../../response-table/components/response-table.component';
 import { ResponseUploadDialog } from './response-upload-dialog/response-upload-dialog.component';
 
 /**
@@ -38,9 +39,16 @@ import { ResponseUploadDialog } from './response-upload-dialog/response-upload-d
   ],
 })
 export class ResponseControlComponent {
+  @ViewChild(ResponseTable) responseTableView: ResponseTable;
+
   constructor(private dialog: MatDialog) {}
 
   openUploadDialog() {
-    this.dialog.open(ResponseUploadDialog);
+    this.dialog
+      .open(ResponseUploadDialog)
+      .afterClosed()
+      .subscribe(() => {
+        this.responseTableView.loadResponses();
+      });
   }
 }

@@ -65,6 +65,7 @@ export class UserStudyComponent implements OnInit, OnChanges {
         videoURL: tag.response.videoURL,
         study: tag.study.name,
         user: tag.user.username,
+        ...tag.response.meta,
         ...tag.info,
       };
     });

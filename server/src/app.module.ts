@@ -19,7 +19,7 @@ import {
 } from './schemas/responsestudy.schema';
 
 // Modules
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
@@ -50,15 +50,21 @@ import { ConfigService } from '@nestjs/config';
 import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
 
-const ENV_FILE = process.env.NODE_ENV
-  ? `.env.${process.env.NODE_ENV}`
-  : `.env.local`;
+// By default just use OS provided environment variables
+let configModule: DynamicModule = ConfigModule.forRoot({
+  ignoreEnvFile: true,
+});
+
+// If a specific environment is provided, load variables from there
+if (process.env.NODE_ENV) {
+  configModule = ConfigModule.forRoot({
+    envFilePath: `.env.${process.env.NODE_ENV}`,
+  });
+}
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: ENV_FILE,
-    }),
+    configModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../dist/'),
     }),

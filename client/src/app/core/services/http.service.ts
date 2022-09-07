@@ -46,7 +46,8 @@ export class SignLabHttpClient {
   /** The base url all SignLab backend requests are made against */
   private baseUrl: string;
 
-  constructor(private http: HttpClient, @Inject(String) baseUrl: string) {
+  constructor(private http: HttpClient) {
+    const baseUrl = location.origin;
     // Ensure the url does not have a trailing '/'
     if (baseUrl.endsWith('/')) {
       this.baseUrl = baseUrl.substring(0, baseUrl.length - 1);
