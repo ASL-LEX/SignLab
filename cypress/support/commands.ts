@@ -1,25 +1,29 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+import responseMetadata from '../fixtures/response_metadata.json';
+import user from '../fixtures/login.json';
+
+Cypress.Commands.add('resetDB', () => {
+  cy.deleteMany({}, { collection: 'dynamicschemas' });
+  cy.deleteMany({}, { collection: 'responses' });
+  cy.deleteMany({}, { collection: 'responsestudies' });
+  cy.deleteMany({}, { collection: 'responseuploads' });
+  cy.deleteMany({}, { collection: 'studies' });
+  cy.deleteMany({}, { collection: 'tags' });
+  cy.deleteMany({}, { collection: 'users' });
+  cy.deleteMany({}, { collection: 'userstudies' });
+});
+
+Cypress.Commands.add('firstTimeSetup', () => {
+  // Submit the expected meta data
+  cy.request({
+    method: 'POST',
+    url: 'api/response/metadata',
+    body: responseMetadata
+  });
+
+  // Make the initial user
+  cy.request({
+    method: 'POST',
+    url: 'api/auth/signup',
+    body: user
+  });
+});
