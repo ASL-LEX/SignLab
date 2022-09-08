@@ -23,6 +23,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 // Controllers
 import { AppController } from './app.controller';
@@ -84,6 +85,10 @@ if (process.env.NODE_ENV) {
         uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
+    }),
+    JwtModule.register({
+      secret: 'TODO: Change this in the future',
+      signOptions: { expiresIn: '2hr' }
     }),
   ],
   controllers: [

@@ -54,8 +54,6 @@ export class AuthService {
     username: string,
     password: string
   ): Promise<User | null> {
-    // Attempt to authenticate against Anchor's authentication API
-    // TODO: Find way of inserting the correct URL
     const credentials = { username: username, password: password };
 
     try {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -8,6 +9,7 @@ import {
   UserSignup,
 } from 'shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
+import { AuthResponse } from 'shared/dtos/auth.dto';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -15,7 +17,9 @@ import { User, UserDocument } from '../schemas/user.schema';
  */
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private jwtService: JwtService) {}
 
   /**
    * Attempt to authenticate the given user based on username and password.
@@ -24,7 +28,7 @@ export class AuthService {
    */
   public async authenticate(
     credentials: UserCredentials,
-  ): Promise<User | null> {
+  ): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
     const user = await this.userModel
       .findOne({ username: credentials.username })
@@ -38,7 +42,7 @@ export class AuthService {
     // Check password
     // TODO: Replace with comparing hashed passwords
     if (user.password === credentials.password) {
-      return user;
+      return { user: user, token: this.jwtService.sign(user) };
     } else {
       return null;
     }

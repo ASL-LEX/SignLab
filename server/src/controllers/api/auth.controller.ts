@@ -19,6 +19,7 @@ import {
 import { User } from '../../schemas/user.schema';
 import { StudyService } from '../../services/study.service';
 import { UserStudyService } from '../../services/userstudy.service';
+import { AuthResponse } from 'shared/dtos/auth.dto';
 
 const passwordValidator = require('joi-password-complexity');
 
@@ -50,17 +51,8 @@ export class AuthController {
    * @return The user credentials for the given user on success
    */
   @Post('/login')
-  async login(
-    @Body() userCredentials: UserCredentials,
-    @Session() session: any,
-  ): Promise<User | null> {
-    const result = await this.authService.authenticate(userCredentials);
-
-    // If the user is valid, update the session with the user ID
-    if (result) {
-      session.userID = result._id;
-    }
-    return result;
+  async login(@Body() userCredentials: UserCredentials): Promise<AuthResponse | null> {
+    return this.authService.authenticate(userCredentials);
   }
 
   /**
