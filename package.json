@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "start:dev": "npm run build:dev --workspace=client && npm run start:dev --workspace=server",
-    "start:watch": "concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client'",
+    "start:watch": "NODE_ENV=local concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client'",
+    "start:test": "NODE_ENV=test concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client' 'cypress open'",
     "build:prod": "npm run build:prod --workspaces --if-present",
     "start:prod": "npm run start:prod --workspace=server",
     "lint": "npm run lint --workspaces --if-present"
@@ -20,6 +21,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "cypress": "^10.7.0",
     "cypress-mongodb": "^5.0.1",
+    "dotenv": "^16.0.2",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0"
