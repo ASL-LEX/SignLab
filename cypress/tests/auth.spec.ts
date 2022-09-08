@@ -140,6 +140,9 @@ describe('User Signup', () => {
       .get('div[role="tab"]')
       .contains('Signup')
       .click();
+
+    // Wait for animation to complete
+    cy.wait(100);
   });
 
   it('should not allow signing up with empty form', () => {
@@ -155,9 +158,11 @@ describe('User Signup', () => {
       .get('input#username')
       .eq(1)
       .type(user.existingUser.username)
-      .get('input#password')
+      .get('input[type="password"]')
+      .eq(0)
       .type(user.existingUser.password)
-      .get('input#confirmPassword')
+      .get('input[type="password"')
+      .eq(1)
       .type(user.existingUser.password)
       .get('button[type="submit')
       .should('be.disabled');
@@ -170,10 +175,11 @@ describe('User Signup', () => {
       .get('input#username')
       .eq(1)
       .type(user.newUser.username)
-      .get('input#password')
-      .eq(1)
+      .get('input[type="password"]')
+      .eq(0)
       .type(user.newUser.password)
-      .get('input#confirmPassword')
+      .get('input[type="password"')
+      .eq(1)
       .type(user.newUser.password)
       .get('button[type="submit')
       .should('be.disabled');
@@ -187,7 +193,7 @@ describe('User Signup', () => {
       .type(user.newUser.email)
       .get('input[type="password"]')
       .eq(0)
-      .type(user.newUser.password)
+      .type(user.newUser.password, { force: true })
       .get('input#confirmPassword')
       .type(user.newUser.password)
       .get('button[type="submit')
@@ -203,7 +209,8 @@ describe('User Signup', () => {
       .type(user.newUser.username)
       .get('input#email')
       .type(user.newUser.email)
-      .get('input#confirmPassword')
+      .get('input[type="password"]')
+      .eq(1)
       .type(user.newUser.password)
       .get('button[type="submit')
       .should('be.disabled');
