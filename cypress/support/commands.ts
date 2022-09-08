@@ -1,5 +1,5 @@
 import responseMetadata from '../fixtures/response_metadata.json';
-import user from '../fixtures/login.json';
+import user from '../fixtures/users.json';
 
 Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'dynamicschemas' });
@@ -24,6 +24,6 @@ Cypress.Commands.add('firstTimeSetup', () => {
   cy.request({
     method: 'POST',
     url: 'api/auth/signup',
-    body: user
+    body: user.existingUser
   });
 });
