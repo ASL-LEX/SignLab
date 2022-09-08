@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { SaveAttempt, Response } from 'shared/dtos/response.dto';
 import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 import { Tag } from 'shared/dtos/tag.dto';
-import { MetaDefinition } from '@angular/platform-browser';
 import { Study } from 'shared/dtos/study.dto';
 import { User } from 'shared/dtos/user.dto';
 import { SignLabHttpClient } from './http.service';
+import { MetadataDefinition } from 'shared/dtos/response.dto';
 
 /**
  * Handle access and modifications make to responses.
@@ -17,7 +17,7 @@ export class ResponseService {
   /**
    * Set the metadata that all responses will be expected to have.
    */
-  async setMetadata(definitions: MetaDefinition[]) {
+  async setMetadata(definitions: MetadataDefinition[]) {
     this.signLab.post<any>('api/response/metadata', definitions);
   }
 

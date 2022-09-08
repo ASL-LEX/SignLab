@@ -1,0 +1,14 @@
+{
+  "existingUser": {
+    "name": "bobby",
+    "email": "bobby@bu.edu",
+    "username": "bobby",
+    "password": "alsobobby"
+  },
+  "newUser": {
+    "name": "sam",
+    "email": "sam@bu.edu",
+    "username": "sam",
+    "password": "sammy"
+  }
+}

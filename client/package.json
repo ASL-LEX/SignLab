@@ -2,13 +2,12 @@
   "name": "client",
   "scripts": {
     "ng": "ng",
-    "start:dev": "ng build --watch",
+    "start:watch": "ng build --watch",
     "build:dev": "ng build",
     "build:prod": "ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
     "test:watch": "ng test",
     "lint": "ng lint --fix",
-    "e2e": "ng e2e",
     "setup": "node setup.js"
   },
   "private": true,
@@ -50,7 +49,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.0.1",
     "karma-jasmine-html-reporter": "^2.0.0",
-    "protractor": "~7.0.0",
     "ts-node": "~10.8.1",
     "typescript": "~4.7.3"
   }
