@@ -34,8 +34,6 @@ import { StudyController } from './controllers/api/study.controller';
 import { TagController } from './controllers/api/tag.controller';
 
 // Services
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/role.guard';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ResponseService } from './services/response.service';
@@ -52,7 +50,6 @@ import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './services/jwt.strategy';
-import { JwtAuthGuard } from './guards/jwt.guard';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
@@ -92,6 +89,7 @@ if (process.env.NODE_ENV) {
     PassportModule,
     JwtModule.register({
       secret: 'TODO: Change this in the future',
+      signOptions: { expiresIn: '4h' },
     }),
   ],
   controllers: [
