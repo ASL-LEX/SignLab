@@ -44,7 +44,19 @@ export class TokenService {
    */
   private loadCredentials(): AuthResponse | null {
     const storedValue = localStorage.getItem(this.AUTH_RESPONSE_KEY);
-    return storedValue ? JSON.parse(storedValue) : null;
+
+    // If nothing stored, return null
+    if (!storedValue) {
+      return null;
+    }
+
+    const authInformation = JSON.parse(storedValue);
+
+    // If the information has expired, return null
+    if (this.hasJWTTokenExpired(authInformation.token)) {
+      return null;
+    }
+    return authInformation;
   }
 
   /**
@@ -52,5 +64,17 @@ export class TokenService {
    */
   private storeCredentials(authResponse: AuthResponse): void {
     localStorage.setItem(this.AUTH_RESPONSE_KEY, JSON.stringify(authResponse));
+  }
+
+  /**
+   * Helper function which checks the timestamp of the JWT to see if it
+   * has expired.
+   *
+   * NOTE: Implementation found from the stackoverflow link below
+   *       https://stackoverflow.com/a/60758392/6745646
+   */
+  private hasJWTTokenExpired(token: string) {
+    const expiry = (JSON.parse(window.atob(token.split('.')[1]))).exp;
+    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
   }
 }

@@ -42,7 +42,7 @@ export class AuthService {
     // Check password
     // TODO: Replace with comparing hashed passwords
     if (user.password === credentials.password) {
-      return { user: user, token: this.jwtService.sign(JSON.stringify(user)) };
+      return { user: user, token: this.jwtService.sign(JSON.parse(JSON.stringify(user))) };
     } else {
       return null;
     }
@@ -99,7 +99,7 @@ export class AuthService {
     };
 
     const newUser = await this.userModel.create(user);
-    return { user: newUser, token: this.jwtService.sign(JSON.stringify(newUser)) };
+    return { user: newUser, token: this.jwtService.sign(JSON.parse(JSON.stringify(newUser))) };
   }
 
   /**
