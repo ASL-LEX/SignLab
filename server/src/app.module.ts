@@ -87,9 +87,13 @@ if (process.env.NODE_ENV) {
       inject: [ConfigService],
     }),
     PassportModule,
-    JwtModule.register({
-      secret: 'TODO: Change this in the future',
-      signOptions: { expiresIn: '4h' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '4h' }
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [
