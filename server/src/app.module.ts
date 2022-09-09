@@ -50,6 +50,8 @@ import { TagGuard } from './guards/tag.guard';
 import { ConfigService } from '@nestjs/config';
 import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './services/jwt.strategy';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
@@ -86,6 +88,7 @@ if (process.env.NODE_ENV) {
       }),
       inject: [ConfigService],
     }),
+    PassportModule,
     JwtModule.register({
       secret: 'TODO: Change this in the future',
     }),
@@ -110,6 +113,7 @@ if (process.env.NODE_ENV) {
     ResponseUploadService,
     UserStudyService,
     TagGuard,
+    JwtStrategy,
     {
       provide: BucketStorage,
       useFactory: BucketFactory.getBucket,

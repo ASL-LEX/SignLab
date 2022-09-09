@@ -3,6 +3,7 @@ import { User, UserAvailability } from 'shared/dtos/user.dto';
 import { AuthResponse } from 'shared/dtos/auth.dto';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { SignLabHttpClient } from './http.service';
+import { TokenService } from './token.service';
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -10,17 +11,11 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class AuthService {
-  AUTH_RESPONSE_KEY = 'SIGNLAB_AUTH_INFO';
-
-  /** Information on the logged in user */
-  authInformation: AuthResponse | null = null;
-
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient) {
-    this.loadCredentials();
-  }
+  constructor(private signLab: SignLabHttpClient,
+              private tokenService: TokenService) {}
 
   /**
    * Determine if the user is currently authenticated.
@@ -28,8 +23,7 @@ export class AuthService {
    * @return True if the system is currently authenticated
    */
   public isAuthenticated(): boolean {
-    // TODO: Check for expiration of JWT token
-    return this.authInformation != null;
+    return this.tokenService.hasAuthInfo();
   }
 
   /**
@@ -40,7 +34,7 @@ export class AuthService {
     if (!this.isAuthenticated()) {
       throw new Error('No authenticated user');
     } else {
-      return this.authInformation!.user;
+      return this.tokenService.user!;
     }
   }
 
@@ -67,8 +61,8 @@ export class AuthService {
         {}
       );
 
-      this.storeCredentials(response);
-      return this.authInformation!.user;
+      this.tokenService.storeAuthInformation(response);
+      return this.user;
     } catch (error) {
       console.debug(`Failed to authenticate user`);
       return null;
@@ -132,8 +126,7 @@ export class AuthService {
       password: password,
     };
     const result = await this.signLab.post<AuthResponse>('api/auth/signup', request);
-
-    this.storeCredentials(result);
+    this.tokenService.storeAuthInformation(result);
 
     return result.user;
   }
@@ -143,25 +136,5 @@ export class AuthService {
    */
   public async signOut() {
     // TODO: Implement sign out logic
-  }
-
-  /**
-   * Locally store credential information to reduce having to login when
-   * returning to the site.
-   */
-  private storeCredentials(authResponse: AuthResponse): void {
-    // Add to local storage
-    localStorage.setItem(this.AUTH_RESPONSE_KEY, JSON.stringify(authResponse));
-
-    // Update in memory authenticate information
-    this.authInformation = authResponse;
-  }
-
-  /**
-   * Attempt to load credentials from local storage
-   */
-  private loadCredentials(): void {
-    const storedValue = localStorage.getItem(this.AUTH_RESPONSE_KEY);
-    this.authInformation = storedValue ? JSON.parse(storedValue) : null;
   }
 }

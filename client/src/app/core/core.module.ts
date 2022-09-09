@@ -8,6 +8,7 @@ import { StudyService } from './services/study.service';
 import { UserService } from './services/user.service';
 import { SignLabHttpClient } from './services/http.service';
 import { AdminAuthGuard, AuthenticatedGuard } from './guards/auth.guard';
+import { TokenService } from './services/token.service';
 
 @NgModule({
   declarations: [],
@@ -25,10 +26,13 @@ export class CoreModule {
         UserService,
         AuthenticatedGuard,
         AdminAuthGuard,
+        TokenService,
         {
           provide: SignLabHttpClient,
-          useFactory: (http: HttpClient) => new SignLabHttpClient(http),
-          deps: [HttpClient],
+          useFactory: (http: HttpClient, tokenService: TokenService) => {
+            return new SignLabHttpClient(http, tokenService);
+          },
+          deps: [HttpClient, TokenService],
         },
       ],
     };
