@@ -52,6 +52,7 @@ import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './services/jwt.strategy';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
@@ -118,11 +119,7 @@ if (process.env.NODE_ENV) {
       provide: BucketStorage,
       useFactory: BucketFactory.getBucket,
       inject: [ConfigService],
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    }
   ],
 })
 export class AppModule {}

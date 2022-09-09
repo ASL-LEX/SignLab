@@ -6,7 +6,6 @@ import {
   Query,
   HttpException,
   HttpStatus,
-  Session,
 } from '@nestjs/common';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { AuthService } from '../../services/auth.service';
@@ -16,7 +15,6 @@ import {
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { User } from '../../schemas/user.schema';
 import { StudyService } from '../../services/study.service';
 import { UserStudyService } from '../../services/userstudy.service';
 import { AuthResponse } from 'shared/dtos/auth.dto';

@@ -82,7 +82,7 @@ export class SignLabHttpClient {
     options?: HttpClientOptions
   ): Promise<T> {
     return firstValueFrom(
-      this.http.put<T>(this.fromStub(urlStub), body, options)
+      this.http.put<T>(this.fromStub(urlStub), body, this.handleBearerToken(options))
     );
   }
 

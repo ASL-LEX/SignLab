@@ -107,17 +107,11 @@ export class AuthService {
    * A user is considered authorized if it has at least one of the necessary
    * roles.
    *
-   * @param id The user ID
+   * @param user The user to find
    * @param roles List of roles (as strings)
    * @return True if the user is authorized, false otherwise
    */
-  public async isAuthorized(id: string, roles: string[]): Promise<boolean> {
-    // Get the user, if no user, then not authorized
-    const user = await this.userModel.findOne({ _id: id }).exec();
-    if (!user) {
-      return false;
-    }
-
+  public async isAuthorized(user: User, roles: string[]): Promise<boolean> {
     // Owner can do anything
     if (user.roles.owner) {
       return true;

@@ -15,6 +15,7 @@ import { ResponseStudyService } from '../../services/responsestudy.service';
 import { Tag } from 'shared/dtos/tag.dto';
 import { UserStudyService } from '../../services/userstudy.service';
 import { TagGuard } from '../../guards/tag.guard';
+import { JwtAuthGuard } from '../../guards/jwt.guard';
 
 @Controller('/api/tag')
 export class TagController {
@@ -36,7 +37,7 @@ export class TagController {
    * 3. Otherwise create a new tag for the user to complete
    */
   @Get('/assign')
-  @UseGuards(TagGuard)
+  @UseGuards(JwtAuthGuard, TagGuard)
   async getNextTag(
     @Query('userID') userID: string,
     @Query('studyID') studyID: string,
