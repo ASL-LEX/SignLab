@@ -87,7 +87,7 @@ export class AuthController {
    * @return The newly created user
    */
   @Post('/signup')
-  async userSignup(@Body() userSignup: UserSignup): Promise<User> {
+  async userSignup(@Body() userSignup: UserSignup): Promise<AuthResponse> {
     // Ensure the user is available, otherwise throw an error
     const availability = await this.authService.availability(userSignup);
     if (!availability.username || !availability.email) {
@@ -108,17 +108,17 @@ export class AuthController {
       );
     }
 
-    const user = await this.authService.signup(userSignup);
+    const authResponse = await this.authService.signup(userSignup);
 
     // Make a user study for each study
     const studies = await this.studyService.getStudies();
 
     await Promise.all(
       studies.map((study) => {
-        return this.userStudyService.create(user, study);
+        return this.userStudyService.create(authResponse.user, study);
       }),
     );
 
-    return user;
+    return authResponse;
   }
 }

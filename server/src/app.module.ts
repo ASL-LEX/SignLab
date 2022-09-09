@@ -88,7 +88,6 @@ if (process.env.NODE_ENV) {
     }),
     JwtModule.register({
       secret: 'TODO: Change this in the future',
-      signOptions: { expiresIn: '2hr' }
     }),
   ],
   controllers: [

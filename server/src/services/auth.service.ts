@@ -42,7 +42,7 @@ export class AuthService {
     // Check password
     // TODO: Replace with comparing hashed passwords
     if (user.password === credentials.password) {
-      return { user: user, token: this.jwtService.sign(user) };
+      return { user: user, token: this.jwtService.sign(JSON.stringify(user)) };
     } else {
       return null;
     }
@@ -81,7 +81,7 @@ export class AuthService {
    *
    * @return The newly created user.
    */
-  public async signup(userSignup: UserSignup): Promise<User> {
+  public async signup(userSignup: UserSignup): Promise<AuthResponse> {
     // TODO: Hash password before saving
 
     // First user is always the owner
@@ -97,7 +97,9 @@ export class AuthService {
       accessing: false,
       owner: isOwner,
     };
-    return this.userModel.create(user);
+
+    const newUser = await this.userModel.create(user);
+    return { user: newUser, token: this.jwtService.sign(JSON.stringify(newUser)) };
   }
 
   /**
