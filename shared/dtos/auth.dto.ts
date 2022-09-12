@@ -1,6 +1,12 @@
 import { User } from './user.dto';
 
 /**
+ * The information stored in the JWT token
+ */
+export interface TokenPayload extends Omit<User, 'name' | 'email' | 'username' | 'password'> {
+}
+
+/**
  * The response that is returned from the server once authentication takes
  * place.
  */

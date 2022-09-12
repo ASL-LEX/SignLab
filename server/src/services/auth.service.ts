@@ -9,7 +9,7 @@ import {
   UserSignup,
 } from 'shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
-import { AuthResponse } from 'shared/dtos/auth.dto';
+import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -42,7 +42,7 @@ export class AuthService {
     // Check password
     // TODO: Replace with comparing hashed passwords
     if (user.password === credentials.password) {
-      return { user: user, token: this.jwtService.sign(JSON.parse(JSON.stringify(user))) };
+      return { user: user, token: this.generateToken(user) };
     } else {
       return null;
     }
@@ -99,7 +99,7 @@ export class AuthService {
     };
 
     const newUser = await this.userModel.create(user);
-    return { user: newUser, token: this.jwtService.sign(JSON.parse(JSON.stringify(newUser))) };
+    return { user: newUser, token: this.generateToken(newUser) };
   }
 
   /**
@@ -125,5 +125,13 @@ export class AuthService {
     }
 
     return false;
+  }
+
+  /**
+   * Generate a token for a given user
+   */
+  private generateToken(user: User): string {
+    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles };
+    return this.jwtService.sign(tokenPayload);
   }
 }
