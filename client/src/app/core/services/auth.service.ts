@@ -14,8 +14,10 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient,
-              private tokenService: TokenService) {}
+  constructor(
+    private signLab: SignLabHttpClient,
+    private tokenService: TokenService
+  ) {}
 
   /**
    * Determine if the user is currently authenticated.
@@ -125,7 +127,10 @@ export class AuthService {
       username: username,
       password: password,
     };
-    const result = await this.signLab.post<AuthResponse>('api/auth/signup', request);
+    const result = await this.signLab.post<AuthResponse>(
+      'api/auth/signup',
+      request
+    );
     this.tokenService.storeAuthInformation(result);
 
     return result.user;

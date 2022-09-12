@@ -18,7 +18,7 @@ export class TokenService {
   }
 
   get user(): User | null {
-    return this.authInformation ? this.authInformation.user : null
+    return this.authInformation ? this.authInformation.user : null;
   }
 
   get token(): string | null {
@@ -74,7 +74,7 @@ export class TokenService {
    *       https://stackoverflow.com/a/60758392/6745646
    */
   private hasJWTTokenExpired(token: string) {
-    const expiry = (JSON.parse(window.atob(token.split('.')[1]))).exp;
-    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+    const expiry = JSON.parse(window.atob(token.split('.')[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
   }
 }

@@ -91,7 +91,7 @@ if (process.env.NODE_ENV) {
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '4h' }
+        signOptions: { expiresIn: '4h' },
       }),
       inject: [ConfigService],
     }),
@@ -121,7 +121,7 @@ if (process.env.NODE_ENV) {
       provide: BucketStorage,
       useFactory: BucketFactory.getBucket,
       inject: [ConfigService],
-    }
+    },
   ],
 })
 export class AppModule {}

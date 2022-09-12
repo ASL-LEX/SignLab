@@ -51,8 +51,7 @@ export class SignLabHttpClient {
   /** The base url all SignLab backend requests are made against */
   private baseUrl: string;
 
-  constructor(private http: HttpClient,
-              private tokenService: TokenService) {
+  constructor(private http: HttpClient, private tokenService: TokenService) {
     const baseUrl = location.origin;
     // Ensure the url does not have a trailing '/'
     if (baseUrl.endsWith('/')) {
@@ -68,12 +67,18 @@ export class SignLabHttpClient {
     options?: HttpClientOptions
   ): Promise<T> {
     return firstValueFrom(
-      this.http.post<T>(this.fromStub(urlStub), body, this.handleBearerToken(options))
+      this.http.post<T>(
+        this.fromStub(urlStub),
+        body,
+        this.handleBearerToken(options)
+      )
     );
   }
 
   async get<T>(urlStub: string, options?: HttpClientOptions): Promise<T> {
-    return firstValueFrom(this.http.get<T>(this.fromStub(urlStub), this.handleBearerToken(options)));
+    return firstValueFrom(
+      this.http.get<T>(this.fromStub(urlStub), this.handleBearerToken(options))
+    );
   }
 
   async put<T>(
@@ -82,12 +87,21 @@ export class SignLabHttpClient {
     options?: HttpClientOptions
   ): Promise<T> {
     return firstValueFrom(
-      this.http.put<T>(this.fromStub(urlStub), body, this.handleBearerToken(options))
+      this.http.put<T>(
+        this.fromStub(urlStub),
+        body,
+        this.handleBearerToken(options)
+      )
     );
   }
 
   async delete<T>(urlStub: string, options?: HttpClientOptions): Promise<T> {
-    return firstValueFrom(this.http.delete<T>(this.fromStub(urlStub), this.handleBearerToken(options)));
+    return firstValueFrom(
+      this.http.delete<T>(
+        this.fromStub(urlStub),
+        this.handleBearerToken(options)
+      )
+    );
   }
 
   /**
@@ -107,13 +121,21 @@ export class SignLabHttpClient {
    * If the bearer token option is added, insert the cooresponding header
    * to the options
    */
-  private handleBearerToken(options?: HttpClientOptions): HttpClientOptions | undefined {
+  private handleBearerToken(
+    options?: HttpClientOptions
+  ): HttpClientOptions | undefined {
     // If options are undefined, do nothing
-    if (options === undefined) { return undefined; }
+    if (options === undefined) {
+      return undefined;
+    }
     // If the provide token option is not provided, do nothing
-    if (options.provideToken === undefined) { return options; }
+    if (options.provideToken === undefined) {
+      return options;
+    }
     // If the provide token option is explicity false, do nothing
-    if (options.provideToken === false) { return options; }
+    if (options.provideToken === false) {
+      return options;
+    }
 
     // Throw an error if the token is not availble
     if (!this.tokenService.hasAuthInfo()) {
@@ -127,7 +149,7 @@ export class SignLabHttpClient {
     // token
     if (options.headers === undefined) {
       newOptions.headers = new HttpHeaders({
-        'Authorization': `Bearer ${this.tokenService.token}`
+        Authorization: `Bearer ${this.tokenService.token}`,
       });
       return newOptions;
     }
@@ -135,11 +157,15 @@ export class SignLabHttpClient {
     // Otherwise, add the token to the existing headers. Since headers can
     // be represented in two ways, have to handle adding to either type
     if (options.headers instanceof HttpHeaders) {
-      newOptions.headers =
-        options.headers.append('Authorization', `Bearer ${this.tokenService.token}`);
+      newOptions.headers = options.headers.append(
+        'Authorization',
+        `Bearer ${this.tokenService.token}`
+      );
     } else {
-      newOptions.headers =
-        new HttpHeaders(options.headers).append('Authorization', `Bearer ${this.tokenService.token}`)
+      newOptions.headers = new HttpHeaders(options.headers).append(
+        'Authorization',
+        `Bearer ${this.tokenService.token}`
+      );
     }
 
     return newOptions;

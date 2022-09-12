@@ -49,7 +49,9 @@ export class AuthController {
    * @return The user credentials for the given user on success
    */
   @Post('/login')
-  async login(@Body() userCredentials: UserCredentials): Promise<AuthResponse | null> {
+  async login(
+    @Body() userCredentials: UserCredentials,
+  ): Promise<AuthResponse | null> {
     return this.authService.authenticate(userCredentials);
   }
 

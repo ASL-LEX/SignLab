@@ -19,7 +19,8 @@ import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService) {}
+    private jwtService: JwtService,
+  ) {}
 
   /**
    * Attempt to authenticate the given user based on username and password.
