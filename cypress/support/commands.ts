@@ -12,6 +12,19 @@ Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'userstudies' });
 });
 
+Cypress.Commands.add('login', () => {
+  // Make the login request and insert into local storage
+  cy
+    .request({
+      method: 'POST',
+      url: 'api/auth/login',
+      body: { username: user.existingUser.username, password: user.existingUser.password }
+    })
+    .then(response => {
+      window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(response.body));
+    });
+});
+
 Cypress.Commands.add('firstTimeSetup', () => {
   // Submit the expected meta data
   cy.request({
