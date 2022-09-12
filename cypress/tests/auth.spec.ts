@@ -288,7 +288,7 @@ describe('User Signup', () => {
       .get('input[type="password"')
       .eq(1)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get('button[type="submit"]')
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.username} is not an available username\n`);
