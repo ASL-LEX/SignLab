@@ -3,6 +3,7 @@ describe('Response Upload', () => {
   const uploadResponsesButton = '[data-cy="uploadResponsesButton"]';
   const uploadCSVButton = '[data-cy="uploadCSVButton"]';
   const uploadZIPButton = '[data-cy="uploadZIPButton"]';
+  const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
 
   before(() => {
     // Clear out any existing data
@@ -33,6 +34,14 @@ describe('Response Upload', () => {
     cy
       .get(uploadZIPButton)
       .should('be.disabled');
+  });
+
+  it('should produce errors when the filename is not present', () => {
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/missing-filenames.csv', { force: true })
+      .get('li')
+      .should('have.text', ('Line 2: Path `filename` is required.\n'));
   });
 
 });

@@ -1,7 +1,7 @@
 <div>
   <form>
     <div>
-      <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload>
+      <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput">
       <button mat-raised-button (click)='csvUpload.click()' data-cy="uploadCSVButton">Upload CSV</button>
     </div>
     <div>
@@ -16,6 +16,6 @@
       <li *ngFor="let error of errorLocations">
         <p>{{ error.place }}: {{ error.message }}</p>
       </li>
-    </ul>
+    </ul=>
   </form>
 </div>
