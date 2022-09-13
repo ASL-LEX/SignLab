@@ -25,7 +25,7 @@ export class S3Storage extends BucketStorage {
       forcePathStyle: true,
     });
 
-    this.baseURL = this.baseURL;
+    this.baseURL = config.baseURL;
   }
 
   async objectUpload(path: string, target: string): Promise<BucketFile> {
