@@ -1,4 +1,9 @@
 describe('Response Upload', () => {
+
+  const uploadResponsesButton = '[data-cy="uploadResponsesButton"]';
+  const uploadCSVButton = '[data-cy="uploadCSVButton"]';
+  const uploadZIPButton = '[data-cy="uploadZIPButton"]';
+
   before(() => {
     // Clear out any existing data
     cy.resetDB();
@@ -14,19 +19,19 @@ describe('Response Upload', () => {
       .contains('Responses')
       .click()
       .wait(100)
-      .get('button[aria-label="Add more responses"]')
+      .get(uploadResponsesButton)
       .click()
   });
 
   it('should open dialog with only the upload button enabled', () => {
     // Upload CSV button should be enabled
     cy
-      .get('button[data-cy="uploadCSVButton"]')
+      .get(uploadCSVButton)
       .should('not.have.attr', 'disabled');
 
     // Upload Vidoes button should be disabled
     cy
-      .get('button[data-cy="uploadZIPButton"]')
+      .get(uploadZIPButton)
       .should('be.disabled');
   });
 

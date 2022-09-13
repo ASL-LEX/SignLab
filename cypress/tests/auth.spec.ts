@@ -5,9 +5,9 @@ describe('User Login', () => {
   // Used for checking alert messages
   let alertStub: SinonStub;
 
-  let usernameField = '[data-cy="usernameField"]';
-  let passwordField = '[data-cy="passwordField"]';
-  let submitButton = '[data-cy="loginSubmit"]';
+  const usernameField = '[data-cy="usernameField"]';
+  const passwordField = '[data-cy="passwordField"]';
+  const submitButton = '[data-cy="loginSubmit"]';
 
   before(() => {
     cy.resetDB();
@@ -123,12 +123,12 @@ describe('User Signup', () => {
   // Used for checking alert messages
   let alertStub: SinonStub;
 
-  let nameField = '[data-cy="signupNameField"]';
-  let emailField = '[data-cy="signupEmailField"]';
-  let usernameField = '[data-cy="signupUsernameField"]';
-  let passwordField = '[data-cy="signupPasswordField"]';
-  let confirmPassField = '[data-cy="signupConfirmPassField"]';
-  let submitButton = '[data-cy="signupSubmit"]';
+  const nameField = '[data-cy="signupNameField"]';
+  const emailField = '[data-cy="signupEmailField"]';
+  const usernameField = '[data-cy="signupUsernameField"]';
+  const passwordField = '[data-cy="signupPasswordField"]';
+  const confirmPassField = '[data-cy="signupConfirmPassField"]';
+  const submitButton = '[data-cy="signupSubmit"]';
 
   before(() => {
     cy.resetDB();
