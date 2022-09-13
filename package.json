@@ -1,6 +1,6 @@
 {
   "name": "signlab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "start:dev": "npm run build:dev --workspace=client && npm run start:dev --workspace=server",
     "start:watch": "NODE_ENV=local concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client'",

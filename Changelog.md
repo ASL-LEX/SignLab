@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+### Fixed
+
+* Base URL not being added to videos stored in S3 like containers
+
 ## 0.1.0
 
 ### Added
