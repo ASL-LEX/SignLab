@@ -69,4 +69,24 @@ describe('Response Upload', () => {
       .should('be.disabled');
   });
 
+  it('should produce errors on CSV with only a header', () => {
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/only-headers.csv', { force: true })
+      .get(uploadStatusMessage)
+      .should('contain.text', 'No responses found in CSV')
+      .get(uploadZIPButton)
+      .should('be.disabled');
+  });
+
+  it('should produce errors on CSV with a row that is missing a filename', () => {
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/missing-filename.csv', { force: true })
+      .get('li')
+      .should('contain.text', 'Line 4: Path `filename` is required.')
+      .get(uploadZIPButton)
+      .should('be.disabled');
+  });
+
 });
