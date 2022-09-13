@@ -8,7 +8,7 @@
       <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload>
       <button mat-raised-button (click)='zipUpload.click()' [disabled]="!csvUploadComplete" data-cy="uploadZIPButton">Upload Videos (ZIP)</button>
     </div>
-    <p>
+    <p [attr.data-cy]="'uploadStatusMessage'">
     {{ uploadStatusMessage }}
     </p>
 
@@ -16,6 +16,6 @@
       <li *ngFor="let error of errorLocations">
         <p>{{ error.place }}: {{ error.message }}</p>
       </li>
-    </ul=>
+    </ul>
   </form>
 </div>

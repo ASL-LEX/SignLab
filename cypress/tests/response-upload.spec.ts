@@ -4,6 +4,7 @@ describe('Response Upload', () => {
   const uploadCSVButton = '[data-cy="uploadCSVButton"]';
   const uploadZIPButton = '[data-cy="uploadZIPButton"]';
   const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
+  const uploadStatusMessage = '[data-cy="uploadStatusMessage"]';
 
   before(() => {
     // Clear out any existing data
@@ -41,7 +42,31 @@ describe('Response Upload', () => {
       .get(csvFileUploadInput)
       .selectFile('cypress/fixtures/responses/missing-filenames.csv', { force: true })
       .get('li')
-      .should('have.text', ('Line 2: Path `filename` is required.\n'));
+      .should('contain.text', ('Line 2: Path `filename` is required.'))
+      .get(uploadZIPButton)
+      .should('be.disabled');
+  });
+
+  it('should produce when the user expected field is not present', () => {
+    // NOTE: This field is added using the `cy.firstTimeSetup()` call
+
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/missing-user-fields.csv', { force: true })
+      .get('li')
+      .should('contain.text', 'Line 2: requires property "prompt"')
+      .get(uploadZIPButton)
+      .should('be.disabled');
+  });
+
+  it('should produce errors on empty csv', () => {
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/empty.csv', { force: true })
+      .get(uploadStatusMessage)
+      .should('contain.text', 'No responses found in CSV')
+      .get(uploadZIPButton)
+      .should('be.disabled');
   });
 
 });
