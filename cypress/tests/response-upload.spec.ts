@@ -6,13 +6,12 @@ describe('Response Upload', () => {
   const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
   const uploadStatusMessage = '[data-cy="uploadStatusMessage"]';
 
-  before(() => {
+
+  beforeEach(() => {
     // Clear out any existing data
     cy.resetDB();
     cy.firstTimeSetup();
-  });
 
-  beforeEach(() => {
     // Navigate to the response interface and select the upload option
     cy
       .login()
@@ -87,6 +86,14 @@ describe('Response Upload', () => {
       .should('contain.text', 'Line 4: Path `filename` is required.')
       .get(uploadZIPButton)
       .should('be.disabled');
+  });
+
+  it('should allow uploading of valid CSV', () => {
+    cy
+      .get(csvFileUploadInput)
+      .selectFile('cypress/fixtures/responses/small-set.csv', { force: true })
+      .get(uploadZIPButton)
+      .should('not.be.disabled');
   });
 
 });
