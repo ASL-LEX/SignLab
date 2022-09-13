@@ -5,7 +5,7 @@
       <button mat-raised-button (click)='csvUpload.click()' data-cy="uploadCSVButton">Upload CSV</button>
     </div>
     <div>
-      <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload>
+      <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput">
       <button mat-raised-button (click)='zipUpload.click()' [disabled]="!csvUploadComplete" data-cy="uploadZIPButton">Upload Videos (ZIP)</button>
     </div>
     <p [attr.data-cy]="'uploadStatusMessage'">
