@@ -21,16 +21,13 @@ describe('Response Upload', () => {
   it('should open dialog with only the upload button enabled', () => {
     // Upload CSV button should be enabled
     cy
-      .get('form>div>button')
-      .eq(0)
+      .get('button[data-cy="uploadCSVButton"]')
       .should('not.have.attr', 'disabled');
 
     // Upload Vidoes button should be disabled
     cy
-      .get('form>div>button')
-      .eq(1)
+      .get('button[data-cy="uploadZIPButton"]')
       .should('be.disabled');
-
   });
 
 });

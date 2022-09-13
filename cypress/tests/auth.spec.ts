@@ -5,6 +5,10 @@ describe('User Login', () => {
   // Used for checking alert messages
   let alertStub: SinonStub;
 
+  let usernameField = '[data-cy="usernameField"]';
+  let passwordField = '[data-cy="passwordField"]';
+  let submitButton = '[data-cy="loginSubmit"]';
+
   before(() => {
     cy.resetDB();
     cy.firstTimeSetup();
@@ -23,8 +27,7 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
@@ -34,10 +37,9 @@ describe('User Login', () => {
   it('should get an alert when only submitting with username', () => {
     cy.visit('/auth');
     cy
-      .get('input#username')
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
@@ -47,10 +49,9 @@ describe('User Login', () => {
   it('should get an alert when only submitting with password', () => {
     cy.visit('/auth');
     cy
-      .get('input#password')
+      .get(passwordField)
       .type(user.existingUser.password)
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
@@ -60,12 +61,11 @@ describe('User Login', () => {
   it('should fail on incorrect username + incorrect password', () => {
     cy.visit('/auth');
     cy
-      .get('input#username')
+      .get(usernameField)
       .type('wrong')
-      .get('input#password')
+      .get(passwordField)
       .type('wrong')
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
@@ -76,12 +76,11 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
-      .get('input#username')
+      .get(usernameField)
       .type('wrong')
-      .get('input#password')
+      .get(passwordField)
       .type(user.existingUser.password)
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
@@ -92,12 +91,11 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
-      .get('input#username')
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('input#password')
+      .get(passwordField)
       .type('wrong')
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
@@ -108,12 +106,11 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
-      .get('input#username')
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('input#password')
+      .get(passwordField)
       .type(user.existingUser.password)
-      .get('button')
-      .contains('Submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.notCalled);
@@ -126,6 +123,13 @@ describe('User Signup', () => {
   // Used for checking alert messages
   let alertStub: SinonStub;
 
+  let nameField = '[data-cy="signupNameField"]';
+  let emailField = '[data-cy="signupEmailField"]';
+  let usernameField = '[data-cy="signupUsernameField"]';
+  let passwordField = '[data-cy="signupPasswordField"]';
+  let confirmPassField = '[data-cy="signupConfirmPassField"]';
+  let submitButton = '[data-cy="signupSubmit"]';
+
   before(() => {
     cy.resetDB();
     cy.firstTimeSetup();
@@ -137,8 +141,8 @@ describe('User Signup', () => {
 
     cy.visit('/auth');
     cy
-      .get('div[role="tab"]')
-      .contains('Signup')
+      .get('div.mat-tab-label-content')
+      .eq(1)
       .click();
 
     // Wait for animation to complete
@@ -147,126 +151,109 @@ describe('User Signup', () => {
 
   it('should not allow signing up with empty form', () => {
     cy
-      .get('button[type="submit"')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a missing name', () => {
     cy
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('input[type="password"]')
-      .eq(0)
+      .get(passwordField)
       .type(user.existingUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.existingUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a missing email', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input[type="password"]')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a missing username', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"]')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password, { force: true })
-      .get('input#confirmPassword')
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a missing password', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"]')
-      .eq(1)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a missing confirm password', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should not submit with a non-matching passwords', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password + 'something else')
-      .get('button[type="submit')
+      .get(submitButton)
       .should('be.disabled');
   });
 
   it('should get alert with using existing username + email', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.existingUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.username} is not an available username\n${user.existingUser.email} is not an available email`);
@@ -275,20 +262,17 @@ describe('User Signup', () => {
 
   it('should get alert with using existing username', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.existingUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit"]')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.username} is not an available username\n`);
@@ -297,20 +281,17 @@ describe('User Signup', () => {
 
   it('should get alert with using existing email', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.existingUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit"]')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.email} is not an available email`);
@@ -319,20 +300,17 @@ describe('User Signup', () => {
 
   it('should submit with valid information', () => {
     cy
-      .get('input#name')
+      .get(nameField)
       .type(user.newUser.name)
-      .get('input#username')
-      .eq(1)
+      .get(usernameField)
       .type(user.newUser.username)
-      .get('input#email')
+      .get(emailField)
       .type(user.newUser.email)
-      .get('input[type="password"')
-      .eq(0)
+      .get(passwordField)
       .type(user.newUser.password)
-      .get('input[type="password"')
-      .eq(1)
+      .get(confirmPassField)
       .type(user.newUser.password)
-      .get('button[type="submit"]')
+      .get(submitButton)
       .click()
       .then(() => {
         expect(alertStub.notCalled);
