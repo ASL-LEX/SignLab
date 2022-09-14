@@ -11,13 +11,16 @@
 </div>
 
 
-<mat-stepper linear="true" *ngIf="!studyCreated">
+<!-- Step Control buttons -->
+<div>
+  <button class="stepControl" mat-stroked-button (click)="stepPrevious()" [disabled]="selectedStepNumber == 1">Back</button>
+  <button class="stepControl" mat-stroked-button (click)="stepNextOrSubmit()"> {{ selectedStepNumber == maxSteps ? "Submit" : "Next" }} </button>
+</div>
 
+<mat-stepper linear="true" *ngIf="!studyCreated">
   <!-- Required Study Metadata -->
   <mat-step label="Study Identification">
     <study-required-info (requiredDataChange)="requiredDataChange($event)"></study-required-info>
-
-    <button mat-stroked-button matStepperNext>Next</button>
   </mat-step>
 
   <!-- Fields in the Tag From -->
@@ -51,9 +54,7 @@
     </mat-card>
 
     <div>
-      <button mat-stroked-button matStepperPrevious>Back</button>
       <button mat-stroked-button (click)="openTagFormPreview()">Preview</button>
-      <button mat-stroked-button matStepperNext>Next</button>
     </div>
   </mat-step>
 
@@ -63,10 +64,5 @@
       (markedDisabledChange)="markedDisabledChange($event)"
       (markedTrainingChange)="markedTrainingChange($event)"
     ></response-new-study>
-
-    <div>
-      <button mat-stroked-button matStepperPrevious>Back</button>
-      <button mat-stroked-button (click)="makeNewStudy()">Submit</button>
-    </div>
   </mat-step>
 </mat-stepper>
