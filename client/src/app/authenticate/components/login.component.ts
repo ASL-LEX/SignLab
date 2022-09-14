@@ -19,6 +19,7 @@ import { AuthService } from '../../core/services/auth.service';
             id="username"
             autocomplete="off"
             [formControl]="username"
+            data-cy="usernameField"
           /><br />
           <label for="password" class="label">Enter Password</label><br />
           <input
@@ -28,8 +29,9 @@ import { AuthService } from '../../core/services/auth.service';
             id="password"
             autocomplete="off"
             [formControl]="pass"
+            data-cy="passwordField"
           /><br />
-          <button mat-stroked-button class="button" type="submit">
+          <button mat-stroked-button class="button" type="submit" data-cy="loginSubmit">
             Submit
           </button>
         </form>

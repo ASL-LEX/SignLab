@@ -36,6 +36,7 @@ lerna-debug.log*
 
 # Temporary storage
 /bucket
+/bucket-test
 
 # Secrets
 .env.test

@@ -16,6 +16,7 @@ import { ResponseUploadDialog } from './response-upload-dialog/response-upload-d
         mat-mini-fab
         aria-label="Add more responses"
         (click)="openUploadDialog()"
+        data-cy="uploadResponsesButton"
       >
         <mat-icon>add_circle</mat-icon>
       </button>
