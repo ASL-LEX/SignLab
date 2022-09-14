@@ -5,19 +5,11 @@
 }
 
 a {
+  padding-left: 1rem;
   padding-right: 1rem;
-  font-size: 20px;
-}
-
-.button {
-  background-color: white;
-  color:teal;
-  border-color: teal;
+  margin: 1rem;
+  font-size: 50px;
+  color: #fafafa;
   font-size: 16px;
   border-radius: 5px;
-}
-
-.button:hover {
-  background-color: teal;
-  color: white;
 }
