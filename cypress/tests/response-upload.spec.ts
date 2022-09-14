@@ -139,4 +139,17 @@ describe('Upload Response ZIP', () => {
       .should('contain.text', 'hi');
   });
   */
+
+
+  // TODO: Uncomment once the bug associated with previously uploaded videos
+  //       being left in the temporary folder location has been addressed
+  /*
+  it('should produce a warning when the ZIP has extra videos provides', () => {
+    cy
+      .get(zipFileUploadInput)
+      .selectFile('cypress/fixtures/responses/small-set-extra-video.zip', { force: true })
+      .get('li')
+      .should('contain.text', 'hi');
+  });
+  */
 });
