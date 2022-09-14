@@ -10,9 +10,9 @@
   <mat-toolbar class="navbar">
     <div>ASL-LEX SignLab</div>
       <div>
-        <a mat-button routerLink='/tag'>Tagging</a>
+        <a mat-stoked-button routerLink='/tag'>Tagging</a>
         <a *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)" mat-button routerLink='/admin'>Admin</a>
-        <a mat-button routerLink='/auth'>Login</a>
+        <a mat-stroked-button routerLink='/auth'>Login</a>
       </div>
   </mat-toolbar>
 

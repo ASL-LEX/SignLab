@@ -53,7 +53,7 @@ export class TokenService {
     const authInformation = JSON.parse(storedValue);
 
     // If the information has expired, return null
-    if (this.hasJWTTokenExpired(authInformation.token)) {
+    if (authInformation == null || this.hasJWTTokenExpired(authInformation.token)) {
       return null;
     }
     return authInformation;
