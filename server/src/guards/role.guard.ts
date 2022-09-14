@@ -1,14 +1,6 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, ExecutionContext, CanActivate } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '../services/auth.service';
-
-/**
- * Interface that defined the necessary components in a session for handling
- * the role guard.
- */
-interface RoleSession {
-  userID?: string;
-}
 
 /**
  * Check to see if the endpoint is accessible to a give user. The following
@@ -35,15 +27,13 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    // Next, check for user information
-    const session: RoleSession = context.switchToHttp().getRequest().session;
-
-    // If the user ID is not present, do not allow the user access
-    if (!session.userID) {
+    // Get the user from the request
+    const user = context.switchToHttp().getRequest().user;
+    if (!user) {
       return false;
     }
 
     // Otherwise, see if the user is authorized to access this endpoint
-    return this.authService.isAuthorized(session.userID, requiredRoles);
+    return this.authService.isAuthorized(user, requiredRoles);
   }
 }

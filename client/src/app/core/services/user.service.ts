@@ -17,7 +17,7 @@ export class UserService {
    * @return The list of users in the system
    */
   async getUsers(): Promise<User[]> {
-    return this.signLab.get<User[]>('api/users');
+    return this.signLab.get<User[]>('api/users', { provideToken: true });
   }
 
   /**
@@ -39,9 +39,9 @@ export class UserService {
     // Try to make the change
     try {
       if (hasRole) {
-        await this.signLab.put<any>(targetURL, null);
+        await this.signLab.put<any>(targetURL, {}, { provideToken: true });
       } else {
-        await this.signLab.delete<any>(targetURL);
+        await this.signLab.delete<any>(targetURL, { provideToken: true });
       }
       return true;
     } catch (error) {

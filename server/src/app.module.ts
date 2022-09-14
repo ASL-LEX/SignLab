@@ -23,6 +23,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 // Controllers
 import { AppController } from './app.controller';
@@ -33,8 +34,6 @@ import { StudyController } from './controllers/api/study.controller';
 import { TagController } from './controllers/api/tag.controller';
 
 // Services
-import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './guards/role.guard';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ResponseService } from './services/response.service';
@@ -49,6 +48,8 @@ import { TagGuard } from './guards/tag.guard';
 import { ConfigService } from '@nestjs/config';
 import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './services/jwt.strategy';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
@@ -85,6 +86,15 @@ if (process.env.NODE_ENV) {
       }),
       inject: [ConfigService],
     }),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '4h' },
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [
     AppController,
@@ -106,14 +116,11 @@ if (process.env.NODE_ENV) {
     ResponseUploadService,
     UserStudyService,
     TagGuard,
+    JwtStrategy,
     {
       provide: BucketStorage,
       useFactory: BucketFactory.getBucket,
       inject: [ConfigService],
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
     },
   ],
 })

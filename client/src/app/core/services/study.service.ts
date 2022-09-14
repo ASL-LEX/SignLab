@@ -10,16 +10,18 @@ export class StudyService {
   constructor(private signLab: SignLabHttpClient) {}
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {
-    return this.signLab.post<any>('api/study/create', studyCreation, {});
+    return this.signLab.post<any>('api/study/create', studyCreation, {
+      provideToken: true,
+    });
   }
 
   async studyExists(studyName: string): Promise<boolean> {
-    const query = { params: { studyName: studyName } };
+    const query = { params: { studyName: studyName }, provideToken: true };
     return this.signLab.get<boolean>('api/study/exists', query);
   }
 
   async getUserStudies(studyID: string): Promise<UserStudy[]> {
-    const query = { params: { studyID: studyID } };
+    const query = { params: { studyID: studyID }, provideToken: true };
     return this.signLab.get<UserStudy[]>('api/study/users', query);
   }
 
@@ -28,22 +30,22 @@ export class StudyService {
    * study
    */
   async getUserStudy(user: User, study: Study): Promise<UserStudy> {
-    const query = { params: { userID: user._id, studyID: study._id! } };
+    const query = {
+      params: { userID: user._id, studyID: study._id! },
+      provideToken: true,
+    };
     return this.signLab.get<UserStudy>('api/study/user', query);
   }
 
-  /**
-   * Get all studie === undefineds
-   */
   async getStudies(): Promise<Study[]> {
-    return this.signLab.get<Study[]>('api/study');
+    return this.signLab.get<Study[]>('api/study', { provideToken: true });
   }
 
   /**
    * Get all tags associated with the given study
    */
   async getTags(study: Study): Promise<Tag[]> {
-    const query = { params: { studyID: study._id! } };
+    const query = { params: { studyID: study._id! }, provideToken: true };
     return this.signLab.get<Tag[]>('api/tag/forStudy', query);
   }
 
@@ -53,6 +55,7 @@ export class StudyService {
   async getTrainingTags(userStudy: UserStudy): Promise<Tag[]> {
     const query = {
       params: { studyID: userStudy.study._id!, userID: userStudy.user._id },
+      provideToken: true,
     };
     return this.signLab.get<Tag[]>('api/tag/training', query);
   }
@@ -74,7 +77,9 @@ export class StudyService {
     };
 
     try {
-      await this.signLab.put<any>(targetURL, requestBody);
+      await this.signLab.put<any>(targetURL, requestBody, {
+        provideToken: true,
+      });
       return true;
     } catch (error) {
       console.error(error);

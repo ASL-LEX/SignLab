@@ -6,7 +6,6 @@ import {
   Query,
   HttpException,
   HttpStatus,
-  Session,
 } from '@nestjs/common';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { AuthService } from '../../services/auth.service';
@@ -16,9 +15,9 @@ import {
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { User } from '../../schemas/user.schema';
 import { StudyService } from '../../services/study.service';
 import { UserStudyService } from '../../services/userstudy.service';
+import { AuthResponse } from 'shared/dtos/auth.dto';
 
 const passwordValidator = require('joi-password-complexity');
 
@@ -52,15 +51,8 @@ export class AuthController {
   @Post('/login')
   async login(
     @Body() userCredentials: UserCredentials,
-    @Session() session: any,
-  ): Promise<User | null> {
-    const result = await this.authService.authenticate(userCredentials);
-
-    // If the user is valid, update the session with the user ID
-    if (result) {
-      session.userID = result._id;
-    }
-    return result;
+  ): Promise<AuthResponse | null> {
+    return this.authService.authenticate(userCredentials);
   }
 
   /**
@@ -95,7 +87,7 @@ export class AuthController {
    * @return The newly created user
    */
   @Post('/signup')
-  async userSignup(@Body() userSignup: UserSignup): Promise<User> {
+  async userSignup(@Body() userSignup: UserSignup): Promise<AuthResponse> {
     // Ensure the user is available, otherwise throw an error
     const availability = await this.authService.availability(userSignup);
     if (!availability.username || !availability.email) {
@@ -116,17 +108,17 @@ export class AuthController {
       );
     }
 
-    const user = await this.authService.signup(userSignup);
+    const authResponse = await this.authService.signup(userSignup);
 
     // Make a user study for each study
     const studies = await this.studyService.getStudies();
 
     await Promise.all(
       studies.map((study) => {
-        return this.userStudyService.create(user, study);
+        return this.userStudyService.create(authResponse.user, study);
       }),
     );
 
-    return user;
+    return authResponse;
   }
 }

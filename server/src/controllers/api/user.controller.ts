@@ -7,9 +7,9 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { Roles } from '../../decorators/roles.decorator';
 import { User } from '../../schemas/user.schema';
 import { UserService } from '../../services/user.service';
+import { Auth } from '../../guards/auth.guard';
 
 @Controller('/api/users')
 export class UserController {
@@ -19,7 +19,7 @@ export class UserController {
    * Get all user information for all users.
    */
   @Get('/')
-  @Roles('admin')
+  @Auth('admin')
   async getAllUsers(): Promise<User[]> {
     return this.userService.findAll();
   }
@@ -31,7 +31,7 @@ export class UserController {
    * @param id The of the user to add the role to
    */
   @Put('/:role/:id')
-  @Roles('admin')
+  @Auth('admin')
   async addRoleToUser(@Param('role') role: string, @Param('id') id: string) {
     const result = await this.userService.addRole(role, id);
 
@@ -52,7 +52,7 @@ export class UserController {
    * @param id The id of the user to remove the role from
    */
   @Delete('/:role/:id')
-  @Roles('admin')
+  @Auth('admin')
   async removeRoleFromUser(
     @Param('role') role: string,
     @Param('id') id: string,

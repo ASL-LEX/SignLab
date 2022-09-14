@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {
@@ -8,6 +9,7 @@ import {
   UserSignup,
 } from 'shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
+import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -15,7 +17,10 @@ import { User, UserDocument } from '../schemas/user.schema';
  */
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private jwtService: JwtService,
+  ) {}
 
   /**
    * Attempt to authenticate the given user based on username and password.
@@ -24,7 +29,7 @@ export class AuthService {
    */
   public async authenticate(
     credentials: UserCredentials,
-  ): Promise<User | null> {
+  ): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
     const user = await this.userModel
       .findOne({ username: credentials.username })
@@ -38,7 +43,7 @@ export class AuthService {
     // Check password
     // TODO: Replace with comparing hashed passwords
     if (user.password === credentials.password) {
-      return user;
+      return { user: user, token: this.generateToken(user) };
     } else {
       return null;
     }
@@ -77,7 +82,7 @@ export class AuthService {
    *
    * @return The newly created user.
    */
-  public async signup(userSignup: UserSignup): Promise<User> {
+  public async signup(userSignup: UserSignup): Promise<AuthResponse> {
     // TODO: Hash password before saving
 
     // First user is always the owner
@@ -93,7 +98,9 @@ export class AuthService {
       accessing: false,
       owner: isOwner,
     };
-    return this.userModel.create(user);
+
+    const newUser = await this.userModel.create(user);
+    return { user: newUser, token: this.generateToken(newUser) };
   }
 
   /**
@@ -101,17 +108,11 @@ export class AuthService {
    * A user is considered authorized if it has at least one of the necessary
    * roles.
    *
-   * @param id The user ID
+   * @param user The user to find
    * @param roles List of roles (as strings)
    * @return True if the user is authorized, false otherwise
    */
-  public async isAuthorized(id: string, roles: string[]): Promise<boolean> {
-    // Get the user, if no user, then not authorized
-    const user = await this.userModel.findOne({ _id: id }).exec();
-    if (!user) {
-      return false;
-    }
-
+  public async isAuthorized(user: User, roles: string[]): Promise<boolean> {
     // Owner can do anything
     if (user.roles.owner) {
       return true;
@@ -125,5 +126,13 @@ export class AuthService {
     }
 
     return false;
+  }
+
+  /**
+   * Generate a token for a given user
+   */
+  private generateToken(user: User): string {
+    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles };
+    return this.jwtService.sign(tokenPayload);
   }
 }

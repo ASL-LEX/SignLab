@@ -11,7 +11,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Roles } from '../../decorators/roles.decorator';
 import { ResponseService } from '../../services/response.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
@@ -22,6 +21,7 @@ import { ResponseUploadService } from '../../services/response-upload.service';
 import { StudyService } from '../../services/study.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
 import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
+import { Auth } from '../../guards/auth.guard';
 
 @Controller('/api/response')
 export class ResponseController {
@@ -80,9 +80,9 @@ export class ResponseController {
    *         error messages
    */
   @Post('/upload/csv')
-  @Roles('admin')
+  @Auth('admin')
   @UseInterceptors(FileInterceptor('file'))
-  // @Roles('admin')
+  // @Auth('admin')
   async uploadCSV(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<SaveAttempt> {
@@ -104,10 +104,10 @@ export class ResponseController {
    *         error messages.
    */
   @Post('/upload/zip')
-  @Roles('admin')
+  @Auth('admin')
   @UseInterceptors(
     FileInterceptor('file', {
-      // @Roles('admin')
+      // @Auth('admin')
       storage: diskStorage({
         destination: './upload/',
         filename: (_req, _file, cb) => {
@@ -144,7 +144,7 @@ export class ResponseController {
    * Get all response information
    */
   @Get('/')
-  @Roles('admin')
+  @Auth('admin')
   async getResponses(): Promise<Response[]> {
     return this.responseService.getAllResponses();
   }
@@ -153,7 +153,7 @@ export class ResponseController {
    * Get the response studies for a specific study.
    */
   @Get('/responsestudies')
-  @Roles('admin')
+  @Auth('admin')
   async getResponseStudies(
     @Query('studyID') studyID: string,
   ): Promise<ResponseStudy[]> {
@@ -173,7 +173,7 @@ export class ResponseController {
    * Change if the response should be enabled as part of the study.
    */
   @Put('/enable')
-  @Roles('admin')
+  @Auth('admin')
   async setResponseStudyEnable(
     @Body()
     changeRequest: {

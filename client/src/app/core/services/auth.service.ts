@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User, UserAvailability } from 'shared/dtos/user.dto';
+import { AuthResponse } from 'shared/dtos/auth.dto';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { SignLabHttpClient } from './http.service';
+import { TokenService } from './token.service';
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -9,15 +11,13 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class AuthService {
-  /** The logged in user information, or null if the user isn't authenticated */
-  currentUser: User | null;
-
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient) {
-    this.currentUser = null;
-  }
+  constructor(
+    private signLab: SignLabHttpClient,
+    private tokenService: TokenService
+  ) {}
 
   /**
    * Determine if the user is currently authenticated.
@@ -25,7 +25,7 @@ export class AuthService {
    * @return True if the system is currently authenticated
    */
   public isAuthenticated(): boolean {
-    return this.currentUser != null;
+    return this.tokenService.hasAuthInfo();
   }
 
   /**
@@ -36,7 +36,7 @@ export class AuthService {
     if (!this.isAuthenticated()) {
       throw new Error('No authenticated user');
     } else {
-      return this.currentUser!;
+      return this.tokenService.user!;
     }
   }
 
@@ -54,20 +54,17 @@ export class AuthService {
     username: string,
     password: string
   ): Promise<User | null> {
-    // Attempt to authenticate against Anchor's authentication API
-    // TODO: Find way of inserting the correct URL
     const credentials = { username: username, password: password };
 
     try {
-      const response = await this.signLab.post<User>(
+      const response = await this.signLab.post<AuthResponse>(
         'api/auth/login',
         credentials,
         {}
       );
 
-      // Store the authorization information and return the user
-      this.currentUser = response;
-      return response;
+      this.tokenService.storeAuthInformation(response);
+      return this.user;
     } catch (error) {
       console.debug(`Failed to authenticate user`);
       return null;
@@ -130,7 +127,13 @@ export class AuthService {
       username: username,
       password: password,
     };
-    return this.signLab.post<User>('api/auth/signup', request);
+    const result = await this.signLab.post<AuthResponse>(
+      'api/auth/signup',
+      request
+    );
+    this.tokenService.storeAuthInformation(result);
+
+    return result.user;
   }
 
   /**

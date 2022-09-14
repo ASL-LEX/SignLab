@@ -1,5 +1,12 @@
 # Changelog
 
+## x.x.x
+
+### Changed
+
+* Using JWT for authentication
+* Create AuthResponse for passing JWT to client
+
 ## 0.1.1
 
 ### Fixed

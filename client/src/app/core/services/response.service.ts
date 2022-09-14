@@ -18,7 +18,9 @@ export class ResponseService {
    * Set the metadata that all responses will be expected to have.
    */
   async setMetadata(definitions: MetadataDefinition[]) {
-    this.signLab.post<any>('api/response/metadata', definitions);
+    this.signLab.post<any>('api/response/metadata', definitions, {
+      provideToken: true,
+    });
   }
 
   /**
@@ -27,7 +29,9 @@ export class ResponseService {
    * @return List of responses
    */
   async getResponses(): Promise<Response[]> {
-    return this.signLab.get<Response[]>('api/response/');
+    return this.signLab.get<Response[]>('api/response/', {
+      provideToken: true,
+    });
   }
 
   /**
@@ -37,6 +41,7 @@ export class ResponseService {
   async getResponseStudies(studyID: string): Promise<ResponseStudy[]> {
     return this.signLab.get<ResponseStudy[]>('api/response/responsestudies', {
       params: { studyID: studyID },
+      provideToken: true,
     });
   }
 
@@ -50,7 +55,9 @@ export class ResponseService {
     const form = new FormData();
     form.append('file', file);
 
-    return this.signLab.post<SaveAttempt>('api/response/upload/csv', form);
+    return this.signLab.post<SaveAttempt>('api/response/upload/csv', form, {
+      provideToken: true,
+    });
   }
 
   /**
@@ -60,7 +67,9 @@ export class ResponseService {
     const form = new FormData();
     form.append('file', file);
 
-    return this.signLab.post<SaveAttempt>('api/response/upload/zip', form);
+    return this.signLab.post<SaveAttempt>('api/response/upload/zip', form, {
+      provideToken: true,
+    });
   }
 
   /**
@@ -72,7 +81,10 @@ export class ResponseService {
     study: Study,
     isTraining: boolean
   ): Promise<Tag | null> {
-    const query = { params: { userID: user._id, studyID: study._id! } };
+    const query = {
+      params: { userID: user._id, studyID: study._id! },
+      provideToken: true,
+    };
 
     if (isTraining) {
       return this.signLab.get<Tag | null>('api/tag/nextTraining', query);
@@ -89,9 +101,13 @@ export class ResponseService {
    */
   async addTag(tag: Tag, isTraining: boolean): Promise<void> {
     if (isTraining) {
-      return this.signLab.post<any>('api/tag/completeTraining', tag, {});
+      return this.signLab.post<any>('api/tag/completeTraining', tag, {
+        provideToken: true,
+      });
     } else {
-      return this.signLab.post<any>('api/tag/complete', tag, {});
+      return this.signLab.post<any>('api/tag/complete', tag, {
+        provideToken: true,
+      });
     }
   }
 
@@ -116,7 +132,9 @@ export class ResponseService {
       isPartOfStudy: usedInStudy,
     };
     try {
-      await this.signLab.put<any>(targetURL, requestBody);
+      await this.signLab.put<any>(targetURL, requestBody, {
+        provideToken: true,
+      });
     } catch (error) {
       console.debug('Failed to update the user role');
       return false;
