@@ -20,10 +20,6 @@ export class UserControlComponent implements OnInit {
     'name',
     'email',
     'isAdmin',
-    'isTagging',
-    'isRecording',
-    'taggingTrainingComplete',
-    'recordingTrainingComplete',
   ];
   /** Stores the current list of all users, is exposed in the user control view */
   userData: User[] = [];
