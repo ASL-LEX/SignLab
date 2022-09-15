@@ -1,54 +1,74 @@
-<h2>{{ activeStudy?.name }}</h2>
+<div *ngIf="activeStudy; then hasStudy; else noStudies"></div>
 
-<div fxLayout fxFlex>
-  <!-- Sidebar View -->
-  <mat-list fxFlex="15">
-    <mat-list-item>
-      <button mat-stroked-button class="nav-button" (click)="setActiveView('responses')">
-        Responses Control
-      </button>
-    </mat-list-item>
 
-    <mat-divider></mat-divider>
+<!-- View when there are no studies present -->
+<ng-template #noStudies>
+  <div fxLayout fxFlex fxLayout="row" fxLayout.xs="column" fxFlexFill fxLayoutAlign="center center">
+    <mat-card>
+      <mat-card-content>
+        <div style="text-align: center">
+          <p class="no-study-message">No studies created yet, make a new study to get started</p>
+          <button mat-stroked-button (click)="newStudyNav()">New Study</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>
 
-    <mat-list-item>
-      <button mat-stroked-button class="nav-button" (click)="setActiveView('users')">
-        User Access Control
-      </button>
-    </mat-list-item>
+<!-- View when there is at least one study -->
+<ng-template #hasStudy>
+  <h2>{{ activeStudy?.name }}</h2>
 
-    <mat-divider></mat-divider>
+  <div fxLayout fxFlex>
+    <!-- Sidebar View -->
+    <mat-list fxFlex="15">
+      <mat-list-item>
+        <button mat-stroked-button class="nav-button" (click)="setActiveView('responses')">
+          Responses Control
+        </button>
+      </mat-list-item>
 
-    <mat-list-item>
-      <button mat-stroked-button class="nav-button" (click)="setActiveView('tags')">
-        Tags
-      </button>
-    </mat-list-item>
+      <mat-divider></mat-divider>
 
-    <mat-divider></mat-divider>
+      <mat-list-item>
+        <button mat-stroked-button class="nav-button" (click)="setActiveView('users')">
+          User Access Control
+        </button>
+      </mat-list-item>
 
-    <mat-list-item>
-      <button mat-stroked-button class="nav-button" (click)="openStudySelectDialog()">
-        Change Study <mat-icon>swap_vert</mat-icon>
-      </button>
-    </mat-list-item>
-  </mat-list>
+      <mat-divider></mat-divider>
 
-  <!-- Main view -->
-  <div fxFlex="85" [ngSwitch]="activeView">
-    <!-- TODO: Have the study ID be dynamically inserted -->
-    <response-study-table
-      *ngSwitchCase="'responses'"
-       [study]="activeStudy">
-    </response-study-table>
+      <mat-list-item>
+        <button mat-stroked-button class="nav-button" (click)="setActiveView('tags')">
+          Tags
+        </button>
+      </mat-list-item>
 
-    <user-study-control
-      *ngSwitchCase="'users'"
-      [study]="activeStudy!"></user-study-control>
+      <mat-divider></mat-divider>
 
-    <div *ngSwitchCase="'tags'">
-      <!-- TODO: Have this be a table view with an export option -->
-      <button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>
+      <mat-list-item>
+        <button mat-stroked-button class="nav-button" (click)="openStudySelectDialog()">
+          Change Study <mat-icon>swap_vert</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-list>
+
+    <!-- Main view -->
+    <div fxFlex="85" [ngSwitch]="activeView">
+      <!-- TODO: Have the study ID be dynamically inserted -->
+      <response-study-table
+        *ngSwitchCase="'responses'"
+         [study]="activeStudy">
+      </response-study-table>
+
+      <user-study-control
+        *ngSwitchCase="'users'"
+        [study]="activeStudy!"></user-study-control>
+
+      <div *ngSwitchCase="'tags'">
+        <!-- TODO: Have this be a table view with an export option -->
+        <button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>
+      </div>
     </div>
   </div>
-</div>
+</ng-template>

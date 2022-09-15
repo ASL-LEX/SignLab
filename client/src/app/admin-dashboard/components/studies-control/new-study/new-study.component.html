@@ -12,57 +12,59 @@
 
 
 <!-- Step Control buttons -->
-<div>
-  <button class="stepControl" mat-stroked-button (click)="stepPrevious()" [disabled]="selectedStepNumber == 1">Back</button>
-  <button class="stepControl" mat-stroked-button (click)="stepNextOrSubmit()"> {{ selectedStepNumber == maxSteps ? "Submit" : "Next" }} </button>
-</div>
+<div *ngIf="!studyCreated">
+  <div>
+    <button class="stepControl" mat-stroked-button (click)="stepPrevious()" [disabled]="selectedStepNumber == 1">Back</button>
+    <button class="stepControl" mat-stroked-button (click)="stepNextOrSubmit()"> {{ selectedStepNumber == maxSteps ? "Submit" : "Next" }} </button>
+  </div>
 
-<mat-stepper linear="true" *ngIf="!studyCreated">
-  <!-- Required Study Metadata -->
-  <mat-step label="Study Identification">
-    <study-required-info (requiredDataChange)="requiredDataChange($event)"></study-required-info>
-  </mat-step>
+  <mat-stepper linear="true" *ngIf="!studyCreated">
+    <!-- Required Study Metadata -->
+    <mat-step label="Study Identification">
+      <study-required-info (requiredDataChange)="requiredDataChange($event)"></study-required-info>
+    </mat-step>
 
-  <!-- Fields in the Tag From -->
-  <mat-step label="Construct Tagging Interface">
-    <!-- Form for the fields needed for each tag -->
-    <mat-card>
-      <mat-card-title>Tag Fields</mat-card-title>
-      <mat-card-content>
-        <div gdAreas="tagFieldOptions tagFields tagFields">
-          <!-- Sidebar for tag field options -->
-          <div gdArea="tagFieldOptions"
-               fxLayout="column"
-               fxLayoutGap="10px">
-            <button mat-stroked-button
-                    class="tagFieldButton"
-                    *ngFor="let field of tagFieldOptions"
-                    (click)="addTagField(field.type)">
-              <mat-icon>{{field.icon}}</mat-icon>{{field.name}}
-            </button>
-          </div>
+    <!-- Fields in the Tag From -->
+    <mat-step label="Construct Tagging Interface">
+      <!-- Form for the fields needed for each tag -->
+      <mat-card>
+        <mat-card-title>Tag Fields</mat-card-title>
+        <mat-card-content>
+          <div gdAreas="tagFieldOptions tagFields tagFields">
+            <!-- Sidebar for tag field options -->
+            <div gdArea="tagFieldOptions"
+                 fxLayout="column"
+                 fxLayoutGap="10px">
+              <button mat-stroked-button
+                      class="tagFieldButton"
+                      *ngFor="let field of tagFieldOptions"
+                      (click)="addTagField(field.type)">
+                <mat-icon>{{field.icon}}</mat-icon>{{field.name}}
+              </button>
+            </div>
 
-          <!-- Main view with the fields that will be used in the tag -->
-          <div gdArea="tagFields">
-            <div *ngFor="let field of tagFields; let idx=index">
-              <tag-field [field]="field"></tag-field>
-              <button mat-mini-fab (click)='removeField(idx)'><mat-icon>delete</mat-icon></button>
+            <!-- Main view with the fields that will be used in the tag -->
+            <div gdArea="tagFields">
+              <div *ngFor="let field of tagFields; let idx=index">
+                <tag-field [field]="field"></tag-field>
+                <button mat-mini-fab (click)='removeField(idx)'><mat-icon>delete</mat-icon></button>
+              </div>
             </div>
           </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card>
 
-    <div>
-      <button mat-stroked-button (click)="openTagFormPreview()">Preview</button>
-    </div>
-  </mat-step>
+      <div>
+        <button mat-stroked-button (click)="openTagFormPreview()">Preview</button>
+      </div>
+    </mat-step>
 
-  <!-- Selecting Training Responses -->
-  <mat-step label="Select Tag Training Items">
-    <response-new-study
-      (markedDisabledChange)="markedDisabledChange($event)"
-      (markedTrainingChange)="markedTrainingChange($event)"
-    ></response-new-study>
-  </mat-step>
-</mat-stepper>
+    <!-- Selecting Training Responses -->
+    <mat-step label="Select Tag Training Items">
+      <response-new-study
+        (markedDisabledChange)="markedDisabledChange($event)"
+        (markedTrainingChange)="markedTrainingChange($event)"
+      ></response-new-study>
+    </mat-step>
+  </mat-stepper>
+</div>

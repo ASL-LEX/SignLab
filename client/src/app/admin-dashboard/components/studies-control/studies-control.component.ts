@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StudyService } from '../../../core/services/study.service';
 import { StudySelectDialog } from './study-select-dialog.component';
 import { Study } from 'shared/dtos/study.dto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'studies-control',
@@ -17,7 +18,9 @@ export class StudiesControlComponent {
   /** Which study control view is active */
   activeView: 'responses' | 'users' | 'tags' = 'responses';
 
-  constructor(private dialog: MatDialog, private studyService: StudyService) {
+  constructor(private dialog: MatDialog,
+              private studyService: StudyService,
+              private router: Router) {
     this.studyService.getStudies().then((studies) => {
       this.studies = studies;
       if (this.studies.length > 0) {
@@ -48,6 +51,11 @@ export class StudiesControlComponent {
           this.activeStudy = selectedStudy.data;
         }
       });
+  }
+
+  /** Navigate to the new study page */
+  newStudyNav() {
+    this.router.navigate(['/new_study']);
   }
 
   /**
