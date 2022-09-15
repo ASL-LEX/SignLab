@@ -16,37 +16,38 @@
       <div *ngIf="activeView == 'info'">
         <!-- Study Selection -->
         <button mat-stroked-button (click)="openStudySelectDialog()">Change Study</button>
+
         <div fxLayout="row" fxLayoutAlign="space-around center">
+          <!-- Enter Training View, shown when the user doesn't have access -->
+          <div *ngIf="!userStudy!.hasAccessToStudy">
+            <h2> Study Training </h2>
 
-          <!-- Tagging Information View -->
-          <div>
-            <h2>Study Tagging</h2>
-
-            <!-- Message displayed if the user cannot tag in this study -->
-            <p *ngIf="!userStudy!.hasAccessToStudy">
-              You do not have access to tag in this study. Make sure you have
-              completed training and have been given access by an administator.
-            </p>
-
-            <!-- Navigation into tagging -->
-            <button mat-stroked-button
-              (click)="setView('tagging')"
-              [disabled]="!userStudy!.hasAccessToStudy">Enter Tagging</button>
-          </div>
-
-          <!-- Training Information View -->
-          <div>
-            <h2>Study Training</h2>
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
 
             <!-- Message displayed when training is complete -->
             <p *ngIf="userStudy!.trainingResponseStudies.length == 0">
-              Training complete, notify your administrator of the completion
-              of your training.
+              Training Complete! Reach out to your study administrator to get access to tagging
             </p>
 
             <button mat-stroked-button
               (click)="setView('training')"
               [disabled]="userStudy!.trainingResponseStudies.length == 0">Enter Training</button>
+          </div>
+
+          <!-- Enter Tagging View, shown when the user has access to tagging -->
+          <div *ngIf="userStudy.hasAccessToStudy">
+            <h2> Study Tagging </h2>
+
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
+
+            <!-- Navigation into tagging -->
+            <button mat-stroked-button
+              (click)="setView('tagging')"
+              [disabled]="!userStudy!.hasAccessToStudy">Enter Tagging</button>
           </div>
         </div>
       </div>

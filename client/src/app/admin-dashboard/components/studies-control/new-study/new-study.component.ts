@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { StudyService } from '../../../../core/services/study.service';
 import { TagField, TagFieldType } from '../../../../models/tag-field';
 import { NewStudyMeta } from '../../../models/new-study';
@@ -16,13 +16,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
 import { JsonSchema } from '@jsonforms/core';
 import { Router } from '@angular/router';
+import {MatStepper} from '@angular/material/stepper';
 
 @Component({
   selector: 'new-study',
   templateUrl: './new-study.component.html',
   styleUrls: ['./new-study.component.css'],
 })
-export class NewStudyComponent {
+export class NewStudyComponent implements AfterViewInit {
+  /** Used for the control of the step logic */
+  @ViewChild(MatStepper) matStepper: MatStepper;
+  selectedStepNumber = 1;
+  maxSteps: number = 0;
+
   /** The study metadata information */
   studyMetadata: NewStudyMeta | null = null;
   /** Handles changes to study metadata */
@@ -74,6 +80,10 @@ export class NewStudyComponent {
     private dialog: MatDialog,
     private router: Router
   ) {}
+
+  ngAfterViewInit(): void {
+    this.maxSteps = this.matStepper.steps.length;
+  }
 
   /** Add a field to the tag */
   addTagField(tagFieldType: TagFieldType) {
@@ -152,6 +162,24 @@ export class NewStudyComponent {
 
   redirectToAdmin() {
     this.router.navigate(['/admin']);
+  }
+
+  stepPrevious() {
+    this.matStepper.previous();
+    this.selectedStepNumber -= 1;
+  }
+
+  /**
+   * Handle either moving the process forward or submitting the data if
+   * the last aspect of the form has been complete
+   */
+  stepNextOrSubmit() {
+    if (this.selectedStepNumber < this.maxSteps) {
+      this.matStepper.next();
+      this.selectedStepNumber += 1;
+    } else {
+      this.makeNewStudy();
+    }
   }
 
   /** Make the JSON Forms schema */
