@@ -1,4 +1,7 @@
+import { AuthResponse } from 'shared/dtos/auth.dto';
+import { User } from 'shared/dtos/user.dto';
 import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -11,6 +14,8 @@ describe('AuthService', () => {
   const invalidUsername = 'bad';
   const invalidPassword = 'not';
 
+  let tokenSpy: jasmine.SpyObj<TokenService>;
+
   beforeEach(() => {
     // Make spy for the authentication service, this one will always not
     // authenticate
@@ -19,12 +24,17 @@ describe('AuthService', () => {
       throw new Error();
     });
 
+    tokenSpy = jasmine.createSpyObj('TokenService',
+      ['token', 'storeAuthInformation', 'hasAuthInfo', 'removeAuthInformation'],
+      { user: {} });
+
     // Create unit under test
-    service = new AuthService(spy);
+    service = new AuthService(spy, tokenSpy);
   });
 
   // When initially setup, the system is not authenticated
   it('should not be authorized on setup', () => {
+    tokenSpy.hasAuthInfo.and.returnValue(false);
     expect(service.isAuthenticated()).toEqual(false);
   });
 
@@ -43,6 +53,8 @@ describe('AuthService', () => {
     expect(result).toEqual(null);
 
     // At this point, should still not be authenticated
+    tokenSpy.hasAuthInfo.and.returnValue(false);
+    expect(tokenSpy.storeAuthInformation).not.toHaveBeenCalled();
     expect(service.isAuthenticated()).toEqual(false);
   });
 
@@ -50,14 +62,30 @@ describe('AuthService', () => {
   it('should authorize valid credentials', async () => {
     // Make a spy that will authenticate
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
-    spy.post.and.returnValue({
-      email: 'bob@bu.edu',
-      name: 'bob',
-      roles: new Map<string, boolean>(),
-      username: 'bob',
-      _id: 'sadlkfj',
-    });
-    service = new AuthService(spy);
+    const data: AuthResponse = {
+      user: {
+        email: 'bob@bu.edu',
+        name: 'bob',
+        password: 'nothing',
+        roles: {
+          admin: false,
+          tagging: false,
+          recording: false,
+          accessing: false,
+          owner: false,
+        },
+        username: 'bob',
+        _id: 'sadlkfj',
+      },
+      token: 'some-fake-token'
+    };
+    spy.post.and.returnValue(data);
+
+    tokenSpy.storeAuthInformation.and.callFake((param) => { return param });
+    tokenSpy.hasAuthInfo.and.returnValue(true);
+    (Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<() => User>).and.returnValue(data.user);
+
+    service = new AuthService(spy, tokenSpy);
 
     const result = await service.authenticate(validUsername, validPassword);
     expect(result).not.toEqual(null);
@@ -72,7 +100,7 @@ describe('AuthService', () => {
     // Make a spy that "knows" of a used email and username
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
     spy.get.and.returnValue({ username: false, email: false });
-    service = new AuthService(spy);
+    service = new AuthService(spy, tokenSpy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
     expect(result).toEqual({ username: false, email: false });
@@ -83,7 +111,7 @@ describe('AuthService', () => {
     // Make a spy that believe every username and email is available
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
     spy.get.and.returnValue({ username: true, email: true });
-    service = new AuthService(spy);
+    service = new AuthService(spy, tokenSpy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
     expect(result).toEqual({ username: true, email: true });
@@ -92,30 +120,35 @@ describe('AuthService', () => {
   // User signup should return valid user
   it('should be able to get back a valid user on signup', async () => {
     // Make a spy that will return back an expected user
-    const user = {
-      email: 'bob@bu.edu',
-      name: 'bob',
-      password: 'hi',
-      roles: {
-        admin: false,
-        tagging: false,
-        recording: false,
-        accessing: false,
-        owner: false,
+    const authResponse: AuthResponse = {
+      user: {
+        email: 'bob@bu.edu',
+        name: 'bob',
+        password: 'hi',
+        roles: {
+          admin: false,
+          tagging: false,
+          recording: false,
+          accessing: false,
+          owner: false,
+        },
+        username: 'bob',
+        _id: '1',
       },
-      username: 'bob',
-      _id: '1',
+      token: 'some-fake-token'
     };
+
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
-    spy.post.and.returnValue(user);
-    service = new AuthService(spy);
+    spy.post.and.returnValue(authResponse);
+    service = new AuthService(spy, tokenSpy);
 
     const result = await service.signup(
-      user.name,
-      user.email,
-      user.username,
+      authResponse.user.name,
+      authResponse.user.email,
+      authResponse.user.username,
       'bobby'
     );
-    expect(result).toEqual(user);
+    expect(tokenSpy.storeAuthInformation).toHaveBeenCalledWith(authResponse);
+    expect(result).toEqual(authResponse.user);
   });
 });

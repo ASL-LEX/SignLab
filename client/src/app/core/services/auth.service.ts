@@ -66,6 +66,7 @@ export class AuthService {
       this.tokenService.storeAuthInformation(response);
       return this.user;
     } catch (error) {
+      console.log(error);
       console.debug(`Failed to authenticate user`);
       return null;
     }
@@ -140,6 +141,6 @@ export class AuthService {
    * Sign out of the system.
    */
   public async signOut() {
-    // TODO: Implement sign out logic
+    this.tokenService.removeAuthInformation();
   }
 }

@@ -8,6 +8,7 @@
 * Create AuthResponse for passing JWT to client
 * Moved and improved readability of navigation elements
 * Add specific UI for the study control page when no studies exist yet
+* Logout ability
 
 ## 0.1.1
 

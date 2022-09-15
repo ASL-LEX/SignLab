@@ -9,10 +9,14 @@
 <ng-template #routerView>
   <mat-toolbar class="navbar">
     <div style="color: #fafafa">ASL-LEX SignLab</div>
-    <a mat-button routerLink='/tag' routerLinkActive="active-link">Tagging</a>
-    <a *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
+    <a class="nav-button" mat-button routerLink='/tag' routerLinkActive="active-link">Tagging</a>
+    <a class="nav-button" *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
        mat-button routerLink='/admin' routerLinkActive="active-link">Admin</a>
-    <a mat-button routerLink='/auth' routerLinkActive="active-link">Login</a>
+
+    <!-- Login vs Logout Button -->
+    <a class="nav-button" mat-button routerLink='/auth' routerLinkActive="active-link" *ngIf="!authService.isAuthenticated()">Login</a>
+    <button class="nav-button" mat-button *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</button>
+
   </mat-toolbar>
 
   <!-- The routed views render in the <router-outlet>-->

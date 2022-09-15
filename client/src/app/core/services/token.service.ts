@@ -39,6 +39,14 @@ export class TokenService {
   }
 
   /**
+   * Remove the stored authentication information
+   */
+  removeAuthInformation(): void {
+    localStorage.removeItem(this.AUTH_RESPONSE_KEY);
+    this.authInformation = null;
+  }
+
+  /**
    * Try to load the credentials from storage, if nothing is present, returns
    * null.
    */

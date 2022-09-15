@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
 import { BackendService } from './core/services/backend.service';
 
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit {
   constructor(
     private ngZone: NgZone,
     private backend: BackendService,
-    public authService: AuthService
+    public authService: AuthService,
+    private router: Router
   ) {
     this.setupComplete = this.setupComplete.bind(this);
   }
@@ -35,5 +37,13 @@ export class AppComponent implements OnInit {
    */
   setupComplete() {
     this.ngZone.run(() => (this.firstTimeSetup = false));
+  }
+
+  /**
+   * Logout the user and re-direct to the login page
+   */
+  logout(): void {
+    this.authService.signOut();
+    this.router.navigate(['/auth']);
   }
 }
