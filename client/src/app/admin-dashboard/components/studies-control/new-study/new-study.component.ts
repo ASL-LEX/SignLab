@@ -82,7 +82,6 @@ export class NewStudyComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    console.log(this.matStepper.steps);
     this.maxSteps = this.matStepper.steps.length;
   }
 
