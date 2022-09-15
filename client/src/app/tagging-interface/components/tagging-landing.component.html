@@ -22,6 +22,10 @@
           <div *ngIf="!userStudy!.hasAccessToStudy">
             <h2> Study Training </h2>
 
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
+
             <!-- Message displayed when training is complete -->
             <p *ngIf="userStudy!.trainingResponseStudies.length == 0">
               Training Complete! Reach out to your study administrator to get access to tagging
@@ -35,6 +39,10 @@
           <!-- Enter Tagging View, shown when the user has access to tagging -->
           <div *ngIf="userStudy.hasAccessToStudy">
             <h2> Study Tagging </h2>
+
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
 
             <!-- Navigation into tagging -->
             <button mat-stroked-button
