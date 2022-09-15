@@ -85,25 +85,11 @@ describe('TaggingLanding', () => {
     // Should have a message explaining to the user they don't have access
     const message = compiled.querySelector('div p');
     expect(message.textContent).toContain(
-      'You do not have access to tag in this study.'
+      'Training Complete! Reach out to your study administrator to get access to tagging'
     );
 
     // The button to access the tagging interface should be disabled
     const button = compiled.querySelectorAll('mat-card-content div button')[1];
-    expect(button.getAttribute('disabled')).toEqual('true');
-  });
-
-  it('should handle when a user has completed the training', () => {
-    const compiled = taggingLanding.nativeElement;
-
-    // Should have a message explaining to the user the next steps
-    const message = compiled.querySelectorAll('div p')[1];
-    expect(message.textContent).toContain(
-      'Training complete, notify your administrator'
-    );
-
-    // The button to access the training should be disabled
-    const button = compiled.querySelectorAll('mat-card-content div button')[2];
     expect(button.getAttribute('disabled')).toEqual('true');
   });
 
@@ -149,7 +135,7 @@ describe('TaggingLanding', () => {
     const compiled = taggingLanding.nativeElement;
 
     // Should be able to select the enter training button
-    const button = compiled.querySelectorAll('mat-card-content div button')[2];
+    const button = compiled.querySelectorAll('mat-card-content div button')[1];
     console.log(button);
     expect(button.getAttribute('disabled')).toBeNull();
   });

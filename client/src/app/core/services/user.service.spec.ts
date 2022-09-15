@@ -58,12 +58,12 @@ describe('UserService', () => {
     // Test adding a role to the user
     let result = await service.changeRole(exampleUserData[0], 'tagging', true);
     expect(result).toBeTrue();
-    expect(spy.put).toHaveBeenCalledWith('api/users/tagging/10', null);
+    expect(spy.put).toHaveBeenCalledWith('api/users/tagging/10', {}, { provideToken: true });
 
     // Test deleting a role from the user
     result = await service.changeRole(exampleUserData[0], 'tagging', false);
     expect(result).toBeTrue();
-    expect(spy.delete).toHaveBeenCalledWith('api/users/tagging/10');
+    expect(spy.delete).toHaveBeenCalledWith('api/users/tagging/10', { provideToken: true });
   });
 
   // Errors should return false
