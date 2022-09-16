@@ -1,6 +1,6 @@
 # Changelog
 
-## x.x.x
+## 0.2.0
 
 ### Changed
 
@@ -9,6 +9,10 @@
 * Moved and improved readability of navigation elements
 * Add specific UI for the study control page when no studies exist yet
 * Logout ability
+
+### Fixed
+
+* Non-admin users can now access the studies and enter tagging
 
 ## 0.1.1
 
