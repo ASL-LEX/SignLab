@@ -9,6 +9,7 @@
 * Moved and improved readability of navigation elements
 * Add specific UI for the study control page when no studies exist yet
 * Logout ability
+* Have thumbnail shown for the response video preview and play the response video on hover
 
 ### Fixed
 
