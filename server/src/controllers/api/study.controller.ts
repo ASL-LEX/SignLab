@@ -31,7 +31,6 @@ export class StudyController {
    * Get all of the studies
    */
   @Get('/')
-  @Auth('admin')
   async getStudies(): Promise<Study[]> {
     return this.studyService.getStudies();
   }
