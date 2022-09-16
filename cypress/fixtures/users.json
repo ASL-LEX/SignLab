@@ -10,5 +10,11 @@
     "email": "sam@bu.edu",
     "username": "sam",
     "password": "sammy"
+  },
+  "nonAdmin": {
+    "name": "basic",
+    "email": "basic@bu.edu",
+    "username": "basic",
+    "password": "basic"
   }
 }
