@@ -1,3 +1,5 @@
+import users from '../fixtures/users.json';
+
 const uploadResponsesButton = '[data-cy="uploadResponsesButton"]';
 const uploadCSVButton = '[data-cy="uploadCSVButton"]';
 const uploadZIPButton = '[data-cy="uploadZIPButton"]';
@@ -13,7 +15,7 @@ describe('Upload CSV', () => {
 
     // Navigate to the response interface and select the upload option
     cy
-      .login()
+      .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
       .contains('Responses')
@@ -105,7 +107,7 @@ describe('Upload Response ZIP', () => {
     // Navigate to the response interface and select the upload option
     // then upload the small dataset
     cy
-      .login()
+      .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
       .contains('Responses')

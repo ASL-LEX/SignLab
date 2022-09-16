@@ -11,6 +11,12 @@ declare namespace Cypress {
     /**
      * Make a login request against the backend
      */
-    login(): Chainable<any>;
+    login(user: { username: string, password: string }): Chainable<any>;
+    /**
+     * Create a new study.
+     *
+     * The data provided should be `StudyCreation` to work
+     */
+    makeStudy(studyCreation: any): Chainable<any>;
   }
 }

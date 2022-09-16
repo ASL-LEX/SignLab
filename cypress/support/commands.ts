@@ -12,15 +12,17 @@ Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'userstudies' });
 });
 
-Cypress.Commands.add('login', () => {
+Cypress.Commands.add('login', (user: { username: string, password: string }) => {
   // Make the login request and insert into local storage
+  console.log(user);
   cy
     .request({
       method: 'POST',
       url: 'api/auth/login',
-      body: { username: user.existingUser.username, password: user.existingUser.password }
+      body: { username: user.username, password: user.password }
     })
     .then(response => {
+      Cypress.env('token', response.body.token);
       window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(response.body));
     });
 });
@@ -33,10 +35,26 @@ Cypress.Commands.add('firstTimeSetup', () => {
     body: responseMetadata
   });
 
-  // Make the initial user
+  // Make the initial user and a non-admin user
+  cy
+    .request({
+      method: 'POST',
+      url: 'api/auth/signup',
+      body: user.existingUser
+    })
+    .request({
+      method: 'POST',
+      url: 'api/auth/signup',
+      body: user.nonAdmin
+    });
+});
+
+Cypress.Commands.add('makeStudy', (studyCreation: any) => {
+  const authorization = `Bearer ${Cypress.env('token')}`;
   cy.request({
     method: 'POST',
-    url: 'api/auth/signup',
-    body: user.existingUser
+    url: 'api/study/create',
+    body: studyCreation,
+    headers: { authorization }
   });
 });

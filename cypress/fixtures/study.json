@@ -1,0 +1,15 @@
+{
+  "noTraining": {
+    "study": {
+      "name": "Default",
+      "description": "Test Study",
+      "instructions": "Complete the study",
+      "tagSchema": {
+        "dataSchema": {},
+        "uiSchema": {}
+      }
+    },
+    "trainingResponses": [],
+    "disabledResponses": []
+  }
+}
