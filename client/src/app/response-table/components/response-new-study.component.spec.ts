@@ -9,6 +9,7 @@ import {
 import { ResponseNewStudyTable } from './response-new-study.component';
 import { SharedModule } from '../../shared/shared.module';
 import { ResponseTableCoreComponent } from './response-table-core.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ResponseNewStudyTable', () => {
   const exampleResponseData: Response[] = [
@@ -62,7 +63,7 @@ describe('ResponseNewStudyTable', () => {
     );
 
     TestBed.configureTestingModule({
-      imports: [SharedModule],
+      imports: [SharedModule, BrowserAnimationsModule],
       declarations: [ResponseNewStudyTable, ResponseTableCoreComponent],
       providers: [{ provide: ResponseService, useValue: responseSpy }],
     });
