@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
 import {
@@ -40,6 +40,8 @@ export class ResponseTableCoreComponent implements OnInit {
   /** Emits changes to when the part of training set change takes place */
   @Output() partOfTrainingChange =
     new EventEmitter<ResponseTableToggleChange>();
+  /** The different displayed videos */
+  @ViewChildren('previewVideo', { read: ElementRef }) videos: QueryList<ElementRef>;
 
   constructor(private dialog: MatDialog) {}
 
@@ -58,5 +60,19 @@ export class ResponseTableCoreComponent implements OnInit {
     this.dialog.open(ResponseViewDialog, {
       data: { videoURL: videoURL },
     });
+  }
+
+  /** Play the video associated with the given index */
+  playVideo(index: number) {
+    const video = this.videos.get(index);
+    if (!video) { return; }
+    video.nativeElement.currentTime = 0;
+    video.nativeElement.play();
+  }
+
+  /** Stop the video */
+  stopVideo(index: number) {
+    const video = this.videos.get(index);
+    video?.nativeElement.pause();
   }
 }
