@@ -18,6 +18,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     CommonModule,
     MatProgressBarModule,
+    MatPaginatorModule,
   ],
   exports: [
     MatButtonModule,
@@ -61,6 +63,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule,
     CommonModule,
     MatProgressBarModule,
+    MatPaginatorModule,
   ],
 })
 export class MaterialModule {}

@@ -1,10 +1,12 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
 import {
   ResponseTableElement,
   ResponseTableToggleChange,
 } from '../models/response-table-element';
+import { MatPaginator } from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 /**
  * The ResponseTable displays response information and controls in a tabular
@@ -20,7 +22,7 @@ import {
   templateUrl: './response-table-core.component.html',
   styleUrls: ['./response-table-core.component.css'],
 })
-export class ResponseTableCoreComponent implements OnInit {
+export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * The columns to show, these are the default options showed in every table
    * view
@@ -42,8 +44,14 @@ export class ResponseTableCoreComponent implements OnInit {
     new EventEmitter<ResponseTableToggleChange>();
   /** The different displayed videos */
   @ViewChildren('previewVideo', { read: ElementRef }) videos: QueryList<ElementRef>;
+  /** Controls the page based access */
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  /** The paged data */
+  dataSource: MatTableDataSource<ResponseTableElement>;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) {
+    this.dataSource = new MatTableDataSource();
+  }
 
   ngOnInit(): void {
     // Determine which additional controls should be displayed
@@ -52,6 +60,16 @@ export class ResponseTableCoreComponent implements OnInit {
     }
     if (this.displayStudyEnableControls) {
       this.displayedColumns.push('studyEnableControls');
+    }
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.responseData) {
+      this.dataSource.data = changes.responseData.currentValue;
     }
   }
 

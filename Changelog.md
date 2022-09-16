@@ -2,6 +2,10 @@
 
 ## 0.2.0
 
+### Added
+
+* Paging of the response table view
+
 ### Changed
 
 * Using JWT for authentication
