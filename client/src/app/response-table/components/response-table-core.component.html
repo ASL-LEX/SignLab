@@ -15,7 +15,7 @@
         <div class="video-preview">
           <video (mouseenter)="playVideo(idx)"
                  (mouseleave)="stopVideo(idx)"
-                 (loadedmetadata)="metadataLoaded(idx)"
+                 (durationchange)="loadedVideoData(idx)"
                  preload="metadata"
                  loop
                  #previewVideo>

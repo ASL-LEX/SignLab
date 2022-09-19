@@ -99,22 +99,22 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
 
     // Pause and reset preview
     video.nativeElement.pause();
-    this.setToMiddleFrame(index);
+    this.setToMiddleFrame(this.videos.get(index));
   }
 
-  metadataLoaded(index: number) {
-    this.setToMiddleFrame(index);
+  loadedVideoData(index: number) {
+    this.setToMiddleFrame(this.videos.get(index));
   }
 
   /**
    * Set the video at the given index in `this.videos` to play at the
    * given location.
    */
-  async setToMiddleFrame(videoIdx: number) {
-    const video = this.videos.get(videoIdx);
+  async setToMiddleFrame(video: ElementRef | undefined) {
     if (!video) { return; }
 
     const duration = await this.getDuration(video);
+    if (!isFinite(duration)) { return; }
 
     const middleFrame = duration / 2;
     video.nativeElement.currentTime = middleFrame;
@@ -135,13 +135,13 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     let duration = video.nativeElement.duration;
     if (isNaN(duration)) { return NaN; }
 
+    const maxAttempts = 5;
+    let attemptNum = 0;
+
     // If the duration is infinity, this is part of a Chrome bug that causes
     // some durations to not load for audio and video. The StackOverflow
     // link below discusses the issues and possible solutions
-    if (duration == Infinity) {
-      // First, set the current time to a large number
-      video.nativeElement.currentTime = 1e101;
-
+    if (!isFinite(duration) && attemptNum < maxAttempts) {
       // Then, wait for the update event to be triggered
       await new Promise<void>((resolve, _reject) => {
         video.nativeElement.ontimeupdate = () => {
@@ -150,11 +150,14 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
           // Reset the time
           video.nativeElement.currentTime = 0;
           resolve();
-        };
-      });
+        }
+
+        video.nativeElement.currentTime = 1e101;
+      }),
 
       // Now try to get the duration again
-      return video.nativeElement.duration;
+      duration = video.nativeElement.duration;
+      attemptNum++;
     }
 
     // Not dealing with the bug, just returning the duration
