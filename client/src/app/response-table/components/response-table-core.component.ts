@@ -82,15 +82,40 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
 
   /** Play the video associated with the given index */
   playVideo(index: number) {
+    // Get the video which was hovered over
     const video = this.videos.get(index);
     if (!video) { return; }
-    video.nativeElement.currentTime = 0;
+
+    video.nativeElement.curentTime = 0;
     video.nativeElement.play();
   }
 
   /** Stop the video */
   stopVideo(index: number) {
+    // Get the video that is no longer being hovered over
     const video = this.videos.get(index);
-    video?.nativeElement.pause();
+    if (!video) { return; }
+
+    video.nativeElement.pause();
+    this.setToMiddleFrame(index);
+  }
+
+  metadataLoaded(index: number) {
+    this.setToMiddleFrame(index);
+  }
+
+  /**
+   * Set the video at the given index in `this.videos` to play at the
+   * given location.
+   */
+  setToMiddleFrame(videoIdx: number) {
+    const video = this.videos.get(videoIdx);
+    if (!video) { return; }
+
+    const duration = video.nativeElement.duration;
+    if (!isFinite(duration)) { return;; }
+
+    const middleFrame = duration / 2;
+    video.nativeElement.currentTime = middleFrame;
   }
 }

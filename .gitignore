@@ -57,3 +57,4 @@ Thumbs.db
 
 # Secret
 /deployment.env
+/.env.sandbox
