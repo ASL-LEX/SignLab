@@ -86,6 +86,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     const video = this.videos.get(index);
     if (!video) { return; }
 
+    // Play the video from the begining
     video.nativeElement.curentTime = 0;
     video.nativeElement.play();
   }
@@ -96,6 +97,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     const video = this.videos.get(index);
     if (!video) { return; }
 
+    // Pause and reset preview
     video.nativeElement.pause();
     this.setToMiddleFrame(index);
   }
@@ -108,14 +110,54 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
    * Set the video at the given index in `this.videos` to play at the
    * given location.
    */
-  setToMiddleFrame(videoIdx: number) {
+  async setToMiddleFrame(videoIdx: number) {
     const video = this.videos.get(videoIdx);
     if (!video) { return; }
 
-    const duration = video.nativeElement.duration;
-    if (!isFinite(duration)) { return;; }
+    const duration = await this.getDuration(video);
 
     const middleFrame = duration / 2;
     video.nativeElement.currentTime = middleFrame;
+  }
+
+  /**
+   * This function provides a wrapper around access the duration of a video.
+   * The wrapper handles dealing with a bug in Chrome where certain videos
+   * don't provide a value duration.
+   *
+   * Links are provided below which explain the issue and the work around.
+   *
+   * https://stackoverflow.com/questions/21522036/html-audio-tag-duration-always-infinity
+   * https://www.thecodehubs.com/infinity-audio-video-duration-issue-fixed-using-javascript/
+   */
+  private async getDuration(video: ElementRef): Promise<number> {
+    // Get the duration and simply return if the duration is NaN
+    let duration = video.nativeElement.duration;
+    if (isNaN(duration)) { return NaN; }
+
+    // If the duration is infinity, this is part of a Chrome bug that causes
+    // some durations to not load for audio and video. The StackOverflow
+    // link below discusses the issues and possible solutions
+    if (duration == Infinity) {
+      // First, set the current time to a large number
+      video.nativeElement.currentTime = 1e101;
+
+      // Then, wait for the update event to be triggered
+      await new Promise<void>((resolve, _reject) => {
+        video.nativeElement.ontimeupdate = () => {
+          // Remove the callback
+          video.nativeElement.ontimeupdate = () => {};
+          // Reset the time
+          video.nativeElement.currentTime = 0;
+          resolve();
+        };
+      });
+
+      // Now try to get the duration again
+      return video.nativeElement.duration;
+    }
+
+    // Not dealing with the bug, just returning the duration
+   return duration;
   }
 }
