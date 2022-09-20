@@ -25,6 +25,7 @@ import { ResponseStudyService } from '../../services/responsestudy.service';
 import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 import { Auth } from '../../guards/auth.guard';
 import { TagService } from '../../services/tag.service';
+import { UserStudyService } from '../../services/userstudy.service';
 
 @Controller('/api/response')
 export class ResponseController {
@@ -34,7 +35,8 @@ export class ResponseController {
     private responseUploadService: ResponseUploadService,
     private studyService: StudyService,
     private responseStudyService: ResponseStudyService,
-    private tagService: TagService
+    private tagService: TagService,
+    private userStudyService: UserStudyService
   ) {}
 
   /**
@@ -234,6 +236,18 @@ export class ResponseController {
     const response = await this.responseService.find(responseID);
     if (!response) {
       throw new HttpException(`Response does not exist with that ID: ${responseID}`, HttpStatus.BAD_REQUEST);
+    }
+
+    // First, handle the case that the response is part of the training set,
+    // this will remove the corresponding response studies from the list of
+    // training set
+    const responseStudies = await this.responseStudyService.findMany(response);
+    for (const responseStudy of responseStudies) {
+      // If it is part of training, remove it from the cooresponding
+      // UserStudies training set
+      if (responseStudy.isUsedForTraining) {
+        this.userStudyService.removeTraining(responseStudy);
+      }
     }
 
     // Delete any tag related to the response, remove the relation between
