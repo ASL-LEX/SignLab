@@ -26,6 +26,15 @@ export class ResponsePreview implements OnDestroy {
   @Input() responseElem: ResponseTableElement;
   @ViewChild('previewVideo') video: ElementRef;
 
+  /**
+   * There is a performance issue where the video elements are not cleaned up
+   * by default. Thus doing things like changing page with video elements
+   * will cause memory usage to grow. This explicitly clears out the
+   * video.
+   *
+   * See
+   * https://stackoverflow.com/questions/31078061/many-video-tags-on-page-in-single-page-application-angular-makes-page-frozen
+   */
   ngOnDestroy(): void {
     if (!this.video) { return; }
 
