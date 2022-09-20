@@ -1,4 +1,17 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  OnInit,
+  ElementRef,
+  EventEmitter,
+  QueryList,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+  ViewChildren,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
 import {
@@ -78,89 +91,5 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     this.dialog.open(ResponseViewDialog, {
       data: { videoURL: videoURL },
     });
-  }
-
-  /** Play the video associated with the given index */
-  playVideo(index: number) {
-    // Get the video which was hovered over
-    const video = this.videos.get(index);
-    if (!video) { return; }
-
-    // Play the video from the begining
-    video.nativeElement.curentTime = 0;
-    video.nativeElement.play();
-  }
-
-  /** Stop the video */
-  stopVideo(index: number) {
-    // Get the video that is no longer being hovered over
-    const video = this.videos.get(index);
-    if (!video) { return; }
-
-    // Pause and reset preview
-    video.nativeElement.pause();
-    this.setToMiddleFrame(this.videos.get(index));
-  }
-
-  loadedVideoData(index: number) {
-    this.setToMiddleFrame(this.videos.get(index));
-  }
-
-  /**
-   * Set the video at the given index in `this.videos` to play at the
-   * given location.
-   */
-  async setToMiddleFrame(video: ElementRef | undefined) {
-    if (!video) { return; }
-
-    const duration = await this.getDuration(video);
-    if (!isFinite(duration)) { return; }
-
-    const middleFrame = duration / 2;
-    video.nativeElement.currentTime = middleFrame;
-  }
-
-  /**
-   * This function provides a wrapper around access the duration of a video.
-   * The wrapper handles dealing with a bug in Chrome where certain videos
-   * don't provide a value duration.
-   *
-   * Links are provided below which explain the issue and the work around.
-   *
-   * https://stackoverflow.com/questions/21522036/html-audio-tag-duration-always-infinity
-   * https://www.thecodehubs.com/infinity-audio-video-duration-issue-fixed-using-javascript/
-   */
-  private async getDuration(video: ElementRef): Promise<number> {
-    // Get the duration and simply return if the duration is NaN
-    let duration = video.nativeElement.duration;
-    if (isNaN(duration)) { return NaN; }
-
-    const maxAttempts = 5;
-    let attemptNum = 0;
-
-    // If the duration is infinity, this is part of a Chrome bug that causes
-    // some durations to not load for audio and video. The StackOverflow
-    // link below discusses the issues and possible solutions
-    if (!isFinite(duration) && attemptNum < maxAttempts) {
-      // Then, wait for the update event to be triggered
-      await new Promise<void>((resolve, _reject) => {
-        video.nativeElement.ontimeupdate = () => {
-          // Remove the callback
-          video.nativeElement.ontimeupdate = () => {};
-          // Reset the time
-          video.nativeElement.currentTime = 0;
-          resolve();
-        }
-
-        video.nativeElement.currentTime = 1e101;
-      }),
-
-      // Now try to get the duration again
-      duration = video.nativeElement.duration;
-      attemptNum++;
-    }
-
-    // Not dealing with the bug, just returning the duration
-   return duration;
   }
 }
