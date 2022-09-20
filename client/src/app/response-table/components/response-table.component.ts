@@ -31,11 +31,11 @@ export class ResponseTable {
     });
   }
 
-  async handleDeletion(responseElem: ResponseTableElement) {
+  handleDeletion(responseElem: ResponseTableElement) {
     this.responseService.delete(responseElem.response);
 
-    // TODO: Update instance variable `responseData` to represent the
-    //       deletion without reloading the whole dataset
-    this.loadResponses();
+    this.responseData = this.responseData.filter(elem => {
+      return elem.response._id != responseElem.response._id;
+    });
   }
 }

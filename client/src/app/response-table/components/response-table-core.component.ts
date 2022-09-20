@@ -3,16 +3,12 @@ import {
   Input,
   Output,
   OnInit,
-  ElementRef,
   EventEmitter,
-  QueryList,
   ViewChild,
   AfterViewInit,
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ResponseViewDialog } from './response-view-dialog.component';
 import {
   ResponseTableElement,
   ResponseTableToggleChange,
@@ -62,7 +58,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
   /** The paged data */
   dataSource: MatTableDataSource<ResponseTableElement>;
 
-  constructor(private dialog: MatDialog) {
+  constructor() {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -89,10 +85,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     }
   }
 
-  /** Handles displaying the response video in a popup dialog */
-  viewResponse(videoURL: string): void {
-    this.dialog.open(ResponseViewDialog, {
-      data: { videoURL: videoURL },
-    });
+  handleDeletion(responseElem: ResponseTableElement) {
+    this.deleteResponse.emit(responseElem);
   }
 }
