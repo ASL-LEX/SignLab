@@ -27,6 +27,8 @@ export class ResponsePreview implements OnDestroy {
   @ViewChild('previewVideo') video: ElementRef;
 
   ngOnDestroy(): void {
+    if (!this.video) { return; }
+
     this.video.nativeElement.pause();
     this.video.nativeElement.src = '';
     // this.video.nativeElement.empty();
