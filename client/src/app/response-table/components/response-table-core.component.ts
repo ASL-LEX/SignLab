@@ -3,16 +3,12 @@ import {
   Input,
   Output,
   OnInit,
-  ElementRef,
   EventEmitter,
-  QueryList,
   ViewChild,
   AfterViewInit,
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ResponseViewDialog } from './response-view-dialog.component';
 import {
   ResponseTableElement,
   ResponseTableToggleChange,
@@ -47,18 +43,22 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
   @Input() displayStudyEnableControls: boolean;
   /** Determine if the training enable controls should be provided */
   @Input() displayStudyTrainingControls: boolean;
+  /** Determine if the deletion option should be displayed */
+  @Input() displayDeletion: boolean = false;
   /** The response elements to display */
   @Input() responseData: ResponseTableElement[];
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
   @Output() partOfTrainingChange = new EventEmitter<ResponseTableToggleChange>();
+  /** Emits change when the user requests a deletion */
+  @Output() deleteResponse = new EventEmitter<ResponseTableElement>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
   dataSource: MatTableDataSource<ResponseTableElement>;
 
-  constructor(private dialog: MatDialog) {
+  constructor() {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -69,6 +69,9 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     }
     if (this.displayStudyEnableControls) {
       this.displayedColumns.push('studyEnableControls');
+    }
+    if (this.displayDeletion) {
+      this.displayedColumns.push('deleteResponse');
     }
   }
 
@@ -82,10 +85,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     }
   }
 
-  /** Handles displaying the response video in a popup dialog */
-  viewResponse(videoURL: string): void {
-    this.dialog.open(ResponseViewDialog, {
-      data: { videoURL: videoURL },
-    });
+  handleDeletion(responseElem: ResponseTableElement) {
+    this.deleteResponse.emit(responseElem);
   }
 }

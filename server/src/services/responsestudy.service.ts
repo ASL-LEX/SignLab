@@ -81,12 +81,23 @@ export class ResponseStudyService {
   /**
    * Find a response study based on a response and a study
    */
-  async find(response: Response, study: Study) {
+  async find(response: Response, study: Study): Promise<ResponseStudy | null> {
     return this.responseStudyModel
       .findOne({
         response: response._id,
         study: study._id,
       })
+      .populate('response')
+      .populate('study')
+      .exec();
+  }
+
+  /**
+   * Find all the Response studies related to a given response
+   */
+  async findMany(response: Response): Promise<ResponseStudy[]> {
+    return this.responseStudyModel
+      .find({ response: response._id })
       .populate('response')
       .populate('study')
       .exec();
@@ -151,6 +162,15 @@ export class ResponseStudyService {
         isUsedForTraining: true,
       })
       .exec();
+  }
+
+  /**
+   * Delete any ResponseStudy related to the given response.
+   */
+  async deleteResponse(response: Response) {
+    this.responseStudyModel.deleteMany({
+      response: response._id
+    }).exec();
   }
 
   /**

@@ -123,4 +123,17 @@ export class UserStudyService {
       )
       .exec();
   }
+
+  /**
+   * Remove the given ResponseStudy as a response study that is part of
+   * the training set. This will pull the ResponseStudy id from the
+   * `trainingResponseStudies` list on each user study
+   */
+  async removeTraining(responseStudy: ResponseStudy) {
+    this.userStudyModel.updateMany({
+      study: responseStudy.study._id
+    }, {
+      $pull: { trainingResponseStudies: responseStudy._id }
+    }).exec();
+  }
 }

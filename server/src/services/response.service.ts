@@ -37,4 +37,14 @@ export class ResponseService {
   async createResponse(response: Response): Promise<Response> {
     return this.responseModel.create(response);
   }
+
+  /**
+   * Delete the given response. Note this will only delete the single entry
+   * and not any related entries that depend on the foreign key.
+   */
+  async delete(response: Response): Promise<void> {
+    this.responseModel.deleteOne({
+      _id: response._id
+    }).exec();
+  }
 }

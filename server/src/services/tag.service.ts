@@ -141,4 +141,13 @@ export class TagService {
   async save(tag: Tag) {
     await this.tagModel.findOneAndUpdate({ _id: tag._id }, tag).exec();
   }
+
+  /**
+   * Delete any tag that may be related to the given response
+   */
+  async deleteResponse(response: Response) {
+    this.tagModel.deleteMany({
+      response: response._id
+    }).exec();
+  }
 }
