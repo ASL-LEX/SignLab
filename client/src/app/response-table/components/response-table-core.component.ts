@@ -10,7 +10,6 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
-  ViewChildren,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
@@ -53,10 +52,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
-  @Output() partOfTrainingChange =
-    new EventEmitter<ResponseTableToggleChange>();
-  /** The different displayed videos */
-  @ViewChildren('previewVideo', { read: ElementRef }) videos: QueryList<ElementRef>;
+  @Output() partOfTrainingChange = new EventEmitter<ResponseTableToggleChange>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
