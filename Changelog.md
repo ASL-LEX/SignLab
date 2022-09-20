@@ -5,6 +5,7 @@
 ### Added
 
 * Paging of the response table view
+* Ability to delete responses
 
 ### Changed
 
