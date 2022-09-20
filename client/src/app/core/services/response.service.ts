@@ -141,4 +141,13 @@ export class ResponseService {
     }
     return true;
   }
+
+  /**
+   * Delete the given response
+   *
+   * @param response The response to delete
+   */
+  async delete(response: Response) {
+    this.signLab.delete<any>(`api/response/${response._id}`, { provideToken: true });
+  }
 }

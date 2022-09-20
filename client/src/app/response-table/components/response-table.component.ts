@@ -9,6 +9,8 @@ import { ResponseTableElement } from '../models/response-table-element';
   selector: 'response-table',
   template: ` <response-table-core
     [responseData]="responseData"
+    [displayDeletion]=true
+    (deleteResponse)="handleDeletion($event)"
   ></response-table-core>`,
 })
 export class ResponseTable {
@@ -27,5 +29,13 @@ export class ResponseTable {
         isUsedForTraining: true,
       };
     });
+  }
+
+  async handleDeletion(responseElem: ResponseTableElement) {
+    this.responseService.delete(responseElem.response);
+
+    // TODO: Update instance variable `responseData` to represent the
+    //       deletion without reloading the whole dataset
+    this.loadResponses();
   }
 }

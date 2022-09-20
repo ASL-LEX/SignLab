@@ -228,9 +228,9 @@ export class ResponseController {
    *
    * @param responseID The database generated ID
    */
-  @Delete('/')
+  @Delete('/:id')
   @Auth('admin')
-  async deleteResponse(@Param('responseID') responseID: string): Promise<void> {
+  async deleteResponse(@Param('id') responseID: string): Promise<void> {
     const response = await this.responseService.find(responseID);
     if (!response) {
       throw new HttpException(`Response does not exist with that ID: ${responseID}`, HttpStatus.BAD_REQUEST);
