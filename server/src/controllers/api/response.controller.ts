@@ -26,6 +26,7 @@ import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 import { Auth } from '../../guards/auth.guard';
 import { TagService } from '../../services/tag.service';
 import { UserStudyService } from '../../services/userstudy.service';
+import { BucketStorage } from '../../services/bucket/bucket.service';
 
 @Controller('/api/response')
 export class ResponseController {
@@ -36,7 +37,8 @@ export class ResponseController {
     private studyService: StudyService,
     private responseStudyService: ResponseStudyService,
     private tagService: TagService,
-    private userStudyService: UserStudyService
+    private userStudyService: UserStudyService,
+    private bucketStorage: BucketStorage
   ) {}
 
   /**
@@ -255,5 +257,8 @@ export class ResponseController {
     this.tagService.deleteResponse(response);
     this.responseStudyService.deleteResponse(response);
     this.responseService.delete(response);
+
+    // Now remove the response from the bucket
+    this.bucketStorage.objectDelete(response.videoURL);
   }
 }

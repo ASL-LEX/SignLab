@@ -71,6 +71,9 @@ export class S3Storage extends BucketStorage {
   }
 
   async objectDelete(target: string): Promise<void> {
+    // If the target is provided with the base url, remove the base URL portion
+    target = target.replace(`${this.baseURL}/`, '');
+
     const params = { Bucket: this.bucketName, Key: target };
     await this.s3.deleteObject(params);
   }
