@@ -1,4 +1,16 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild, ViewChildren, ElementRef, QueryList, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  OnInit,
+  ElementRef,
+  EventEmitter,
+  QueryList,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ResponseViewDialog } from './response-view-dialog.component';
 import {
@@ -40,10 +52,7 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
-  @Output() partOfTrainingChange =
-    new EventEmitter<ResponseTableToggleChange>();
-  /** The different displayed videos */
-  @ViewChildren('previewVideo', { read: ElementRef }) videos: QueryList<ElementRef>;
+  @Output() partOfTrainingChange = new EventEmitter<ResponseTableToggleChange>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
@@ -78,19 +87,5 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
     this.dialog.open(ResponseViewDialog, {
       data: { videoURL: videoURL },
     });
-  }
-
-  /** Play the video associated with the given index */
-  playVideo(index: number) {
-    const video = this.videos.get(index);
-    if (!video) { return; }
-    video.nativeElement.currentTime = 0;
-    video.nativeElement.play();
-  }
-
-  /** Stop the video */
-  stopVideo(index: number) {
-    const video = this.videos.get(index);
-    video?.nativeElement.pause();
   }
 }
