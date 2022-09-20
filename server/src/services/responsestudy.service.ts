@@ -154,6 +154,15 @@ export class ResponseStudyService {
   }
 
   /**
+   * Delete any ResponseStudy related to the given response
+   */
+  async deleteResponse(response: Response) {
+    this.responseStudyModel.deleteMany({
+      response: response._id
+    }).exec();
+  }
+
+  /**
    * Mark a single response study as being part of the training set
    */
   private async markSingleTraining(studyID: string, responseID: string) {

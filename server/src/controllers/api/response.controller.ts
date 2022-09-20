@@ -9,6 +9,8 @@ import {
   HttpStatus,
   Body,
   Query,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ResponseService } from '../../services/response.service';
@@ -22,6 +24,7 @@ import { StudyService } from '../../services/study.service';
 import { ResponseStudyService } from '../../services/responsestudy.service';
 import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
 import { Auth } from '../../guards/auth.guard';
+import { TagService } from '../../services/tag.service';
 
 @Controller('/api/response')
 export class ResponseController {
@@ -31,6 +34,7 @@ export class ResponseController {
     private responseUploadService: ResponseUploadService,
     private studyService: StudyService,
     private responseStudyService: ResponseStudyService,
+    private tagService: TagService
   ) {}
 
   /**
@@ -149,7 +153,7 @@ export class ResponseController {
     return this.responseService.getAllResponses();
   }
 
-  /*
+  /**
    * Get the response studies for a specific study.
    */
   @Get('/responsestudies')
@@ -215,5 +219,27 @@ export class ResponseController {
       responseStudy,
       changeRequest.isPartOfStudy,
     );
+  }
+
+  /**
+   * Delete the given response. This will also have the effect of deleting
+   * the response's relation to any study as well as any tags that may
+   * exist for the response.
+   *
+   * @param responseID The database generated ID
+   */
+  @Delete('/')
+  @Auth('admin')
+  async deleteResponse(@Param('responseID') responseID: string): Promise<void> {
+    const response = await this.responseService.find(responseID);
+    if (!response) {
+      throw new HttpException(`Response does not exist with that ID: ${responseID}`, HttpStatus.BAD_REQUEST);
+    }
+
+    // Delete any tag related to the response, remove the relation between
+    // response and study, and remove the response itself
+    this.tagService.deleteResponse(response);
+    this.responseStudyService.deleteResponse(response);
+    this.responseService.delete(response);
   }
 }
