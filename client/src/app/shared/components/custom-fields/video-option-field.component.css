@@ -18,6 +18,7 @@
 
 .embedded-video {
     max-height: 100px;
+    min-height: 50px;
 }
 
 tr.active {
