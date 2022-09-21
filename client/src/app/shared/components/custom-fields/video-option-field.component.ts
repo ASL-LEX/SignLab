@@ -94,6 +94,7 @@ export class VideoOptionField {
   makeSelection(videoOption: VideoOption, index: number): void {
     // Update the selected option
     this.selectedIndex = index;
+    this.userSearchValue = videoOption.searchTerm;
 
     // Emit the selection
     this.videoSelected.emit({ value: videoOption.code, isCustom: false });
@@ -103,8 +104,10 @@ export class VideoOptionField {
    * Make a custom selection.
    */
   makeCustomSelection(): void {
+    // Update the selected option
+    this.selectedIndex = -1;
 
     // Emit the selection
-    this.videoSelected.emit({ value: '', isCustom: true });
+    this.videoSelected.emit({ value: this.userSearchValue, isCustom: true });
   }
 }

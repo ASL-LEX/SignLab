@@ -60,9 +60,9 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
    */
   selectOption(sign: VideoSelection) {
     if(sign.isCustom) {
-      this.setLabelValue(`code: ${sign.value}`);
+      this.setLabelValue(`custom: ${sign.value}`);
     } else {
-      this.setLabelValue(`custon: ${sign.value}`);
+      this.setLabelValue(`code: ${sign.value}`);
     }
   }
 
