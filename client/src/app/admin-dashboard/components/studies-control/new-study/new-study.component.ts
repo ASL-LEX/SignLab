@@ -16,7 +16,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
 import { JsonSchema } from '@jsonforms/core';
 import { Router } from '@angular/router';
-import {MatStepper} from '@angular/material/stepper';
+import { MatStepper } from '@angular/material/stepper';
+import { VideoOptionUpload, videoOptionUploadRendererTester } from '../../../../shared/components/custom-fields/video-option-upload.component';
+import { userVideoOptionRendererTester, UserVideoOption } from '../../../../shared/components/custom-fields/user-video-option-field.component';
 
 @Component({
   selector: 'new-study',
@@ -61,6 +63,8 @@ export class NewStudyComponent implements AfterViewInit {
       renderer: AslLexSignBankField,
     },
     { tester: fileListControlRendererTester, renderer: FileListField },
+    { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
+    { tester: userVideoOptionRendererTester, renderer: UserVideoOption },
   ];
   /** Possible tag options */
   tagFieldOptions = [
@@ -71,6 +75,7 @@ export class NewStudyComponent implements AfterViewInit {
       icon: 'text_format',
     },
     { type: TagFieldType.BooleanOption, name: 'Boolean Option', icon: 'flag' },
+    { type: TagFieldType.EmbeddedVideoOption, name: 'Video Option', icon: 'video_library' },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
   ];

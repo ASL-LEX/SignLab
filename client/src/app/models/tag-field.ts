@@ -7,6 +7,7 @@ export enum TagFieldType {
   AslLex,
   Autocomplete,
   BooleanOption,
+  EmbeddedVideoOption,
   FreeText,
   Numeric,
 }
@@ -68,6 +69,8 @@ export abstract class TagField {
         return new AutocompleteField();
       case TagFieldType.BooleanOption:
         return new BooleanField();
+      case TagFieldType.EmbeddedVideoOption:
+        return new EmbeddedVideoOption();
       case TagFieldType.FreeText:
         return new FreeTextField();
       case TagFieldType.Numeric:
@@ -325,6 +328,73 @@ class AutocompleteField extends TagField {
 class BooleanField extends TagField {
   constructor() {
     super(TagFieldType.BooleanOption, 'Boolean Option', 'boolean');
+  }
+}
+
+class EmbeddedVideoOption extends TagField {
+  constructor() {
+    super(TagFieldType.EmbeddedVideoOption, 'Video Option', 'string');
+  }
+
+ /**
+  * Provides options to allow users to select a custom intpu and the format
+  * of the video options
+  */
+  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
+    return {
+      allowCustomLabels: {
+        type: 'boolean',
+      },
+      userVideoParameters: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            videoURL: {
+              type: 'string'
+            },
+            code: {
+              type: 'string'
+            },
+            searchTerm: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    };
+  }
+
+  /** Option for custom labels */
+  protected getFieldSpecificUiSchema(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: '#/properties/allowCustomLabels',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/userVideoParameters',
+        options: {
+          customType: 'video-option-upload'
+        }
+      }
+    ];
+  }
+
+  asUIProperty(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: `#/properties/${this.getFieldName()}`,
+        options: {
+          customType: 'video-options',
+          allowCustomLabels: this.data.allowCustomLabels,
+          userVideoParameters: this.data.userVideoParameters,
+          showUnfocusedDescription: true
+        }
+      }
+    ];
   }
 }
 

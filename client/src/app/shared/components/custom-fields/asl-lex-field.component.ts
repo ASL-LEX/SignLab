@@ -45,6 +45,7 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
   }
 
   ngOnInit(): void {
+    // For JsonFormsControl
     super.ngOnInit();
 
     // Check to see if the `allowCustomTags` is an option present on the

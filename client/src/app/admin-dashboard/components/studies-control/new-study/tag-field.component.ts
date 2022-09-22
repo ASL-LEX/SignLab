@@ -6,6 +6,7 @@ import {
   FileListField,
 } from '../../../../shared/components/custom-fields/file-list.component';
 import { TagField } from '../../../../models/tag-field';
+import { VideoOptionUpload, videoOptionUploadRendererTester } from '../../../../shared/components/custom-fields/video-option-upload.component';
 
 @Component({
   selector: 'tag-field',
@@ -31,6 +32,7 @@ export class TagFieldComponent implements OnInit {
   renderers = [
     ...angularMaterialRenderers,
     { tester: fileListControlRendererTester, renderer: FileListField },
+    { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
   ];
   data: any = {};
 
