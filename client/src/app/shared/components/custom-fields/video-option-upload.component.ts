@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { VideoOption } from './video-option-field.component';
@@ -43,7 +43,8 @@ interface CsvDataFormat {
 export class VideoOptionUpload extends JsonFormsControl {
   constructor(
     jsonFormsService: JsonFormsAngularService,
-    private csvParser: NgxCsvParser
+    private csvParser: NgxCsvParser,
+    private changeDetect: ChangeDetectorRef
   ) {
     super(jsonFormsService);
   }
@@ -61,7 +62,14 @@ export class VideoOptionUpload extends JsonFormsControl {
       .pipe()
       .subscribe({
         next: (result: any) => {
-          this.setValue(this.csvToVideoOption(result));
+          try {
+            const videoOptions = this.csvToVideoOption(result);
+            this.setValue(videoOptions);
+          } catch(error: any) {
+            console.warn('Failed to parse CSV, invalid data provided');
+            console.warn(error);
+            this.changeDetect.detectChanges();
+          }
         },
         error: (error: NgxCSVParserError) => {
           console.warn('Failed to parse CSV');
@@ -75,7 +83,7 @@ export class VideoOptionUpload extends JsonFormsControl {
   /**
    * Set the value stored by this field
    */
-  private setValue(value: VideoOption[]) {
+  private setValue(value: VideoOption[] | undefined) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.jsonFormsService.updateCore(Actions.update(path, () => value));
     this.triggerValidation();
@@ -85,16 +93,42 @@ export class VideoOptionUpload extends JsonFormsControl {
    * Converts the data from the format specified in the CSV to an array
    * of VideoOption(s)
    *
-   * TODO: Validate the data comes in as expected
+   * NOTE: This will also handle the validation logic. The internal
+   *       `error` property which is used for JSON Forms validation will
+   *       be updated
    */
-  private csvToVideoOption(results: CsvDataFormat[]): VideoOption[] {
-    return results.map(csvLine => {
-      return {
+  private csvToVideoOption(csvData: CsvDataFormat[]): VideoOption[] {
+    // Clear out any pre-existing errors
+    this.error = null;
+
+    const results: VideoOption[] = [];
+    for (const csvLine of csvData) {
+
+      // Ensure each field is present
+      if (!csvLine['Video URL']) {
+        this.error = 'Missing column "Video URL"';
+      }
+      if (!csvLine['Code']) {
+        this.error = 'Missing column "Code"';
+      }
+      if (!csvLine['Search Term']) {
+        this.error = 'Missing column "Search Term"';
+      }
+
+      // If any error took place, throw the error
+      if (this.error) {
+        throw new Error(this.error);
+      }
+
+      // Otherwise add to the list of results
+      results.push({
         videoURL: csvLine['Video URL'],
         code: csvLine['Code'],
         searchTerm: csvLine['Search Term']
-      }
-    });
+      });
+    }
+
+    return results;
   }
 }
 

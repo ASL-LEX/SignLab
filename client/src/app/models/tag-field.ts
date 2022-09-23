@@ -359,9 +359,10 @@ class EmbeddedVideoOption extends TagField {
             searchTerm: {
               type: 'string'
             }
-          }
+          },
+          required: ['videoURL', 'code', 'searchTerm']
         }
-      }
+      },
     };
   }
 
