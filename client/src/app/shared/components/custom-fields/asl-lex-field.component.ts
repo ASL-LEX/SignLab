@@ -7,8 +7,8 @@ import {
   composeWithUi,
   ControlElement,
 } from '@jsonforms/core';
-import { AslLexService, TagSearchResult } from '../../services/asl-lex.service';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { AslLexService } from '../../services/asl-lex.service';
+import { VideoOption, VideoSelection } from './video-option-field.component';
 
 /**
  * This component is a custom renderer for JSON Forms that allows users to
@@ -18,18 +18,23 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
  */
 @Component({
   selector: 'asl-lex-sign-bank',
-  templateUrl: './asl-lex-field.component.html',
-  styleUrls: ['./asl-lex-field.component.css'],
+  template: `
+    <video-option-field
+      [videoOptions]="tagSearchResults"
+      [label]="label"
+      [description]="description"
+      [allowCustomOption]="allowCustomLabels"
+      [debounceTime]="500"
+      (videoSelected)="selectOption($event)"
+      (searchValue)="searchUpdate($event)"
+    ></video-option-field>
+  `
 })
 export class AslLexSignBankField extends JsonFormsControl implements OnInit {
-  tagSearchResults: TagSearchResult[] = [];
-  signSearchSubject = new Subject<string>();
+  tagSearchResults: VideoOption[] = [];
   signSearch = '';
-  selectedSignCode = '';
   /** If the user can enter their own information in as a label */
   allowCustomLabels = false;
-  /** Helps control the active state of the custom option */
-  customOptionSelected = false;
 
   constructor(
     jsonFormsService: JsonFormsAngularService,
@@ -37,16 +42,10 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
     private changeDetectorRef: ChangeDetectorRef
   ) {
     super(jsonFormsService);
-
-    // Setup the ASL-LEX search handler
-    this.signSearchSubject
-      .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((search: string) => {
-        this.searchUpdate(search);
-      });
   }
 
   ngOnInit(): void {
+    // For JsonFormsControl
     super.ngOnInit();
 
     // Check to see if the `allowCustomTags` is an option present on the
@@ -60,21 +59,26 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
    * Handles the selection of the tag to use from the user click. Will
    * update the search field with the selected sign's english tag.
    */
-  selectSign(sign: TagSearchResult) {
-    this.signSearch = sign.englishTag;
-    this.selectedSignCode = sign.code;
-    this.customOptionSelected = false;
-
-    this.setLabelValue(`code: ${sign.code}`);
+  selectOption(sign: VideoSelection) {
+    if(sign.isCustom) {
+      this.setLabelValue(`custom: ${sign.value}`);
+    } else {
+      this.setLabelValue(`code: ${sign.value}`);
+    }
   }
 
   /**
-   * Handles if the user selected a custom response
+   * Update the search result view based on the search parameter. Will hit
+   * the AslLexService to get the results.
    */
-  selectCustomLabel(customLabel: string) {
-    this.customOptionSelected = true;
+  async searchUpdate(search: string) {
+    const signs = await this.aslLexService.getAslLexView(search);
 
-    this.setLabelValue(`custom: ${customLabel}`);
+    // Convert the sign data into options for the videos select field
+    this.tagSearchResults = signs.map(sign => {
+      return { videoURL: sign.videoURL, code: sign.code, searchTerm: sign.englishTag };
+    });
+    this.changeDetectorRef.detectChanges();
   }
 
   /**
@@ -85,16 +89,6 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.jsonFormsService.updateCore(Actions.update(path, () => value));
     this.triggerValidation();
-  }
-
-  /**
-   * Update the search result view based on the search parameter. Will hit
-   * the AslLexService to get the results.
-   */
-  private async searchUpdate(search: string) {
-    const signs = await this.aslLexService.getAslLexView(search);
-    this.tagSearchResults = signs;
-    this.changeDetectorRef.detectChanges();
   }
 }
 

@@ -1,0 +1,55 @@
+<mat-form-field style="width: 100%">
+  <!-- Input secion -->
+  <mat-label>{{ label }}</mat-label>
+  <mat-hint>{{ description }}</mat-hint>
+  <input
+    matInput
+    class="search"
+    style="margin: 1rem"
+    type="text"
+    [(ngModel)]="userSearchValue"
+    (ngModelChange)="userSearchSubject.next($event)"
+  />
+
+  <!-- Video selection section -->
+  <div class="search-result">
+    <table class="search-table" rules=none>
+      <!-- Display each video option -->
+      <tr
+        *ngFor="let videoOption of videoOptions"
+        style="width: 100%"
+        (click)="makeSelection(videoOption)"
+        [class.active]="selectedVideo && selectedVideo.code === videoOption.code">
+
+        <!-- Video view -->
+        <td class="embedded-video">
+          <iframe [src]="videoOption.videoURL | safe" allow="autoplay">
+          </iframe>
+        </td>
+
+        <!-- Search term -->
+        <td style="width: 100%">
+          {{ videoOption.searchTerm }}
+        </td>
+      </tr>
+
+      <!-- Option for custom option -->
+      <tr
+        *ngIf="allowCustomOption && userSearchValue != ''"
+        style="width: 100%"
+        (click)="makeCustomSelection()"
+        [class.active]="selectedVideo && selectedVideo.code == userSearchValue">
+
+        <!-- Custom icon -->
+        <td class="embedded-video">
+          Custom Option
+        </td>
+
+        <!-- The user search text -->
+        <td style="width: 100%">
+          {{ userSearchValue }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</mat-form-field>
