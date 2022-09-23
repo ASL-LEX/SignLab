@@ -396,6 +396,10 @@ class EmbeddedVideoOption extends TagField {
       }
     ];
   }
+
+  protected getRequiredFieldProperties(): string[] {
+    return ['userVideoParameters'];
+  }
 }
 
 class FreeTextField extends TagField {
