@@ -16,10 +16,10 @@
     <table class="search-table" rules=none>
       <!-- Display each video option -->
       <tr
-        *ngFor="let videoOption of videoOptions; let i = index"
+        *ngFor="let videoOption of videoOptions"
         style="width: 100%"
-        (click)="makeSelection(videoOption, i)"
-        [class.active]="selectedIndex == i">
+        (click)="makeSelection(videoOption)"
+        [class.active]="selectedVideo && selectedVideo.code === videoOption.code">
 
         <!-- Video view -->
         <td class="embedded-video">
@@ -38,7 +38,7 @@
         *ngIf="allowCustomOption && userSearchValue != ''"
         style="width: 100%"
         (click)="makeCustomSelection()"
-        [class.active]="selectedIndex == -1">
+        [class.active]="selectedVideo && selectedVideo.code == userSearchValue">
 
         <!-- Custom icon -->
         <td class="embedded-video">

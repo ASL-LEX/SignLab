@@ -64,13 +64,8 @@ export class VideoOptionField {
   @Output() videoSelected: EventEmitter<VideoSelection> = new EventEmitter();
   /** Emits an event when the user types in a change to their search result */
   @Output() searchValue: EventEmitter<string> = new EventEmitter();
-  /**
-   * The selected video option, this allows for controlling which option
-   * is visually shown as selected.
-   *
-   * -1 represents the custom option was selected
-   */
-  selectedIndex = 0;
+  /** The selected video option */
+  selectedVideo: VideoOption | null = null;
   /** The current search string */
   userSearchValue = '';
   /** The search representation which is subscribed to */
@@ -91,9 +86,9 @@ export class VideoOptionField {
    * Handles the selection logic. Will emit the user selection and will
    * make sure the selected option is clear to the user.
    */
-  makeSelection(videoOption: VideoOption, index: number): void {
+  makeSelection(videoOption: VideoOption): void {
     // Update the selected option
-    this.selectedIndex = index;
+    this.selectedVideo = videoOption;
     this.userSearchValue = videoOption.searchTerm;
 
     // Emit the selection
@@ -105,7 +100,11 @@ export class VideoOptionField {
    */
   makeCustomSelection(): void {
     // Update the selected option
-    this.selectedIndex = -1;
+    this.selectedVideo = {
+      videoURL: '',
+      code: this.userSearchValue,
+      searchTerm: this.userSearchValue
+    };
 
     // Emit the selection
     this.videoSelected.emit({ value: this.userSearchValue, isCustom: true });

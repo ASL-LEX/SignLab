@@ -88,8 +88,6 @@ export class VideoOptionUpload extends JsonFormsControl {
    * TODO: Validate the data comes in as expected
    */
   private csvToVideoOption(results: CsvDataFormat[]): VideoOption[] {
-    console.log('Results');
-    console.log(results);
     return results.map(csvLine => {
       return {
         videoURL: csvLine['Video URL'],
