@@ -1,12 +1,27 @@
 <div>
   <form>
+    <!-- CSV Upload -->
     <div>
       <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput">
-      <button mat-raised-button (click)='csvUpload.click()' data-cy="uploadCSVButton">Upload CSV</button>
+      <button mat-raised-button
+              (click)='csvUpload.click()'
+              matTooltip="Upload information on the responses"
+              data-cy="uploadCSVButton">Upload CSV</button>
+      <button mat-icon-button
+              matTooltip="Download a template for uploading response information"
+              (click)='downloadCSVTemplate()'>
+        <mat-icon>play_for_work</mat-icon>
+      </button>
     </div>
+
+    <!-- Video ZIP Upload -->
     <div>
       <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput">
-      <button mat-raised-button (click)='zipUpload.click()' [disabled]="!csvUploadComplete" data-cy="uploadZIPButton">Upload Videos (ZIP)</button>
+      <button mat-raised-button
+              (click)='zipUpload.click()'
+              [disabled]="!csvUploadComplete"
+              matTooltip="Upload files, the ZIP files should not contain folders"
+              data-cy="uploadZIPButton">Upload Videos (ZIP)</button>
     </div>
     <p [attr.data-cy]="'uploadStatusMessage'">
     {{ uploadStatusMessage }}

@@ -36,6 +36,11 @@ interface CsvDataFormat {
       <button mat-raised-button (click)="fileUpload.click()">
         Upload Video Options
       </button>
+      <button mat-icon-button
+              matTooltip="Download an example option list"
+              (click)='downloadExample()'>
+        <mat-icon>play_for_work</mat-icon>
+      </button>
       <mat-error>{{ error }}</mat-error>
     </div>
   `
@@ -129,6 +134,25 @@ export class VideoOptionUpload extends JsonFormsControl {
     }
 
     return results;
+  }
+
+  /**
+   * Download an example file with options shown
+   */
+  downloadExample() {
+    let data = 'Video URL,Code,Search Term\n';
+    data += 'https://player.vimeo.com/video/344216753?title=0&byline=0&portrait=0?&loop=1&autoplay=1&controls=0&background=1,A-1,cat';
+
+    const a = document.createElement('a');
+    const blob = new Blob([data], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = 'video-options.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+
   }
 }
 

@@ -68,4 +68,21 @@ export class ResponseUploadDialog {
       this.errorLocations = [];
     }
   }
+
+  /**
+   * Download the template for the responses
+   */
+  async downloadCSVTemplate() {
+    const header = await this.responseService.getCSVHeader();
+
+    const a = document.createElement('a');
+    const blob = new Blob([header], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = 'response-upload-template.csv';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
 }

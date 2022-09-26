@@ -90,7 +90,6 @@ export class ResponseController {
   @Post('/upload/csv')
   @Auth('admin')
   @UseInterceptors(FileInterceptor('file'))
-  // @Auth('admin')
   async uploadCSV(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<SaveAttempt> {
@@ -98,6 +97,25 @@ export class ResponseController {
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
     return this.responseUploadService.uploadResponseDataCSV(fileStream);
+  }
+
+  /**
+   * Download the template which the user can use for uploading new
+   * responses.
+   */
+  @Get('/template')
+  @Auth('admin')
+  async getResponseCSVTemplate(): Promise<{ header: string }> {
+    // Header with required arguments
+    let header = 'responseID,responderID,filename';
+
+    // Add in user provided metadata
+    for (const metadata of await this.schemaService.getFields('Response')) {
+      header += ',';
+      header += metadata;
+    }
+
+    return { header: header };
   }
 
   /**

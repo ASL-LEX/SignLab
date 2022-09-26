@@ -84,6 +84,14 @@ export class SchemaService {
   }
 
   /**
+   * Get the fields associated with a given schema type.
+   */
+  async getFields(schemaType: string): Promise<string[]> {
+    const schema = await this.getSchema(schemaType);
+    return Object.keys(schema.schema.properties);
+  }
+
+  /**
    * Attempts to read the schema from the cached map. If the schema is not
    * in the cached map, then try to get the schema from the database, if the
    * schema is not in the database, throw an error.
