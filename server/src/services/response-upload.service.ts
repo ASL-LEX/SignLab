@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir } from 'fs/promises';
+import { readdir, unlink } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
@@ -103,9 +103,13 @@ export class ResponseUploadService {
    */
   async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
     // Unzip the folder
-    await createReadStream(zipFile).pipe(
-      unzipper.Extract({ path: './upload/responses' }),
-    );
+    await new Promise<void>((resolve, _reject) => {
+      createReadStream(zipFile)
+        .pipe(
+          unzipper.Extract({ path: './upload/responses' }),
+        )
+        .on('finish', () => { resolve(); });
+    });
 
     const filesMissingData = []; // Files that don't have cooresponding ResponseUploads
 
@@ -116,7 +120,7 @@ export class ResponseUploadService {
 
     let count = 0;
     for (const file of files) {
-      const filePath = join('./upload/response', file);
+      const filePath = join('./upload/responses', file);
 
       // Ignore gitkeep
       if (file === '.gitkeep') {
@@ -145,6 +149,11 @@ export class ResponseUploadService {
         },
       };
     }
+
+    // Delete the files after handling upload
+    await Promise.all(files.map(file => {
+      return unlink(join('./upload/responses', file));
+    }));
 
     const result: SaveAttempt = {
       type: 'success',
