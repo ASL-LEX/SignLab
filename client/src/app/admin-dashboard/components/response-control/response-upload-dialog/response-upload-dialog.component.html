@@ -2,7 +2,7 @@
   <form>
     <!-- CSV Upload -->
     <div>
-      <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput">
+      <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput" accept=".csv">
       <button mat-raised-button
               (click)='csvUpload.click()'
               matTooltip="Upload information on the responses"
@@ -16,7 +16,7 @@
 
     <!-- Video ZIP Upload -->
     <div>
-      <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput">
+      <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput" accept=".zip">
       <button mat-raised-button
               (click)='zipUpload.click()'
               [disabled]="!csvUploadComplete"
