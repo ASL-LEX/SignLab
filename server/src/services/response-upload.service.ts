@@ -103,13 +103,25 @@ export class ResponseUploadService {
    */
   async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
     // Unzip the folder
-    await new Promise<void>((resolve, _reject) => {
-      createReadStream(zipFile)
-        .pipe(
-          unzipper.Extract({ path: './upload/responses' }),
-        )
-        .on('finish', () => { resolve(); });
-    });
+    try {
+      await new Promise<void>((resolve, reject) => {
+        createReadStream(zipFile)
+          .pipe(
+            unzipper.Extract({ path: './upload/responses' }),
+          )
+          .on('finish', () => { resolve(); })
+          .on('error', () => { reject() });
+      });
+    } catch (error: any) {
+      console.warn('Failed to extract user provided zip');
+      return {
+        responses: [],
+        saveResult: {
+          type: 'error',
+          message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
+        }
+      };
+    }
 
     const filesMissingData = []; // Files that don't have cooresponding ResponseUploads
 

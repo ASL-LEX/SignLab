@@ -119,16 +119,13 @@ describe('Upload Response ZIP', () => {
       .selectFile('cypress/fixtures/responses/small-set.csv', { force: true })
   });
 
-  // TODO: Uncomment once the bug associating with uploading empty zip
-  //       files has been addressed
-  /*
   it('should warn when nothing in zip folder', () => {
     cy
       .get(zipFileUploadInput)
       .selectFile('cypress/fixtures/responses/empty.zip', { force: true })
-      .get('li');
+      .get('p')
+      .should('contain.text', 'No response videos found in ZIP, no responses saved');
   });
-  */
 
   it('should produce a warning when not all of the videos have been provided in a zip', () => {
     cy
@@ -138,9 +135,6 @@ describe('Upload Response ZIP', () => {
       .should('contain.text', 'Response uploaded successfully, reload page to see new responses');
   });
 
-
-  // TODO: Uncomment once the bug associated with previously uploaded videos
-  //       being left in the temporary folder location has been addressed
   it('should produce a warning when the ZIP has extra videos provides', () => {
     cy
       .get(zipFileUploadInput)
