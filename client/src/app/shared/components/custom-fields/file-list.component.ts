@@ -32,8 +32,15 @@ import {
         (change)="fileSelect($event)"
         #fileUpload
       />
-      <button mat-raised-button (click)="fileUpload.click()">
+      <button mat-raised-button
+              matTooltip="Upload options with each option on its own line"
+              (click)="fileUpload.click()">
         Upload Options
+      </button>
+      <button mat-icon-button
+              matTooltip="Download an example option list"
+              (click)='downloadExample()'>
+        <mat-icon>play_for_work</mat-icon>
       </button>
       <mat-error>{{ error }}</mat-error>
     </div>
@@ -74,6 +81,23 @@ export class FileListField extends JsonFormsControl {
       this.triggerValidation();
     };
     fileReader.readAsText(file);
+  }
+
+  /**
+   * Download an example file with options shown
+   */
+  downloadExample() {
+    const data = 'Option 1\nOption 2\nOption3';
+
+    const a = document.createElement('a');
+    const blob = new Blob([data], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+
+    a.href = url;
+    a.download = 'example-options.txt';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   }
 }
 

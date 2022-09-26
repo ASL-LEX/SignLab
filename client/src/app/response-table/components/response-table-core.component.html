@@ -18,7 +18,9 @@
 
     <!-- Enabled Column -->
     <ng-container matColumnDef="studyEnableControls">
-      <th mat-header-cell *matHeaderCellDef> Available for Tagging </th>
+      <th mat-header-cell
+          *matHeaderCellDef
+          matTooltip="Controls if the video will be included in the tagging process"> Available for Tagging </th>
       <td mat-cell *matCellDef="let responseElem">
         <mat-slide-toggle
           (change)="partOfStudyChange.emit({responseElem: responseElem, option: $event.checked})"
@@ -27,7 +29,9 @@
     </ng-container>
 
     <ng-container matColumnDef="studyTrainingControls">
-      <th mat-header-cell *matHeaderCellDef> Is Part of Training Set </th>
+      <th mat-header-cell
+          *matHeaderCellDef
+          matTooltip="Videos part of this set will be part of what the users will tag to complete their training"> Is Part of Training Set </th>
       <td mat-cell *matCellDef="let responseElem">
         <mat-slide-toggle
           (change)="partOfTrainingChange.emit({responseElem: responseElem, option: $event.checked})"

@@ -50,7 +50,7 @@ export class ResponsePreview implements OnDestroy {
     if (!this.video) { return; }
 
     // Play the video from the begining
-    this.video.nativeElement.curentTime = 0;
+    this.video.nativeElement.currentTime = 0;
     this.video.nativeElement.play();
   }
 
