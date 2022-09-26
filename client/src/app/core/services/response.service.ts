@@ -150,4 +150,16 @@ export class ResponseService {
   async delete(response: Response) {
     this.signLab.delete<any>(`api/response/${response._id}`, { provideToken: true });
   }
+
+  /**
+   * Get the header which is the required fields to be present in a CSV
+   * upload of response data
+   */
+  async getCSVHeader(): Promise<string> {
+    const result = await this.signLab.get<{header: string}>('api/response/template',{
+      provideToken: true,
+    });
+
+    return result.header;
+  }
 }

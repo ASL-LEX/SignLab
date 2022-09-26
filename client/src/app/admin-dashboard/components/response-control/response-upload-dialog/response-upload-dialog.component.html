@@ -3,6 +3,11 @@
     <div>
       <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput">
       <button mat-raised-button (click)='csvUpload.click()' data-cy="uploadCSVButton">Upload CSV</button>
+      <button mat-icon-button
+              matTooltip="Download a template for uploading response information"
+              (click)='downloadCSVTemplate()'>
+        <mat-icon>play_for_work</mat-icon>
+      </button>
     </div>
     <div>
       <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput">
