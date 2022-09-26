@@ -131,6 +131,7 @@ export class ResponseUploadService {
       // Search for cooresponding ResponseUpload
       const saveResult = await this.saveResponse(file, filePath);
       if (saveResult.saveResult.type == 'warning') {
+        console.log(saveResult);
         filesMissingData.push(file);
         continue;
       }

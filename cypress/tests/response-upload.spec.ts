@@ -130,28 +130,22 @@ describe('Upload Response ZIP', () => {
   });
   */
 
-  // TODO: Uncomment once the bug associated with no warnings being displayed
-  //       if the user is missing a video in the ZIP has been addressed
-  /*
   it('should produce a warning when not all of the videos have been provided in a zip', () => {
     cy
       .get(zipFileUploadInput)
       .selectFile('cypress/fixtures/responses/small-set-missing.zip', { force: true })
-      .get('li')
-      .should('contain.text', 'hi');
+      .get('p')
+      .should('contain.text', 'Response uploaded successfully, reload page to see new responses');
   });
-  */
 
 
   // TODO: Uncomment once the bug associated with previously uploaded videos
   //       being left in the temporary folder location has been addressed
-  /*
   it('should produce a warning when the ZIP has extra videos provides', () => {
     cy
       .get(zipFileUploadInput)
       .selectFile('cypress/fixtures/responses/small-set-extra-video.zip', { force: true })
       .get('li')
-      .should('contain.text', 'hi');
+      .should('contain.text', 'Could not find information in CSV');
   });
-  */
 });
