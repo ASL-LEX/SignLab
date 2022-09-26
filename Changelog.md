@@ -19,6 +19,8 @@
 ### Fixed
 
 * Non-admin users can now access the studies and enter tagging
+* Clear out old files from response ZIP upload
+* Handle empty ZIP files
 
 ## 0.1.1
 

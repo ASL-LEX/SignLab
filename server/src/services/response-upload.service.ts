@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir } from 'fs/promises';
+import { readdir, unlink } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
@@ -103,9 +103,25 @@ export class ResponseUploadService {
    */
   async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
     // Unzip the folder
-    await createReadStream(zipFile).pipe(
-      unzipper.Extract({ path: './upload/responses' }),
-    );
+    try {
+      await new Promise<void>((resolve, reject) => {
+        createReadStream(zipFile)
+          .pipe(
+            unzipper.Extract({ path: './upload/responses' }),
+          )
+          .on('finish', () => { resolve(); })
+          .on('error', () => { reject() });
+      });
+    } catch (error: any) {
+      console.warn('Failed to extract user provided zip');
+      return {
+        responses: [],
+        saveResult: {
+          type: 'error',
+          message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
+        }
+      };
+    }
 
     const filesMissingData = []; // Files that don't have cooresponding ResponseUploads
 
@@ -116,7 +132,7 @@ export class ResponseUploadService {
 
     let count = 0;
     for (const file of files) {
-      const filePath = join('./upload/response', file);
+      const filePath = join('./upload/responses', file);
 
       // Ignore gitkeep
       if (file === '.gitkeep') {
@@ -127,6 +143,7 @@ export class ResponseUploadService {
       // Search for cooresponding ResponseUpload
       const saveResult = await this.saveResponse(file, filePath);
       if (saveResult.saveResult.type == 'warning') {
+        console.log(saveResult);
         filesMissingData.push(file);
         continue;
       }
@@ -145,6 +162,11 @@ export class ResponseUploadService {
         },
       };
     }
+
+    // Delete the files after handling upload
+    await Promise.all(files.map(file => {
+      return unlink(join('./upload/responses', file));
+    }));
 
     const result: SaveAttempt = {
       type: 'success',
