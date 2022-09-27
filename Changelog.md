@@ -6,6 +6,7 @@
 
 * Paging of the response table view
 * Ability to delete responses
+* Check for supported video types
 
 ### Changed
 
