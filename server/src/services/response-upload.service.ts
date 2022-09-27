@@ -9,10 +9,11 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir, unlink } from 'fs/promises';
+import { readdir, unlink, rm, stat } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
+import {ConfigService} from '@nestjs/config';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -29,12 +30,18 @@ export interface ResponseUploadResult {
 
 @Injectable()
 export class ResponseUploadService {
+  private supportedVideoFormats: Set<string>;
+
   constructor(
     @InjectModel(ResponseUpload.name)
     private responseUploadModel: Model<ResponseUploadDocument>,
     private responseService: ResponseService,
     private bucketService: BucketStorage,
-  ) {}
+    configService: ConfigService
+  ) {
+
+    this.supportedVideoFormats = new Set<string>(configService.getOrThrow<string[]>('videoSettings.supportedTypes'));
+  }
 
   /**
    * Handle the process of taking a stream of data and attempting to parse
@@ -123,7 +130,8 @@ export class ResponseUploadService {
       };
     }
 
-    const filesMissingData = []; // Files that don't have cooresponding ResponseUploads
+    // Warning that were generated when uploading the files
+    const fileWarnings: SaveAttempt[] = [];
 
     // Go through each file and find the cooresponding ResponseUpload
     const files = await readdir('./upload/responses/');
@@ -138,17 +146,37 @@ export class ResponseUploadService {
       if (file === '.gitkeep') {
         continue;
       }
-      count += 1;
 
-      // Search for cooresponding ResponseUpload
-      const saveResult = await this.saveResponse(file, filePath);
-      if (saveResult.saveResult.type == 'warning') {
-        console.log(saveResult);
-        filesMissingData.push(file);
+      // Ignore directories
+      const fileStats = await stat(filePath);
+      if (fileStats.isDirectory()) {
         continue;
       }
-      if (saveResult.responses) {
-        responsesCreated.push(saveResult.responses[0]);
+
+      count += 1;
+
+      // Check the file type based on the extension
+      const fileExtension = file.slice(file.lastIndexOf('.') + 1);
+      if (!this.supportedVideoFormats.has(fileExtension)) {
+        console.warn(`Unsupported file type uploaded: ${fileExtension}`);
+
+        fileWarnings.push({
+          type: 'warning',
+          message: `File has unsupported type "${fileExtension}", supported formats ${Array.from(this.supportedVideoFormats).join(', ')}`,
+          where: [{ place: `${file}`, message: 'Invalid extension' }]
+        });
+
+        continue;
+      }
+
+      // Attempt to save the response based on the filename
+      const responseUploadResult = await this.saveResponse(file, filePath);
+      if (responseUploadResult.saveResult.type == 'warning') {
+        fileWarnings.push(responseUploadResult.saveResult);
+        continue;
+      }
+      if (responseUploadResult.responses) {
+        responsesCreated.push(responseUploadResult.responses[0]);
       }
     }
 
@@ -165,28 +193,24 @@ export class ResponseUploadService {
 
     // Delete the files after handling upload
     await Promise.all(files.map(file => {
-      return unlink(join('./upload/responses', file));
+      return rm(join('./upload/responses', file), { recursive: true, force: true });
     }));
 
     const result: SaveAttempt = {
       type: 'success',
     };
 
-    // If some files did not have ResonseUploads, collect that info in
-    // a warning
-    if (filesMissingData.length > 0) {
+    // Collect all of the warnings generated
+    if (fileWarnings.length > 0) {
       result.type = 'warning';
-      result.message = `File(s) were included in the upload that did not have
-                        a cooresponding row in the CSV, upload a new CSV with
-                        the missing information and a new ZIP with just the
-                        files that had the missing information to include
-                        those responses in the system`;
+      result.message = 'Uploading video files caused warnings';
       result.where = [];
 
-      for (const file of filesMissingData) {
+      for (const warning of fileWarnings) {
+        const place = warning.where ? warning.where[0].place : '';
         result.where.push({
-          place: `${file}`,
-          message: 'Could not find information in CSV',
+          message: warning.message || '',
+          place: place
         });
       }
     }
@@ -224,7 +248,11 @@ export class ResponseUploadService {
         responses: [],
         saveResult: {
           type: 'warning',
-          message: `Response upload not found for ${filename}`,
+          message: `Response for file ${filename} was not found in original CSV`,
+          where: [{
+            place: `${filename}`,
+            message: 'Response upload not found'
+          }]
         },
       };
     }
