@@ -119,12 +119,12 @@ describe('Upload Response ZIP', () => {
       .selectFile('cypress/fixtures/responses/small-set.csv', { force: true })
   });
 
-  it('should warn when nothing in zip folder', () => {
+  it('should not break if a directory is present', () => {
     cy
       .get(zipFileUploadInput)
-      .selectFile('cypress/fixtures/responses/empty.zip', { force: true })
+      .selectFile('cypress/fixtures/responses/with-directory.zip', { force: true })
       .get('p')
-      .should('contain.text', 'No response videos found in ZIP, no responses saved');
+      .should('contain.text', 'successfully');
   });
 
   it('should produce a warning when not all of the videos have been provided in a zip', () => {

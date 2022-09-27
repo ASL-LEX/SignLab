@@ -9,7 +9,7 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir, unlink } from 'fs/promises';
+import { readdir, unlink, rm, stat } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
@@ -147,6 +147,12 @@ export class ResponseUploadService {
         continue;
       }
 
+      // Ignore directories
+      const fileStats = await stat(filePath);
+      if (fileStats.isDirectory()) {
+        continue;
+      }
+
       count += 1;
 
       // Check the file type based on the extension
@@ -187,7 +193,7 @@ export class ResponseUploadService {
 
     // Delete the files after handling upload
     await Promise.all(files.map(file => {
-      return unlink(join('./upload/responses', file));
+      return rm(join('./upload/responses', file), { recursive: true, force: true });
     }));
 
     const result: SaveAttempt = {
