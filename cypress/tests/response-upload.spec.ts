@@ -140,6 +140,14 @@ describe('Upload Response ZIP', () => {
       .get(zipFileUploadInput)
       .selectFile('cypress/fixtures/responses/small-set-extra-video.zip', { force: true })
       .get('li')
-      .should('contain.text', 'Could not find information in CSV');
+      .should('contain.text', 'was not found in original CSV');
+  });
+
+  it('should produce a warning when the ZIP has a video with an unsupported video type', () => {
+    cy
+      .get(zipFileUploadInput)
+      .selectFile('cypress/fixtures/responses/bad-extension.zip', { force: true })
+      .get('li')
+      .should('contain.text', 'girl_response-1.bad: File has unsupported type "bad"');
   });
 });
