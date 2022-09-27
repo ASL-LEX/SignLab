@@ -50,16 +50,19 @@ import { BucketStorage } from './services/bucket/bucket.service';
 import { BucketFactory } from './services/bucket/bucketfactory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './services/jwt.strategy';
+import configuration from './config/configuration';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
   ignoreEnvFile: true,
+  load: [configuration]
 });
 
 // If a specific environment is provided, load variables from there
 if (process.env.NODE_ENV) {
   configModule = ConfigModule.forRoot({
     envFilePath: `../.env.${process.env.NODE_ENV}`,
+    load: [configuration]
   });
 }
 
@@ -82,7 +85,7 @@ if (process.env.NODE_ENV) {
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
+        uri: configService.getOrThrow<string>('database.host'),
       }),
       inject: [ConfigService],
     }),
@@ -90,7 +93,7 @@ if (process.env.NODE_ENV) {
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
+        secret: configService.getOrThrow<string>('auth.jwtSecret'),
         signOptions: { expiresIn: '4h' },
       }),
       inject: [ConfigService],

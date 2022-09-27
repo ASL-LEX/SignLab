@@ -6,13 +6,13 @@ import { LocalStorage } from './local.service';
 
 export class BucketFactory {
   static getS3(bucketName: string, configService: ConfigService): S3Storage {
-    const accessKeyId = configService.getOrThrow<string>('S3_ACCESS_ID');
+    const accessKeyId = configService.getOrThrow<string>('bucket.s3.accessKey');
     const secretAccessKey = configService.getOrThrow<string>(
-      'S3_SECRET_ACCESS_KEY',
+      'bucket.s3.secretKey',
     );
-    const baseUrl = configService.getOrThrow<string>('S3_BASE_URL');
+    const baseUrl = configService.getOrThrow<string>('bucket.s3.baseUrl');
     const endpoint: string | undefined =
-      configService.get<string>('S3_ENDPOINT');
+      configService.get<string>('bucket.s3.endpoint');
 
     const config = {
       credentials: {
@@ -37,7 +37,7 @@ export class BucketFactory {
     bucketName: string,
     configService: ConfigService,
   ): LocalStorage {
-    const folder = configService.getOrThrow<string>('BUCKET_LOCAL_FOLDER');
+    const folder = configService.getOrThrow<string>('bucket.local.folder');
 
     return new LocalStorage(bucketName, folder);
   }
@@ -54,6 +54,7 @@ export class BucketFactory {
    *   * `S3_ACCESS_ID`: The access ID associated with the S3 interface
    *   * `S3_SECRET_ACCESS_KEY`: The secret access key associated with the S3 interface
    *   * `S3_BASE_URL`: Base public URL for reconstructing URLs for objects
+   *   * `S3_ENDPOINT`: S3 complient endpoint to make requests against
    *
    * Local Required Config
    *  * `BUCKET_LOCAL_FOLDER`: Where to locally store the objects
@@ -61,8 +62,8 @@ export class BucketFactory {
   static getBucket(configService: ConfigService): BucketStorage {
     // Get the required information needed regardless of which bucket service
     // is used
-    const bucketType = configService.getOrThrow<string>('BUCKET_TYPE');
-    const bucketName = configService.getOrThrow<string>('BUCKET_NAME');
+    const bucketType = configService.getOrThrow<string>('bucket.type');
+    const bucketName = configService.getOrThrow<string>('bucket.name');
 
     switch (bucketType) {
       case 'S3':
