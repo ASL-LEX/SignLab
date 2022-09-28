@@ -7,3 +7,9 @@ on:
 jobs:
   lint:
     uses: ./.github/workflows/base.yaml
+    with:
+      run-linting: true
+      run-client-unit-tests: true
+      run-server-unit-tests: true
+      run-e2e-tests: true
+      run-docker-build: false
