@@ -8,7 +8,8 @@
     "build:prod": "npm run build:prod --workspaces --if-present",
     "start:prod": "npm run start:prod --workspace=server",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present"
+    "lint": "npm run lint --workspaces --if-present",
+    "start:ci": "NODE_ENV=test npm run start:prod --workspace=server"
   },
   "workspaces": [
     "server",

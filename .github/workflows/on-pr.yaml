@@ -1,4 +1,4 @@
-name: ESLint
+name: Run Linting and Testing
 
 on:
   pull_request:

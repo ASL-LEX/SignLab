@@ -3,7 +3,7 @@
   "scripts": {
     "ng": "ng",
     "start:watch": "ng build --watch",
-    "build:dev": "ng build",
+    "build:dev": "ng build && ls -ll",
     "build:prod": "ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
     "test:watch": "ng test",
