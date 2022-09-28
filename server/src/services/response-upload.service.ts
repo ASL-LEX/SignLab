@@ -9,11 +9,11 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir, unlink, rm, stat } from 'fs/promises';
+import { readdir, rm, stat } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
-import {ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -109,26 +109,9 @@ export class ResponseUploadService {
    * @param zipFile Path to the zip file containing the videos
    */
   async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
-    // Unzip the folder
-    try {
-      await new Promise<void>((resolve, reject) => {
-        createReadStream(zipFile)
-          .pipe(
-            unzipper.Extract({ path: './upload/responses' }),
-          )
-          .on('finish', () => { resolve(); })
-          .on('error', () => { reject() });
-      });
-    } catch (error: any) {
-      console.warn('Failed to extract user provided zip');
-      return {
-        responses: [],
-        saveResult: {
-          type: 'error',
-          message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
-        }
-      };
-    }
+    // Extract the zip
+    const unzipResult = await this.extractZIP(zipFile);
+    if (unzipResult.type == 'error') { return { responses: [], saveResult: unzipResult } };
 
     // Warning that were generated when uploading the files
     const fileWarnings: SaveAttempt[] = [];
@@ -394,5 +377,31 @@ export class ResponseUploadService {
         message: errorMessage,
       };
     }
+  }
+
+  /**
+   * Wrapper around the extract logic
+   */
+  private async extractZIP(path: string): Promise<SaveAttempt> {
+    // Unzip the folder
+    try {
+      await new Promise<void>((resolve, reject) => {
+        createReadStream(path)
+          .pipe(
+            unzipper.Extract({ path: './upload/responses' }),
+          )
+          .on('finish', () => { resolve(); })
+          .on('error', () => { reject() });
+      });
+    } catch (error: any) {
+      console.log(error);
+      console.warn('Failed to extract user provided zip');
+      return {
+        type: 'error',
+        message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
+      };
+    }
+
+    return { type: 'success' };
   }
 }

@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { UserService } from '../../services/user.service';
 import { User } from '../../schemas/user.schema';
 import { UserController } from './user.controller';
+import { RolesGuard } from '../../guards/role.guard';
 
 const testUser1: User = {
   _id: '1',
@@ -56,6 +57,13 @@ const userService = {
   }),
 };
 
+// Test rolesguard
+const rolesGuard = {
+  async canActivate() {
+    return true;
+  }
+};
+
 describe('UserController', () => {
   // Controller being tested
   let userController: UserController;
@@ -69,7 +77,9 @@ describe('UserController', () => {
           useValue: userService,
         },
       ],
-    }).compile();
+    })
+    .overrideGuard(RolesGuard).useValue(rolesGuard)
+    .compile();
 
     userController = await module.resolve(UserController);
   });

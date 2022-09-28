@@ -122,7 +122,7 @@ describe('AuthController', () => {
   describe('login()', () => {
     it('should return null for an invalid username + password', async () => {
       const session: any = {};
-      const result = await authController.login(invalidCredentials, session);
+      const result = await authController.login(invalidCredentials);
 
       // Expect the result to be null
       expect(result).toBeNull;
@@ -137,8 +137,7 @@ describe('AuthController', () => {
         {
           username: invalidCredentials.username,
           password: validCredentials.password,
-        },
-        session,
+        }
       );
 
       // Expect the result to be null
@@ -154,8 +153,7 @@ describe('AuthController', () => {
         {
           username: validCredentials.username,
           password: invalidCredentials.password,
-        },
-        session,
+        }
       );
 
       // Expect the result to be null
@@ -167,13 +165,10 @@ describe('AuthController', () => {
 
     it('should return user for valid username + valid password', async () => {
       const session: any = {};
-      const result = await authController.login(validCredentials, session);
+      const result = await authController.login(validCredentials);
 
       // Should be the `testUser`
       expect(result).toEqual(testUser);
-
-      // Session should have the user ID contained
-      expect(session['userID']).toEqual(testUser._id);
     });
   });
 

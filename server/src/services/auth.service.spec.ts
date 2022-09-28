@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserSignup } from 'shared/dtos/user.dto';
@@ -51,6 +52,13 @@ const userModel = {
   },
 };
 
+// Test JWTService
+const jwtService = {
+  sign(_payload: any) {
+    return 'signed';
+  }
+};
+
 /**
  * Mock the response schema since it indirectly gets a different module
  * declaration from the `app`
@@ -78,6 +86,10 @@ describe('AuthService', () => {
           provide: getModelToken(User.name),
           useValue: userModel,
         },
+        {
+          provide: JwtService,
+          useValue: jwtService
+        }
       ],
     }).compile();
 
@@ -109,7 +121,7 @@ describe('AuthService', () => {
         password: testUser.password,
       });
 
-      expect(result).toEqual(testUser);
+      expect(result).toEqual({ token: 'signed', user: testUser });
     });
   });
 
@@ -167,13 +179,13 @@ describe('AuthService', () => {
         },
       };
       const result = await authService.signup(newUser);
-      expect(result).toEqual(newUser);
+      expect(result).toEqual({ token: 'signed', user: newUser });
     });
   });
 
   describe('isAuthorized()', () => {
     it('should not authorize if a role is not present', async () => {
-      const result = await authService.isAuthorized(testUser._id, [
+      const result = await authService.isAuthorized(testUser, [
         'tagging, responding',
       ]);
 
@@ -181,7 +193,7 @@ describe('AuthService', () => {
     });
 
     it('should authorize if a role is present', async () => {
-      const result = await authService.isAuthorized(testUser._id, [
+      const result = await authService.isAuthorized(testUser, [
         'tagging',
         'responding',
         'admin',
