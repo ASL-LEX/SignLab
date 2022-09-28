@@ -56,7 +56,7 @@ const userModel = {
 const jwtService = {
   sign(_payload: any) {
     return 'signed';
-  }
+  },
 };
 
 /**
@@ -88,8 +88,8 @@ describe('AuthService', () => {
         },
         {
           provide: JwtService,
-          useValue: jwtService
-        }
+          useValue: jwtService,
+        },
       ],
     }).compile();
 

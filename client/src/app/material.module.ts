@@ -43,7 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CommonModule,
     MatProgressBarModule,
     MatPaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   exports: [
     MatButtonModule,
@@ -66,7 +66,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     CommonModule,
     MatProgressBarModule,
     MatPaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
 })
 export class MaterialModule {}

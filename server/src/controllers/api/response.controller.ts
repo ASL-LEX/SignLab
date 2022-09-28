@@ -38,7 +38,7 @@ export class ResponseController {
     private responseStudyService: ResponseStudyService,
     private tagService: TagService,
     private userStudyService: UserStudyService,
-    private bucketStorage: BucketStorage
+    private bucketStorage: BucketStorage,
   ) {}
 
   /**
@@ -255,7 +255,10 @@ export class ResponseController {
   async deleteResponse(@Param('id') responseID: string): Promise<void> {
     const response = await this.responseService.find(responseID);
     if (!response) {
-      throw new HttpException(`Response does not exist with that ID: ${responseID}`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        `Response does not exist with that ID: ${responseID}`,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     // First, handle the case that the response is part of the training set,

@@ -61,7 +61,7 @@ const userService = {
 const rolesGuard = {
   async canActivate() {
     return true;
-  }
+  },
 };
 
 describe('UserController', () => {
@@ -78,8 +78,9 @@ describe('UserController', () => {
         },
       ],
     })
-    .overrideGuard(RolesGuard).useValue(rolesGuard)
-    .compile();
+      .overrideGuard(RolesGuard)
+      .useValue(rolesGuard)
+      .compile();
 
     userController = await module.resolve(UserController);
   });

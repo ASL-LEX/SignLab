@@ -146,8 +146,10 @@ export class TagService {
    * Delete any tag that may be related to the given response
    */
   async deleteResponse(response: Response) {
-    this.tagModel.deleteMany({
-      response: response._id
-    }).exec();
+    this.tagModel
+      .deleteMany({
+        response: response._id,
+      })
+      .exec();
   }
 }

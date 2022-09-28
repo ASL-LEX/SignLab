@@ -18,9 +18,11 @@ export class StudiesControlComponent {
   /** Which study control view is active */
   activeView: 'responses' | 'users' | 'tags' = 'responses';
 
-  constructor(private dialog: MatDialog,
-              private studyService: StudyService,
-              private router: Router) {
+  constructor(
+    private dialog: MatDialog,
+    private studyService: StudyService,
+    private router: Router
+  ) {
     this.studyService.getStudies().then((studies) => {
       this.studies = studies;
       if (this.studies.length > 0) {
@@ -95,7 +97,7 @@ export class StudiesControlComponent {
       'videoURL',
       'study',
       'user',
-      ...Object.keys(tags[0].study.tagSchema.dataSchema.properties)
+      ...Object.keys(tags[0].study.tagSchema.dataSchema.properties),
     ];
 
     this.downloadFile(headerElements, flattenedData);

@@ -2,11 +2,17 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { VideoOption } from './video-option-field.component';
-import { ControlElement, Actions, composeWithUi, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  ControlElement,
+  Actions,
+  composeWithUi,
+  RankedTester,
+  rankWith,
+} from '@jsonforms/core';
 
 interface CsvDataFormat {
   'Video URL': string;
-  'Code': string;
+  Code: string;
   'Search Term': string;
 }
 
@@ -36,14 +42,16 @@ interface CsvDataFormat {
       <button mat-raised-button (click)="fileUpload.click()">
         Upload Video Options
       </button>
-      <button mat-icon-button
-              matTooltip="Download an example option list"
-              (click)='downloadExample()'>
+      <button
+        mat-icon-button
+        matTooltip="Download an example option list"
+        (click)="downloadExample()"
+      >
         <mat-icon>play_for_work</mat-icon>
       </button>
       <mat-error>{{ error }}</mat-error>
     </div>
-  `
+  `,
 })
 export class VideoOptionUpload extends JsonFormsControl {
   constructor(
@@ -70,7 +78,7 @@ export class VideoOptionUpload extends JsonFormsControl {
           try {
             const videoOptions = this.csvToVideoOption(result);
             this.setValue(videoOptions);
-          } catch(error: any) {
+          } catch (error: any) {
             console.warn('Failed to parse CSV, invalid data provided');
             console.warn(error);
             this.changeDetect.detectChanges();
@@ -81,8 +89,8 @@ export class VideoOptionUpload extends JsonFormsControl {
           console.warn(error);
 
           // TODO: Pass along error to the user
-        }
-      })
+        },
+      });
   }
 
   /**
@@ -108,7 +116,6 @@ export class VideoOptionUpload extends JsonFormsControl {
 
     const results: VideoOption[] = [];
     for (const csvLine of csvData) {
-
       // Ensure each field is present
       if (!csvLine['Video URL']) {
         this.error = 'Missing column "Video URL"';
@@ -129,7 +136,7 @@ export class VideoOptionUpload extends JsonFormsControl {
       results.push({
         videoURL: csvLine['Video URL'],
         code: csvLine['Code'],
-        searchTerm: csvLine['Search Term']
+        searchTerm: csvLine['Search Term'],
       });
     }
 
@@ -141,7 +148,8 @@ export class VideoOptionUpload extends JsonFormsControl {
    */
   downloadExample() {
     let data = 'Video URL,Code,Search Term\n';
-    data += 'https://player.vimeo.com/video/344216753?title=0&byline=0&portrait=0?&loop=1&autoplay=1&controls=0&background=1,A-1,cat';
+    data +=
+      'https://player.vimeo.com/video/344216753?title=0&byline=0&portrait=0?&loop=1&autoplay=1&controls=0&background=1,A-1,cat';
 
     const a = document.createElement('a');
     const blob = new Blob([data], { type: 'text/csv' });
@@ -152,7 +160,6 @@ export class VideoOptionUpload extends JsonFormsControl {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
-
   }
 }
 

@@ -20,10 +20,11 @@ import { SafePipe } from './pipes/safe.pipe';
 @NgModule({
   declarations: [
     AslLexSignBankField,
-    FileListField, SafePipe,
+    FileListField,
+    SafePipe,
     VideoOptionField,
     UserVideoOption,
-    VideoOptionUpload
+    VideoOptionUpload,
   ],
   imports: [
     FormsModule,
@@ -31,7 +32,7 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     FlexModule,
-    NgxCsvParserModule
+    NgxCsvParserModule,
   ],
   exports: [
     AslLexSignBankField,

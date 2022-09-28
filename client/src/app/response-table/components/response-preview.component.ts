@@ -3,7 +3,7 @@ import {
   OnDestroy,
   Input,
   ElementRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { ResponseTableElement } from '../models/response-table-element';
 
@@ -11,12 +11,16 @@ import { ResponseTableElement } from '../models/response-table-element';
   selector: 'response-preview',
   template: `
     <div class="video-preview">
-      <video (mouseenter)="playVideo()"
-             (mouseleave)="stopVideo()"
-             (durationchange)="loadedVideoData()"
-             loop
-             #previewVideo>
-        <source src="{{ responseElem ? responseElem.response.videoURL : '' }}">
+      <video
+        (mouseenter)="playVideo()"
+        (mouseleave)="stopVideo()"
+        (durationchange)="loadedVideoData()"
+        loop
+        #previewVideo
+      >
+        <source
+          src="{{ responseElem ? responseElem.response.videoURL : '' }}"
+        />
       </video>
     </div>
   `,
@@ -36,7 +40,9 @@ export class ResponsePreview implements OnDestroy {
    * https://stackoverflow.com/questions/31078061/many-video-tags-on-page-in-single-page-application-angular-makes-page-frozen
    */
   ngOnDestroy(): void {
-    if (!this.video) { return; }
+    if (!this.video) {
+      return;
+    }
 
     this.video.nativeElement.pause();
     this.video.nativeElement.src = '';
@@ -47,7 +53,9 @@ export class ResponsePreview implements OnDestroy {
 
   playVideo() {
     // Get the video which was hovered over
-    if (!this.video) { return; }
+    if (!this.video) {
+      return;
+    }
 
     // Play the video from the begining
     this.video.nativeElement.currentTime = 0;
@@ -56,7 +64,9 @@ export class ResponsePreview implements OnDestroy {
 
   stopVideo() {
     // Get the video that is no longer being hovered over
-    if (!this.video) { return; }
+    if (!this.video) {
+      return;
+    }
 
     // Pause and reset preview
     this.video.nativeElement.pause();
@@ -71,10 +81,14 @@ export class ResponsePreview implements OnDestroy {
    * Have the video preview the middle frame
    */
   async setToMiddleFrame() {
-    if (!this.video) { return; }
+    if (!this.video) {
+      return;
+    }
 
     const duration = await this.getDuration(this.video);
-    if (!isFinite(duration)) { return; }
+    if (!isFinite(duration)) {
+      return;
+    }
 
     const middleFrame = duration / 2;
     this.video.nativeElement.currentTime = middleFrame;
@@ -93,7 +107,9 @@ export class ResponsePreview implements OnDestroy {
   private async getDuration(video: ElementRef): Promise<number> {
     // Get the duration and simply return if the duration is NaN
     let duration = video.nativeElement.duration;
-    if (isNaN(duration)) { return NaN; }
+    if (isNaN(duration)) {
+      return NaN;
+    }
 
     const maxAttempts = 5;
     let attemptNum = 0;
@@ -110,7 +126,7 @@ export class ResponsePreview implements OnDestroy {
           // Reset the time
           video.nativeElement.currentTime = 0;
           resolve();
-        }
+        };
 
         video.nativeElement.currentTime = 1e101;
       });
@@ -121,6 +137,6 @@ export class ResponsePreview implements OnDestroy {
     }
 
     // Not dealing with the bug, just returning the duration
-   return duration;
+    return duration;
   }
 }

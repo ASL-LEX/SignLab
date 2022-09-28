@@ -15,12 +15,7 @@ import { User } from 'shared/dtos/user.dto';
 export class UserControlComponent implements OnInit {
   // TODO: Get roles dynamically from server
   /** Columns to display in the user view */
-  displayedColumns = [
-    'username',
-    'name',
-    'email',
-    'isAdmin',
-  ];
+  displayedColumns = ['username', 'name', 'email', 'isAdmin'];
   /** Stores the current list of all users, is exposed in the user control view */
   userData: User[] = [];
 

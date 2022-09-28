@@ -28,7 +28,7 @@ import { VideoOption, VideoSelection } from './video-option-field.component';
       (videoSelected)="selectOption($event)"
       (searchValue)="searchUpdate($event)"
     ></video-option-field>
-  `
+  `,
 })
 export class AslLexSignBankField extends JsonFormsControl implements OnInit {
   tagSearchResults: VideoOption[] = [];
@@ -60,7 +60,7 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
    * update the search field with the selected sign's english tag.
    */
   selectOption(sign: VideoSelection) {
-    if(sign.isCustom) {
+    if (sign.isCustom) {
       this.setLabelValue(`custom: ${sign.value}`);
     } else {
       this.setLabelValue(`code: ${sign.value}`);
@@ -75,8 +75,12 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
     const signs = await this.aslLexService.getAslLexView(search);
 
     // Convert the sign data into options for the videos select field
-    this.tagSearchResults = signs.map(sign => {
-      return { videoURL: sign.videoURL, code: sign.code, searchTerm: sign.englishTag };
+    this.tagSearchResults = signs.map((sign) => {
+      return {
+        videoURL: sign.videoURL,
+        code: sign.code,
+        searchTerm: sign.englishTag,
+      };
     });
     this.changeDetectorRef.detectChanges();
   }

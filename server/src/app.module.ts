@@ -55,14 +55,14 @@ import configuration from './config/configuration';
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
   ignoreEnvFile: true,
-  load: [configuration]
+  load: [configuration],
 });
 
 // If a specific environment is provided, load variables from there
 if (process.env.NODE_ENV) {
   configModule = ConfigModule.forRoot({
     envFilePath: `../.env.${process.env.NODE_ENV}`,
-    load: [configuration]
+    load: [configuration],
   });
 }
 

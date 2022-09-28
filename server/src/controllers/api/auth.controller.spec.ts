@@ -133,12 +133,10 @@ describe('AuthController', () => {
 
     it('should return null for invalid username + valid password', async () => {
       const session: any = {};
-      const result = await authController.login(
-        {
-          username: invalidCredentials.username,
-          password: validCredentials.password,
-        }
-      );
+      const result = await authController.login({
+        username: invalidCredentials.username,
+        password: validCredentials.password,
+      });
 
       // Expect the result to be null
       expect(result).toBeNull;
@@ -149,12 +147,10 @@ describe('AuthController', () => {
 
     it('should return null for valid username + invalid password', async () => {
       const session: any = {};
-      const result = await authController.login(
-        {
-          username: validCredentials.username,
-          password: invalidCredentials.password,
-        }
-      );
+      const result = await authController.login({
+        username: validCredentials.username,
+        password: invalidCredentials.password,
+      });
 
       // Expect the result to be null
       expect(result).toBeNull;

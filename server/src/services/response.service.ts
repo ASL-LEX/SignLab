@@ -43,8 +43,10 @@ export class ResponseService {
    * and not any related entries that depend on the foreign key.
    */
   async delete(response: Response): Promise<void> {
-    this.responseModel.deleteOne({
-      _id: response._id
-    }).exec();
+    this.responseModel
+      .deleteOne({
+        _id: response._id,
+      })
+      .exec();
   }
 }

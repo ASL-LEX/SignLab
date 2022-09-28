@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { VideoOption, VideoSelection } from './video-option-field.component';
-import { composeWithUi, Actions, ControlElement, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  composeWithUi,
+  Actions,
+  ControlElement,
+  RankedTester,
+  rankWith,
+} from '@jsonforms/core';
 
 /**
  * Provides videos are options to a user where the videos, identitfication
@@ -19,7 +25,7 @@ import { composeWithUi, Actions, ControlElement, RankedTester, rankWith } from '
       (videoSelected)="selectOption($event)"
       (searchValue)="searchUpdate($event)"
     ></video-option-field>
-  `
+  `,
 })
 export class UserVideoOption extends JsonFormsControl implements OnInit {
   /** The video options presented to the user based on user search */
@@ -52,7 +58,7 @@ export class UserVideoOption extends JsonFormsControl implements OnInit {
   }
 
   selectOption(option: VideoSelection) {
-    if(option.isCustom) {
+    if (option.isCustom) {
       this.setLabelValue(`custom: ${option.value}`);
     } else {
       this.setLabelValue(`code: ${option.value}`);
@@ -61,10 +67,10 @@ export class UserVideoOption extends JsonFormsControl implements OnInit {
 
   /** On search filter the videos to display to the user */
   searchUpdate(searchTerm: string): void {
-    this.videoOptions = this.allVideoOptions.filter(option => {
-      return option.searchTerm
-        .toLowerCase()
-        .indexOf(searchTerm.toLowerCase()) == 0;
+    this.videoOptions = this.allVideoOptions.filter((option) => {
+      return (
+        option.searchTerm.toLowerCase().indexOf(searchTerm.toLowerCase()) == 0
+      );
     });
   }
 

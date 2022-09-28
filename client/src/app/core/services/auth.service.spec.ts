@@ -24,9 +24,11 @@ describe('AuthService', () => {
       throw new Error();
     });
 
-    tokenSpy = jasmine.createSpyObj('TokenService',
+    tokenSpy = jasmine.createSpyObj(
+      'TokenService',
       ['token', 'storeAuthInformation', 'hasAuthInfo', 'removeAuthInformation'],
-      { user: {} });
+      { user: {} }
+    );
 
     // Create unit under test
     service = new AuthService(spy, tokenSpy);
@@ -77,13 +79,19 @@ describe('AuthService', () => {
         username: 'bob',
         _id: 'sadlkfj',
       },
-      token: 'some-fake-token'
+      token: 'some-fake-token',
     };
     spy.post.and.returnValue(data);
 
-    tokenSpy.storeAuthInformation.and.callFake((param) => { return param });
+    tokenSpy.storeAuthInformation.and.callFake((param) => {
+      return param;
+    });
     tokenSpy.hasAuthInfo.and.returnValue(true);
-    (Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<() => User>).and.returnValue(data.user);
+    (
+      Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<
+        () => User
+      >
+    ).and.returnValue(data.user);
 
     service = new AuthService(spy, tokenSpy);
 
@@ -135,7 +143,7 @@ describe('AuthService', () => {
         username: 'bob',
         _id: '1',
       },
-      token: 'some-fake-token'
+      token: 'some-fake-token',
     };
 
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
