@@ -221,7 +221,6 @@ describe('ResponseService', () => {
     }).compile();
 
     responseUploadService = await module.resolve(ResponseUploadService);
-    // @ts-ignore
     jest.spyOn(responseUploadService, 'extractZIP').mockReturnValue(Promise.resolve({ type: 'success' }));
   });
 

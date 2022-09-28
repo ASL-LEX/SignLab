@@ -382,7 +382,7 @@ export class ResponseUploadService {
   /**
    * Wrapper around the extract logic
    */
-  private async extractZIP(path: string): Promise<SaveAttempt> {
+  async extractZIP(path: string): Promise<SaveAttempt> {
     // Unzip the folder
     try {
       await new Promise<void>((resolve, reject) => {

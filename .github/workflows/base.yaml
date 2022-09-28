@@ -1,0 +1,35 @@
+name: Setup for SignLab workflows
+
+on:
+  workflow_call:
+
+jobs:
+  base:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the respository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      # Setup node
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Install dependencies
+      - name: NPM Install
+        run: npm install --only-dev
+
+      # Run linting
+      - name: Check for Linting Issues
+        run: npm run lint
+
+      - name: Client Side Unit Tests
+        run: npm run test --workspace=client
+
+      - name: Server Side Unit Tests
+        run: npm run test --workspace=server
