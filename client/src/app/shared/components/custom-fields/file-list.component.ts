@@ -32,14 +32,18 @@ import {
         (change)="fileSelect($event)"
         #fileUpload
       />
-      <button mat-raised-button
-              matTooltip="Upload options with each option on its own line"
-              (click)="fileUpload.click()">
+      <button
+        mat-raised-button
+        matTooltip="Upload options with each option on its own line"
+        (click)="fileUpload.click()"
+      >
         Upload Options
       </button>
-      <button mat-icon-button
-              matTooltip="Download an example option list"
-              (click)='downloadExample()'>
+      <button
+        mat-icon-button
+        matTooltip="Download an example option list"
+        (click)="downloadExample()"
+      >
         <mat-icon>play_for_work</mat-icon>
       </button>
       <mat-error>{{ error }}</mat-error>

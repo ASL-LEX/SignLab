@@ -27,15 +27,13 @@ export default () => ({
       accessKey: process.env.S3_ACCESS_ID,
       secretKey: process.env.S3_SECRET_ACCESS_KEY,
       baseUrl: process.env.S3_BASE_URL,
-      endpoint: process.env.S3_ENDPOINT
+      endpoint: process.env.S3_ENDPOINT,
     },
     /** Gooogle cloud buckets */
-    gcp: {
-
-    }
+    gcp: {},
   },
   videoSettings: {
     /** Specifies the types that users can upload to SignLab */
-    supportedTypes: ['webm', 'mp4', 'ogg']
-  }
+    supportedTypes: ['webm', 'mp4', 'ogg'],
+  },
 });

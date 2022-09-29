@@ -130,10 +130,15 @@ export class UserStudyService {
    * `trainingResponseStudies` list on each user study
    */
   async removeTraining(responseStudy: ResponseStudy) {
-    this.userStudyModel.updateMany({
-      study: responseStudy.study._id
-    }, {
-      $pull: { trainingResponseStudies: responseStudy._id }
-    }).exec();
+    this.userStudyModel
+      .updateMany(
+        {
+          study: responseStudy.study._id,
+        },
+        {
+          $pull: { trainingResponseStudies: responseStudy._id },
+        },
+      )
+      .exec();
   }
 }

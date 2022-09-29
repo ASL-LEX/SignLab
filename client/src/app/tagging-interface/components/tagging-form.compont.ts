@@ -13,7 +13,10 @@ import {
 } from '../../shared/components/custom-fields/asl-lex-field.component';
 import { createAjv } from '@jsonforms/core';
 import { Tag } from 'shared/dtos/tag.dto';
-import { UserVideoOption, userVideoOptionRendererTester } from '../../shared/components/custom-fields/user-video-option-field.component';
+import {
+  UserVideoOption,
+  userVideoOptionRendererTester,
+} from '../../shared/components/custom-fields/user-video-option-field.component';
 
 @Component({
   selector: 'tagging-form',
@@ -78,8 +81,8 @@ export class TaggingForm implements OnChanges {
     },
     {
       tester: userVideoOptionRendererTester,
-      renderer: UserVideoOption
-    }
+      renderer: UserVideoOption,
+    },
   ];
   /** Configure how errors are presented */
   ajv = createAjv({ schemaId: 'id', allErrors: true });

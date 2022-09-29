@@ -148,7 +148,9 @@ export class ResponseService {
    * @param response The response to delete
    */
   async delete(response: Response) {
-    this.signLab.delete<any>(`api/response/${response._id}`, { provideToken: true });
+    this.signLab.delete<any>(`api/response/${response._id}`, {
+      provideToken: true,
+    });
   }
 
   /**
@@ -156,9 +158,12 @@ export class ResponseService {
    * upload of response data
    */
   async getCSVHeader(): Promise<string> {
-    const result = await this.signLab.get<{header: string}>('api/response/template',{
-      provideToken: true,
-    });
+    const result = await this.signLab.get<{ header: string }>(
+      'api/response/template',
+      {
+        provideToken: true,
+      }
+    );
 
     return result.header;
   }

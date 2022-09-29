@@ -9,11 +9,11 @@ import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/response.dto';
 import { createReadStream } from 'fs';
-import { readdir, unlink, rm, stat } from 'fs/promises';
+import { readdir, rm, stat } from 'fs/promises';
 import { join, basename } from 'path';
 import { Response } from '../schemas/response.schema';
 import { BucketStorage } from './bucket/bucket.service';
-import {ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -37,10 +37,11 @@ export class ResponseUploadService {
     private responseUploadModel: Model<ResponseUploadDocument>,
     private responseService: ResponseService,
     private bucketService: BucketStorage,
-    configService: ConfigService
+    configService: ConfigService,
   ) {
-
-    this.supportedVideoFormats = new Set<string>(configService.getOrThrow<string[]>('videoSettings.supportedTypes'));
+    this.supportedVideoFormats = new Set<string>(
+      configService.getOrThrow<string[]>('videoSettings.supportedTypes'),
+    );
   }
 
   /**
@@ -109,25 +110,10 @@ export class ResponseUploadService {
    * @param zipFile Path to the zip file containing the videos
    */
   async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
-    // Unzip the folder
-    try {
-      await new Promise<void>((resolve, reject) => {
-        createReadStream(zipFile)
-          .pipe(
-            unzipper.Extract({ path: './upload/responses' }),
-          )
-          .on('finish', () => { resolve(); })
-          .on('error', () => { reject() });
-      });
-    } catch (error: any) {
-      console.warn('Failed to extract user provided zip');
-      return {
-        responses: [],
-        saveResult: {
-          type: 'error',
-          message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
-        }
-      };
+    // Extract the zip
+    const unzipResult = await this.extractZIP(zipFile);
+    if (unzipResult.type == 'error') {
+      return { responses: [], saveResult: unzipResult };
     }
 
     // Warning that were generated when uploading the files
@@ -162,8 +148,10 @@ export class ResponseUploadService {
 
         fileWarnings.push({
           type: 'warning',
-          message: `File has unsupported type "${fileExtension}", supported formats ${Array.from(this.supportedVideoFormats).join(', ')}`,
-          where: [{ place: `${file}`, message: 'Invalid extension' }]
+          message: `File has unsupported type "${fileExtension}", supported formats ${Array.from(
+            this.supportedVideoFormats,
+          ).join(', ')}`,
+          where: [{ place: `${file}`, message: 'Invalid extension' }],
         });
 
         continue;
@@ -192,9 +180,14 @@ export class ResponseUploadService {
     }
 
     // Delete the files after handling upload
-    await Promise.all(files.map(file => {
-      return rm(join('./upload/responses', file), { recursive: true, force: true });
-    }));
+    await Promise.all(
+      files.map((file) => {
+        return rm(join('./upload/responses', file), {
+          recursive: true,
+          force: true,
+        });
+      }),
+    );
 
     const result: SaveAttempt = {
       type: 'success',
@@ -210,7 +203,7 @@ export class ResponseUploadService {
         const place = warning.where ? warning.where[0].place : '';
         result.where.push({
           message: warning.message || '',
-          place: place
+          place: place,
         });
       }
     }
@@ -249,10 +242,12 @@ export class ResponseUploadService {
         saveResult: {
           type: 'warning',
           message: `Response for file ${filename} was not found in original CSV`,
-          where: [{
-            place: `${filename}`,
-            message: 'Response upload not found'
-          }]
+          where: [
+            {
+              place: `${filename}`,
+              message: 'Response upload not found',
+            },
+          ],
         },
       };
     }
@@ -394,5 +389,34 @@ export class ResponseUploadService {
         message: errorMessage,
       };
     }
+  }
+
+  /**
+   * Wrapper around the extract logic
+   */
+  async extractZIP(path: string): Promise<SaveAttempt> {
+    // Unzip the folder
+    try {
+      await new Promise<void>((resolve, reject) => {
+        createReadStream(path)
+          .pipe(unzipper.Extract({ path: './upload/responses' }))
+          .on('finish', () => {
+            resolve();
+          })
+          .on('error', () => {
+            reject();
+          });
+      });
+    } catch (error: any) {
+      console.log(error);
+      console.warn('Failed to extract user provided zip');
+      return {
+        type: 'error',
+        message:
+          'Was unable to extract provided ZIP, ensure the file is valid and not corrupt',
+      };
+    }
+
+    return { type: 'success' };
   }
 }

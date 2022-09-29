@@ -336,10 +336,10 @@ class EmbeddedVideoOption extends TagField {
     super(TagFieldType.EmbeddedVideoOption, 'Video Option', 'string');
   }
 
- /**
-  * Provides options to allow users to select a custom intpu and the format
-  * of the video options
-  */
+  /**
+   * Provides options to allow users to select a custom intpu and the format
+   * of the video options
+   */
   protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
     return {
       allowCustomLabels: {
@@ -351,17 +351,17 @@ class EmbeddedVideoOption extends TagField {
           type: 'object',
           properties: {
             videoURL: {
-              type: 'string'
+              type: 'string',
             },
             code: {
-              type: 'string'
+              type: 'string',
             },
             searchTerm: {
-              type: 'string'
-            }
+              type: 'string',
+            },
           },
-          required: ['videoURL', 'code', 'searchTerm']
-        }
+          required: ['videoURL', 'code', 'searchTerm'],
+        },
       },
     };
   }
@@ -377,9 +377,9 @@ class EmbeddedVideoOption extends TagField {
         type: 'Control',
         scope: '#/properties/userVideoParameters',
         options: {
-          customType: 'video-option-upload'
-        }
-      }
+          customType: 'video-option-upload',
+        },
+      },
     ];
   }
 
@@ -392,9 +392,9 @@ class EmbeddedVideoOption extends TagField {
           customType: 'video-options',
           allowCustomLabels: this.data.allowCustomLabels,
           userVideoParameters: this.data.userVideoParameters,
-          showUnfocusedDescription: true
-        }
-      }
+          showUnfocusedDescription: true,
+        },
+      },
     ];
   }
 

@@ -14,7 +14,7 @@ import {
   ResponseTableToggleChange,
 } from '../models/response-table-element';
 import { MatPaginator } from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 
 /**
  * The ResponseTable displays response information and controls in a tabular
@@ -30,7 +30,9 @@ import {MatTableDataSource} from '@angular/material/table';
   templateUrl: './response-table-core.component.html',
   styleUrls: ['./response-table-core.component.css'],
 })
-export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChanges {
+export class ResponseTableCoreComponent
+  implements OnInit, AfterViewInit, OnChanges
+{
   /**
    * The columns to show, these are the default options showed in every table
    * view
@@ -44,13 +46,14 @@ export class ResponseTableCoreComponent implements OnInit, AfterViewInit, OnChan
   /** Determine if the training enable controls should be provided */
   @Input() displayStudyTrainingControls: boolean;
   /** Determine if the deletion option should be displayed */
-  @Input() displayDeletion: boolean = false;
+  @Input() displayDeletion = false;
   /** The response elements to display */
   @Input() responseData: ResponseTableElement[];
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
-  @Output() partOfTrainingChange = new EventEmitter<ResponseTableToggleChange>();
+  @Output() partOfTrainingChange =
+    new EventEmitter<ResponseTableToggleChange>();
   /** Emits change when the user requests a deletion */
   @Output() deleteResponse = new EventEmitter<ResponseTableElement>();
   /** Controls the page based access */

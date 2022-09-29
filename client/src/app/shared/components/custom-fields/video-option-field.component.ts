@@ -34,7 +34,7 @@ export interface VideoSelection {
   value: string;
   /** If the option the user selected is a custom option */
   isCustom: boolean;
-};
+}
 
 /**
  * This component is a field where a user's option is a video they selected
@@ -47,17 +47,17 @@ export interface VideoSelection {
 @Component({
   selector: 'video-option-field',
   templateUrl: './video-option-field.component.html',
-  styleUrls: ['./video-option-field.component.css']
+  styleUrls: ['./video-option-field.component.css'],
 })
 export class VideoOptionField {
   /** The options that are to be actively displayed to the user */
   @Input() videoOptions: VideoOption[] = [];
   /** The field label which identifies the field to the user */
-  @Input() label: string = '';
+  @Input() label = '';
   /** The description explaining what the field is about to the user */
-  @Input() description: string = '';
+  @Input() description = '';
   /** Determines if a custom option is possible */
-  @Input() allowCustomOption: boolean = false;
+  @Input() allowCustomOption = false;
   /** Debounce between when a user has entered a search term and the value is emitted */
   @Input() debounceTime = 500;
   /** Emits an event when the user has made a selection */
@@ -103,7 +103,7 @@ export class VideoOptionField {
     this.selectedVideo = {
       videoURL: '',
       code: this.userSearchValue,
-      searchTerm: this.userSearchValue
+      searchTerm: this.userSearchValue,
     };
 
     // Emit the selection

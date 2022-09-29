@@ -31,7 +31,12 @@ import { AuthService } from '../../core/services/auth.service';
             [formControl]="pass"
             data-cy="passwordField"
           /><br />
-          <button mat-stroked-button class="button" type="submit" data-cy="loginSubmit">
+          <button
+            mat-stroked-button
+            class="button"
+            type="submit"
+            data-cy="loginSubmit"
+          >
             Submit
           </button>
         </form>

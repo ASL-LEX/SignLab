@@ -9,7 +9,7 @@ import { ResponseTableElement } from '../models/response-table-element';
   selector: 'response-table',
   template: ` <response-table-core
     [responseData]="responseData"
-    [displayDeletion]=true
+    [displayDeletion]="true"
     (deleteResponse)="handleDeletion($event)"
   ></response-table-core>`,
 })
@@ -32,16 +32,17 @@ export class ResponseTable {
   }
 
   handleDeletion(responseElem: ResponseTableElement) {
-    const message = 'Are you sure you want to delete this response? Doing so ' +
-                    'will remove all data related to this response including ' +
-                    'existing tags';
-    if(!confirm(message)) {
+    const message =
+      'Are you sure you want to delete this response? Doing so ' +
+      'will remove all data related to this response including ' +
+      'existing tags';
+    if (!confirm(message)) {
       return;
     }
 
     this.responseService.delete(responseElem.response);
 
-    this.responseData = this.responseData.filter(elem => {
+    this.responseData = this.responseData.filter((elem) => {
       return elem.response._id != responseElem.response._id;
     });
   }

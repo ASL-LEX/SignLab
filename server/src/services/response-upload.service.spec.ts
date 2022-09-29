@@ -8,6 +8,7 @@ import { StudyService } from './study.service';
 import { TagService } from './tag.service';
 import { ResponseUploadService } from './response-upload.service';
 import { BucketStorage, BucketFile } from './bucket/bucket.service';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * Example ResponseUpload model that expects data in the form below
@@ -131,6 +132,12 @@ const studyService = {
   },
 };
 
+const configService = {
+  getOrThrow<T>(search: string) {
+    return ['mp4', 'oog', 'webm'];
+  },
+};
+
 /**
  * Mock the response schema since it indirectly gets a different module
  * declaration from the `app`
@@ -153,16 +160,19 @@ const readdirMock = jest.fn<string[], [string]>((_path) => {
   return [];
 });
 
-jest.mock('fs', () => ({
-  createReadStream: () => {
-    return {
-      pipe() {},
-    };
-  },
-}));
 jest.mock('fs/promises', () => ({
   readdir: (path: string) => {
     return readdirMock(path);
+  },
+  stat: (_path: string) => {
+    return {
+      isDirectory: () => {
+        return false;
+      },
+    };
+  },
+  rm: (_path: string) => {
+    return Promise.resolve();
   },
 }));
 
@@ -207,10 +217,17 @@ describe('ResponseService', () => {
           provide: BucketStorage,
           useValue: bucketService,
         },
+        {
+          provide: ConfigService,
+          useValue: configService,
+        },
       ],
     }).compile();
 
     responseUploadService = await module.resolve(ResponseUploadService);
+    jest
+      .spyOn(responseUploadService, 'extractZIP')
+      .mockReturnValue(Promise.resolve({ type: 'success' }));
   });
 
   describe('uploadResponseDataCSV()', () => {
@@ -300,7 +317,9 @@ describe('ResponseService', () => {
       );
 
       expect(result.saveResult.type).toEqual('warning');
-      expect(result.saveResult.message).toContain('No response videos found');
+      expect(result.saveResult.message).toContain(
+        'No response videos found in ZIP, no responses saved',
+      );
     });
 
     it('should give warning if file does not have a cooresponding response upload', async () => {
@@ -321,7 +340,7 @@ describe('ResponseService', () => {
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain(
-        'included in the upload that did not have',
+        'Uploading video files caused warnings',
       );
     });
 
