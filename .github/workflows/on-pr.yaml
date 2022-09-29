@@ -6,10 +6,76 @@ on:
 
 jobs:
   lint:
-    uses: ./.github/workflows/base.yaml
-    with:
-      run-linting: true
-      run-client-unit-tests: true
-      run-server-unit-tests: true
-      run-e2e-tests: true
-      run-docker-build: false
+    runs-on: ubuntu-latest
+    name: Check for Linting Errors
+    steps:
+      - name: Setup
+        uses: ./github/actions/setup.yaml
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Check for Linting Issues
+        run: npm run lint
+
+  client-unit-tests:
+    runs-on: ubuntu-latest
+    name: Run Client Side Unit Tests
+    steps:
+      - name: Setup
+        uses: ./github/actions/setup.yaml
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Run unit tests for the client
+        run: npm run test --workspace=client
+
+  server-unit-tests:
+    runs-on: ubuntu-latest
+    name: Run Server Side Unit Tests
+    steps:
+      - name: Setup
+        uses: ./github/actions/setup.yaml
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Run unit tests for the server
+        run: npm run test --workspace=server
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    name: Run E2E Tests
+    steps:
+      - name: Setup
+        uses: ./github/actions/setup.yaml
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Build Code
+        if: ${{ inputs.run-e2e-tests }}
+        run: |
+          npm run build:prod
+          mkdir -p server/bucket-test/Responses
+
+      - name: Start MongoDB Instance
+        if: ${{ inputs.run-e2e-tests }}
+        uses: supercharge/mongodb-github-action@1.8.0
+
+      - name: Run e2e testing
+        uses: cypress-io/github-action@v4.2.0
+        if: ${{ inputs.run-e2e-tests }}
+        with:
+          start: npm run start:ci
+        env:
+          MONGO_URI: mongodb://localhost:27017/signlab-test
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos

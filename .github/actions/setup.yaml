@@ -1,0 +1,23 @@
+name: 'Setup Environment'
+description: 'Checkout the code and install required elements'
+inputs:
+  ref:
+    description: 'Git reference to checkout'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.ref }}
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: NPM Install
+      run: npm install --only-dev
+      shell: bash
