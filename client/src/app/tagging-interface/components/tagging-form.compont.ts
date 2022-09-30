@@ -24,7 +24,7 @@ import {
     <div fxLayout="row" fxLayoutAlign="space-around">
       <!-- Response Video View -->
       <div class="video-tag-child">
-        <video src="{{ tag.response.videoURL }}" controls autoplay></video>
+        <video src="{{ tag.response.videoURL }}" controls autoplay loop></video>
       </div>
 
       <!-- Form View -->
