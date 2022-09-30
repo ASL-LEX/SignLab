@@ -68,7 +68,6 @@ describe('AuthService', () => {
       user: {
         email: 'bob@bu.edu',
         name: 'bob',
-        password: 'nothing',
         roles: {
           admin: false,
           tagging: false,
@@ -132,7 +131,6 @@ describe('AuthService', () => {
       user: {
         email: 'bob@bu.edu',
         name: 'bob',
-        password: 'hi',
         roles: {
           admin: false,
           tagging: false,

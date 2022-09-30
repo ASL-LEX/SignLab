@@ -1,10 +1,11 @@
 import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserSignup } from 'shared/dtos/user.dto';
+import { UserCredentials, UserSignup } from 'shared/dtos/user.dto';
 import { User } from '../schemas/user.schema';
 import { AuthService } from './auth.service';
 import { hashSync } from 'bcrypt';
+import * as usercredentials from '../schemas/usercredentials.schema';
 
 // Test user in the system
 const testUser: User = {
@@ -12,7 +13,6 @@ const testUser: User = {
   name: 'bob',
   email: 'bob@bu.edu',
   username: 'bob',
-  password: 'bobby',
   roles: {
     admin: true,
     tagging: true,
@@ -20,6 +20,11 @@ const testUser: User = {
     accessing: true,
     owner: false,
   },
+};
+
+const testCredentials: UserCredentials = {
+  username: 'bob',
+  password: 'bobby',
 };
 
 // Test interface for user storage
@@ -37,12 +42,6 @@ const userModel = {
       user = testUser;
     }
 
-
-    if (user != null) {
-      user = JSON.parse(JSON.stringify(user));
-      user!.password = hashSync(user!.password, 10);
-    }
-
     return {
       async exec() {
         return user;
@@ -55,6 +54,27 @@ const userModel = {
   },
 
   async create(params: UserSignup) {
+    return params;
+  },
+};
+
+const credentialsModel = {
+  findOne(params: any) {
+    return {
+      async exec() {
+        if (params.username == testCredentials.username) {
+          return {
+            username: testCredentials.username,
+            password: hashSync(testCredentials.password, 10),
+          };
+        } else {
+          return null;
+        }
+      },
+    };
+  },
+
+  async create(params: any) {
     return params;
   },
 };
@@ -97,6 +117,10 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: jwtService,
         },
+        {
+          provide: getModelToken(usercredentials.UserCredentials.name),
+          useValue: credentialsModel,
+        },
       ],
     }).compile();
 
@@ -125,15 +149,10 @@ describe('AuthService', () => {
     it('should authenticate a user with a valid username + password', async () => {
       const result: any = await authService.authenticate({
         username: testUser.username,
-        password: testUser.password,
+        password: testCredentials.password,
       });
 
-      // Passwords won't match due to hashing
-      const expectedUser = JSON.parse(JSON.stringify(testUser));
-      delete expectedUser.password;
-      delete result.user.password;
-
-      expect(result).toEqual({ token: 'signed', user: expectedUser });
+      expect(result).toEqual({ token: 'signed', user: testUser });
     });
   });
 
@@ -191,7 +210,8 @@ describe('AuthService', () => {
         },
       };
       const result: any = await authService.signup(newUser);
-      delete result.user.password; // Pgassword will not match due to hashin
+
+      // Password not present on user model
       delete newUser.password;
       expect(result).toEqual({ token: 'signed', user: newUser });
     });

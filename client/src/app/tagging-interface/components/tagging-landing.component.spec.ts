@@ -16,7 +16,6 @@ describe('TaggingLanding', () => {
     name: 'mary',
     email: 'mary@bu.edu',
     username: 'mary',
-    password: 'fake',
     roles: {
       admin: false,
       tagging: false,

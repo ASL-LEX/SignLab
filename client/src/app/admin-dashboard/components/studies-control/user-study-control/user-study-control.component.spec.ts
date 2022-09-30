@@ -30,7 +30,6 @@ describe('UserStudyComponent', () => {
         name: 'bob',
         email: 'bob@bu.edu',
         username: 'bob',
-        password: 'fake',
         roles: {
           admin: false,
           tagging: false,
@@ -50,7 +49,6 @@ describe('UserStudyComponent', () => {
         name: 'sam',
         email: 'sam@bu.edu',
         username: 'sam',
-        password: 'fake',
         roles: {
           admin: false,
           tagging: false,
@@ -70,7 +68,6 @@ describe('UserStudyComponent', () => {
         name: 'mary',
         email: 'mary@bu.edu',
         username: 'mary',
-        password: 'fake',
         roles: {
           admin: false,
           tagging: false,

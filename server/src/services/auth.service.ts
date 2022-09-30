@@ -11,6 +11,7 @@ import {
 import { User, UserDocument } from '../schemas/user.schema';
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
+import * as usercredentials from '../schemas/usercredentials.schema';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -21,6 +22,8 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
+    @InjectModel(usercredentials.UserCredentials.name)
+    private userCredentialsModel: Model<usercredentials.UserCredentialsDocument>,
   ) {}
 
   /**
@@ -32,17 +35,20 @@ export class AuthService {
     credentials: UserCredentials,
   ): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
+    const userCredentials = await this.userCredentialsModel
+      .findOne({ username: credentials.username })
+      .exec();
     const user = await this.userModel
       .findOne({ username: credentials.username })
       .exec();
 
     // If a user is not found with that username, return null
-    if (user === null) {
+    if (userCredentials === null || user === null) {
       return null;
     }
 
     // Check password
-    if (await compare(credentials.password, user.password)) {
+    if (await compare(credentials.password, userCredentials.password)) {
       return { user: user, token: this.generateToken(user) };
     } else {
       return null;
@@ -89,17 +95,26 @@ export class AuthService {
 
     const hashedPassword = await hash(userSignup.password, 10);
 
-    const user: any = JSON.parse(JSON.stringify(userSignup));
-    user.roles = {
-      admin: isOwner,
-      tagging: false,
-      recording: false,
-      accessing: false,
-      owner: isOwner,
+    const user = {
+      username: userSignup.username,
+      email: userSignup.email,
+      name: userSignup.name,
+      roles: {
+        admin: isOwner,
+        tagging: false,
+        recording: false,
+        accessing: false,
+        owner: isOwner,
+      },
     };
-    user.password = hashedPassword;
+
+    const userCredentials = {
+      username: userSignup.username,
+      password: hashedPassword,
+    };
 
     const newUser = await this.userModel.create(user);
+    await this.userCredentialsModel.create(userCredentials);
     return { user: newUser, token: this.generateToken(newUser) };
   }
 

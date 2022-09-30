@@ -51,6 +51,10 @@ import { BucketFactory } from './services/bucket/bucketfactory';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './services/jwt.strategy';
 import configuration from './config/configuration';
+import {
+  UserCredentials,
+  UserCredentialsSchema,
+} from './schemas/usercredentials.schema';
 
 // By default just use OS provided environment variables
 let configModule: DynamicModule = ConfigModule.forRoot({
@@ -81,6 +85,7 @@ if (process.env.NODE_ENV) {
       { name: Tag.name, schema: TagSchema },
       { name: ResponseStudy.name, schema: ResponseStudySchema },
       { name: UserStudy.name, schema: UserStudySchema },
+      { name: UserCredentials.name, schema: UserCredentialsSchema },
     ]),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
