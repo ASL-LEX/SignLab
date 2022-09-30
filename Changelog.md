@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Added
+
+* Have videos autoplay and loop in the tagging interface
+
 ## 0.2.0
 
 ### Added
