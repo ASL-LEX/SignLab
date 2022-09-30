@@ -27,7 +27,7 @@ export class AppController {
   ) {
     try {
       const file = createReadStream(
-        join(process.cwd(), `upload/responses/${filename}`),
+        join(process.cwd(), `bucket/Responses/${filename}`),
       );
 
       res.set({
