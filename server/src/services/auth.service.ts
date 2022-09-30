@@ -10,6 +10,7 @@ import {
 } from 'shared/dtos/user.dto';
 import { User, UserDocument } from '../schemas/user.schema';
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
+import { hash, compare } from 'bcrypt';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -41,8 +42,7 @@ export class AuthService {
     }
 
     // Check password
-    // TODO: Replace with comparing hashed passwords
-    if (user.password === credentials.password) {
+    if (await compare(credentials.password, user.password)) {
       return { user: user, token: this.generateToken(user) };
     } else {
       return null;
@@ -83,14 +83,13 @@ export class AuthService {
    * @return The newly created user.
    */
   public async signup(userSignup: UserSignup): Promise<AuthResponse> {
-    // TODO: Hash password before saving
-
     // First user is always the owner
     const numUsers = await this.userModel.count();
     const isOwner = numUsers == 0;
 
-    const user = { roles: {} };
-    Object.assign(user, userSignup);
+    const hashedPassword = await hash(userSignup.password, 10);
+
+    const user: any = JSON.parse(JSON.stringify(userSignup));
     user.roles = {
       admin: isOwner,
       tagging: false,
@@ -98,6 +97,7 @@ export class AuthService {
       accessing: false,
       owner: isOwner,
     };
+    user.password = hashedPassword;
 
     const newUser = await this.userModel.create(user);
     return { user: newUser, token: this.generateToken(newUser) };

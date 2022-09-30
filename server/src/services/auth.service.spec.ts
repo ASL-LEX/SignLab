@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserSignup } from 'shared/dtos/user.dto';
 import { User } from '../schemas/user.schema';
 import { AuthService } from './auth.service';
+import { hashSync } from 'bcrypt';
 
 // Test user in the system
 const testUser: User = {
@@ -34,6 +35,12 @@ const userModel = {
     }
     if (params._id == testUser._id) {
       user = testUser;
+    }
+
+
+    if (user != null) {
+      user = JSON.parse(JSON.stringify(user));
+      user!.password = hashSync(user!.password, 10);
     }
 
     return {
@@ -116,12 +123,17 @@ describe('AuthService', () => {
     });
 
     it('should authenticate a user with a valid username + password', async () => {
-      const result = await authService.authenticate({
+      const result: any = await authService.authenticate({
         username: testUser.username,
         password: testUser.password,
       });
 
-      expect(result).toEqual({ token: 'signed', user: testUser });
+      // Passwords won't match due to hashing
+      const expectedUser = JSON.parse(JSON.stringify(testUser));
+      delete expectedUser.password;
+      delete result.user.password;
+
+      expect(result).toEqual({ token: 'signed', user: expectedUser });
     });
   });
 
@@ -165,7 +177,7 @@ describe('AuthService', () => {
 
   describe('signup()', () => {
     it('should return a user after signup', async () => {
-      const newUser = {
+      const newUser: any = {
         username: 'sam',
         email: 'sam@bu.edu',
         name: 'sam',
@@ -178,7 +190,9 @@ describe('AuthService', () => {
           owner: false,
         },
       };
-      const result = await authService.signup(newUser);
+      const result: any = await authService.signup(newUser);
+      delete result.user.password; // Pgassword will not match due to hashin
+      delete newUser.password;
       expect(result).toEqual({ token: 'signed', user: newUser });
     });
   });

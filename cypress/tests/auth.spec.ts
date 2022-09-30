@@ -68,7 +68,7 @@ describe('User Login', () => {
       .get(submitButton)
       .click()
       .then(() => {
-        expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
+         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
       });
   });
 
@@ -87,7 +87,7 @@ describe('User Login', () => {
       });
   });
 
-  it('should fail on correct username + incorrect pasword', () => {
+  it('should fail on correct username + incorrect password', () => {
     cy.visit('/auth');
 
     cy
@@ -97,7 +97,9 @@ describe('User Login', () => {
       .type('wrong')
       .get(submitButton)
       .click()
+      .wait(100)
       .then(() => {
+        console.log(alertStub);
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
       });
   });
