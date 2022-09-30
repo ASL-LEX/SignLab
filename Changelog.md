@@ -6,6 +6,10 @@
 
 * Have videos autoplay and loop in the tagging interface
 
+### Changed
+
+* Store user information and user credentials separately
+
 ## 0.2.0
 
 ### Added
