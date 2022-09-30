@@ -57,7 +57,6 @@ describe('TaggingInterface', () => {
       name: 'Bobby',
       email: 'bob@bu.edu',
       username: 'bobby',
-      password: 'hi',
       roles: {
         admin: false,
         tagging: true,
@@ -111,7 +110,6 @@ describe('TaggingInterface', () => {
       name: 'Bobby',
       email: 'bob@bu.edu',
       username: 'bobby',
-      password: 'hi',
       roles: {
         admin: false,
         tagging: true,

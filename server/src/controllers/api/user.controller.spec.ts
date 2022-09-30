@@ -9,7 +9,6 @@ const testUser1: User = {
   name: 'bob',
   email: 'bob@bu.edu',
   username: 'bob',
-  password: 'bobby',
   roles: {
     admin: true,
     tagging: false,
@@ -24,7 +23,6 @@ const testUser2: User = {
   name: 'sam',
   email: 'sam@bu.edu',
   username: 'sam',
-  password: 'sammy',
   roles: {
     admin: false,
     tagging: true,

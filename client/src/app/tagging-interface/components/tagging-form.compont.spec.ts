@@ -50,7 +50,6 @@ describe('TaggingForm', () => {
       name: 'Bobby',
       email: 'bob@bu.edu',
       username: 'bobby',
-      password: 'hi',
       roles: {
         admin: false,
         tagging: true,

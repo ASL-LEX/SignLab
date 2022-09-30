@@ -9,7 +9,6 @@ const testUsers: User[] = [
     name: 'bob',
     email: 'bob@bu.edu',
     username: 'bob',
-    password: 'bobby',
     roles: {
       admin: true,
       tagging: false,
@@ -23,7 +22,6 @@ const testUsers: User[] = [
     name: 'sam',
     email: 'sam@bu.edu',
     username: 'sam',
-    password: 'sammy',
     roles: {
       admin: true,
       tagging: true,

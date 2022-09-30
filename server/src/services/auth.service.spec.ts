@@ -1,9 +1,11 @@
 import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserSignup } from 'shared/dtos/user.dto';
+import { UserCredentials, UserSignup } from 'shared/dtos/user.dto';
 import { User } from '../schemas/user.schema';
 import { AuthService } from './auth.service';
+import { hashSync } from 'bcrypt';
+import * as usercredentials from '../schemas/usercredentials.schema';
 
 // Test user in the system
 const testUser: User = {
@@ -11,7 +13,6 @@ const testUser: User = {
   name: 'bob',
   email: 'bob@bu.edu',
   username: 'bob',
-  password: 'bobby',
   roles: {
     admin: true,
     tagging: true,
@@ -19,6 +20,11 @@ const testUser: User = {
     accessing: true,
     owner: false,
   },
+};
+
+const testCredentials: UserCredentials = {
+  username: 'bob',
+  password: 'bobby',
 };
 
 // Test interface for user storage
@@ -48,6 +54,27 @@ const userModel = {
   },
 
   async create(params: UserSignup) {
+    return params;
+  },
+};
+
+const credentialsModel = {
+  findOne(params: any) {
+    return {
+      async exec() {
+        if (params.username == testCredentials.username) {
+          return {
+            username: testCredentials.username,
+            password: hashSync(testCredentials.password, 10),
+          };
+        } else {
+          return null;
+        }
+      },
+    };
+  },
+
+  async create(params: any) {
     return params;
   },
 };
@@ -90,6 +117,10 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: jwtService,
         },
+        {
+          provide: getModelToken(usercredentials.UserCredentials.name),
+          useValue: credentialsModel,
+        },
       ],
     }).compile();
 
@@ -116,9 +147,9 @@ describe('AuthService', () => {
     });
 
     it('should authenticate a user with a valid username + password', async () => {
-      const result = await authService.authenticate({
+      const result: any = await authService.authenticate({
         username: testUser.username,
-        password: testUser.password,
+        password: testCredentials.password,
       });
 
       expect(result).toEqual({ token: 'signed', user: testUser });
@@ -165,7 +196,7 @@ describe('AuthService', () => {
 
   describe('signup()', () => {
     it('should return a user after signup', async () => {
-      const newUser = {
+      const newUser: any = {
         username: 'sam',
         email: 'sam@bu.edu',
         name: 'sam',
@@ -178,7 +209,10 @@ describe('AuthService', () => {
           owner: false,
         },
       };
-      const result = await authService.signup(newUser);
+      const result: any = await authService.signup(newUser);
+
+      // Password not present on user model
+      delete newUser.password;
       expect(result).toEqual({ token: 'signed', user: newUser });
     });
   });

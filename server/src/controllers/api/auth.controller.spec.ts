@@ -28,7 +28,6 @@ const testUser: User = {
   name: 'bob',
   email: 'bob@bu.edu',
   username: 'bob',
-  password: 'bobby',
   roles: {
     admin: true,
     tagging: false,
@@ -121,18 +120,13 @@ describe('AuthController', () => {
 
   describe('login()', () => {
     it('should return null for an invalid username + password', async () => {
-      const session: any = {};
       const result = await authController.login(invalidCredentials);
 
       // Expect the result to be null
       expect(result).toBeNull;
-
-      // Session should not have a userID field
-      expect(session['userID']).toBeUndefined();
     });
 
     it('should return null for invalid username + valid password', async () => {
-      const session: any = {};
       const result = await authController.login({
         username: invalidCredentials.username,
         password: validCredentials.password,
@@ -140,13 +134,9 @@ describe('AuthController', () => {
 
       // Expect the result to be null
       expect(result).toBeNull;
-
-      // Session should not have a userID field
-      expect(session['userID']).toBeUndefined();
     });
 
     it('should return null for valid username + invalid password', async () => {
-      const session: any = {};
       const result = await authController.login({
         username: validCredentials.username,
         password: invalidCredentials.password,
@@ -154,13 +144,9 @@ describe('AuthController', () => {
 
       // Expect the result to be null
       expect(result).toBeNull;
-
-      // Session should not have a userID field
-      expect(session['userID']).toBeUndefined();
     });
 
     it('should return user for valid username + valid password', async () => {
-      const session: any = {};
       const result = await authController.login(validCredentials);
 
       // Should be the `testUser`
