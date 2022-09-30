@@ -29,7 +29,7 @@ describe('User Login', () => {
     cy
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
       });
   });
@@ -41,7 +41,7 @@ describe('User Login', () => {
       .type(user.existingUser.username)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
       });
   });
@@ -53,7 +53,7 @@ describe('User Login', () => {
       .type(user.existingUser.password)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
       });
   });
@@ -67,7 +67,7 @@ describe('User Login', () => {
       .type('wrong')
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
          expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
       });
   });
@@ -82,7 +82,7 @@ describe('User Login', () => {
       .type(user.existingUser.password)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
       });
   });
@@ -97,9 +97,7 @@ describe('User Login', () => {
       .type('wrong')
       .get(submitButton)
       .click()
-      .wait(100)
-      .then(() => {
-        console.log(alertStub);
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith('Username or password is invalid');
       });
   });
@@ -257,7 +255,7 @@ describe('User Signup', () => {
       .type(user.newUser.password)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.username} is not an available username\n${user.existingUser.email} is not an available email`);
       });
   });
@@ -276,7 +274,7 @@ describe('User Signup', () => {
       .type(user.newUser.password)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.username} is not an available username\n`);
       });
   });
@@ -295,7 +293,7 @@ describe('User Signup', () => {
       .type(user.newUser.password)
       .get(submitButton)
       .click()
-      .then(() => {
+      .and(() => {
         expect(alertStub.getCall(0)).to.be.calledWith(`${user.existingUser.email} is not an available email`);
       });
   });
