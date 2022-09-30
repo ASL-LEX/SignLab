@@ -7,7 +7,7 @@ import { BackendService } from './services/backend.service';
 import { StudyService } from './services/study.service';
 import { UserService } from './services/user.service';
 import { SignLabHttpClient } from './services/http.service';
-import { AdminAuthGuard, AuthenticatedGuard } from './guards/auth.guard';
+import { AdminAuthGuard, AuthenticatedGuard, OwnerAuthGuard } from './guards/auth.guard';
 import { TokenService } from './services/token.service';
 
 @NgModule({
@@ -26,6 +26,7 @@ export class CoreModule {
         UserService,
         AuthenticatedGuard,
         AdminAuthGuard,
+        OwnerAuthGuard,
         TokenService,
         {
           provide: SignLabHttpClient,

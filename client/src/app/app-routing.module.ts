@@ -31,6 +31,14 @@ const routes: Routes = [
         (m) => m.TaggingInterfaceModule
       ),
   },
+  {
+    path: 'owner',
+    canActivate: [],
+    loadChildren: () =>
+      import('./owner-dashboard/owner-dashboard-routing.module').then(
+        (m) => m.OwnerDashboardRoutingModule
+      ),
+  }
 ];
 
 @NgModule({
