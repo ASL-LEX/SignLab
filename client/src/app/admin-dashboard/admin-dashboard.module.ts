@@ -21,6 +21,7 @@ import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
 import { SharedModule } from '../shared/shared.module';
 import { ResponseTableModule } from '../response-table/response-table.module';
 import { TagFormPreviewDialog } from './components/studies-control/new-study/tag-form-preview.component';
+import { UserTableModule } from '../user-table/user-table.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { TagFormPreviewDialog } from './components/studies-control/new-study/tag
     RequiredInfoComponent,
     TagFormPreviewDialog,
   ],
-  imports: [AdminDashboardRoutingModule, SharedModule, ResponseTableModule],
+  imports: [AdminDashboardRoutingModule, SharedModule, ResponseTableModule, UserTableModule],
   providers: [],
 })
 export class AdminDashboardModule {}
