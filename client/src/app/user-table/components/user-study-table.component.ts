@@ -11,7 +11,7 @@ import { UserStudy } from 'shared/dtos/userstudy.dto';
       [userData]="userData"
       [displayedColumns]="['username', 'name', 'email', 'taggingTrainingResults', 'canTag']"
       (taggingChange)="changeAccessToStudy($event)"
-      (downloadTrainingRequest)="downloadUserTraining($event)"
+      (downloadTrainingResultsRequest)="downloadUserTraining($event)"
     ></user-table-core>
   `
 })
@@ -66,8 +66,8 @@ export class UserStudyTable implements OnInit, OnChanges {
    * NOTE: This is a tempory feature for exporting information and
    *       will be changed in future versions
    */
-  async downloadUserTraining(userStudy: any) {
-    const tags = await this.studyService.getTrainingTags(userStudy);
+  async downloadUserTraining(user: UserTableElement) {
+    const tags = await this.studyService.getTrainingTags(user.userStudy!);
 
     const flattenedData = tags.map((tag) => {
       return {
@@ -85,7 +85,7 @@ export class UserStudyTable implements OnInit, OnChanges {
       return;
     }
 
-    this.downloadFile(userStudy, flattenedData);
+    this.downloadFile(user.userStudy!, flattenedData);
   }
 
   private downloadFile(userStudy: UserStudy, data: any[]) {
