@@ -96,7 +96,7 @@ export class UserController {
    * This will first check to see if the number of owners is below the
    * maximum before adding the provided user as an owner
    */
-  @Put('/owner/add/:id')
+  @Post('/owner/add/:id')
   @Auth('owner')
   async addOwner(@Param('id') id: string) {
     // Check to make sure the maximum number of owners isn't exceeded

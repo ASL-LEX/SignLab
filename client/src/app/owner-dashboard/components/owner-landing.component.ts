@@ -65,6 +65,9 @@ export class OwnerLandingComponent {
     if (!confirm(`Are you sure you want to add ${user.name} as an owner?`)) {
       return;
     }
+
+    // Complete the transfer
+    this.userService.addOwner(user);
   }
 
   /**

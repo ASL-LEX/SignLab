@@ -66,6 +66,13 @@ export class UserService {
 
     this.signLab.post<any>('api/users/owner/transfer', requestBody,
                           { provideToken: true });
+  }
 
+  /**
+   * Add the provided user as a new owner
+   */
+  async addOwner(newOwner: User) {
+    this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {},
+                           { provideToken: true });
   }
 }
