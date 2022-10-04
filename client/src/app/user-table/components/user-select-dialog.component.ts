@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserService } from '../../core/services/user.service';
 import { UserTableElement } from '../models/user-table-element';
 
@@ -7,7 +7,7 @@ import { UserTableElement } from '../models/user-table-element';
   selector: 'user-select-dialog',
   template: `
     <mat-card>
-      <mat-card-title>Select User to Add as Owner (2/3 spots available)</mat-card-title>
+      <mat-card-title>{{ title }}</mat-card-title>
 
       <mat-card-content>
         <user-table-core
@@ -22,9 +22,13 @@ import { UserTableElement } from '../models/user-table-element';
 export class UserSelectDialog {
   /** The user data which is inserted into the table */
   userData: UserTableElement[] = [];
+  /** What to display to the user what the selection is for */
+  title = '';
 
   constructor(private userService: UserService,
-              private dialogRef: MatDialogRef<UserSelectDialog>) {
+              private dialogRef: MatDialogRef<UserSelectDialog>,
+              @Inject(MAT_DIALOG_DATA) data: { title: string }) {
+    this.title = data.title;
     this.loadUserData();
   }
 

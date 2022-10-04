@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from 'shared/dtos/user.dto';
+import { AuthService } from './auth.service';
 import { SignLabHttpClient } from './http.service';
 
 /**
@@ -8,7 +9,7 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class UserService {
-  constructor(private signLab: SignLabHttpClient) {}
+  constructor(private signLab: SignLabHttpClient, private authService: AuthService) {}
 
   /**
    * Get back all of the users. If the result is malformed or no users are in
@@ -49,5 +50,22 @@ export class UserService {
       console.log(error);
       return false;
     }
+  }
+
+  /**
+   * Transfer ownership from the current user to the selected user.
+   * At this point the user logged in will no longer be an owner
+   */
+  async transferOwnership(newOwner: User) {
+    const currentUser = this.authService.user;
+
+    const requestBody = {
+      originalID: currentUser._id,
+      newOwnerID: newOwner._id,
+    };
+
+    this.signLab.post<any>('api/users/owner/transfer', requestBody,
+                          { provideToken: true });
+
   }
 }
