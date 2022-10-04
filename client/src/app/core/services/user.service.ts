@@ -75,4 +75,11 @@ export class UserService {
     this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {},
                            { provideToken: true });
   }
+
+  /**
+   * Get information on the number of owner accounts
+   */
+  async getOwnerInfo(): Promise<{ numberOfOwners: number, maxOwnerAccounts: number }> {
+    return this.signLab.get<any>('api/users/owner/info', { provideToken: true });
+  }
 }

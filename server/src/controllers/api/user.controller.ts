@@ -148,4 +148,19 @@ export class UserController {
     // Remove the role from the original owner
     this.userService.removeRole('owner', transferRequest.originalID);
   }
+
+  /**
+   * Get information on the owner usage. This will give back the number of
+   * current owners as well as the maximum number of owners.
+   */
+  @Get('/owner/info')
+  @Auth('owner')
+  async getOwnerInfo(): Promise<{ numberOfOwners: number, maxOwnerAccounts: number }> {
+    const owners = await this.userService.getByRole('owner');
+
+    return {
+      numberOfOwners: owners.length,
+      maxOwnerAccounts: this.configService.getOrThrow('auth.maxOwnerAccounts')
+    };
+  }
 }

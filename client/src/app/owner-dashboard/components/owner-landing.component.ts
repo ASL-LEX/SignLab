@@ -23,11 +23,12 @@ import { UserSelectDialog } from '../../user-table/components/user-select-dialog
 export class OwnerLandingComponent {
   constructor(private dialog: MatDialog, private userService: UserService) {}
 
-  addOwner() {
+  async addOwner() {
+    const ownerInfo = await this.userService.getOwnerInfo();
     const params = {
       width: '1000px',
       data: {
-        title: 'Select User To Add as owner (2/3 spots available)'
+        title: `Select User To Add as owner (${ownerInfo.numberOfOwners} / ${ownerInfo.maxOwnerAccounts} spots available)`
       }
     };
     this.dialog
