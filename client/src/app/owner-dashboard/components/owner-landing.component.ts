@@ -12,7 +12,7 @@ import { UserSelectDialog } from '../../user-table/components/user-select-dialog
         <div>
           <button mat-stroked-button (click)="addOwner()">Add Owner</button>
 
-          <button mat-stroked-button>Transfer Ownership</button>
+          <button mat-stroked-button (click)="transferOwnership()">Transfer Ownership</button>
         </div>
       </mat-card-content>
     </mat-card>
@@ -22,7 +22,6 @@ import { UserSelectDialog } from '../../user-table/components/user-select-dialog
 export class OwnerLandingComponent {
   constructor(private dialog: MatDialog) {}
 
-
   addOwner() {
     const params = {
       width: '1000px'
@@ -31,7 +30,21 @@ export class OwnerLandingComponent {
       .open(UserSelectDialog, params)
       .afterClosed()
       .subscribe(user => {
-        this.selectUser(user.data);
+        if (user === undefined) { return; }
+        this.handleAddingOwner(user.data);
+      });
+  }
+
+  transferOwnership() {
+    const params = {
+      width: '1000px'
+    };
+    this.dialog
+      .open(UserSelectDialog, params)
+      .afterClosed()
+      .subscribe(user => {
+        if (user === undefined) { return; }
+        this.handleTransferringOwnership(user.data);
       });
   }
 
@@ -40,12 +53,20 @@ export class OwnerLandingComponent {
    * a "are you sure" before submitting the user against the backend to
    * add them as an owner
    */
-  private selectUser(user: User | undefined) {
-    // Do nothing if the user is undefined
-    if (user === undefined) { return; }
-
+  private handleAddingOwner(user: User): void {
     // Verify with the user
-    if(!confirm(`Are you sure you want to add ${user.name} as an owner?`)) {
+    if (!confirm(`Are you sure you want to add ${user.name} as an owner?`)) {
+      return;
+    }
+  }
+
+  /**
+   * Handle transfering the ownership from the current user to the selected
+   * user. Will make request against the backend
+   */
+  private handleTransferringOwnership(user: User): void {
+    // Verify the transfer request
+    if (!confirm(`Are you sure you want to transfer your ownership to ${user.name}? After this action you will no longer be an owner`)) {
       return;
     }
   }
