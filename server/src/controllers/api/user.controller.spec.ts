@@ -39,6 +39,10 @@ const userService = {
     return [testUser1, testUser2];
   },
 
+  async find(_id: string) {
+    return testUser1;
+  },
+
   addRole: jest.fn((_role: string, id: string) => {
     if (id == testUser1._id || id == testUser2._id) {
       return true;
