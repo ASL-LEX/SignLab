@@ -1,5 +1,6 @@
 import responseMetadata from '../fixtures/response_metadata.json';
 import user from '../fixtures/users.json';
+import { UserSignup } from '../../shared/dtos/user.dto';
 
 Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'dynamicschemas' });
@@ -47,6 +48,15 @@ Cypress.Commands.add('firstTimeSetup', () => {
       url: 'api/auth/signup',
       body: user.nonAdmin
     });
+});
+
+Cypress.Commands.add('signup', (user: UserSignup) => {
+  cy
+    .request({
+      method: 'POST',
+      url: 'api/auth/signup',
+      body: user
+    })
 });
 
 Cypress.Commands.add('makeStudy', (studyCreation: any) => {

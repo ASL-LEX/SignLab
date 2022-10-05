@@ -1,3 +1,4 @@
+import { SinonStub } from 'cypress/types/sinon';
 import users from '../fixtures/users.json';
 
 describe('OwnerDashboard', () => {
@@ -29,6 +30,8 @@ describe('OwnerDashboard', () => {
   });
 
   describe('Adding Owner', () => {
+    let alertStub: SinonStub;
+
     beforeEach(() => {
       cy.resetDB()
         .firstTimeSetup()
@@ -36,6 +39,9 @@ describe('OwnerDashboard', () => {
         .visit('/owner')
         .get('[data-cy="addOwnerButton"]')
         .click()
+
+      alertStub = cy.stub();
+      cy.on('window:alert', alertStub);
     });
 
     it('can add another user as an owner', () => {
@@ -48,6 +54,31 @@ describe('OwnerDashboard', () => {
         .then((user: any) => {
           expect(user.roles.owner).to.be.true;
         })
+    });
+
+    it('should not let you add more then N number of owners', () => {
+      cy.on('window:confirm', () => true);
+      cy.signup(users.others[0]);
+      cy.signup(users.others[1]);
+      cy.signup(users.others[2]);
+
+      cy
+        // And an owner (2 / 3)
+        .get(`[data-cy="select-user-${users.nonAdmin.username}"]`)
+        .click()
+        // And another owner (3 / 3)
+        .get('[data-cy="addOwnerButton"]')
+        .click()
+        .get(`[data-cy="select-user-${users.others[0].username}"]`)
+        .click()
+        // Attempt to add too many users
+        .get('[data-cy="addOwnerButton"]')
+        .click()
+        .get(`[data-cy="select-user-${users.others[1].username}"]`)
+        .click()
+        .and(() => {
+          expect(alertStub.getCall(0)).to.be.calledWith('There are already a maximum number of owners');
+        });
     });
   });
 });

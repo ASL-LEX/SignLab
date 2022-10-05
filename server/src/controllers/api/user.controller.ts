@@ -118,7 +118,7 @@ export class UserController {
   async addOwner(@Param('id') id: string) {
     // Check to make sure the maximum number of owners isn't exceeded
     const owners = await this.userService.getByRole('owner');
-    if (owners.length > this.configService.get('auth.maxOwnerAccounts')) {
+    if (owners.length >= this.configService.get('auth.maxOwnerAccounts')) {
       throw new HttpException(
         `Maximum number of owner accounts reached: ${this.configService.get('auth.maxOwnerAccounts')}`,
         HttpStatus.BAD_REQUEST

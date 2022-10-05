@@ -21,7 +21,8 @@ import { UserSelectDialog } from '../../user-table/components/user-select-dialog
   styleUrls: ['./owner-landing.component.css']
 })
 export class OwnerLandingComponent {
-  constructor(private dialog: MatDialog, private userService: UserService) {}
+  constructor(private dialog: MatDialog, private userService: UserService) {
+  }
 
   async addOwner() {
     const ownerInfo = await this.userService.getOwnerInfo();
@@ -34,8 +35,16 @@ export class OwnerLandingComponent {
     this.dialog
       .open(UserSelectDialog, params)
       .afterClosed()
-      .subscribe(user => {
+      .subscribe(async (user) => {
         if (user === undefined) { return; }
+
+        // Check for limits
+        const limits = await this.userService.getOwnerInfo();
+        if (limits.numberOfOwners == limits.maxOwnerAccounts) {
+          alert('There are already a maximum number of owners');
+          return;
+        }
+
         this.handleAddingOwner(user.data);
       });
   }
