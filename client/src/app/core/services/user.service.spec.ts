@@ -37,10 +37,13 @@ describe('UserService', () => {
   it('should get users', async () => {
     // Make a spy that will produce a list of users
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
-    spy.get.and.returnValue(exampleUserData);
+    spy.get.and.returnValue(exampleUserData)
+
+    // Make a spy auth service that always returns the same user
+    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
 
     // Make the test service
-    const service = new UserService(spy);
+    const service = new UserService(spy, authSpy);
 
     // Ensure the same users are gotten back
     const result = await service.getUsers();
@@ -52,8 +55,11 @@ describe('UserService', () => {
     // Make a spy for verifying the methods called
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['put', 'delete']);
 
+    // Make a spy auth service that always returns the same user
+    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
+
     // Make the test service
-    const service = new UserService(spy);
+    const service = new UserService(spy, authSpy);
 
     // Test adding a role to the user
     let result = await service.changeRole(exampleUserData[0], 'tagging', true);
@@ -78,8 +84,11 @@ describe('UserService', () => {
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['put']);
     spy.put.and.throwError('Cannot add role');
 
+    // Make a spy auth service that always returns the same user
+    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
+
     // Make the test service
-    const service = new UserService(spy);
+    const service = new UserService(spy, authSpy);
 
     // Test trying to change a role
     const result = await service.changeRole(
