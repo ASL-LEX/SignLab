@@ -1,7 +1,16 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
-import { UserStudyToggleChange, UserTableElement } from '../models/user-table-element';
+import {
+  UserStudyToggleChange,
+  UserTableElement,
+} from '../models/user-table-element';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
@@ -9,11 +18,17 @@ import { UserStudy } from 'shared/dtos/userstudy.dto';
   template: `
     <user-table-core
       [userData]="userData"
-      [displayedColumns]="['username', 'name', 'email', 'taggingTrainingResults', 'canTag']"
+      [displayedColumns]="[
+        'username',
+        'name',
+        'email',
+        'taggingTrainingResults',
+        'canTag'
+      ]"
       (taggingChange)="changeAccessToStudy($event)"
       (downloadTrainingResultsRequest)="downloadUserTraining($event)"
     ></user-table-core>
-  `
+  `,
 })
 export class UserStudyTable implements OnInit, OnChanges {
   /** The study of interest for this table */
@@ -41,9 +56,13 @@ export class UserStudyTable implements OnInit, OnChanges {
    */
   private async loadUserStudies() {
     // Do nothing if the study is not defined
-    if (!this.study) { return; }
+    if (!this.study) {
+      return;
+    }
 
-    this.userData = (await this.studyService.getUserStudies(this.study._id!)).map(userStudy => {
+    this.userData = (
+      await this.studyService.getUserStudies(this.study._id!)
+    ).map((userStudy) => {
       return { user: userStudy.user, userStudy: userStudy };
     });
   }

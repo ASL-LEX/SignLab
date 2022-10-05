@@ -35,9 +35,11 @@ export class UserService {
    * Get all users that have the given roles
    */
   async getByRole(role: string): Promise<User[]> {
-    return this.userModel.find({
-      [`roles.${role}`]: true
-    }).exec();
+    return this.userModel
+      .find({
+        [`roles.${role}`]: true,
+      })
+      .exec();
   }
 
   /**

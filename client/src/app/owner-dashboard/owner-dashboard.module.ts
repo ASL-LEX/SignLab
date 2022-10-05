@@ -4,9 +4,7 @@ import { OwnerLandingComponent } from './components/owner-landing.component';
 import { OwnerDashboardRoutingModule } from './owner-dashboard-routing.module';
 
 @NgModule({
-  declarations: [
-    OwnerLandingComponent,
-  ],
-  imports: [ SharedModule, OwnerDashboardRoutingModule ],
+  declarations: [OwnerLandingComponent],
+  imports: [SharedModule, OwnerDashboardRoutingModule],
 })
 export class OwnerDashboardModule {}

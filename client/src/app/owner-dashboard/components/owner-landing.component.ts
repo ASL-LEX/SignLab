@@ -4,39 +4,52 @@ import { User } from 'shared/dtos/user.dto';
 import { UserService } from '../../core/services/user.service';
 import { UserSelectDialog } from '../../user-table/components/user-select-dialog.component';
 
-@Component( {
+@Component({
   selector: 'owner-landing',
   template: `
     <mat-card>
       <mat-card-title>Ownership Control</mat-card-title>
       <mat-card-content>
         <div>
-          <button mat-stroked-button (click)="addOwner()" data-cy="addOwnerButton">Add Owner</button>
+          <button
+            mat-stroked-button
+            (click)="addOwner()"
+            data-cy="addOwnerButton"
+          >
+            Add Owner
+          </button>
 
-          <button mat-stroked-button (click)="transferOwnership()" data-cy="transferOwnerButton">Transfer Ownership</button>
+          <button
+            mat-stroked-button
+            (click)="transferOwnership()"
+            data-cy="transferOwnerButton"
+          >
+            Transfer Ownership
+          </button>
         </div>
       </mat-card-content>
     </mat-card>
   `,
-  styleUrls: ['./owner-landing.component.css']
+  styleUrls: ['./owner-landing.component.css'],
 })
 export class OwnerLandingComponent {
-  constructor(private dialog: MatDialog, private userService: UserService) {
-  }
+  constructor(private dialog: MatDialog, private userService: UserService) {}
 
   async addOwner() {
     const ownerInfo = await this.userService.getOwnerInfo();
     const params = {
       width: '1000px',
       data: {
-        title: `Select User To Add as owner (${ownerInfo.numberOfOwners} / ${ownerInfo.maxOwnerAccounts} spots available)`
-      }
+        title: `Select User To Add as owner (${ownerInfo.numberOfOwners} / ${ownerInfo.maxOwnerAccounts} spots available)`,
+      },
     };
     this.dialog
       .open(UserSelectDialog, params)
       .afterClosed()
       .subscribe(async (user) => {
-        if (user === undefined) { return; }
+        if (user === undefined) {
+          return;
+        }
 
         // Check for limits
         const limits = await this.userService.getOwnerInfo();
@@ -53,14 +66,16 @@ export class OwnerLandingComponent {
     const params = {
       width: '1000px',
       data: {
-        title: 'Select User to Transfer Ownership to'
-      }
+        title: 'Select User to Transfer Ownership to',
+      },
     };
     this.dialog
       .open(UserSelectDialog, params)
       .afterClosed()
-      .subscribe(user => {
-        if (user === undefined) { return; }
+      .subscribe((user) => {
+        if (user === undefined) {
+          return;
+        }
         this.handleTransferringOwnership(user.data);
       });
   }
@@ -86,7 +101,11 @@ export class OwnerLandingComponent {
    */
   private async handleTransferringOwnership(user: User): Promise<void> {
     // Verify the transfer request
-    if (!confirm(`Are you sure you want to transfer your ownership to ${user.name}? After this action you will no longer be an owner`)) {
+    if (
+      !confirm(
+        `Are you sure you want to transfer your ownership to ${user.name}? After this action you will no longer be an owner`
+      )
+    ) {
       return;
     }
 

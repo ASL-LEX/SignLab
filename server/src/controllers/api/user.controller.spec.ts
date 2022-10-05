@@ -67,7 +67,7 @@ const rolesGuard = {
 const configService = {
   get(_param: string) {
     return 3;
-  }
+  },
 };
 
 describe('UserController', () => {
@@ -84,8 +84,8 @@ describe('UserController', () => {
         },
         {
           provide: ConfigService,
-          useValue: configService
-        }
+          useValue: configService,
+        },
       ],
     })
       .overrideGuard(RolesGuard)

@@ -12,12 +12,14 @@ import {
 import { User } from '../../schemas/user.schema';
 import { UserService } from '../../services/user.service';
 import { Auth } from '../../guards/auth.guard';
-import {ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('/api/users')
 export class UserController {
-  constructor(private userService: UserService,
-              private configService: ConfigService) {}
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
 
   /**
    * Get all user information for all users.
@@ -41,7 +43,7 @@ export class UserController {
     if (role == 'owner') {
       throw new HttpException(
         'The endpoint does not support changing owernship',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -73,7 +75,7 @@ export class UserController {
     if (role == 'owner') {
       throw new HttpException(
         'The endpoint does not support changing owernship',
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -82,7 +84,7 @@ export class UserController {
     if (!user) {
       throw new HttpException(
         `User with ID: ${id} not found`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -90,7 +92,7 @@ export class UserController {
     if (role === 'admin' && user.roles.owner) {
       throw new HttpException(
         `Cannot remove the admin role from an owner`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -120,8 +122,10 @@ export class UserController {
     const owners = await this.userService.getByRole('owner');
     if (owners.length >= this.configService.get('auth.maxOwnerAccounts')) {
       throw new HttpException(
-        `Maximum number of owner accounts reached: ${this.configService.get('auth.maxOwnerAccounts')}`,
-        HttpStatus.BAD_REQUEST
+        `Maximum number of owner accounts reached: ${this.configService.get(
+          'auth.maxOwnerAccounts',
+        )}`,
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -130,7 +134,7 @@ export class UserController {
     if (!user) {
       throw new HttpException(
         `User with ID: ${id} not found`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
     this.userService.addRole('owner', id);
@@ -142,20 +146,24 @@ export class UserController {
    */
   @Post('/owner/transfer')
   @Auth('owner')
-  async transferOwnership(@Body() transferRequest: { originalID: string, newOwnerID: string }) {
+  async transferOwnership(
+    @Body() transferRequest: { originalID: string; newOwnerID: string },
+  ) {
     // Verify that both users exist
-    const originalOwner = await this.userService.find(transferRequest.originalID);
+    const originalOwner = await this.userService.find(
+      transferRequest.originalID,
+    );
     if (!originalOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
     const newOwner = await this.userService.find(transferRequest.newOwnerID);
     if (!newOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
-        HttpStatus.BAD_REQUEST
+        HttpStatus.BAD_REQUEST,
       );
     }
 
@@ -178,12 +186,15 @@ export class UserController {
    */
   @Get('/owner/info')
   @Auth('owner')
-  async getOwnerInfo(): Promise<{ numberOfOwners: number, maxOwnerAccounts: number }> {
+  async getOwnerInfo(): Promise<{
+    numberOfOwners: number;
+    maxOwnerAccounts: number;
+  }> {
     const owners = await this.userService.getByRole('owner');
 
     return {
       numberOfOwners: owners.length,
-      maxOwnerAccounts: this.configService.getOrThrow('auth.maxOwnerAccounts')
+      maxOwnerAccounts: this.configService.getOrThrow('auth.maxOwnerAccounts'),
     };
   }
 }

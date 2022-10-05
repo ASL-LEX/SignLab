@@ -4,16 +4,19 @@ import {
   SimpleChanges,
   OnChanges,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
-import { UserTableElement, UserStudyToggleChange, UserToggleChange } from '../models/user-table-element';
-
+import {
+  UserTableElement,
+  UserStudyToggleChange,
+  UserToggleChange,
+} from '../models/user-table-element';
 
 @Component({
   selector: 'user-table-core',
   templateUrl: './user-table-core.component.html',
-  styleUrls: ['./user-table-core.component.css']
+  styleUrls: ['./user-table-core.component.css'],
 })
 export class UserTableCore implements OnChanges {
   /** Data the table is going to use for the display */
@@ -34,7 +37,6 @@ export class UserTableCore implements OnChanges {
   /** Emit event when a request to download the users training results is made */
   @Output()
   downloadTrainingResultsRequest = new EventEmitter<UserStudy>();
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.userData) {

@@ -35,7 +35,7 @@ import { UserTableModule } from '../user-table/user-table.module';
     AdminDashboardRoutingModule,
     SharedModule,
     ResponseTableModule,
-    UserTableModule
+    UserTableModule,
   ],
   providers: [],
 })

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../core/services/user.service';
-import { UserTableElement, UserToggleChange } from '../models/user-table-element';
+import {
+  UserTableElement,
+  UserToggleChange,
+} from '../models/user-table-element';
 
 @Component({
   selector: 'user-control-table',
@@ -10,7 +13,7 @@ import { UserTableElement, UserToggleChange } from '../models/user-table-element
       [displayedColumns]="['username', 'name', 'email', 'isAdmin']"
       (adminChange)="updateAdminRole($event)"
     ></user-table-core>
-  `
+  `,
 })
 export class UserControlTable implements OnInit {
   userData: UserTableElement[] = [];
@@ -22,13 +25,17 @@ export class UserControlTable implements OnInit {
   }
 
   async loadUsers() {
-    this.userData = (await this.userService.getUsers()).map(user => {
+    this.userData = (await this.userService.getUsers()).map((user) => {
       return { user: user };
     });
   }
 
   async updateAdminRole(toggle: UserToggleChange) {
-    const result = await this.userService.changeRole(toggle.user, 'admin', toggle.option);
+    const result = await this.userService.changeRole(
+      toggle.user,
+      'admin',
+      toggle.option
+    );
 
     // If the role update failed, revert the checkbox
     if (!result) {

@@ -10,7 +10,7 @@ import { UserTableCore } from './components/user-table-core.component';
     UserTableCore,
     UserControlTable,
     UserStudyTable,
-    UserSelectDialog
+    UserSelectDialog,
   ],
   imports: [SharedModule],
   exports: [UserStudyTable, UserControlTable, UserSelectDialog],

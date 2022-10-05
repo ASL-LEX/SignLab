@@ -25,15 +25,17 @@ export class UserSelectDialog {
   /** What to display to the user what the selection is for */
   title = '';
 
-  constructor(private userService: UserService,
-              private dialogRef: MatDialogRef<UserSelectDialog>,
-              @Inject(MAT_DIALOG_DATA) data: { title: string }) {
+  constructor(
+    private userService: UserService,
+    private dialogRef: MatDialogRef<UserSelectDialog>,
+    @Inject(MAT_DIALOG_DATA) data: { title: string }
+  ) {
     this.title = data.title;
     this.loadUserData();
   }
 
   async loadUserData() {
-    this.userData = (await this.userService.getUsers()).map(user => {
+    this.userData = (await this.userService.getUsers()).map((user) => {
       return { user: user };
     });
   }

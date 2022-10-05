@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminAuthGuard, AuthenticatedGuard, OwnerAuthGuard } from './core/guards/auth.guard';
+import {
+  AdminAuthGuard,
+  AuthenticatedGuard,
+  OwnerAuthGuard,
+} from './core/guards/auth.guard';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [
@@ -38,7 +42,7 @@ const routes: Routes = [
       import('./owner-dashboard/owner-dashboard.module').then(
         (m) => m.OwnerDashboardModule
       ),
-  }
+  },
 ];
 
 @NgModule({

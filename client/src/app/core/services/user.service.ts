@@ -9,7 +9,10 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class UserService {
-  constructor(private signLab: SignLabHttpClient, private authService: AuthService) {}
+  constructor(
+    private signLab: SignLabHttpClient,
+    private authService: AuthService
+  ) {}
 
   /**
    * Get back all of the users. If the result is malformed or no users are in
@@ -64,22 +67,31 @@ export class UserService {
       newOwnerID: newOwner._id,
     };
 
-    this.signLab.post<any>('api/users/owner/transfer', requestBody,
-                          { provideToken: true });
+    this.signLab.post<any>('api/users/owner/transfer', requestBody, {
+      provideToken: true,
+    });
   }
 
   /**
    * Add the provided user as a new owner
    */
   async addOwner(newOwner: User) {
-    this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {},
-                           { provideToken: true });
+    this.signLab.post<any>(
+      `api/users/owner/add/${newOwner._id}`,
+      {},
+      { provideToken: true }
+    );
   }
 
   /**
    * Get information on the number of owner accounts
    */
-  async getOwnerInfo(): Promise<{ numberOfOwners: number, maxOwnerAccounts: number }> {
-    return this.signLab.get<any>('api/users/owner/info', { provideToken: true });
+  async getOwnerInfo(): Promise<{
+    numberOfOwners: number;
+    maxOwnerAccounts: number;
+  }> {
+    return this.signLab.get<any>('api/users/owner/info', {
+      provideToken: true,
+    });
   }
 }

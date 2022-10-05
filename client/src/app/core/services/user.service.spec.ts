@@ -37,10 +37,12 @@ describe('UserService', () => {
   it('should get users', async () => {
     // Make a spy that will produce a list of users
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
-    spy.get.and.returnValue(exampleUserData)
+    spy.get.and.returnValue(exampleUserData);
 
     // Make a spy auth service that always returns the same user
-    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
+    const authSpy = jasmine.createSpyObj('AuthService', [], {
+      user: exampleUserData[0],
+    });
 
     // Make the test service
     const service = new UserService(spy, authSpy);
@@ -56,7 +58,9 @@ describe('UserService', () => {
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['put', 'delete']);
 
     // Make a spy auth service that always returns the same user
-    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
+    const authSpy = jasmine.createSpyObj('AuthService', [], {
+      user: exampleUserData[0],
+    });
 
     // Make the test service
     const service = new UserService(spy, authSpy);
@@ -85,7 +89,9 @@ describe('UserService', () => {
     spy.put.and.throwError('Cannot add role');
 
     // Make a spy auth service that always returns the same user
-    const authSpy = jasmine.createSpyObj('AuthService', [], { user: exampleUserData[0] });
+    const authSpy = jasmine.createSpyObj('AuthService', [], {
+      user: exampleUserData[0],
+    });
 
     // Make the test service
     const service = new UserService(spy, authSpy);
