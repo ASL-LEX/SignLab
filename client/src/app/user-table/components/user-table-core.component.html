@@ -4,7 +4,9 @@
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>Select</th>
       <td mat-cell *matCellDef="let user">
-        <button mat-stroked-button (click)="userSelected.emit(user)">Select</button>
+        <button mat-stroked-button
+                (click)="userSelected.emit(user)"
+                [attr.data-cy]="'select-user-' + user.user.username">Select</button>
       </td>
     </ng-container>
 

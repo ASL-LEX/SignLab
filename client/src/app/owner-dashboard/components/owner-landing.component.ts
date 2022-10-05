@@ -11,9 +11,9 @@ import { UserSelectDialog } from '../../user-table/components/user-select-dialog
       <mat-card-title>Ownership Control</mat-card-title>
       <mat-card-content>
         <div>
-          <button mat-stroked-button (click)="addOwner()">Add Owner</button>
+          <button mat-stroked-button (click)="addOwner()" data-cy="addOwnerButton">Add Owner</button>
 
-          <button mat-stroked-button (click)="transferOwnership()">Transfer Ownership</button>
+          <button mat-stroked-button (click)="transferOwnership()" data-cy="transferOwnerButton">Transfer Ownership</button>
         </div>
       </mat-card-content>
     </mat-card>
