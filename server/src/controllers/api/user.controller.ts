@@ -77,6 +77,23 @@ export class UserController {
       );
     }
 
+    // Get the user and ensure the user exists
+    const user = await this.userService.find(id);
+    if (!user) {
+      throw new HttpException(
+        `User with ID: ${id} not found`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    // Cannot remove admin from an owner
+    if (role === 'admin' && user.roles.owner) {
+      throw new HttpException(
+        `Cannot remove the admin role from an owner`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
     const result = await this.userService.removeRole(role, id);
 
     if (result) {
@@ -109,7 +126,7 @@ export class UserController {
     }
 
     // Get the user and ensure the user exists
-    const user = this.userService.find(id);
+    const user = await this.userService.find(id);
     if (!user) {
       throw new HttpException(
         `User with ID: ${id} not found`,
@@ -127,14 +144,14 @@ export class UserController {
   @Auth('owner')
   async transferOwnership(@Body() transferRequest: { originalID: string, newOwnerID: string }) {
     // Verify that both users exist
-    const originalOwner = this.userService.find(transferRequest.originalID);
+    const originalOwner = await this.userService.find(transferRequest.originalID);
     if (!originalOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
         HttpStatus.BAD_REQUEST
       );
     }
-    const newOwner = this.userService.find(transferRequest.newOwnerID);
+    const newOwner = await this.userService.find(transferRequest.newOwnerID);
     if (!newOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
@@ -149,6 +166,7 @@ export class UserController {
 
     // Add the owner role to the new user
     this.userService.addRole('owner', transferRequest.newOwnerID);
+    this.userService.addRole('admin', transferRequest.newOwnerID);
 
     // Remove the role from the original owner
     this.userService.removeRole('owner', transferRequest.originalID);

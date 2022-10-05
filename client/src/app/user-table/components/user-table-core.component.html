@@ -55,7 +55,8 @@
       <td mat-cell *matCellDef="let user">
         <mat-checkbox
           (change)="adminChange.emit({ user: user.user, option: $event.checked })"
-          [(ngModel)]="user.user.roles.admin"></mat-checkbox>
+          [(ngModel)]="user.user.roles.admin"
+          [disabled]="user.user.roles.owner"></mat-checkbox>
       </td>
     </ng-container>
 
