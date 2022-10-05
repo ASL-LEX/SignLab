@@ -142,6 +142,11 @@ export class UserController {
       );
     }
 
+    // If the users are the same, do nothing
+    if (transferRequest.originalID == transferRequest.newOwnerID) {
+      return;
+    }
+
     // Add the owner role to the new user
     this.userService.addRole('owner', transferRequest.newOwnerID);
 
