@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../schemas/user.schema';
 import { UserController } from './user.controller';
 import { RolesGuard } from '../../guards/role.guard';
+import { ConfigService } from '@nestjs/config';
 
 const testUser1: User = {
   _id: '1',
@@ -62,6 +63,13 @@ const rolesGuard = {
   },
 };
 
+// Test config service
+const configService = {
+  get(_param: string) {
+    return 3;
+  }
+};
+
 describe('UserController', () => {
   // Controller being tested
   let userController: UserController;
@@ -74,6 +82,10 @@ describe('UserController', () => {
           provide: UserService,
           useValue: userService,
         },
+        {
+          provide: ConfigService,
+          useValue: configService
+        }
       ],
     })
       .overrideGuard(RolesGuard)
