@@ -7,6 +7,8 @@ export default () => ({
   auth: {
     /** Used for generating the JWT tokens */
     jwtSecret: process.env.JWT_SECRET,
+    /** The maximum number of owner accounts supported */
+    maxOwnerAccounts: 3,
   },
   database: {
     /** The hostname of the database to connect to */

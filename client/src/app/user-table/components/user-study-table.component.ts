@@ -5,25 +5,37 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { StudyService } from '../../../../core/services/study.service';
 import { Study } from 'shared/dtos/study.dto';
+import { StudyService } from '../../core/services/study.service';
+import {
+  UserStudyToggleChange,
+  UserTableElement,
+} from '../models/user-table-element';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
-  selector: 'user-study-control',
-  templateUrl: './user-study-control.component.html',
-  styleUrls: ['./user-study-control.component.css'],
+  selector: 'user-study-table',
+  template: `
+    <user-table-core
+      [userData]="userData"
+      [displayedColumns]="[
+        'username',
+        'name',
+        'email',
+        'taggingTrainingResults',
+        'canTag'
+      ]"
+      (taggingChange)="changeAccessToStudy($event)"
+      (downloadTrainingResultsRequest)="downloadUserTraining($event)"
+    ></user-table-core>
+  `,
 })
-export class UserStudyComponent implements OnInit, OnChanges {
-  @Input() study: Study;
-  displayedColumns = [
-    'username',
-    'name',
-    'email',
-    'taggingTrainingResults',
-    'canTag',
-  ];
-  userData: UserStudy[] = [];
+export class UserStudyTable implements OnInit, OnChanges {
+  /** The study of interest for this table */
+  @Input()
+  study: Study;
+  /** The user information as well as the study information */
+  userData: UserTableElement[] = [];
 
   constructor(private studyService: StudyService) {}
 
@@ -32,32 +44,49 @@ export class UserStudyComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // Update the stored user information when the study changes
     if (changes.study) {
       this.study = changes.study.currentValue;
       this.loadUserStudies();
     }
   }
 
-  async changeAccessToStudy(userStudy: UserStudy, hasAccess: boolean) {
+  /**
+   * Load the user information associated with the given study
+   */
+  private async loadUserStudies() {
+    // Do nothing if the study is not defined
+    if (!this.study) {
+      return;
+    }
+
+    this.userData = (
+      await this.studyService.getUserStudies(this.study._id!)
+    ).map((userStudy) => {
+      return { user: userStudy.user, userStudy: userStudy };
+    });
+  }
+
+  async changeAccessToStudy(userStudyToggle: UserStudyToggleChange) {
     const result = await this.studyService.changeAccessToStudy(
-      userStudy,
-      hasAccess
+      userStudyToggle.userStudy,
+      userStudyToggle.option
     );
 
     if (!result) {
       console.error('Failed to change permission on user study');
-      userStudy.hasAccessToStudy = !hasAccess;
+      userStudyToggle.userStudy.hasAccessToStudy = !userStudyToggle.option;
     }
   }
 
-  /**
+  /*!*
    * Download the training tags as a CSV
    *
    * NOTE: This is a tempory feature for exporting information and
    *       will be changed in future versions
    */
-  async downloadUserTraining(userStudy: UserStudy) {
-    const tags = await this.studyService.getTrainingTags(userStudy);
+  async downloadUserTraining(user: UserTableElement) {
+    const tags = await this.studyService.getTrainingTags(user.userStudy!);
 
     const flattenedData = tags.map((tag) => {
       return {
@@ -75,10 +104,10 @@ export class UserStudyComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.downloadFile(userStudy, flattenedData);
+    this.downloadFile(user.userStudy!, flattenedData);
   }
 
-  downloadFile(userStudy: UserStudy, data: any[]) {
+  private downloadFile(userStudy: UserStudy, data: any[]) {
     const replacer = (_key: string, value: any) =>
       value === null ? '' : value; // specify how you want to handle null values here
     const header = Object.keys(data[0]);
@@ -99,14 +128,5 @@ export class UserStudyComponent implements OnInit, OnChanges {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
-  }
-
-  private async loadUserStudies() {
-    // Do nothing if study is not defined
-    if (!this.study) {
-      return;
-    }
-
-    this.userData = await this.studyService.getUserStudies(this.study._id!);
   }
 }

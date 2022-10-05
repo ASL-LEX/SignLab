@@ -61,9 +61,9 @@
          [study]="activeStudy">
       </response-study-table>
 
-      <user-study-control
+      <user-study-table
         *ngSwitchCase="'users'"
-        [study]="activeStudy!"></user-study-control>
+        [study]="activeStudy!"></user-study-table>
 
       <div *ngSwitchCase="'tags'">
         <!-- TODO: Have this be a table view with an export option -->

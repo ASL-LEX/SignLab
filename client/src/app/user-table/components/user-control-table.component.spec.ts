@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '../../../material.module';
-import { UserService } from '../../../core/services/user.service';
-import { UserControlComponent } from './user-control.component';
+import { SharedModule } from '../../shared/shared.module';
+import { UserService } from '../../core/services/user.service';
+import { UserControlTable } from './user-control-table.component';
+import { UserTableCore } from './user-table-core.component';
 
 describe('UserControlComponent', () => {
   const exampleUserData = [
@@ -39,7 +39,7 @@ describe('UserControlComponent', () => {
   // The user service spy for serving fake data
   let userServiceSpy: jasmine.SpyObj<UserService>;
   // Test component
-  let userControl: ComponentFixture<UserControlComponent>;
+  let userControl: ComponentFixture<UserControlTable>;
 
   beforeEach(() => {
     // Make the user service spy
@@ -48,12 +48,12 @@ describe('UserControlComponent', () => {
 
     // Make the test component
     TestBed.configureTestingModule({
-      imports: [MaterialModule, FormsModule],
-      declarations: [UserControlComponent],
+      imports: [SharedModule],
+      declarations: [UserControlTable, UserTableCore],
       providers: [{ provide: UserService, useValue: userServiceSpy }],
     });
 
-    userControl = TestBed.createComponent(UserControlComponent);
+    userControl = TestBed.createComponent(UserControlTable);
   });
 
   it('grabs the users from the user service', () => {

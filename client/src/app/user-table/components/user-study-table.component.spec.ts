@@ -4,11 +4,12 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { StudyService } from '../.../../../../../core/services/study.service';
+import { StudyService } from '../../core/services/study.service';
 import { Study } from 'shared/dtos/study.dto';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
-import { SharedModule } from '../../../../shared/shared.module';
-import { UserStudyComponent } from './user-study-control.component';
+import { SharedModule } from '../../shared/shared.module';
+import { UserStudyTable } from './user-study-table.component';
+import { UserTableCore } from './user-table-core.component';
 
 describe('UserStudyComponent', () => {
   const testStudy: Study = {
@@ -84,7 +85,7 @@ describe('UserStudyComponent', () => {
 
   let studySpy: jasmine.SpyObj<StudyService>;
   // Test component
-  let userStudyComponent: ComponentFixture<UserStudyComponent>;
+  let userStudyComponent: ComponentFixture<UserStudyTable>;
 
   beforeEach(fakeAsync(() => {
     studySpy = jasmine.createSpyObj('StudyService', [
@@ -98,11 +99,11 @@ describe('UserStudyComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [SharedModule],
-      declarations: [UserStudyComponent],
+      declarations: [UserStudyTable, UserTableCore],
       providers: [{ provide: StudyService, useValue: studySpy }],
     });
 
-    userStudyComponent = TestBed.createComponent(UserStudyComponent);
+    userStudyComponent = TestBed.createComponent(UserStudyTable);
     userStudyComponent.componentInstance.study = testStudy;
     tick();
     userStudyComponent.detectChanges();

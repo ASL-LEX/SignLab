@@ -9,9 +9,17 @@
 <ng-template #routerView>
   <mat-toolbar class="navbar">
     <div style="color: #fafafa">ASL-LEX SignLab</div>
+    <!-- Tagging interface for users -->
     <a class="nav-button" mat-button routerLink='/tag' routerLinkActive="active-link">Tagging</a>
+
+    <!-- Admin based operations -->
     <a class="nav-button" *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
        mat-button routerLink='/admin' routerLinkActive="active-link">Admin</a>
+
+    <!-- Owner based operations -->
+    <a class="nav-button" *ngIf="authService.isAuthenticated() && authService.user.roles.owner"
+       mat-button routerLink="/owner" routerLinkActive="active-link">Owner</a>
+
 
     <!-- Login vs Logout Button -->
     <a class="nav-button" mat-button routerLink='/auth' routerLinkActive="active-link" *ngIf="!authService.isAuthenticated()">Login</a>

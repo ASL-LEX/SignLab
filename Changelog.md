@@ -5,6 +5,7 @@
 ### Added
 
 * Have videos autoplay and loop in the tagging interface
+* Allow for adding new owners and transferring ownership
 
 ### Changed
 

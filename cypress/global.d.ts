@@ -18,5 +18,9 @@ declare namespace Cypress {
      * The data provided should be `StudyCreation` to work
      */
     makeStudy(studyCreation: any): Chainable<any>;
+    /**
+     * Signup the given user into the signlab system
+     */
+    signup(user: any): Chainable<any>;
   }
 }

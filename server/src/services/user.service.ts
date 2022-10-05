@@ -32,6 +32,17 @@ export class UserService {
   }
 
   /**
+   * Get all users that have the given roles
+   */
+  async getByRole(role: string): Promise<User[]> {
+    return this.userModel
+      .find({
+        [`roles.${role}`]: true,
+      })
+      .exec();
+  }
+
+  /**
    * Add a role to the given user
    *
    * @param role The role to add to the user

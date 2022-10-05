@@ -16,5 +16,31 @@
     "email": "basic@bu.edu",
     "username": "basic",
     "password": "basic"
-  }
+  },
+  "others": [
+    {
+      "name": "a",
+      "email": "a@bu.edu",
+      "username": "a",
+      "password": "aaaa"
+    },
+    {
+      "name": "b",
+      "email": "b@bu.edu",
+      "username": "b",
+      "password": "bbbb"
+    },
+    {
+      "name": "c",
+      "email": "c@bu.edu",
+      "username": "c",
+      "password": "cccc"
+    },
+    {
+      "name": "d",
+      "email": "d@bu.edu",
+      "username": "d",
+      "password": "dddd"
+    }
+  ]
 }
