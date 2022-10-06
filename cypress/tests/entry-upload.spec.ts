@@ -1,6 +1,6 @@
 import users from '../fixtures/users.json';
 
-const uploadResponsesButton = '[data-cy="uploadResponsesButton"]';
+const uploadEntriesButton = '[data-cy="uploadEntriesButton"]';
 const uploadCSVButton = '[data-cy="uploadCSVButton"]';
 const uploadZIPButton = '[data-cy="uploadZIPButton"]';
 const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
@@ -13,15 +13,15 @@ describe('Upload CSV', () => {
     cy.resetDB();
     cy.firstTimeSetup();
 
-    // Navigate to the response interface and select the upload option
+    // Navigate to the entry interface and select the upload option
     cy
       .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Responses')
+      .contains('Entries')
       .click()
       .wait(100)
-      .get(uploadResponsesButton)
+      .get(uploadEntriesButton)
       .click()
   });
 
@@ -40,7 +40,7 @@ describe('Upload CSV', () => {
   it('should produce errors when the filename is not present', () => {
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/missing-filenames.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/missing-filenames.csv', { force: true })
       .get('li')
       .should('contain.text', ('Line 2: Path `filename` is required.'))
       .get(uploadZIPButton)
@@ -52,7 +52,7 @@ describe('Upload CSV', () => {
 
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/missing-user-fields.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/missing-user-fields.csv', { force: true })
       .get('li')
       .should('contain.text', 'Line 2: requires property "prompt"')
       .get(uploadZIPButton)
@@ -62,9 +62,9 @@ describe('Upload CSV', () => {
   it('should produce errors on empty csv', () => {
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/empty.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/empty.csv', { force: true })
       .get(uploadStatusMessage)
-      .should('contain.text', 'No responses found in CSV')
+      .should('contain.text', 'No entries found in CSV')
       .get(uploadZIPButton)
       .should('be.disabled');
   });
@@ -72,9 +72,9 @@ describe('Upload CSV', () => {
   it('should produce errors on CSV with only a header', () => {
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/only-headers.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/only-headers.csv', { force: true })
       .get(uploadStatusMessage)
-      .should('contain.text', 'No responses found in CSV')
+      .should('contain.text', 'No entries found in CSV')
       .get(uploadZIPButton)
       .should('be.disabled');
   });
@@ -82,7 +82,7 @@ describe('Upload CSV', () => {
   it('should produce errors on CSV with a row that is missing a filename', () => {
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/missing-filename.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/missing-filename.csv', { force: true })
       .get('li')
       .should('contain.text', 'Line 4: Path `filename` is required.')
       .get(uploadZIPButton)
@@ -92,37 +92,37 @@ describe('Upload CSV', () => {
   it('should allow uploading of valid CSV', () => {
     cy
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/small-set.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/small-set.csv', { force: true })
       .get(uploadZIPButton)
       .should('not.be.disabled');
   });
 });
 
-describe('Upload Response ZIP', () => {
+describe('Upload Entry ZIP', () => {
   beforeEach(() => {
     // Clear out any existing data
     cy.resetDB();
     cy.firstTimeSetup();
 
-    // Navigate to the response interface and select the upload option
+    // Navigate to the entry interface and select the upload option
     // then upload the small dataset
     cy
       .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Responses')
+      .contains('Entries')
       .click()
       .wait(100)
-      .get(uploadResponsesButton)
+      .get(uploadEntriesButton)
       .click()
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/responses/small-set.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/small-set.csv', { force: true })
   });
 
   it('should not break if a directory is present', () => {
     cy
       .get(zipFileUploadInput)
-      .selectFile('cypress/fixtures/responses/with-directory.zip', { force: true })
+      .selectFile('cypress/fixtures/entries/with-directory.zip', { force: true })
       .get('p')
       .should('contain.text', 'successfully');
   });
@@ -130,15 +130,15 @@ describe('Upload Response ZIP', () => {
   it('should produce a warning when not all of the videos have been provided in a zip', () => {
     cy
       .get(zipFileUploadInput)
-      .selectFile('cypress/fixtures/responses/small-set-missing.zip', { force: true })
+      .selectFile('cypress/fixtures/entries/small-set-missing.zip', { force: true })
       .get('p')
-      .should('contain.text', 'Response uploaded successfully, reload page to see new responses');
+      .should('contain.text', 'Entry uploaded successfully, reload page to see new entries');
   });
 
   it('should produce a warning when the ZIP has extra videos provides', () => {
     cy
       .get(zipFileUploadInput)
-      .selectFile('cypress/fixtures/responses/small-set-extra-video.zip', { force: true })
+      .selectFile('cypress/fixtures/entries/small-set-extra-video.zip', { force: true })
       .get('li')
       .should('contain.text', 'was not found in original CSV');
   });
@@ -146,7 +146,7 @@ describe('Upload Response ZIP', () => {
   it('should produce a warning when the ZIP has a video with an unsupported video type', () => {
     cy
       .get(zipFileUploadInput)
-      .selectFile('cypress/fixtures/responses/bad-extension.zip', { force: true })
+      .selectFile('cypress/fixtures/entries/bad-extension.zip', { force: true })
       .get('li')
       .should('contain.text', 'girl_response-1.bad: File has unsupported type "bad"');
   });
