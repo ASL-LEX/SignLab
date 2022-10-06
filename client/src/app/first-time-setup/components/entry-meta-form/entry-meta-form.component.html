@@ -1,8 +1,8 @@
-<form [formGroup]="responseMetadataFormGroup" (ngSubmit)="submitMeta()">
+<form [formGroup]="entryMetadataFormGroup" (ngSubmit)="submitMeta()">
   <!-- User added number of field -->
   <div>
-    <ng-container formArrayName="responseMetadata">
-      <ng-container *ngFor="let metadata of responseMetadata.controls; let idx=index">
+    <ng-container formArrayName="entryMetadata">
+      <ng-container *ngFor="let metadata of entryMetadata.controls; let idx=index">
         <div [formGroupName]="idx">
           <!-- Name of the metadata field -->
           <mat-form-field appearance="fill">
@@ -33,11 +33,11 @@
       <mat-icon class="add-course-btn">add</mat-icon>
     </button>
 
-    <p *ngIf="!responseMetadataFormGroup.valid">
+    <p *ngIf="!entryMetadataFormGroup.valid">
       Ensure each field has a name and type and make sure the name is unique.
     </p>
   </div>
 
   <!-- Button to submit the form -->
-  <button mat-stroked-button type="submit" [disabled]="!responseMetadataFormGroup.valid">Submit</button>
+  <button mat-stroked-button type="submit" [disabled]="!entryMetadataFormGroup.valid">Submit</button>
 </form>

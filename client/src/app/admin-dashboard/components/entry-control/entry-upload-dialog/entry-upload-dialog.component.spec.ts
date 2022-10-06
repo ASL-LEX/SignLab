@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ResponseService } from '../../../../core/services/response.service';
-import { SaveAttempt } from 'shared/dtos/response.dto';
-import { ResponseUploadDialog } from './response-upload-dialog.component';
+import { EntryService } from '../../../../core/services/entry.service';
+import { SaveAttempt } from 'shared/dtos/entry.dto';
+import { EntryUploadDialog } from './entry-upload-dialog.component';
 
-describe('ResponseUploadDialog', () => {
+describe('EntryUploadDialog', () => {
   const exampleError: SaveAttempt = {
     type: 'error',
     message: 'this is the message',
@@ -22,26 +22,26 @@ describe('ResponseUploadDialog', () => {
   const csvUpload = { target: { files: [{}] } };
 
   // Unit under test
-  let responseDialog: ComponentFixture<ResponseUploadDialog>;
-  // Spy response service
-  let responseSpy: jasmine.SpyObj<ResponseService>;
+  let entryDialog: ComponentFixture<EntryUploadDialog>;
+  // Spy entry service
+  let entrySpy: jasmine.SpyObj<EntryService>;
 
   beforeEach(() => {
-    responseSpy = jasmine.createSpyObj('ResponseService', [
+    entrySpy = jasmine.createSpyObj('EntryService', [
       'uploadCSV',
       'uploadZIP',
     ]);
 
     TestBed.configureTestingModule({
-      declarations: [ResponseUploadDialog],
-      providers: [{ provide: ResponseService, useValue: responseSpy }],
+      declarations: [EntryUploadDialog],
+      providers: [{ provide: EntryService, useValue: entrySpy }],
     });
 
-    responseDialog = TestBed.createComponent(ResponseUploadDialog);
+    entryDialog = TestBed.createComponent(EntryUploadDialog);
   });
 
   it('should have no errors displayed on open', () => {
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const errorMessage = compiled.querySelector('p');
 
     // No message and no location errors
@@ -50,13 +50,13 @@ describe('ResponseUploadDialog', () => {
   });
 
   it('should display CSV errors correctly', async () => {
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
 
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const errorMessage = compiled.querySelector('p');
 
     // Expected message and error location
@@ -68,13 +68,13 @@ describe('ResponseUploadDialog', () => {
   });
 
   it('should not allow ZIP uploads when the CSV has not been uploaded', async () => {
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
 
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const zipButton = compiled.querySelectorAll('button')[1];
     console.log(zipButton);
 
@@ -83,13 +83,13 @@ describe('ResponseUploadDialog', () => {
   });
 
   it('should have no messages on valid CSV upload', async () => {
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
 
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const errorMessage = compiled.querySelector('p');
 
     // No message and no location errors
@@ -98,13 +98,13 @@ describe('ResponseUploadDialog', () => {
   });
 
   it('should allow ZIP upload after successful CSV upload', async () => {
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
 
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const zipButton = compiled.querySelectorAll('button')[1];
 
     expect(zipButton.getAttribute('disabled')).toBeNull();
@@ -112,21 +112,21 @@ describe('ResponseUploadDialog', () => {
 
   it('should clear error messages from a failed upload after a success upload', async () => {
     // First have a failed upload
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleError));
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
     // CSV upload shouldn't have been considered complete
-    expect(responseDialog.componentInstance.csvUploadComplete).toBeFalse();
+    expect(entryDialog.componentInstance.csvUploadComplete).toBeFalse();
 
     // Now have a successful upload
-    responseSpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadCSV(csvUpload);
-    responseDialog.detectChanges();
+    entrySpy.uploadCSV.and.returnValue(Promise.resolve(exampleSuccess));
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadCSV(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const errorMessage = compiled.querySelector('p');
     const errorLocations = compiled.querySelectorAll('ul li');
 
@@ -136,13 +136,13 @@ describe('ResponseUploadDialog', () => {
   });
 
   it('should handle unsuccessful ZIP upload', async () => {
-    responseSpy.uploadZIP.and.returnValue(Promise.resolve(exampleError));
+    entrySpy.uploadZIP.and.returnValue(Promise.resolve(exampleError));
 
-    responseDialog.detectChanges();
-    await responseDialog.componentInstance.uploadZIP(csvUpload);
-    responseDialog.detectChanges();
+    entryDialog.detectChanges();
+    await entryDialog.componentInstance.uploadZIP(csvUpload);
+    entryDialog.detectChanges();
 
-    const compiled = responseDialog.debugElement.nativeElement;
+    const compiled = entryDialog.debugElement.nativeElement;
     const errorMessage = compiled.querySelector('p');
 
     // Expected message and error location

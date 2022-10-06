@@ -5,10 +5,10 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { ResponseTableElement } from '../models/response-table-element';
+import { EntryTableElement } from '../models/entry-table-element';
 
 @Component({
-  selector: 'response-preview',
+  selector: 'entry-preview',
   template: `
     <div class="video-preview">
       <video
@@ -19,15 +19,15 @@ import { ResponseTableElement } from '../models/response-table-element';
         #previewVideo
       >
         <source
-          src="{{ responseElem ? responseElem.response.videoURL : '' }}"
+          src="{{ entryElem ? entryElem.entry.videoURL : '' }}"
         />
       </video>
     </div>
   `,
-  styleUrls: ['./response-preview.component.css'],
+  styleUrls: ['./entry-preview.component.css'],
 })
-export class ResponsePreview implements OnDestroy {
-  @Input() responseElem: ResponseTableElement;
+export class EntryPreview implements OnDestroy {
+  @Input() entryElem: EntryTableElement;
   @ViewChild('previewVideo') video: ElementRef;
 
   /**

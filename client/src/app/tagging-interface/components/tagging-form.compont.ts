@@ -22,9 +22,9 @@ import {
   selector: 'tagging-form',
   template: `
     <div fxLayout="row" fxLayoutAlign="space-around">
-      <!-- Response Video View -->
+      <!-- Entry Video View -->
       <div class="video-tag-child">
-        <video src="{{ tag.response.videoURL }}" controls autoplay loop></video>
+        <video src="{{ tag.entry.videoURL }}" controls autoplay loop></video>
       </div>
 
       <!-- Form View -->

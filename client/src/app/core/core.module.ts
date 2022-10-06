@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
-import { ResponseService } from './services/response.service';
+import { EntryService } from './services/entry.service';
 import { BackendService } from './services/backend.service';
 import { StudyService } from './services/study.service';
 import { UserService } from './services/user.service';
@@ -24,7 +24,7 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         AuthService,
-        ResponseService,
+        EntryService,
         BackendService,
         StudyService,
         UserService,

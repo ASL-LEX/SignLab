@@ -4,20 +4,20 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { ResponseService } from '../../core/services/response.service';
-import { ResponseStudyTable } from './response-study-table.component';
-import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
+import { EntryService } from '../../core/services/entry.service';
+import { EntryStudyTable } from './entry-study-table.component';
+import { EntryStudy } from 'shared/dtos/entriestudy.dto';
 import { SharedModule } from '../../shared/shared.module';
-import { ResponseTableCoreComponent } from './response-table-core.component';
+import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('ResponseStudyTable', () => {
-  const exampleResponseData: ResponseStudy[] = [
+describe('EntryStudyTable', () => {
+  const exampleEntryData: EntryStudy[] = [
     {
       _id: '1',
-      response: {
+      entry: {
         _id: '1',
-        responseID: '1',
+        entryID: '1',
         videoURL: 'video',
         duration: 5,
         recordedInSignLab: false,
@@ -40,9 +40,9 @@ describe('ResponseStudyTable', () => {
     },
     {
       _id: '2',
-      response: {
+      entry: {
         _id: '2',
-        responseID: '2',
+        entryID: '2',
         videoURL: 'video',
         duration: 5,
         recordedInSignLab: false,
@@ -65,9 +65,9 @@ describe('ResponseStudyTable', () => {
     },
     {
       _id: '3',
-      response: {
+      entry: {
         _id: '3',
-        responseID: '3',
+        entryID: '3',
         videoURL: 'video',
         duration: 5,
         recordedInSignLab: false,
@@ -90,39 +90,39 @@ describe('ResponseStudyTable', () => {
     },
   ];
 
-  // Response service spy to serve fake data
-  let responseSpy: jasmine.SpyObj<ResponseService>;
+  // Entry service spy to serve fake data
+  let entrySpy: jasmine.SpyObj<EntryService>;
   // Test component
-  let responseTable: ComponentFixture<ResponseStudyTable>;
+  let entryTable: ComponentFixture<EntryStudyTable>;
 
   beforeEach(fakeAsync(() => {
-    responseSpy = jasmine.createSpyObj('ResponseService', [
-      'getResponseStudies',
+    entrySpy = jasmine.createSpyObj('EntryService', [
+      'getEntryStudies',
       'setUsedInStudy',
     ]);
-    responseSpy.getResponseStudies.and.returnValue(
-      Promise.resolve(JSON.parse(JSON.stringify(exampleResponseData)))
+    entrySpy.getEntryStudies.and.returnValue(
+      Promise.resolve(JSON.parse(JSON.stringify(exampleEntryData)))
     );
-    responseSpy.setUsedInStudy.and.returnValue(Promise.resolve(true));
+    entrySpy.setUsedInStudy.and.returnValue(Promise.resolve(true));
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],
-      declarations: [ResponseStudyTable, ResponseTableCoreComponent],
-      providers: [{ provide: ResponseService, useValue: responseSpy }],
+      declarations: [EntryStudyTable, EntryTableCoreComponent],
+      providers: [{ provide: EntryService, useValue: entrySpy }],
     });
 
-    responseTable = TestBed.createComponent(ResponseStudyTable);
-    responseTable.componentInstance.study = exampleResponseData[0].study;
+    entryTable = TestBed.createComponent(EntryStudyTable);
+    entryTable.componentInstance.study = exampleEntryData[0].study;
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
   }));
 
-  it('should load in correctly which responses are disabled', () => {
-    const compiled = responseTable.nativeElement;
+  it('should load in correctly which entries are disabled', () => {
+    const compiled = entryTable.nativeElement;
 
     // Get the toggle controls
     const toggles = compiled.querySelectorAll('td mat-slide-toggle input');
@@ -134,58 +134,58 @@ describe('ResponseStudyTable', () => {
       toggleStates.push(toggle.getAttribute('aria-checked') == 'true');
     }
 
-    // Based on the example data, only the last response should be enabled
+    // Based on the example data, only the last entry should be enabled
     expect(toggleStates).toEqual([false, false, true]);
   });
 
-  it('should allow disabling of responses in a study', fakeAsync(() => {
-    const compiled = responseTable.nativeElement;
+  it('should allow disabling of entries in a study', fakeAsync(() => {
+    const compiled = entryTable.nativeElement;
 
-    // Get the toggle associated with an enabled response
+    // Get the toggle associated with an enabled entry
     const enabledToggle = compiled.querySelectorAll(
       'td mat-slide-toggle input'
     )[2];
     enabledToggle.click();
 
-    responseTable.detectChanges();
+    entryTable.detectChanges();
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
 
-    expect(responseSpy.setUsedInStudy).toHaveBeenCalledWith('3', false, '1');
+    expect(entrySpy.setUsedInStudy).toHaveBeenCalledWith('3', false, '1');
   }));
 
-  it('should allow enabling fo responses in a study', fakeAsync(() => {
-    const compiled = responseTable.nativeElement;
+  it('should allow enabling fo entries in a study', fakeAsync(() => {
+    const compiled = entryTable.nativeElement;
 
-    // Get the toggle associated with an enabled response
+    // Get the toggle associated with an enabled entry
     const enabledToggle = compiled.querySelectorAll(
       'td mat-slide-toggle input'
     )[0];
     enabledToggle.click();
 
-    responseTable.detectChanges();
+    entryTable.detectChanges();
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
 
-    expect(responseSpy.setUsedInStudy).toHaveBeenCalledWith('1', true, '1');
+    expect(entrySpy.setUsedInStudy).toHaveBeenCalledWith('1', true, '1');
   }));
 
-  it('should do nothing if the response id is not present', fakeAsync(() => {
-    const compiled = responseTable.nativeElement;
+  it('should do nothing if the entry id is not present', fakeAsync(() => {
+    const compiled = entryTable.nativeElement;
 
-    // Make the response ID undefined
-    responseTable.componentInstance.responseData[0].response._id = undefined;
+    // Make the entry ID undefined
+    entryTable.componentInstance.entryData[0].entry._id = undefined;
 
-    // Get the toggle associated with an enabled response
+    // Get the toggle associated with an enabled entry
     const enabledToggle = compiled.querySelectorAll(
       'td mat-slide-toggle input'
     )[0];
     enabledToggle.click();
 
-    responseTable.detectChanges();
+    entryTable.detectChanges();
     tick();
-    responseTable.detectChanges();
+    entryTable.detectChanges();
 
-    expect(responseSpy.setUsedInStudy).toHaveBeenCalledTimes(0);
+    expect(entrySpy.setUsedInStudy).toHaveBeenCalledTimes(0);
   }));
 });

@@ -6,7 +6,7 @@ import {
 } from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { Tag } from 'shared/dtos/tag.dto';
-import { ResponseService } from '../../core/services/response.service';
+import { EntryService } from '../../core/services/entry.service';
 import { TaggingInterface } from './tagging-interface.component';
 import { StudyService } from '../../core/services/study.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,12 +15,12 @@ import { AuthService } from '../../core/services/auth.service';
 describe('TaggingInterface', () => {
   // Unit under test
   let tagInterface: ComponentFixture<TaggingInterface>;
-  let responseSpy: jasmine.SpyObj<ResponseService>;
+  let entrySpy: jasmine.SpyObj<EntryService>;
 
   const testTag1: Tag = {
     _id: 'something unique',
-    response: {
-      responseID: 'I am a response, trust me',
+    entry: {
+      entryID: 'I am a entry, trust me',
       videoURL: '/media/video.mp4',
       recordedInSignLab: false,
       responderID: '1',
@@ -72,8 +72,8 @@ describe('TaggingInterface', () => {
 
   const testTag2: Tag = {
     _id: 'a differe ID',
-    response: {
-      responseID: 'I am a response, trust me',
+    entry: {
+      entryID: 'I am a entry, trust me',
       videoURL: '/media/another-video.mp4',
       recordedInSignLab: false,
       responderID: '1',
@@ -130,8 +130,8 @@ describe('TaggingInterface', () => {
   };
 
   beforeEach(() => {
-    responseSpy = jasmine.createSpyObj('ResponseService', [
-      'getNextUntaggedResponse',
+    entrySpy = jasmine.createSpyObj('EntryService', [
+      'getNextUntaggedEntry',
       'addTag',
     ]);
     const studySpy = jasmine.createSpyObj('StudyService', ['getStudies']);
@@ -141,7 +141,7 @@ describe('TaggingInterface', () => {
       declarations: [TaggingInterface],
       imports: [SharedModule, BrowserAnimationsModule],
       providers: [
-        { provide: ResponseService, useValue: responseSpy },
+        { provide: EntryService, useValue: entrySpy },
         { provide: StudyService, useValue: studySpy },
         { provide: AuthService, useValue: authSpy },
       ],
@@ -151,7 +151,7 @@ describe('TaggingInterface', () => {
   });
 
   it('should handle no remaing tags', fakeAsync(() => {
-    responseSpy.getNextUntaggedResponse.and.returnValue(Promise.resolve(null));
+    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
 
     // Have ngOnInit run and let changes take place
     tagInterface.detectChanges();
@@ -163,14 +163,14 @@ describe('TaggingInterface', () => {
     const card = compiled.querySelector('mat-card-content');
 
     expect(card).toBeTruthy();
-    expect(card.textContent).toContain('All responses have been tagged so far');
+    expect(card.textContent).toContain('All entries have been tagged so far');
   }));
 
   it('should handle submitting one tag and getting no more tags', fakeAsync(() => {
-    responseSpy.getNextUntaggedResponse.and.returnValue(
+    entrySpy.getNextUntaggedEntry.and.returnValue(
       Promise.resolve(testTag1)
     );
-    responseSpy.addTag.and.resolveTo();
+    entrySpy.addTag.and.resolveTo();
 
     // Have ngOnInit run and let changes take place
     tagInterface.detectChanges();
@@ -178,7 +178,7 @@ describe('TaggingInterface', () => {
     tagInterface.detectChanges();
 
     // Attempt to submit and render the "no more tags" message
-    responseSpy.getNextUntaggedResponse.and.returnValue(Promise.resolve(null));
+    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
     tagInterface.componentInstance.formSubmit(testTag2);
     tick();
     tagInterface.detectChanges();
@@ -188,6 +188,6 @@ describe('TaggingInterface', () => {
     const card = compiled.querySelector('mat-card-content');
 
     expect(card).toBeTruthy();
-    expect(card.textContent).toContain('All responses have been tagged so far');
+    expect(card.textContent).toContain('All entries have been tagged so far');
   }));
 });

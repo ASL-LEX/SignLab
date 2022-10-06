@@ -44,9 +44,9 @@ export class NewStudyComponent implements AfterViewInit {
     this.studyMetadata = studyMetadata;
   }
 
-  /** The selected responses' IDs that will be disabled for this study */
+  /** The selected entries' IDs that will be disabled for this study */
   markedDisabled = new Set<string>();
-  /** The selected responses' IDs that will be used for training */
+  /** The selected entries' IDs that will be used for training */
   markedTraining = new Set<string>();
   /** Handle changes to marked disabled */
   markedDisabledChange(newSet: Set<string>) {
@@ -156,8 +156,8 @@ export class NewStudyComponent implements AfterViewInit {
         instructions: this.studyMetadata.instructions,
         tagSchema: schema,
       },
-      trainingResponses: Array.from(this.markedTraining),
-      disabledResponses: Array.from(this.markedDisabled),
+      trainingEntries: Array.from(this.markedTraining),
+      disabledEntries: Array.from(this.markedDisabled),
     });
     this.studyCreated = true;
   }

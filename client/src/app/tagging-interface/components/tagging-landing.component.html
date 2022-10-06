@@ -27,13 +27,13 @@
             <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
 
             <!-- Message displayed when training is complete -->
-            <p *ngIf="userStudy!.trainingResponseStudies.length == 0">
+            <p *ngIf="userStudy!.trainingEntryStudies.length == 0">
               Training Complete! Reach out to your study administrator to get access to tagging
             </p>
 
             <button mat-stroked-button
               (click)="setView('training')"
-              [disabled]="userStudy!.trainingResponseStudies.length == 0">Enter Training</button>
+              [disabled]="userStudy!.trainingEntryStudies.length == 0">Enter Training</button>
           </div>
 
           <!-- Enter Tagging View, shown when the user has access to tagging -->

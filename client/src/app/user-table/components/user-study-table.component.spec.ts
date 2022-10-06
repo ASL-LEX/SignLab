@@ -40,7 +40,7 @@ describe('UserStudyComponent', () => {
         },
       },
       study: testStudy,
-      trainingResponseStudies: [],
+      trainingEntryStudies: [],
       hasAccessToStudy: false,
     },
     {
@@ -59,7 +59,7 @@ describe('UserStudyComponent', () => {
         },
       },
       study: testStudy,
-      trainingResponseStudies: [],
+      trainingEntryStudies: [],
       hasAccessToStudy: false,
     },
     {
@@ -78,7 +78,7 @@ describe('UserStudyComponent', () => {
         },
       },
       study: testStudy,
-      trainingResponseStudies: [],
+      trainingEntryStudies: [],
       hasAccessToStudy: true,
     },
   ];
@@ -132,7 +132,7 @@ describe('UserStudyComponent', () => {
   it('shoud allow giving access to a study', fakeAsync(() => {
     const compiled = userStudyComponent.nativeElement;
 
-    // Get the toggle associated with an enabled response
+    // Get the toggle associated with an enabled entry
     const enabledToggle = compiled.querySelectorAll(
       'td mat-slide-toggle input'
     )[0];
@@ -153,7 +153,7 @@ describe('UserStudyComponent', () => {
   it('should allow removing access to a study', fakeAsync(() => {
     const compiled = userStudyComponent.nativeElement;
 
-    // Get the toggle associated with an enabled response
+    // Get the toggle associated with an enabled entry
     const enabledToggle = compiled.querySelectorAll(
       'td mat-slide-toggle input'
     )[2];

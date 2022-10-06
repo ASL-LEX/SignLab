@@ -1,27 +1,27 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ResponseTable } from '../../../response-table/components/response-table.component';
-import { ResponseUploadDialog } from './response-upload-dialog/response-upload-dialog.component';
+import { EntryTable } from '../../../entry-table/components/entry-table.component';
+import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.component';
 
 /**
  * The video control view allows Admins to view all of the currently uploaded
  * videos as well as enable/disable videos from view.
  */
 @Component({
-  selector: 'response-control',
+  selector: 'entry-control',
   template: `
-    <div class="response-grid">
-      <!-- Button to upload responses -->
+    <div class="entry-grid">
+      <!-- Button to upload entires -->
       <button
         mat-mini-fab
-        aria-label="Add more responses"
+        aria-label="Add more entires"
         (click)="openUploadDialog()"
-        data-cy="uploadResponsesButton"
+        data-cy="uploadEntriesButton"
       >
         <mat-icon>add_circle</mat-icon>
       </button>
-      <label>Upload Responses</label>
-      <response-table></response-table>
+      <label>Upload Entries</label>
+      <entry-table></entry-table>
     </div>
   `,
   styles: [
@@ -31,7 +31,7 @@ import { ResponseUploadDialog } from './response-upload-dialog/response-upload-d
       }
     `,
     `
-      .response-grid {
+      .entry-grid {
         width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -39,17 +39,17 @@ import { ResponseUploadDialog } from './response-upload-dialog/response-upload-d
     `,
   ],
 })
-export class ResponseControlComponent {
-  @ViewChild(ResponseTable) responseTableView: ResponseTable;
+export class EntryControlComponent {
+  @ViewChild(EntryTable) entryTableView: EntryTable;
 
   constructor(private dialog: MatDialog) {}
 
   openUploadDialog() {
     this.dialog
-      .open(ResponseUploadDialog)
+      .open(EntryUploadDialog)
       .afterClosed()
       .subscribe(() => {
-        this.responseTableView.loadResponses();
+        this.entryTableView.loadEntries();
       });
   }
 }

@@ -23,8 +23,8 @@
     <!-- Sidebar View -->
     <mat-list fxFlex="15">
       <mat-list-item>
-        <button mat-stroked-button class="nav-button" (click)="setActiveView('responses')">
-          Responses Control
+        <button mat-stroked-button class="nav-button" (click)="setActiveView('entries')">
+          Entries Control
         </button>
       </mat-list-item>
 
@@ -56,10 +56,10 @@
     <!-- Main view -->
     <div fxFlex="85" [ngSwitch]="activeView">
       <!-- TODO: Have the study ID be dynamically inserted -->
-      <response-study-table
-        *ngSwitchCase="'responses'"
+      <entry-study-table
+        *ngSwitchCase="'entries'"
          [study]="activeStudy">
-      </response-study-table>
+      </entry-study-table>
 
       <user-study-table
         *ngSwitchCase="'users'"

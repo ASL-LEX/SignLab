@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { ResponseService } from '../../../../core/services/response.service';
-import { LocationInfo } from 'shared/dtos/response.dto';
+import { EntryService } from '../../../../core/services/entry.service';
+import { LocationInfo } from 'shared/dtos/entry.dto';
 
 /**
- * Handles the UI to allow users to add new responses to SignLab.
+ * Handles the UI to allow users to add new entries to SignLab.
  */
 @Component({
-  selector: 'response-upload-dialog',
-  templateUrl: './response-upload-dialog.component.html',
-  styleUrls: ['./response-upload-dialog.component.css'],
+  selector: 'entry-upload-dialog',
+  templateUrl: './entry-upload-dialog.component.html',
+  styleUrls: ['./entry-upload-dialog.component.css'],
 })
-export class ResponseUploadDialog {
+export class EntryUploadDialog {
   /**
    * Represents if the CSV has been uploaded successfully, controls if
    * the user can upload a zip yet
@@ -25,14 +25,14 @@ export class ResponseUploadDialog {
    */
   errorLocations: LocationInfo[];
 
-  constructor(private responseService: ResponseService) {
+  constructor(private entryService: EntryService) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
   }
 
   async uploadCSV(event: any) {
-    const result = await this.responseService.uploadCSV(event.target.files[0]);
+    const result = await this.entryService.uploadCSV(event.target.files[0]);
 
     // Update status message displayed to user
     if (result.type != 'success') {
@@ -53,7 +53,7 @@ export class ResponseUploadDialog {
   }
 
   async uploadZIP(event: any) {
-    const result = await this.responseService.uploadZIP(event.target.files[0]);
+    const result = await this.entryService.uploadZIP(event.target.files[0]);
 
     // Upload status message displayed to user
     if (result.type != 'success') {
@@ -64,23 +64,23 @@ export class ResponseUploadDialog {
       event.target.value = '';
     } else {
       this.uploadStatusMessage =
-        'Response uploaded successfully, reload page to see new responses';
+        'Entry uploaded successfully, reload page to see new entries';
       this.errorLocations = [];
     }
   }
 
   /**
-   * Download the template for the responses
+   * Download the template for the entries
    */
   async downloadCSVTemplate() {
-    const header = await this.responseService.getCSVHeader();
+    const header = await this.entryService.getCSVHeader();
 
     const a = document.createElement('a');
     const blob = new Blob([header], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = 'response-upload-template.csv';
+    a.download = 'entry-upload-template.csv';
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();

@@ -10,27 +10,27 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import {
-  ResponseTableElement,
-  ResponseTableToggleChange,
-} from '../models/response-table-element';
+  EntryTableElement,
+  EntryTableToggleChange,
+} from '../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 /**
- * The ResponseTable displays response information and controls in a tabular
+ * The EntryTable displays entry information and controls in a tabular
  * form. This includes per-study information/control logic.
  *
- * This class provides the core view logic. The other response tables provide
- * specific options and call backs that controls how the ResponseTable is used.
- * For example, the ResponseTable can be used both when creating a study
+ * This class provides the core view logic. The other entry tables provide
+ * specific options and call backs that controls how the EntryTable is used.
+ * For example, the EntryTable can be used both when creating a study
  * as well as after the study is created.
  */
 @Component({
-  selector: 'response-table-core',
-  templateUrl: './response-table-core.component.html',
-  styleUrls: ['./response-table-core.component.css'],
+  selector: 'entry-table-core',
+  templateUrl: './entry-table-core.component.html',
+  styleUrls: ['./entry-table-core.component.css'],
 })
-export class ResponseTableCoreComponent
+export class EntryTableCoreComponent
   implements OnInit, AfterViewInit, OnChanges
 {
   /**
@@ -39,7 +39,7 @@ export class ResponseTableCoreComponent
    *
    * TODO: Add meta data display
    */
-  displayedColumns: string[] = ['view', 'responseID', 'responderID'];
+  displayedColumns: string[] = ['view', 'entryID', 'responderID'];
 
   /** Determine if the study enable controls should be provided */
   @Input() displayStudyEnableControls: boolean;
@@ -47,19 +47,19 @@ export class ResponseTableCoreComponent
   @Input() displayStudyTrainingControls: boolean;
   /** Determine if the deletion option should be displayed */
   @Input() displayDeletion = false;
-  /** The response elements to display */
-  @Input() responseData: ResponseTableElement[];
+  /** The entry elements to display */
+  @Input() entryData: EntryTableElement[];
   /** Emits changes to when the part of study change takes place */
-  @Output() partOfStudyChange = new EventEmitter<ResponseTableToggleChange>();
+  @Output() partOfStudyChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
   @Output() partOfTrainingChange =
-    new EventEmitter<ResponseTableToggleChange>();
+    new EventEmitter<EntryTableToggleChange>();
   /** Emits change when the user requests a deletion */
-  @Output() deleteResponse = new EventEmitter<ResponseTableElement>();
+  @Output() deleteEntry = new EventEmitter<EntryTableElement>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
-  dataSource: MatTableDataSource<ResponseTableElement>;
+  dataSource: MatTableDataSource<EntryTableElement>;
 
   constructor() {
     this.dataSource = new MatTableDataSource();
@@ -74,7 +74,7 @@ export class ResponseTableCoreComponent
       this.displayedColumns.push('studyEnableControls');
     }
     if (this.displayDeletion) {
-      this.displayedColumns.push('deleteResponse');
+      this.displayedColumns.push('deleteEntry');
     }
   }
 
@@ -83,12 +83,12 @@ export class ResponseTableCoreComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.responseData) {
-      this.dataSource.data = changes.responseData.currentValue;
+    if (changes.entryData) {
+      this.dataSource.data = changes.entryData.currentValue;
     }
   }
 
-  handleDeletion(responseElem: ResponseTableElement) {
-    this.deleteResponse.emit(responseElem);
+  handleDeletion(entryElem: EntryTableElement) {
+    this.deleteEntry.emit(entryElem);
   }
 }

@@ -5,10 +5,10 @@
       <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput" accept=".csv">
       <button mat-raised-button
               (click)='csvUpload.click()'
-              matTooltip="Upload information on the responses"
+              matTooltip="Upload information on the entries"
               data-cy="uploadCSVButton">Upload CSV</button>
       <button mat-icon-button
-              matTooltip="Download a template for uploading response information"
+              matTooltip="Download a template for uploading entry information"
               (click)='downloadCSVTemplate()'>
         <mat-icon>play_for_work</mat-icon>
       </button>

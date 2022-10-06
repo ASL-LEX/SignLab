@@ -1,52 +1,52 @@
 import { Injectable } from '@angular/core';
-import { SaveAttempt, Response } from 'shared/dtos/response.dto';
-import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
+import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
+import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { Tag } from 'shared/dtos/tag.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { User } from 'shared/dtos/user.dto';
 import { SignLabHttpClient } from './http.service';
-import { MetadataDefinition } from 'shared/dtos/response.dto';
+import { MetadataDefinition } from 'shared/dtos/entry.dto';
 
 /**
- * Handle access and modifications make to responses.
+ * Handle access and modifications make to entries.
  */
 @Injectable()
-export class ResponseService {
+export class EntryService {
   constructor(private signLab: SignLabHttpClient) {}
 
   /**
-   * Set the metadata that all responses will be expected to have.
+   * Set the metadata that all entries will be expected to have.
    */
   async setMetadata(definitions: MetadataDefinition[]) {
-    this.signLab.post<any>('api/response/metadata', definitions, {
+    this.signLab.post<any>('api/entry/metadata', definitions, {
       provideToken: true,
     });
   }
 
   /**
-   * Get all responses.
+   * Get all entries.
    *
-   * @return List of responses
+   * @return List of entries
    */
-  async getResponses(): Promise<Response[]> {
-    return this.signLab.get<Response[]>('api/response/', {
+  async getEntries(): Promise<Entry[]> {
+    return this.signLab.get<Entry[]>('api/entry/', {
       provideToken: true,
     });
   }
 
   /**
-   * Get all responses with the cooresponding information about how the
-   * response is used in a study.
+   * Get all entries with the cooresponding information about how the
+   * entry is used in a study.
    */
-  async getResponseStudies(studyID: string): Promise<ResponseStudy[]> {
-    return this.signLab.get<ResponseStudy[]>('api/response/responsestudies', {
+  async getEntryStudies(studyID: string): Promise<EntryStudy[]> {
+    return this.signLab.get<EntryStudy[]>('api/entry/entriestudies', {
       params: { studyID: studyID },
       provideToken: true,
     });
   }
 
   /**
-   * Upload the CSV that containes information on new responses
+   * Upload the CSV that containes information on new entries
    *
    * @param file The file to upload
    */
@@ -55,28 +55,28 @@ export class ResponseService {
     const form = new FormData();
     form.append('file', file);
 
-    return this.signLab.post<SaveAttempt>('api/response/upload/csv', form, {
+    return this.signLab.post<SaveAttempt>('api/entry/upload/csv', form, {
       provideToken: true,
     });
   }
 
   /**
-   * Upload ZIP which has all of the new response videos in it
+   * Upload ZIP which has all of the new entry videos in it
    */
   async uploadZIP(file: File): Promise<SaveAttempt> {
     const form = new FormData();
     form.append('file', file);
 
-    return this.signLab.post<SaveAttempt>('api/response/upload/zip', form, {
+    return this.signLab.post<SaveAttempt>('api/entry/upload/zip', form, {
       provideToken: true,
     });
   }
 
   /**
-   * Get the next response that needs to be tagged. This will return an
+   * Get the next entry that needs to be tagged. This will return an
    * incomplete tag for the user to complete.
    */
-  async getNextUntaggedResponse(
+  async getNextUntaggedEntry(
     user: User,
     study: Study,
     isTraining: boolean
@@ -94,7 +94,7 @@ export class ResponseService {
   }
 
   /**
-   * Attempt to apply the given tag to the associated response.
+   * Attempt to apply the given tag to the associated entry.
    *
    * @param tag The tag that is being applied
    * @return Success or error
@@ -112,22 +112,22 @@ export class ResponseService {
   }
 
   /**
-   * Change the enable state of a response for given study.
+   * Change the enable state of a entry for given study.
    *
-   * @param responseID The response to change th    const params = e enable state of
-   * @param usedInStudy If the response should be included in the tagging
+   * @param entryID The entry to change th    const params = e enable state of
+   * @param usedInStudy If the entry should be included in the tagging
    *                    portion of the study or not
    * @param studyID The ID of the study that this is being applied to
    * @return True if the change took place successfully
    */
   async setUsedInStudy(
-    responseID: string,
+    entryID: string,
     usedInStudy: boolean,
     studyID: string
   ): Promise<boolean> {
-    const targetURL = 'api/response/enable';
+    const targetURL = 'api/entry/enable';
     const requestBody = {
-      responseID: responseID,
+      entryID: entryID,
       studyID: studyID,
       isPartOfStudy: usedInStudy,
     };
@@ -143,23 +143,23 @@ export class ResponseService {
   }
 
   /**
-   * Delete the given response
+   * Delete the given entry
    *
-   * @param response The response to delete
+   * @param entry The entry to delete
    */
-  async delete(response: Response) {
-    this.signLab.delete<any>(`api/response/${response._id}`, {
+  async delete(entry: Entry) {
+    this.signLab.delete<any>(`api/entry/${entry._id}`, {
       provideToken: true,
     });
   }
 
   /**
    * Get the header which is the required fields to be present in a CSV
-   * upload of response data
+   * upload of entry data
    */
   async getCSVHeader(): Promise<string> {
     const result = await this.signLab.get<{ header: string }>(
-      'api/response/template',
+      'api/entry/template',
       {
         provideToken: true,
       }

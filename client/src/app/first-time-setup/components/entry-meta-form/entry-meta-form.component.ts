@@ -6,7 +6,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { ResponseService } from '../../../core/services/response.service';
+import { EntryService } from '../../../core/services/entry.service';
 
 /**
  * Validator to check if each field in the form array has a unique name
@@ -26,24 +26,24 @@ function uniqueValidator(control: AbstractControl) {
 }
 
 @Component({
-  selector: 'response-meta-form',
-  templateUrl: './response-meta-form.component.html',
+  selector: 'entry-meta-form',
+  templateUrl: './entry-meta-form.component.html',
 })
-export class ResponseMetaForm {
+export class EntryMetaForm {
   /** Form that controls the fields of the metadata */
-  responseMetadataFormGroup = this.formBuilder.group({
-    responseMetadata: this.formBuilder.array([], uniqueValidator),
+  entryMetadataFormGroup = this.formBuilder.group({
+    entryMetadata: this.formBuilder.array([], uniqueValidator),
   });
   /** Callback for after the metadata has been submitted */
   @Input() onMetadataSubmit: () => void;
 
   constructor(
     private formBuilder: FormBuilder,
-    private responseService: ResponseService
+    private entryService: EntryService
   ) {}
 
-  get responseMetadata() {
-    return this.responseMetadataFormGroup.get('responseMetadata') as FormArray;
+  get entryMetadata() {
+    return this.entryMetadataFormGroup.get('entryMetadata') as FormArray;
   }
 
   addMetaField() {
@@ -51,22 +51,22 @@ export class ResponseMetaForm {
       name: ['', Validators.required],
       type: ['', Validators.required],
     });
-    this.responseMetadata.push(newForm);
+    this.entryMetadata.push(newForm);
   }
 
   /**
    * Remove a metdata field
    */
   deleteMetadata(index: number) {
-    this.responseMetadata.removeAt(index);
+    this.entryMetadata.removeAt(index);
   }
 
   /**
-   * Submit the response meta data
+   * Submit the entry meta data
    */
   submitMeta() {
     // TODO: Add "are you sure" validation
-    this.responseService.setMetadata(this.responseMetadata.value);
+    this.entryService.setMetadata(this.entryMetadata.value);
 
     if (this.onMetadataSubmit) {
       this.onMetadataSubmit();
