@@ -1,16 +1,16 @@
-import { Response } from './response.dto';
+import { Entry } from './entry.dto';
 import { User } from './user.dto';
 import { Study } from './study.dto';
 
 /**
  * This represents a single tag in the SignLab system. A tag is assocaited
- * with a single response per study.
+ * with a single entry per study.
  */
 export interface Tag {
   /** Unique identifier for the tag */
   _id: string;
-  /** The response the tag is assocaited with */
-  response: Response;
+  /** The entry the tag is assocaited with */
+  entry: Entry;
   /** The study the tag is associated with */
   study: Study;
   /** The user in SignLab who made this tag */

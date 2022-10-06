@@ -38,18 +38,18 @@ export interface SaveAttempt {
 }
 
 /**
- * Interface for a single response. A response in the system represents a
+ * Interface for a single entry. A entry in the system represents a
  * single entity the is tagged in the system.
  */
-export interface Response {
+export interface Entry {
   _id?: string;
   /**
-   * Way to uniquely identify the response in the system. This is a user
+   * Way to uniquely identify the entry in the system. This is a user
    * defined value.
    */
-  responseID: string;
+  entryID: string;
   /**
-   * This is the location of the response itself as a URL.
+   * This is the location of the entry itself as a URL.
    */
   videoURL: string;
   /**
@@ -57,14 +57,14 @@ export interface Response {
    */
   duration?: number;
   /**
-   * This represents if the response was recorded in SignLab or not.
+   * This represents if the entry was recorded in SignLab or not.
    */
   recordedInSignLab: boolean;
   /**
-   * This is the ID of the responder. If the response was not recorded in
+   * This is the ID of the responder. If the entry was not recorded in
    * SignLab, this will be populated as a way to identify the person who
-   * made this response. If this response was recorded in SignLab, a
-   * SignLab user will be associated with the response.
+   * made this entry. If this entry was recorded in SignLab, a
+   * SignLab user will be associated with the entry.
    */
   responderID?: string;
   /**

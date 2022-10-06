@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import {
-  ResponseUpload,
-  ResponseUploadDocument,
-} from '../schemas/response-upload.schema';
-import { ResponseService } from './response.service';
+  EntryUpload,
+  EntryUploadDocument,
+} from '../schemas/entry-upload.schema';
+import { EntryService } from './entry.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';
-import { SaveAttempt } from 'shared/dtos/response.dto';
+import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { createReadStream } from 'fs';
 import { readdir, rm, stat } from 'fs/promises';
 import { join, basename } from 'path';
-import { Response } from '../schemas/response.schema';
+import { Entry } from '../schemas/entry.schema';
 import { BucketStorage } from './bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 
@@ -20,22 +20,22 @@ const unzipper = require('unzipper');
 
 /**
  * The upload result includes any error messages that may have taken place
- * during the upload as well as an array of responses that was created
+ * during the upload as well as an array of entries that was created
  * during the upload.
  */
-export interface ResponseUploadResult {
-  responses: Response[];
+export interface EntryUploadResult {
+  entries: Entry[];
   saveResult: SaveAttempt;
 }
 
 @Injectable()
-export class ResponseUploadService {
+export class EntryUploadService {
   private supportedVideoFormats: Set<string>;
 
   constructor(
-    @InjectModel(ResponseUpload.name)
-    private responseUploadModel: Model<ResponseUploadDocument>,
-    private responseService: ResponseService,
+    @InjectModel(EntryUpload.name)
+    private entryUploadModel: Model<EntryUploadDocument>,
+    private entryService: EntryService,
     private bucketService: BucketStorage,
     configService: ConfigService,
   ) {
@@ -47,15 +47,15 @@ export class ResponseUploadService {
   /**
    * Handle the process of taking a stream of data and attempting to parse
    * that data as a CSV. The CSV should contain information related to series
-   * of responses being uploaded.
+   * of entries being uploaded.
    */
-  async uploadResponseDataCSV(stream: Readable): Promise<SaveAttempt> {
-    // Clear out any left over ResponseUploads
+  async uploadEntryDataCSV(stream: Readable): Promise<SaveAttempt> {
+    // Clear out any left over EntryUploads
     // TODO: May want some way of alerting the user that there are any
-    //       remaining response uploads
-    await this.responseUploadModel.deleteMany({}).exec();
+    //       remaining entry uploads
+    await this.entryUploadModel.deleteMany({}).exec();
 
-    // Loop over all rows and attempt to parse the ResponseUploads out
+    // Loop over all rows and attempt to parse the EntryUploads out
     let lineNumber = 2; // Ignore header which must always be present
     try {
       const parser = stream.pipe(csv({ strict: true }));
@@ -65,7 +65,7 @@ export class ResponseUploadService {
         const transformed = this.transformRow(row);
 
         // Try to save this row
-        const saveResult = await this.responseUploadSave(transformed);
+        const saveResult = await this.entryUploadSave(transformed);
         if (saveResult.type == 'error') {
           return {
             type: 'error',
@@ -94,7 +94,7 @@ export class ResponseUploadService {
     if (lineNumber == 2) {
       return {
         type: 'error',
-        message: `No responses found in CSV, ensure there is at least one line
+        message: `No entries found in CSV, ensure there is at least one line
                   of data not including the required header`,
       };
     }
@@ -104,29 +104,29 @@ export class ResponseUploadService {
   }
 
   /**
-   * Handles saving the video responses into the bucket and creating the
-   * Responses from the ResponseUploads
+   * Handles saving the video entries into the bucket and creating the
+   * Entries from the EntryUploads
    *
    * @param zipFile Path to the zip file containing the videos
    */
-  async uploadResponseVideos(zipFile: string): Promise<ResponseUploadResult> {
+  async uploadEntryVideos(zipFile: string): Promise<EntryUploadResult> {
     // Extract the zip
     const unzipResult = await this.extractZIP(zipFile);
     if (unzipResult.type == 'error') {
-      return { responses: [], saveResult: unzipResult };
+      return { entries: [], saveResult: unzipResult };
     }
 
     // Warning that were generated when uploading the files
     const fileWarnings: SaveAttempt[] = [];
 
-    // Go through each file and find the cooresponding ResponseUpload
-    const files = await readdir('./upload/responses/');
+    // Go through each file and find the cooresponding EntryUpload
+    const files = await readdir('./upload/entries/');
 
-    const responsesCreated: Response[] = [];
+    const entriesCreated: Entry[] = [];
 
     let count = 0;
     for (const file of files) {
-      const filePath = join('./upload/responses', file);
+      const filePath = join('./upload/entries', file);
 
       // Ignore gitkeep
       if (file === '.gitkeep') {
@@ -157,24 +157,24 @@ export class ResponseUploadService {
         continue;
       }
 
-      // Attempt to save the response based on the filename
-      const responseUploadResult = await this.saveResponse(file, filePath);
-      if (responseUploadResult.saveResult.type == 'warning') {
-        fileWarnings.push(responseUploadResult.saveResult);
+      // Attempt to save the entry based on the filename
+      const entryUploadResult = await this.saveEntry(file, filePath);
+      if (entryUploadResult.saveResult.type == 'warning') {
+        fileWarnings.push(entryUploadResult.saveResult);
         continue;
       }
-      if (responseUploadResult.responses) {
-        responsesCreated.push(responseUploadResult.responses[0]);
+      if (entryUploadResult.entries) {
+        entriesCreated.push(entryUploadResult.entries[0]);
       }
     }
 
     // No files found, return a warning
     if (count == 0) {
       return {
-        responses: [],
+        entries: [],
         saveResult: {
           type: 'warning',
-          message: 'No response videos found in ZIP, no responses saved',
+          message: 'No entry videos found in ZIP, no entries saved',
         },
       };
     }
@@ -182,7 +182,7 @@ export class ResponseUploadService {
     // Delete the files after handling upload
     await Promise.all(
       files.map((file) => {
-        return rm(join('./upload/responses', file), {
+        return rm(join('./upload/entries', file), {
           recursive: true,
           force: true,
         });
@@ -209,43 +209,43 @@ export class ResponseUploadService {
     }
 
     return {
-      responses: responsesCreated,
+      entries: entriesCreated,
       saveResult: result,
     };
   }
 
   /**
-   * Attempt to make a Response entity for the given file. This will do
+   * Attempt to make a Entry entity for the given file. This will do
    * the following
    *
-   * 1. Try to find a cooresponding ResponseUpload based on filename
-   * 2. Make a Response entity based on the ResponseUpload and file
+   * 1. Try to find a cooresponding EntryUpload based on filename
+   * 2. Make a Entry entity based on the EntryUpload and file
    * 3. Upload the file to bucket storage
-   * 4. Remove the ResponseUpload entity
+   * 4. Remove the EntryUpload entity
    *
-   * Will return a warning if a ResponseUpload is not found.
+   * Will return a warning if a EntryUpload is not found.
    *
    * @param filename The name of the file of the video
    * @param _filePath The path to the file including the name
    */
-  private async saveResponse(
+  private async saveEntry(
     filename: string,
     _filePath: string,
-  ): Promise<ResponseUploadResult> {
-    // Try to find a cooresponding ResponseUpload based on filename
-    const responseUpload = await this.responseUploadModel
+  ): Promise<EntryUploadResult> {
+    // Try to find a cooresponding EntryUpload based on filename
+    const entryUpload = await this.entryUploadModel
       .findOne({ filename: filename })
       .exec();
-    if (!responseUpload) {
+    if (!entryUpload) {
       return {
-        responses: [],
+        entries: [],
         saveResult: {
           type: 'warning',
-          message: `Response for file ${filename} was not found in original CSV`,
+          message: `Entry for file ${filename} was not found in original CSV`,
           where: [
             {
               place: `${filename}`,
-              message: 'Response upload not found',
+              message: 'Entry upload not found',
             },
           ],
         },
@@ -254,30 +254,30 @@ export class ResponseUploadService {
 
     // Move the file into the bucket
     const uploadResult = await this.bucketService.objectUpload(
-      `upload/responses/${responseUpload.filename}`,
-      `Responses/${basename(responseUpload.filename)}`,
+      `upload/entries/${entryUpload.filename}`,
+      `Entries/${basename(entryUpload.filename)}`,
     );
 
-    // Make a response entity
+    // Make a entry entity
     // TODO: Determine duration or have default on error
     // TODO: Replace video URL with location in bucket storage
-    const newResponse: Response = {
-      responseID: responseUpload.responseID,
+    const newEntry: Entry = {
+      entryID: entryUpload.entryID,
       videoURL: uploadResult.uri,
       recordedInSignLab: false,
-      responderID: responseUpload.responderID,
-      meta: responseUpload.meta,
+      responderID: entryUpload.responderID,
+      meta: entryUpload.meta,
     };
-    const response = await this.responseService.createResponse(newResponse);
+    const entry = await this.entryService.createEntry(newEntry);
 
-    // Remove the ResponseUpload entity
-    this.responseUploadModel.deleteOne({
-      responseID: responseUpload.responseID,
+    // Remove the EntryUpload entity
+    this.entryUploadModel.deleteOne({
+      entryID: entryUpload.entryID,
     });
 
     // Success
     return {
-      responses: [response],
+      entries: [entry],
       saveResult: {
         type: 'success',
       },
@@ -285,50 +285,50 @@ export class ResponseUploadService {
   }
 
   /**
-   * Try to save the new ResponseUpload, this will first validate that the
-   * ResponseUpload meets the following requirements
+   * Try to save the new EntryUpload, this will first validate that the
+   * EntryUpload meets the following requirements
    *
-   * 1. The format of the response matches the required schema
-   * 2. The responseID is unique and not found in existing ResponseUploads
-   *    nor in regular Responses
+   * 1. The format of the entry matches the required schema
+   * 2. The entryID is unique and not found in existing EntryUploads
+   *    nor in regular Entries
    *
    * @return The result of attempting to save, if there is an error, a human
    *         readable error field will be present in the result
    */
-  private async responseUploadSave(
-    responseUpload: ResponseUpload,
+  private async entryUploadSave(
+    entryUpload: EntryUpload,
   ): Promise<SaveAttempt> {
     // Make sure the schema matches the expectation
-    const schemaResult = await this.validateSchema(responseUpload);
+    const schemaResult = await this.validateSchema(entryUpload);
 
     if (schemaResult.type == 'error') {
       return schemaResult;
     }
 
     // Trim required fields
-    responseUpload.responderID = responseUpload.responderID.trim();
-    responseUpload.responseID = responseUpload.responseID.trim();
-    responseUpload.filename = responseUpload.filename.trim();
+    entryUpload.responderID = entryUpload.responderID.trim();
+    entryUpload.entryID = entryUpload.entryID.trim();
+    entryUpload.filename = entryUpload.filename.trim();
 
-    // Make sure the ResponseUpload ID is unique
-    const responseExists =
-      (await this.responseService.responseExists(responseUpload.responseID)) ||
-      (await this.responseUploadExists(responseUpload.responseID));
-    if (responseExists) {
+    // Make sure the EntryUpload ID is unique
+    const entryExists =
+      (await this.entryService.entryExists(entryUpload.entryID)) ||
+      (await this.entryUploadExists(entryUpload.entryID));
+    if (entryExists) {
       return {
         type: 'error',
-        message: `Response with ID ${responseUpload.responseID} already exists`,
+        message: `Entry with ID ${entryUpload.entryID} already exists`,
       };
     }
 
-    // Otherwise, save the new response upload
-    this.responseUploadModel.create(responseUpload);
+    // Otherwise, save the new entry upload
+    this.entryUploadModel.create(entryUpload);
     return { type: 'success' };
   }
 
   /**
    * Attempts to transform the flat row of the CSV into the format of
-   * a ResponseUpload. This will work by taking all required fields
+   * a EntryUpload. This will work by taking all required fields
    * and placing them at the root level of the object, then placing all
    * other fields and placing them within the metadata field.
    *
@@ -336,17 +336,17 @@ export class ResponseUploadService {
    *       data into the expected format.
    *
    * @param row The row to transform
-   * @return The transformed ResponseUpload
+   * @return The transformed EntryUpload
    */
-  private transformRow(row: any): ResponseUpload {
+  private transformRow(row: any): EntryUpload {
     const transformed = {
-      responseID: row.responseID,
+      entryID: row.entryID,
       responderID: row.responderID,
       filename: row.filename,
       meta: {},
     };
 
-    delete row.responseID;
+    delete row.entryID;
     delete row.responderID;
     delete row.filename;
 
@@ -355,26 +355,26 @@ export class ResponseUploadService {
     return transformed;
   }
 
-  private async responseUploadExists(responseID: string): Promise<boolean> {
-    const responseUpload = await this.responseUploadModel
-      .findOne({ responseID: responseID })
+  private async entryUploadExists(entryID: string): Promise<boolean> {
+    const entryUpload = await this.entryUploadModel
+      .findOne({ entryID: entryID })
       .exec();
-    return responseUpload != null;
+    return entryUpload != null;
   }
 
   /**
-   * Attempt to validate the object as a ResponseUpload. On failure will
+   * Attempt to validate the object as a EntryUpload. On failure will
    * grab the errors in a human readable format.
    *
    * This calls the validation method through the Mongoose schema.
    *
-   * @param obj The object to try to verify as a ResponseUpload
+   * @param obj The object to try to verify as a EntryUpload
    * @return SaveAttempt with the error field populated if an error has taken
    *         place
    */
   private async validateSchema(obj: any): Promise<SaveAttempt> {
     try {
-      await this.responseUploadModel.validate(obj);
+      await this.entryUploadModel.validate(obj);
       // Validate ran successfully, return no errors
       return { type: 'success' };
     } catch (error: any) {
@@ -399,7 +399,7 @@ export class ResponseUploadService {
     try {
       await new Promise<void>((resolve, reject) => {
         createReadStream(path)
-          .pipe(unzipper.Extract({ path: './upload/responses' }))
+          .pipe(unzipper.Extract({ path: './upload/entries' }))
           .on('finish', () => {
             resolve();
           })

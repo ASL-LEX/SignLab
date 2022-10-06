@@ -5,25 +5,25 @@ import { app } from '../main';
 import { SchemaService } from '../services/schema.service';
 
 /**
- * A Response is a complete video entity in the SignLab system. A Response
- * differes from a ResponseUpload in that a Response has all information needed
- * to be in the SignLab system while a ResponseUpload is an intermediate
+ * A Entry is a complete video entity in the SignLab system. A Entry
+ * differes from a EntryUpload in that a Entry has all information needed
+ * to be in the SignLab system while a EntryUpload is an intermediate
  * step with missing information
  */
 @Schema()
-export class Response {
+export class Entry {
   /** MongoDB assigned ID */
   _id?: string;
 
   /**
    * User assigned ID. This is useful if the researcher has additional pieces
-   * of information regarding this response that is not uploaded to SignLab
+   * of information regarding this entry that is not uploaded to SignLab
    */
   @Prop({ required: true, trim: true })
-  responseID: string;
+  entryID: string;
 
   /**
-   * URL of the video associated with this response.
+   * URL of the video associated with this entry.
    */
   @Prop({ required: true, trim: true })
   videoURL: string;
@@ -35,23 +35,23 @@ export class Response {
   duration?: number;
 
   /**
-   * Flag which represents if this response was recorded in SignLab or not.
+   * Flag which represents if this entry was recorded in SignLab or not.
    */
   @Prop({ required: true })
   recordedInSignLab: boolean;
 
   /**
-   * This Response ID is present if the Response was uploaded to SignLab
+   * This Entry ID is present if the Entry was uploaded to SignLab
    * instead of being recorded in SignLab. This is a way for researchers
-   * to tell who make their response against their own records.
+   * to tell who make their entry against their own records.
    */
   @Prop({ required: false, trim: true })
   responderID?: string;
 
   /**
-   * This field is present if the response was recorded in SignLab. If that
+   * This field is present if the entry was recorded in SignLab. If that
    * is the case, then a user of SignLab made the recording and that is how
-   * the recorder of the response can be identified.
+   * the recorder of the entry can be identified.
    */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   recorder?: User;
@@ -64,12 +64,12 @@ export class Response {
     validate: {
       validator: async (value: any) => {
         const schemaService = app.get(SchemaService);
-        return schemaService.validate('Response', value);
+        return schemaService.validate('Entry', value);
       },
     },
   })
   meta: any;
 }
 
-export type ResponseDocument = Response & Document;
-export const ResponseSchema = SchemaFactory.createForClass(Response);
+export type EntryDocument = Entry & Document;
+export const EntrySchema = SchemaFactory.createForClass(Entry);

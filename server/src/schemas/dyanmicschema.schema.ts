@@ -6,7 +6,7 @@ import mongoose, { Document } from 'mongoose';
  * schema stores a JSON schema representation which is used for data
  * validation.
  *
- * An example use case is for Responses. Responses can have additional
+ * An example use case is for Entries. Entries can have additional
  * meta data which is configured by the user. That meta data is considered
  * a dynamic schema and stored here.
  */
@@ -14,8 +14,8 @@ import mongoose, { Document } from 'mongoose';
 export class DynamicSchema {
   /**
    * This is how the schema is identified. Typically this is the data that
-   * this dyanmic schema is associated with. So for example, Responses
-   * will have a DynamicSchema entry with the schemaName of Response.
+   * this dyanmic schema is associated with. So for example, Entries
+   * will have a DynamicSchema entry with the schemaName of Entry.
    */
   @Prop()
   schemaName: string;

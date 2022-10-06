@@ -8,10 +8,10 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
-import { ResponseService } from '../../services/response.service';
+import { EntryService } from '../../services/entry.service';
 import { Study } from '../../schemas/study.schema';
 import { StudyService } from '../../services/study.service';
-import { ResponseStudyService } from '../../services/responsestudy.service';
+import { EntryStudyService } from '../../services/entrystudy.service';
 import { StudyCreation } from 'shared/dtos/study.dto';
 import { UserStudy } from '../../schemas/userstudy.schema';
 import { UserStudyService } from '../../services/userstudy.service';
@@ -22,8 +22,8 @@ import { Auth } from '../../guards/auth.guard';
 export class StudyController {
   constructor(
     private studyService: StudyService,
-    private responseService: ResponseService,
-    private responseStudyService: ResponseStudyService,
+    private entryService: EntryService,
+    private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
     private userService: UserService,
   ) {}
@@ -125,8 +125,8 @@ export class StudyController {
   }
 
   /**
-   * Make a a new study. When the new study is created, a ResponseStudy will
-   * be made for each Response for this new study. This will return the
+   * Make a a new study. When the new study is created, a EntryStudy will
+   * be made for each Entry for this new study. This will return the
    * newly created study.
    */
   @Post('/create')
@@ -143,19 +143,19 @@ export class StudyController {
 
     const newStudy = await this.studyService.createStudy(studyCreation.study);
 
-    // Now add a ResponseStudy for each response
-    const responses = await this.responseService.getAllResponses();
-    await this.responseStudyService.createResponseStudies(responses, newStudy);
+    // Now add a EntryStudy for each entry
+    const entries = await this.entryService.getAllEntries();
+    await this.entryStudyService.createEntryStudies(entries, newStudy);
 
-    // Mark training and disabled responses
+    // Mark training and disabled entries
     await Promise.all([
-      this.responseStudyService.markTraining(
+      this.entryStudyService.markTraining(
         newStudy._id!,
-        studyCreation.trainingResponses,
+        studyCreation.trainingEntries,
       ),
-      this.responseStudyService.markDisabled(
+      this.entryStudyService.markDisabled(
         newStudy._id!,
-        studyCreation.disabledResponses,
+        studyCreation.disabledEntries,
       ),
     ]);
 

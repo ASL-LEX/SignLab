@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { ResponseStudy } from './responsestudy.schema';
+import { EntryStudy } from './entrystudy.schema';
 import { Study } from './study.schema';
 import { User } from './user.schema';
 
@@ -31,15 +31,15 @@ export class UserStudy {
   study: Study;
 
   /**
-   * The list of `ResponseStudies` that the user needs to complete as part of
+   * The list of `EntryStudies` that the user needs to complete as part of
    * their training for this study. This list will shrink as the user
    * completes their training.
    */
   @Prop({
     required: true,
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: ResponseStudy.name }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: EntryStudy.name }],
   })
-  trainingResponseStudies: ResponseStudy[];
+  trainingEntryStudies: EntryStudy[];
 
   /**
    * Flag that represents if the user has access to the given study

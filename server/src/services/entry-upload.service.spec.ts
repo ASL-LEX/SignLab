@@ -1,21 +1,21 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ResponseStudy } from '../schemas/responsestudy.schema';
+import { EntryStudy } from '../schemas/entriestudy.schema';
 import { Readable } from 'stream';
-import { ResponseUpload } from '../schemas/response-upload.schema';
-import { ResponseService } from './response.service';
+import { EntryUpload } from '../schemas/entry-upload.schema';
+import { EntryService } from './entry.service';
 import { StudyService } from './study.service';
 import { TagService } from './tag.service';
-import { ResponseUploadService } from './response-upload.service';
+import { EntryUploadService } from './entry-upload.service';
 import { BucketStorage, BucketFile } from './bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 
 /**
- * Example ResponseUpload model that expects data in the form below
+ * Example EntryUpload model that expects data in the form below
  * ```
  * {
  *    responderID: string,
- *    responseID: string,
+ *    entryID: string,
  *    filename: string,
  *    meta: {
  *      prompt: string,
@@ -23,12 +23,12 @@ import { ConfigService } from '@nestjs/config';
  * }
  * ```
  */
-const responseUploadFindOneMock = jest.fn((params: any) => {
+const entryUploadFindOneMock = jest.fn((params: any) => {
   let result: any = null;
 
-  if (params.responseID.trim() == '2') {
+  if (params.entryID.trim() == '2') {
     result = {
-      responseID: '2',
+      entryID: '2',
       responderID: '1',
       filename: 'my_video.mp4',
       meta: {
@@ -43,7 +43,7 @@ const responseUploadFindOneMock = jest.fn((params: any) => {
     },
   };
 });
-const responseUploadModel = {
+const entryUploadModel = {
   // Delete many implementation to avoid errors
   deleteMany(_params: any) {
     return {
@@ -52,7 +52,7 @@ const responseUploadModel = {
   },
 
   findOne(params: any) {
-    return responseUploadFindOneMock(params);
+    return entryUploadFindOneMock(params);
   },
 
   create(params: any) {
@@ -67,13 +67,13 @@ const responseUploadModel = {
     // Make sure all fields present
     const result: any = { errors: {} };
     if (!params.responderID) {
-      result.errors['responserID'] = {
-        properties: { message: 'responseID must be of type string' },
+      result.errors['entryrID'] = {
+        properties: { message: 'entryID must be of type string' },
       };
     }
-    if (!params.responseID) {
-      result.errors['responseID'] = {
-        properties: { message: 'responseID must be of type string' },
+    if (!params.entryID) {
+      result.errors['entryID'] = {
+        properties: { message: 'entryID must be of type string' },
       };
     }
     if (!params.filename) {
@@ -99,13 +99,13 @@ const responseUploadModel = {
   deleteOne(_params: any) {},
 };
 
-const responseService = {
-  responseExists(params: any) {
+const entryService = {
+  entryExists(params: any) {
     let result = null;
 
     if (params.id == '2') {
       result = {
-        responseID: '2',
+        entryID: '2',
         responderID: '1',
         filename: 'my_video.mp4',
         meta: {
@@ -117,7 +117,7 @@ const responseService = {
     return Promise.resolve(result);
   },
 
-  createResponse(params: any) {
+  createEntry(params: any) {
     return {
       async exec() {
         return params;
@@ -139,17 +139,17 @@ const configService = {
 };
 
 /**
- * Mock the response schema since it indirectly gets a different module
+ * Mock the entry schema since it indirectly gets a different module
  * declaration from the `app`
  */
-jest.mock('../schemas/response.schema', () => ({
-  Response: () => {
-    return { name: 'Response' };
+jest.mock('../schemas/entry.schema', () => ({
+  Entry: () => {
+    return { name: 'Entry' };
   },
 }));
-jest.mock('../schemas/response-upload.schema', () => ({
-  ResponseUpload: () => {
-    return { name: 'Response' };
+jest.mock('../schemas/entry-upload.schema', () => ({
+  EntryUpload: () => {
+    return { name: 'Entry' };
   },
 }));
 
@@ -185,20 +185,20 @@ const bucketService = {
   },
 };
 
-describe('ResponseService', () => {
+describe('EntryService', () => {
   // Service being tested
-  let responseUploadService: ResponseUploadService;
+  let entryUploadService: EntryUploadService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ResponseUploadService,
+        EntryUploadService,
         {
-          provide: getModelToken(ResponseUpload.name),
-          useValue: responseUploadModel,
+          provide: getModelToken(EntryUpload.name),
+          useValue: entryUploadModel,
         },
         {
-          provide: getModelToken(ResponseStudy.name),
+          provide: getModelToken(EntryStudy.name),
           useValue: {},
         },
         {
@@ -210,8 +210,8 @@ describe('ResponseService', () => {
           useValue: {},
         },
         {
-          provide: ResponseService,
-          useValue: responseService,
+          provide: EntryService,
+          useValue: entryService,
         },
         {
           provide: BucketStorage,
@@ -224,19 +224,19 @@ describe('ResponseService', () => {
       ],
     }).compile();
 
-    responseUploadService = await module.resolve(ResponseUploadService);
+    entryUploadService = await module.resolve(EntryUploadService);
     jest
-      .spyOn(responseUploadService, 'extractZIP')
+      .spyOn(entryUploadService, 'extractZIP')
       .mockReturnValue(Promise.resolve({ type: 'success' }));
   });
 
-  describe('uploadResponseDataCSV()', () => {
+  describe('uploadEntryDataCSV()', () => {
     it('single line CSV should fail', async () => {
       const testInput = Readable.from([
         `This is garbage and now good no commas for you`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('error');
@@ -245,21 +245,21 @@ describe('ResponseService', () => {
     it('should not allow empty CSV', async () => {
       const testInput = Readable.from(['']);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('error');
-      expect(result.message).toContain('No responses found in CSV');
+      expect(result.message).toContain('No entries found in CSV');
     });
 
     it('should catch CSVs that do not match validation requirements', async () => {
       // Missing responderID
       const testInput = Readable.from([
-        `responseID,filename,prompt
+        `entryID,filename,prompt
          1,example.mp4,tree`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('error');
@@ -268,26 +268,26 @@ describe('ResponseService', () => {
     it('should catch invalid CSVs', async () => {
       // Extra input on last line (butterfly)
       const testInput = Readable.from([
-        `responseID,responderID,filename,prompt
+        `entryID,responderID,filename,prompt
          1,2,example.mp4,tree,butterfly`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('error');
       expect(result.message).toContain('Failed to parse CSV');
     });
 
-    it('should not allow duplicated ResponseUploads', async () => {
-      // Response ID duplicated in insertion
+    it('should not allow duplicated EntryUploads', async () => {
+      // Entry ID duplicated in insertion
       const testInput = Readable.from([
-        `responseID,responderID,filename,prompt
+        `entryID,responderID,filename,prompt
         2,2,example.mp4,tree
         1,3,example.mp4,bread`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('error');
@@ -296,37 +296,37 @@ describe('ResponseService', () => {
 
     it('should allow valid CSV', async () => {
       const testInput = Readable.from([
-        `responseID,responderID,filename,prompt
+        `entryID,responderID,filename,prompt
          1,2,example.mp4,tree
          3,4,another.mp4,bread
          5,6,what.mp4,grass
          7,8,another.mp4,water`,
       ]);
 
-      const result = await responseUploadService.uploadResponseDataCSV(
+      const result = await entryUploadService.uploadEntryDataCSV(
         testInput,
       );
       expect(result.type).toEqual('success');
     });
   });
 
-  describe('uploadResponseVideos()', () => {
+  describe('uploadEntryVideos()', () => {
     it('should give warning on a ZIP file with not content', async () => {
-      const result = await responseUploadService.uploadResponseVideos(
+      const result = await entryUploadService.uploadEntryVideos(
         'empty.zip',
       );
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain(
-        'No response videos found in ZIP, no responses saved',
+        'No entry videos found in ZIP, no entries saved',
       );
     });
 
-    it('should give warning if file does not have a cooresponding response upload', async () => {
+    it('should give warning if file does not have a cooresponding entry upload', async () => {
       readdirMock.mockImplementation((_path: string) => {
-        return ['tree_response.mp4'];
+        return ['tree_entry.mp4'];
       });
-      responseUploadFindOneMock.mockImplementation((_params: any) => {
+      entryUploadFindOneMock.mockImplementation((_params: any) => {
         return {
           async exec() {
             return null;
@@ -334,8 +334,8 @@ describe('ResponseService', () => {
         };
       });
 
-      const result = await responseUploadService.uploadResponseVideos(
-        'missing_response_upload.zip',
+      const result = await entryUploadService.uploadEntryVideos(
+        'missing_entry_upload.zip',
       );
 
       expect(result.saveResult.type).toEqual('warning');
@@ -344,28 +344,28 @@ describe('ResponseService', () => {
       );
     });
 
-    it('should work for ZIP that has the cooresponding ResponseUploads', async () => {
+    it('should work for ZIP that has the cooresponding EntryUploads', async () => {
       readdirMock.mockImplementation((_path: string) => {
-        return ['tree_response.mp4', 'bread_response.mp4'];
+        return ['tree_entry.mp4', 'bread_entry.mp4'];
       });
 
-      responseUploadFindOneMock.mockImplementation((params: any) => {
+      entryUploadFindOneMock.mockImplementation((params: any) => {
         let result: any = null;
 
-        if (params.filename == 'tree_response.mp4') {
+        if (params.filename == 'tree_entry.mp4') {
           result = {
-            responseID: '1',
+            entryID: '1',
             responderID: '2',
-            filename: 'tree_response.mp4',
+            filename: 'tree_entry.mp4',
             meta: {
               prompt: 'tree',
             },
           };
-        } else if (params.filename == 'bread_response.mp4') {
+        } else if (params.filename == 'bread_entry.mp4') {
           result = {
-            responseID: '1',
+            entryID: '1',
             responderID: '2',
-            filename: 'bread_response.mp4',
+            filename: 'bread_entry.mp4',
             meta: {
               prompt: 'bread',
             },
@@ -379,7 +379,7 @@ describe('ResponseService', () => {
         };
       });
 
-      const result = await responseUploadService.uploadResponseVideos(
+      const result = await entryUploadService.uploadEntryVideos(
         'all_good.zip',
       );
 

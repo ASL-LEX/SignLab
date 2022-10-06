@@ -4,27 +4,27 @@ import { UserStudy, UserStudyDocument } from '../schemas/userstudy.schema';
 import { Model } from 'mongoose';
 import { User } from '../schemas/user.schema';
 import { Study } from '../schemas/study.schema';
-import { ResponseStudyService } from './responsestudy.service';
-import { ResponseStudy } from '../schemas/responsestudy.schema';
+import { EntryStudyService } from './entrystudy.service';
+import { EntryStudy } from '../schemas/entrystudy.schema';
 
 @Injectable()
 export class UserStudyService {
   constructor(
     @InjectModel(UserStudy.name)
     private userStudyModel: Model<UserStudyDocument>,
-    private responseStudyService: ResponseStudyService,
+    private entryStudyService: EntryStudyService,
   ) {}
 
   /**
    * Make a user study for the given user and study
    */
   async create(user: User, study: Study): Promise<UserStudy> {
-    const trainingResponseStudies =
-      await this.responseStudyService.getTrainingSet(study);
+    const trainingEntryStudies =
+      await this.entryStudyService.getTrainingSet(study);
     const newUserStudy: UserStudy = {
       user: user,
       study: study,
-      trainingResponseStudies: trainingResponseStudies,
+      trainingEntryStudies: trainingEntryStudies,
       hasAccessToStudy: false,
     };
 
@@ -47,7 +47,7 @@ export class UserStudyService {
       })
       .populate('user')
       .populate('study')
-      .populate('trainingResponseStudies')
+      .populate('trainingEntryStudies')
       .exec();
     if (userStudy) {
       return userStudy;
@@ -58,18 +58,18 @@ export class UserStudyService {
   }
 
   /**
-   * Get the next response study for a given user that coorespondes to the
-   * next response the user needs to tag as part of their training. If no
-   * more training responses are present, null is returned.
+   * Get the next entry study for a given user that coorespondes to the
+   * next entry the user needs to tag as part of their training. If no
+   * more training entrys are present, null is returned.
    */
-  async getNextTrainingResponseStudy(
+  async getNextTrainingEntryStudy(
     user: User,
     study: Study,
-  ): Promise<ResponseStudy | null> {
+  ): Promise<EntryStudy | null> {
     const userStudy = await this.getUserStudy(user, study);
-    return userStudy.trainingResponseStudies.length == 0
+    return userStudy.trainingEntryStudies.length == 0
       ? null
-      : userStudy.trainingResponseStudies[0];
+      : userStudy.trainingEntryStudies[0];
   }
 
   /**
@@ -80,7 +80,7 @@ export class UserStudyService {
       .find({
         study: study._id!,
       })
-      .populate('trainingResponseStudies')
+      .populate('trainingEntryStudies')
       .populate('user')
       .populate('study')
       .exec();
@@ -104,10 +104,10 @@ export class UserStudyService {
   }
 
   /**
-   * Mark the given tag as completed. This will remove the first response in the
-   * user's list of ResponseStudies.
+   * Mark the given tag as completed. This will remove the first entry in the
+   * user's list of EntryStudies.
    *
-   * NOTE: This method assumes that the tag is for the first response in the
+   * NOTE: This method assumes that the tag is for the first entry in the
    *       user's list. This should always be the case.
    */
   async markTrainingTagComplete(user: User, study: Study): Promise<void> {
@@ -118,25 +118,25 @@ export class UserStudyService {
           study: study._id!,
         },
         {
-          $pop: { trainingResponseStudies: -1 },
+          $pop: { trainingEntryStudies: -1 },
         },
       )
       .exec();
   }
 
   /**
-   * Remove the given ResponseStudy as a response study that is part of
-   * the training set. This will pull the ResponseStudy id from the
-   * `trainingResponseStudies` list on each user study
+   * Remove the given EntryStudy as a entry study that is part of
+   * the training set. This will pull the EntryStudy id from the
+   * `trainingEntryStudies` list on each user study
    */
-  async removeTraining(responseStudy: ResponseStudy) {
+  async removeTraining(entryStudy: EntryStudy) {
     this.userStudyModel
       .updateMany(
         {
-          study: responseStudy.study._id,
+          study: entryStudy.study._id,
         },
         {
-          $pull: { trainingResponseStudies: responseStudy._id },
+          $pull: { trainingEntryStudies: entryStudy._id },
         },
       )
       .exec();

@@ -78,17 +78,17 @@ const mockUserStudyService = {
 };
 
 /**
- * Mock the response schema since it indirectly gets a different module
+ * Mock the entry schema since it indirectly gets a different module
  * declaration from the `app`
  */
-jest.mock('../../schemas/response.schema', () => ({
-  Response: () => {
-    return { name: 'Response' };
+jest.mock('../../schemas/entry.schema', () => ({
+  Entry: () => {
+    return { name: 'Entry' };
   },
 }));
-jest.mock('../../schemas/response-upload.schema', () => ({
-  ResponseUpload: () => {
-    return { name: 'Response' };
+jest.mock('../../schemas/entry-upload.schema', () => ({
+  EntryUpload: () => {
+    return { name: 'Entry' };
   },
 }));
 

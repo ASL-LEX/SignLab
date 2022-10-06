@@ -1,6 +1,6 @@
 import { User } from './user.dto';
 import { Study } from './study.dto';
-import { ResponseStudy } from './responsestudy.dto';
+import { EntryStudy } from './entrystudy.dto';
 
 /**
  * Contains the user as well as additional information on the user as they
@@ -13,8 +13,8 @@ export interface UserStudy {
   user: User;
   /** The study the user is associated with */
   study: Study;
-  /** The training responses the user has yet to complete */
-  trainingResponseStudies: ResponseStudy[];
+  /** The training entrys the user has yet to complete */
+  trainingEntryStudies: EntryStudy[];
   /** If the user has access to the given study */
   hasAccessToStudy: boolean;
 }

@@ -39,7 +39,7 @@ export class Study {
 
   /**
    * Human readable instructions which will be provided to the taggers
-   * when tagging responses for this study.
+   * when tagging entries for this study.
    */
   @Prop({ required: true })
   instructions: string;

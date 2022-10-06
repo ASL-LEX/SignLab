@@ -13,29 +13,29 @@ import {
   Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ResponseService } from '../../services/response.service';
+import { EntryService } from '../../services/entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { Response } from '../../schemas/response.schema';
-import { MetadataDefinition, SaveAttempt } from 'shared/dtos/response.dto';
+import { Entry } from '../../schemas/entry.schema';
+import { MetadataDefinition, SaveAttempt } from 'shared/dtos/entry.dto';
 import { SchemaService } from '../../services/schema.service';
-import { ResponseUploadService } from '../../services/response-upload.service';
+import { EntryUploadService } from '../../services/entry-upload.service';
 import { StudyService } from '../../services/study.service';
-import { ResponseStudyService } from '../../services/responsestudy.service';
-import { ResponseStudy } from 'shared/dtos/responsestudy.dto';
+import { EntryStudyService } from '../../services/entrystudy.service';
+import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { Auth } from '../../guards/auth.guard';
 import { TagService } from '../../services/tag.service';
 import { UserStudyService } from '../../services/userstudy.service';
 import { BucketStorage } from '../../services/bucket/bucket.service';
 
-@Controller('/api/response')
-export class ResponseController {
+@Controller('/api/entry')
+export class EntryController {
   constructor(
-    private responseService: ResponseService,
+    private entryService: EntryService,
     private schemaService: SchemaService,
-    private responseUploadService: ResponseUploadService,
+    private entryUploadService: EntryUploadService,
     private studyService: StudyService,
-    private responseStudyService: ResponseStudyService,
+    private entryStudyService: EntryStudyService,
     private tagService: TagService,
     private userStudyService: UserStudyService,
     private bucketStorage: BucketStorage,
@@ -43,7 +43,7 @@ export class ResponseController {
 
   /**
    * Handle storing the metadata schema which will be stored for
-   * every response.
+   * every entry.
    *
    * NOTE: This is a one-time operation. Once the meta data is specified,
    *       it cannot be changed.
@@ -51,16 +51,16 @@ export class ResponseController {
   @Post('/metadata')
   async setMetadata(@Body() fields: MetadataDefinition[]) {
     // If the schema already exists, throw an error
-    if (await this.schemaService.hasSchema('Response')) {
+    if (await this.schemaService.hasSchema('Entry')) {
       throw new HttpException(
-        'Response schema already exists',
+        'Entry schema already exists',
         HttpStatus.BAD_REQUEST,
       );
     }
 
     // Generate a JSON Schmea from the meta data
     const schema = {
-      $id: 'Response',
+      $id: 'Entry',
       $schema: 'https://json-schema.org/draft/2020-12/schema',
       type: 'object',
       properties: {},
@@ -70,18 +70,18 @@ export class ResponseController {
       (schema.properties as any)[field.name] = { type: field.type };
     }
 
-    this.schemaService.saveSchema('Response', schema);
+    this.schemaService.saveSchema('Entry', schema);
   }
 
   /**
-   * Handles the process of uploading responses to SignLab. This process
+   * Handles the process of uploading entries to SignLab. This process
    * includes the following.
    *
    * 1. Parsing a CSV and ensuring all required fields are present
-   * 2. Creating ResponseUpload entities in the database
+   * 2. Creating EntryUpload entities in the database
    * 3. Handling video uploading to bucket storage
-   * 4. For each video uploaded, move the ResponseUpload entity into a full
-   *    Response
+   * 4. For each video uploaded, move the EntryUpload entity into a full
+   *    Entry
    *
    * @param file The CSV that needs to be parsed
    * @return The results of attempting to make the save with any associated
@@ -96,21 +96,21 @@ export class ResponseController {
     // TODO: Add error handling on file type
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
-    return this.responseUploadService.uploadResponseDataCSV(fileStream);
+    return this.entryUploadService.uploadEntryDataCSV(fileStream);
   }
 
   /**
    * Download the template which the user can use for uploading new
-   * responses.
+   * entries.
    */
   @Get('/template')
   @Auth('admin')
-  async getResponseCSVTemplate(): Promise<{ header: string }> {
+  async getEntryCSVTemplate(): Promise<{ header: string }> {
     // Header with required arguments
-    let header = 'responseID,responderID,filename';
+    let header = 'entryID,responderID,filename';
 
     // Add in user provided metadata
-    for (const metadata of await this.schemaService.getFields('Response')) {
+    for (const metadata of await this.schemaService.getFields('Entry')) {
       header += ',';
       header += metadata;
     }
@@ -119,10 +119,10 @@ export class ResponseController {
   }
 
   /**
-   * Handles uploading the ZIP file containing all of the response videos
+   * Handles uploading the ZIP file containing all of the entry videos
    * to SignLab. This must take place after a request to
-   * `/api/response/upload/csv` otherwise the call will quickly error out
-   * when corresponding ResponseUpload data is not found to coorespond
+   * `/api/entry/upload/csv` otherwise the call will quickly error out
+   * when corresponding EntryUpload data is not found to coorespond
    * with the videos.
    *
    * @param _file The zip file that was uploaded and saved
@@ -146,17 +146,17 @@ export class ResponseController {
     @UploadedFile() _file: Express.Multer.File,
   ): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
-    const result = await this.responseUploadService.uploadResponseVideos(
+    const result = await this.entryUploadService.uploadEntryVideos(
       './upload/upload.zip',
     );
 
-    // Now create a ResponseStudy for each response for each study
-    if (result.responses) {
+    // Now create a EntryStudy for each entry for each study
+    if (result.entries) {
       const studies = await this.studyService.getStudies();
       await Promise.all(
         studies.map(async (study) => {
-          this.responseStudyService.createResponseStudies(
-            result.responses,
+          this.entryStudyService.createEntryStudies(
+            result.entries,
             study,
           );
         }),
@@ -167,22 +167,22 @@ export class ResponseController {
   }
 
   /**
-   * Get all response information
+   * Get all entry information
    */
   @Get('/')
   @Auth('admin')
-  async getResponses(): Promise<Response[]> {
-    return this.responseService.getAllResponses();
+  async getEntries(): Promise<Entry[]> {
+    return this.entryService.getAllEntries();
   }
 
   /**
-   * Get the response studies for a specific study.
+   * Get the entry studies for a specific study.
    */
-  @Get('/responsestudies')
+  @Get('/entriestudies')
   @Auth('admin')
-  async getResponseStudies(
+  async getEntryStudies(
     @Query('studyID') studyID: string,
-  ): Promise<ResponseStudy[]> {
+  ): Promise<EntryStudy[]> {
     // Ensure that the service exists
     const study = await this.studyService.find(studyID);
     if (!study) {
@@ -192,23 +192,23 @@ export class ResponseController {
       );
     }
 
-    return this.responseStudyService.getResponseStudies(study);
+    return this.entryStudyService.getEntryStudies(study);
   }
 
   /**
-   * Change if the response should be enabled as part of the study.
+   * Change if the entry should be enabled as part of the study.
    */
   @Put('/enable')
   @Auth('admin')
-  async setResponseStudyEnable(
+  async setEntryStudyEnable(
     @Body()
     changeRequest: {
       studyID: string;
-      responseID: string;
+      entryID: string;
       isPartOfStudy: boolean;
     },
   ): Promise<void> {
-    // Get the study and response
+    // Get the study and entry
     // TODO: Standardized this process of existence checking and querying
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
@@ -217,69 +217,69 @@ export class ResponseController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const response = await this.responseService.find(changeRequest.responseID);
-    if (!response) {
+    const entry = await this.entryService.find(changeRequest.entryID);
+    if (!entry) {
       throw new HttpException(
-        `The response with id ${changeRequest.responseID} does not exist`,
+        `The entry with id ${changeRequest.entryID} does not exist`,
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    // This would be bad if the response study does not exist since the
-    // ResponseStudy should exist if the response and study both exist.
+    // This would be bad if the entry study does not exist since the
+    // EntryStudy should exist if the entry and study both exist.
     // This would either be a bug in the code, or someone was poking around the
     // DB and did something bad.
-    const responseStudy = await this.responseStudyService.find(response, study);
-    if (!responseStudy) {
+    const entryStudy = await this.entryStudyService.find(entry, study);
+    if (!entryStudy) {
       throw new HttpException(
-        `Something went wrong trying to find the response study information`,
+        `Something went wrong trying to find the entry study information`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
 
-    this.responseStudyService.changePartOfStudy(
-      responseStudy,
+    this.entryStudyService.changePartOfStudy(
+      entryStudy,
       changeRequest.isPartOfStudy,
     );
   }
 
   /**
-   * Delete the given response. This will also have the effect of deleting
-   * the response's relation to any study as well as any tags that may
-   * exist for the response.
+   * Delete the given entry. This will also have the effect of deleting
+   * the entry's relation to any study as well as any tags that may
+   * exist for the entry.
    *
-   * @param responseID The database generated ID
+   * @param entryID The database generated ID
    */
   @Delete('/:id')
   @Auth('admin')
-  async deleteResponse(@Param('id') responseID: string): Promise<void> {
-    const response = await this.responseService.find(responseID);
-    if (!response) {
+  async deleteEntry(@Param('id') entryID: string): Promise<void> {
+    const entry = await this.entryService.find(entryID);
+    if (!entry) {
       throw new HttpException(
-        `Response does not exist with that ID: ${responseID}`,
+        `Entry does not exist with that ID: ${entryID}`,
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    // First, handle the case that the response is part of the training set,
-    // this will remove the corresponding response studies from the list of
+    // First, handle the case that the entry is part of the training set,
+    // this will remove the corresponding entry studies from the list of
     // training set
-    const responseStudies = await this.responseStudyService.findMany(response);
-    for (const responseStudy of responseStudies) {
+    const entryStudies = await this.entryStudyService.findMany(entry);
+    for (const entryStudy of entryStudies) {
       // If it is part of training, remove it from the cooresponding
       // UserStudies training set
-      if (responseStudy.isUsedForTraining) {
-        this.userStudyService.removeTraining(responseStudy);
+      if (entryStudy.isUsedForTraining) {
+        this.userStudyService.removeTraining(entryStudy);
       }
     }
 
-    // Delete any tag related to the response, remove the relation between
-    // response and study, and remove the response itself
-    this.tagService.deleteResponse(response);
-    this.responseStudyService.deleteResponse(response);
-    this.responseService.delete(response);
+    // Delete any tag related to the entry, remove the relation between
+    // entry and study, and remove the entry itself
+    this.tagService.deleteEntry(entry);
+    this.entryStudyService.deleteEntry(entry);
+    this.entryService.delete(entry);
 
-    // Now remove the response from the bucket
-    this.bucketStorage.objectDelete(response.videoURL);
+    // Now remove the entry from the bucket
+    this.bucketStorage.objectDelete(entry.videoURL);
   }
 }
