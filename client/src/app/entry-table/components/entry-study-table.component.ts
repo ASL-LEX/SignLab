@@ -53,9 +53,7 @@ export class EntryStudyTable implements OnInit, OnChanges {
 
   async loadEntries() {
     if (this.study) {
-      this.entryData = await this.entryService.getEntryStudies(
-        this.study._id!
-      );
+      this.entryData = await this.entryService.getEntryStudies(this.study._id!);
     }
   }
 

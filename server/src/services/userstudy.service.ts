@@ -19,8 +19,9 @@ export class UserStudyService {
    * Make a user study for the given user and study
    */
   async create(user: User, study: Study): Promise<UserStudy> {
-    const trainingEntryStudies =
-      await this.entryStudyService.getTrainingSet(study);
+    const trainingEntryStudies = await this.entryStudyService.getTrainingSet(
+      study,
+    );
     const newUserStudy: UserStudy = {
       user: user,
       study: study,

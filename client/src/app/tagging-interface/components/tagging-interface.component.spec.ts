@@ -167,9 +167,7 @@ describe('TaggingInterface', () => {
   }));
 
   it('should handle submitting one tag and getting no more tags', fakeAsync(() => {
-    entrySpy.getNextUntaggedEntry.and.returnValue(
-      Promise.resolve(testTag1)
-    );
+    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(testTag1));
     entrySpy.addTag.and.resolveTo();
 
     // Have ngOnInit run and let changes take place

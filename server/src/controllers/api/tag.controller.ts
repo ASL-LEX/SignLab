@@ -67,9 +67,7 @@ export class TagController {
     }
 
     // Find the next entry without a tag in this study
-    const nextEntryStudy = await this.entryStudyService.getAndMarkTagged(
-      study,
-    );
+    const nextEntryStudy = await this.entryStudyService.getAndMarkTagged(study);
 
     // If there is no next entry study, return null
     if (!nextEntryStudy) {

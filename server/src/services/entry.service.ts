@@ -28,9 +28,7 @@ export class EntryService {
    * @return True if the entryID is present in Entries
    */
   async entryExists(entryID: string): Promise<boolean> {
-    const entry = await this.entryModel
-      .findOne({ entryID: entryID })
-      .exec();
+    const entry = await this.entryModel.findOne({ entryID: entryID }).exec();
     return entry != null;
   }
 

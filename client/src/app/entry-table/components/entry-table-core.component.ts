@@ -52,8 +52,7 @@ export class EntryTableCoreComponent
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
-  @Output() partOfTrainingChange =
-    new EventEmitter<EntryTableToggleChange>();
+  @Output() partOfTrainingChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits change when the user requests a deletion */
   @Output() deleteEntry = new EventEmitter<EntryTableElement>();
   /** Controls the page based access */

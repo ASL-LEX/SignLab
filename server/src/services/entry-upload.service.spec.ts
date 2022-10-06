@@ -236,18 +236,14 @@ describe('EntryService', () => {
         `This is garbage and now good no commas for you`,
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
     });
 
     it('should not allow empty CSV', async () => {
       const testInput = Readable.from(['']);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
       expect(result.message).toContain('No entries found in CSV');
     });
@@ -259,9 +255,7 @@ describe('EntryService', () => {
          1,example.mp4,tree`,
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
     });
 
@@ -272,9 +266,7 @@ describe('EntryService', () => {
          1,2,example.mp4,tree,butterfly`,
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
       expect(result.message).toContain('Failed to parse CSV');
     });
@@ -287,9 +279,7 @@ describe('EntryService', () => {
         1,3,example.mp4,bread`,
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
       expect(result!.where![0].message).toContain('already exists');
     });
@@ -303,18 +293,14 @@ describe('EntryService', () => {
          7,8,another.mp4,water`,
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(
-        testInput,
-      );
+      const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('success');
     });
   });
 
   describe('uploadEntryVideos()', () => {
     it('should give warning on a ZIP file with not content', async () => {
-      const result = await entryUploadService.uploadEntryVideos(
-        'empty.zip',
-      );
+      const result = await entryUploadService.uploadEntryVideos('empty.zip');
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain(
@@ -379,9 +365,7 @@ describe('EntryService', () => {
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos(
-        'all_good.zip',
-      );
+      const result = await entryUploadService.uploadEntryVideos('all_good.zip');
 
       expect(result.saveResult.type).toEqual('success');
     });

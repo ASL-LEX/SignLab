@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Study } from '../schemas/study.schema';
-import {
-  EntryStudy,
-  EntryStudyDocument,
-} from '../schemas/entrystudy.schema';
+import { EntryStudy, EntryStudyDocument } from '../schemas/entrystudy.schema';
 import { Entry } from '../schemas/entry.schema';
 
 @Injectable()
@@ -50,10 +47,7 @@ export class EntryStudyService {
    * @param entries The entries to make corresponding ResposeStudies for
    * @param study The study each EntryStudy will be associated with
    */
-  async createEntryStudies(
-    entries: Entry[],
-    study: Study,
-  ): Promise<void> {
+  async createEntryStudies(entries: Entry[], study: Study): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
         await this.entryStudyModel.create({

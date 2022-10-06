@@ -2,10 +2,7 @@ import { join } from 'path';
 
 // Schema
 import { User, UserSchema } from './schemas/user.schema';
-import {
-  EntryUpload,
-  EntryUploadSchema,
-} from './schemas/entry-upload.schema';
+import { EntryUpload, EntryUploadSchema } from './schemas/entry-upload.schema';
 import {
   DynamicSchema,
   DynamicSchemaSchema,
@@ -13,10 +10,7 @@ import {
 import { Entry, EntrySchema } from './schemas/entry.schema';
 import { Study, StudySchema } from './schemas/study.schema';
 import { Tag, TagSchema } from './schemas/tag.schema';
-import {
-  EntryStudy,
-  EntryStudySchema,
-} from './schemas/entrystudy.schema';
+import { EntryStudy, EntryStudySchema } from './schemas/entrystudy.schema';
 
 // Modules
 import { DynamicModule, Module } from '@nestjs/common';

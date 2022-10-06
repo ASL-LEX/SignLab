@@ -15,10 +15,7 @@ describe('EntryMetaForm', () => {
 
     TestBed.configureTestingModule({
       declarations: [EntryMetaForm],
-      providers: [
-        { provide: EntryService, useValue: entrySpy },
-        FormBuilder,
-      ],
+      providers: [{ provide: EntryService, useValue: entrySpy }, FormBuilder],
     });
 
     entryForm = TestBed.createComponent(EntryMetaForm);
@@ -58,8 +55,6 @@ describe('EntryMetaForm', () => {
   });
 
   it('should consider an empty form to be valid', () => {
-    expect(
-      entryForm.componentInstance.entryMetadataFormGroup.valid
-    ).toBeTrue();
+    expect(entryForm.componentInstance.entryMetadataFormGroup.valid).toBeTrue();
   });
 });

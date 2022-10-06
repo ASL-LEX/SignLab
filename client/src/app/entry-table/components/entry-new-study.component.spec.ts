@@ -58,9 +58,7 @@ describe('EntryNewStudyTable', () => {
 
   beforeEach(fakeAsync(() => {
     entrySpy = jasmine.createSpyObj('EntryService', ['getEntries']);
-    entrySpy.getEntries.and.returnValue(
-      Promise.resolve(exampleEntryData)
-    );
+    entrySpy.getEntries.and.returnValue(Promise.resolve(exampleEntryData));
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],

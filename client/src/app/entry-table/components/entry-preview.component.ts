@@ -18,9 +18,7 @@ import { EntryTableElement } from '../models/entry-table-element';
         loop
         #previewVideo
       >
-        <source
-          src="{{ entryElem ? entryElem.entry.videoURL : '' }}"
-        />
+        <source src="{{ entryElem ? entryElem.entry.videoURL : '' }}" />
       </video>
     </div>
   `,

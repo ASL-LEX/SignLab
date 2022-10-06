@@ -66,5 +66,4 @@ export class EntryUpload {
 }
 
 export type EntryUploadDocument = EntryUpload & Document;
-export const EntryUploadSchema =
-  SchemaFactory.createForClass(EntryUpload);
+export const EntryUploadSchema = SchemaFactory.createForClass(EntryUpload);

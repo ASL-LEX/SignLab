@@ -27,10 +27,7 @@ describe('EntryUploadDialog', () => {
   let entrySpy: jasmine.SpyObj<EntryService>;
 
   beforeEach(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', [
-      'uploadCSV',
-      'uploadZIP',
-    ]);
+    entrySpy = jasmine.createSpyObj('EntryService', ['uploadCSV', 'uploadZIP']);
 
     TestBed.configureTestingModule({
       declarations: [EntryUploadDialog],
