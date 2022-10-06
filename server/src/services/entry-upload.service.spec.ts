@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EntryStudy } from '../schemas/entriestudy.schema';
+import { EntryStudy } from '../schemas/entrystudy.schema';
 import { Readable } from 'stream';
 import { EntryUpload } from '../schemas/entry-upload.schema';
 import { EntryService } from './entry.service';

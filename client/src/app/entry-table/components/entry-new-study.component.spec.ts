@@ -57,8 +57,8 @@ describe('EntryNewStudyTable', () => {
   let entryTable: ComponentFixture<EntryNewStudyTable>;
 
   beforeEach(fakeAsync(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', ['getEntires']);
-    entrySpy.getEntires.and.returnValue(
+    entrySpy = jasmine.createSpyObj('EntryService', ['getEntries']);
+    entrySpy.getEntries.and.returnValue(
       Promise.resolve(exampleEntryData)
     );
 

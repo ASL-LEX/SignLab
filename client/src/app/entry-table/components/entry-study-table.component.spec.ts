@@ -6,7 +6,7 @@ import {
 } from '@angular/core/testing';
 import { EntryService } from '../../core/services/entry.service';
 import { EntryStudyTable } from './entry-study-table.component';
-import { EntryStudy } from 'shared/dtos/entriestudy.dto';
+import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SharedModule } from '../../shared/shared.module';
 import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
