@@ -10,6 +10,7 @@
 ### Changed
 
 * Store user information and user credentials separately
+* "Response" renamed to "Entry"
 
 ## 0.2.0
 

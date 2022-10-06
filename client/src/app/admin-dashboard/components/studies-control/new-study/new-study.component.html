@@ -59,12 +59,12 @@
       </div>
     </mat-step>
 
-    <!-- Selecting Training Responses -->
+    <!-- Selecting Training Entries -->
     <mat-step label="Select Tag Training Items">
-      <response-new-study
+      <entry-new-study
         (markedDisabledChange)="markedDisabledChange($event)"
         (markedTrainingChange)="markedTrainingChange($event)"
-      ></response-new-study>
+      ></entry-new-study>
     </mat-step>
   </mat-stepper>
 </div>

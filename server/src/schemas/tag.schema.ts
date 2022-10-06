@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Response } from './response.schema';
+import { Entry } from './entry.schema';
 import { Study } from './study.schema';
 import { User } from './user.schema';
 
@@ -10,13 +10,13 @@ export class Tag {
   _id: string;
 
   /**
-   * Foreign key for the response that this tag is associated with.
+   * Foreign key for the entry that this tag is associated with.
    *
-   * NOTE: This is the `_id` of the Response instead of the user defined
-   *       `responseID`
+   * NOTE: This is the `_id` of the Entry instead of the user defined
+   *       `entryID`
    */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Response.name })
-  response: Response;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Entry.name })
+  entry: Entry;
 
   /**
    * The study that this tag is associated with.
@@ -32,10 +32,10 @@ export class Tag {
 
   /**
    * Flag for if the tag has been completed. A tag is created as soon as a
-   * user is assigned a response to tag for a study, but the tag isn't
+   * user is assigned a entry to tag for a study, but the tag isn't
    * considered complete until the user has completed the tagging process.
    * This also makes it possible for a user to start the tagging process,
-   * leave, and come back to the same response.
+   * leave, and come back to the same entry.
    */
   @Prop()
   complete: boolean;

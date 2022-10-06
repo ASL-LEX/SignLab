@@ -90,11 +90,11 @@ export class UserStudyTable implements OnInit, OnChanges {
 
     const flattenedData = tags.map((tag) => {
       return {
-        responseID: tag.response.responseID,
-        videoURL: tag.response.videoURL,
+        entryID: tag.entry.entryID,
+        videoURL: tag.entry.videoURL,
         study: tag.study.name,
         user: tag.user.username,
-        ...tag.response.meta,
+        ...tag.entry.meta,
         ...tag.info,
       };
     });

@@ -89,7 +89,7 @@ jobs:
       - name: Build Code
         run: |
           npm run build:prod
-          mkdir -p server/bucket-test/Responses
+          mkdir -p server/bucket-test/Entries
 
       - name: Start MongoDB Instance
         uses: supercharge/mongodb-github-action@1.8.0

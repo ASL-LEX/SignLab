@@ -40,7 +40,7 @@ describe('TaggingLanding', () => {
     _id: '1',
     user: testUser,
     study: testStudy,
-    trainingResponseStudies: [],
+    trainingEntryStudies: [],
     hasAccessToStudy: false,
   };
 
@@ -109,13 +109,13 @@ describe('TaggingLanding', () => {
   });
 
   it('should handle when a user still has training to complete', () => {
-    // Insert test data that has a response left to tag
+    // Insert test data that has a entry left to tag
     const withTrainingLeft = JSON.parse(JSON.stringify(testUserStudy));
-    withTrainingLeft.trainingResponseStudies.push({
+    withTrainingLeft.trainingEntryStudies.push({
       _id: '1',
-      response: {
+      entry: {
         _id: '1',
-        responseID: '1',
+        entryID: '1',
         videoURL: 'hello.mp4',
         duration: 3,
         recordedInSignLab: false,

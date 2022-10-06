@@ -16,7 +16,7 @@ export class StudiesControlComponent {
   /** The current study that is being displayed to the user */
   activeStudy: Study | null = null;
   /** Which study control view is active */
-  activeView: 'responses' | 'users' | 'tags' = 'responses';
+  activeView: 'entries' | 'users' | 'tags' = 'entries';
 
   constructor(
     private dialog: MatDialog,
@@ -78,11 +78,11 @@ export class StudiesControlComponent {
     //       from a table.
     const flattenedData = tags.map((tag) => {
       return {
-        responseID: tag.response.responseID,
-        videoURL: tag.response.videoURL,
+        entryID: tag.entry.entryID,
+        videoURL: tag.entry.videoURL,
         study: tag.study.name,
         user: tag.user.username,
-        ...tag.response.meta,
+        ...tag.entry.meta,
         ...tag.info,
       };
     });
@@ -93,7 +93,7 @@ export class StudiesControlComponent {
     }
 
     const headerElements = [
-      'responseID',
+      'entryID',
       'videoURL',
       'study',
       'user',
@@ -125,7 +125,7 @@ export class StudiesControlComponent {
     a.remove();
   }
 
-  setActiveView(view: 'responses' | 'users' | 'tags') {
+  setActiveView(view: 'entries' | 'users' | 'tags') {
     this.activeView = view;
   }
 }

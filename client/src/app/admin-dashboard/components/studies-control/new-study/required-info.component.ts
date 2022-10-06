@@ -43,7 +43,7 @@ export class RequiredInfoComponent {
   requiredDataRenderers = angularMaterialRenderers;
   /** Configure how errors are presented */
   ajv = createAjv({ schemaId: 'id', allErrors: true });
-  /** Stores the response meta information */
+  /** Stores the entry meta information */
   requiredData: NewStudyMeta | null = null;
   @Output() requiredDataChange = new EventEmitter<NewStudyMeta | null>();
 

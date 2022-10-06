@@ -5,7 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { ResponseService } from '../../core/services/response.service';
+import { EntryService } from '../../core/services/entry.service';
 import { Tag } from 'shared/dtos/tag.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
@@ -23,7 +23,7 @@ import { AuthService } from '../../core/services/auth.service';
     <!-- Message displayed when all tags have been complete -->
     <ng-template #noTagsMessage>
       <mat-card>
-        <mat-card-title>No Responses Untagged</mat-card-title>
+        <mat-card-title>No Entries Untagged</mat-card-title>
         <mat-card-content>
           <!-- Training "no more tags" message -->
           <div *ngIf="isTraining">
@@ -32,7 +32,7 @@ import { AuthService } from '../../core/services/auth.service';
 
           <!-- Normal tagging "no more tags" message -->
           <div *ngIf="!isTraining">
-            All responses have been tagged so far, come back later
+            All entries have been tagged so far, come back later
           </div>
         </mat-card-content>
       </mat-card>
@@ -53,7 +53,7 @@ export class TaggingInterface implements OnChanges, OnInit {
   @Input() isTraining = false;
 
   constructor(
-    private responseService: ResponseService,
+    private entryService: EntryService,
     private authService: AuthService
   ) {}
 
@@ -84,7 +84,7 @@ export class TaggingInterface implements OnChanges, OnInit {
    * the user.
    */
   async getNextTag() {
-    const tag = await this.responseService.getNextUntaggedResponse(
+    const tag = await this.entryService.getNextUntaggedEntry(
       this.authService.user,
       this.study,
       this.isTraining
@@ -107,7 +107,7 @@ export class TaggingInterface implements OnChanges, OnInit {
   async formSubmit(tag: Tag) {
     try {
       // Add on the tag data
-      await this.responseService.addTag(tag, this.isTraining);
+      await this.entryService.addTag(tag, this.isTraining);
 
       // Get next tag to complete
       this.getNextTag();

@@ -11,7 +11,7 @@ import {
 import { UserService } from '../../services/user.service';
 import { StudyService } from '../../services/study.service';
 import { TagService } from '../../services/tag.service';
-import { ResponseStudyService } from '../../services/responsestudy.service';
+import { EntryStudyService } from '../../services/entrystudy.service';
 import { Tag } from 'shared/dtos/tag.dto';
 import { UserStudyService } from '../../services/userstudy.service';
 import { TagGuard } from '../../guards/tag.guard';
@@ -23,7 +23,7 @@ export class TagController {
     private userService: UserService,
     private studyService: StudyService,
     private tagService: TagService,
-    private responseStudyService: ResponseStudyService,
+    private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
   ) {}
 
@@ -33,7 +33,7 @@ export class TagController {
    *
    * 1. If the user has a tag for this study they have not yet completed,
    *    return back that incomplete tag
-   * 2. If there is no responses left untagged for this study return null
+   * 2. If there is no entries left untagged for this study return null
    * 3. Otherwise create a new tag for the user to complete
    */
   @Get('/assign')
@@ -66,24 +66,22 @@ export class TagController {
       return incompleteTag;
     }
 
-    // Find the next response without a tag in this study
-    const nextResponseStudy = await this.responseStudyService.getAndMarkTagged(
-      study,
-    );
+    // Find the next entry without a tag in this study
+    const nextEntryStudy = await this.entryStudyService.getAndMarkTagged(study);
 
-    // If there is no next response study, return null
-    if (!nextResponseStudy) {
+    // If there is no next entry study, return null
+    if (!nextEntryStudy) {
       return null;
     }
 
     // Create a new tag
-    return this.tagService.createTag(user, nextResponseStudy.response, study);
+    return this.tagService.createTag(user, nextEntryStudy.entry, study);
   }
 
   /**
    * Get the next tag that is part of the training for the given study. This
    * will first check for an incomplete training tag before getting the next
-   * response to tag.
+   * entry to tag.
    */
   @Get('/nextTraining')
   async getNextTrainingTag(
@@ -118,23 +116,23 @@ export class TagController {
     }
 
     // Otherwise make a new training tag
-    const nextTrainingResponseStudy =
-      await this.userStudyService.getNextTrainingResponseStudy(user, study);
-    if (!nextTrainingResponseStudy) {
+    const nextTrainingEntryStudy =
+      await this.userStudyService.getNextTrainingEntryStudy(user, study);
+    if (!nextTrainingEntryStudy) {
       return null;
     }
 
     // Create a new tag
     return this.tagService.createTrainingTag(
       user,
-      nextTrainingResponseStudy.response,
+      nextTrainingEntryStudy.entry,
       study,
     );
   }
 
   /**
    * Mark a given tag as complete. This will remove the cooresponding
-   * response from the user's list of responses to complete as part of their
+   * entry from the user's list of entries to complete as part of their
    * training.
    */
   @Post('/completeTraining')

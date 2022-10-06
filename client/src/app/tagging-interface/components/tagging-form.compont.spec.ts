@@ -12,8 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('TaggingForm', () => {
   const testTag1: Tag = {
     _id: 'something unique',
-    response: {
-      responseID: 'I am a response, trust me',
+    entry: {
+      entryID: 'I am a entry, trust me',
       videoURL: '/media/video.mp4',
       recordedInSignLab: false,
       responderID: '1',
@@ -88,7 +88,7 @@ describe('TaggingForm', () => {
     const form = compiled.querySelector('jsonforms');
 
     expect(video).toBeTruthy();
-    expect(video.getAttribute('src')).toEqual(testTag1.response.videoURL);
+    expect(video.getAttribute('src')).toEqual(testTag1.entry.videoURL);
     expect(form).toBeTruthy();
   }));
 
@@ -107,6 +107,6 @@ describe('TaggingForm', () => {
     const video = compiled.querySelector('video');
 
     expect(video).toBeTruthy();
-    expect(video.getAttribute('src')).toEqual(testTag1.response.videoURL);
+    expect(video.getAttribute('src')).toEqual(testTag1.entry.videoURL);
   }));
 });

@@ -4,24 +4,24 @@ import { Model } from 'mongoose';
 import { Study } from '../schemas/study.schema';
 import { User } from '../schemas/user.schema';
 import { Tag, TagDocument } from '../schemas/tag.schema';
-import { Response } from '../schemas/response.schema';
+import { Entry } from '../schemas/entry.schema';
 
 @Injectable()
 export class TagService {
   constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>) {}
 
   /**
-   * Make a new tag for the given user, study, and response. When the tag is
+   * Make a new tag for the given user, study, and entry. When the tag is
    * created, it is considered incomplete
    *
    * @param user The user who will complete the tag
-   * @param response The response that the tag is associated with
+   * @param entry The entry that the tag is associated with
    * @param study The study the tag is for
    * @return A new tag
    */
-  async createTag(user: User, response: Response, study: Study): Promise<Tag> {
+  async createTag(user: User, entry: Entry, study: Study): Promise<Tag> {
     return this.tagModel.create({
-      response: response,
+      entry: entry,
       study: study,
       user: user,
       complete: false,
@@ -35,18 +35,18 @@ export class TagService {
    */
   async createTrainingTag(
     user: User,
-    response: Response,
+    entry: Entry,
     study: Study,
   ): Promise<Tag> {
     const result = await (
       await this.tagModel.create({
-        response: response,
+        entry: entry,
         study: study,
         user: user,
         complete: false,
         isTraining: true,
       })
-    ).populate('response');
+    ).populate('entry');
 
     return result;
   }
@@ -65,7 +65,7 @@ export class TagService {
       })
       .populate('user')
       .populate('study')
-      .populate('response')
+      .populate('entry')
       .exec();
   }
 
@@ -82,12 +82,12 @@ export class TagService {
       })
       .populate('user')
       .populate('study')
-      .populate('response')
+      .populate('entry')
       .exec();
   }
 
   /**
-   * Find a response and tag that the given user has yet to complete for
+   * Find a entry and tag that the given user has yet to complete for
    * the given study. If the user does not have an incomplete tag, then null
    * is returned.
    *
@@ -99,7 +99,7 @@ export class TagService {
   }
 
   /**
-   * Find a response and tag for the given user that was incomplete as part
+   * Find a entry and tag for the given user that was incomplete as part
    * of the training for a specific study.
    */
   async getIncompleteTrainingTag(
@@ -110,7 +110,7 @@ export class TagService {
   }
 
   /**
-   * Find a response and tag that the user has yet to complete either
+   * Find a entry and tag that the user has yet to complete either
    * from the normal data set or the training data set.
    */
   private async getIncompleteTagGeneric(
@@ -126,7 +126,7 @@ export class TagService {
         isTraining: fromTrainingSet,
       })
       .populate('user')
-      .populate('response')
+      .populate('entry')
       .populate('study')
       .exec();
 
@@ -143,12 +143,12 @@ export class TagService {
   }
 
   /**
-   * Delete any tag that may be related to the given response
+   * Delete any tag that may be related to the given entry
    */
-  async deleteResponse(response: Response) {
+  async deleteEntry(entry: Entry) {
     this.tagModel
       .deleteMany({
-        response: response._id,
+        entry: entry._id,
       })
       .exec();
   }

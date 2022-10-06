@@ -1,12 +1,12 @@
-import responseMetadata from '../fixtures/response_metadata.json';
+import entryMetadata from '../fixtures/entry_metadata.json';
 import user from '../fixtures/users.json';
 import { UserSignup } from '../../shared/dtos/user.dto';
 
 Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'dynamicschemas' });
-  cy.deleteMany({}, { collection: 'responses' });
-  cy.deleteMany({}, { collection: 'responsestudies' });
-  cy.deleteMany({}, { collection: 'responseuploads' });
+  cy.deleteMany({}, { collection: 'entries' });
+  cy.deleteMany({}, { collection: 'entriestudies' });
+  cy.deleteMany({}, { collection: 'entryuploads' });
   cy.deleteMany({}, { collection: 'studies' });
   cy.deleteMany({}, { collection: 'tags' });
   cy.deleteMany({}, { collection: 'users' });
@@ -22,9 +22,9 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
       url: 'api/auth/login',
       body: { username: user.username, password: user.password }
     })
-    .then(response => {
-      Cypress.env('token', response.body.token);
-      window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(response.body));
+    .then(entry => {
+      Cypress.env('token', entry.body.token);
+      window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(entry.body));
     });
 });
 
@@ -32,8 +32,8 @@ Cypress.Commands.add('firstTimeSetup', () => {
   // Submit the expected meta data
   cy.request({
     method: 'POST',
-    url: 'api/response/metadata',
-    body: responseMetadata
+    url: 'api/entry/metadata',
+    body: entryMetadata
   });
 
   // Make the initial user and a non-admin user

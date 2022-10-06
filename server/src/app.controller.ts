@@ -27,7 +27,7 @@ export class AppController {
   ) {
     try {
       const file = createReadStream(
-        join(process.cwd(), `bucket/Responses/${filename}`),
+        join(process.cwd(), `bucket/Entries/${filename}`),
       );
 
       res.set({
@@ -48,13 +48,13 @@ export class AppController {
    * Determine if the app is in the "First Time Setup Mode".
    *
    * For implementation, it is being leveraged that during a first time setup
-   * there will not be any schema defined for the Response metadata. Therefore
+   * there will not be any schema defined for the Entry metadata. Therefore
    * the existance of that schema is the indicitor of "First Time Setup Mode"
    */
   @Get('/api/first')
   async isFirstTime() {
     return {
-      isFirstTimeSetup: !(await this.schemaService.hasSchema('Response')),
+      isFirstTimeSetup: !(await this.schemaService.hasSchema('Entry')),
     };
   }
 }

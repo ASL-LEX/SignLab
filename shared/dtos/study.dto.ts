@@ -30,7 +30,7 @@ export interface Study {
 export interface StudyCreation {
   study: Study;
   /** List of Response IDs which will be used for the training set */
-  trainingResponses: string[];
+  trainingEntries: string[];
   /** List of Response IDs which will be disabled for this study */
-  disabledResponses: string[];
+  disabledEntries: string[];
 }
