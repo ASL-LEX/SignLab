@@ -124,6 +124,8 @@ const entryService = {
       },
     };
   },
+
+  updateVideoURL(_params: any) {},
 };
 
 const studyService = {
