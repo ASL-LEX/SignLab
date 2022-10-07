@@ -52,8 +52,8 @@ export class EntryService {
    * Update the video URL of the given entry
    */
   async updateVideoURL(entry: Entry, videoURL: string): Promise<void> {
-    this.entryModel.updateOne(
-      { _id: entry._id! },
-      { $set: { videoURL: videoURL } }).exec();
+    this.entryModel
+      .updateOne({ _id: entry._id! }, { $set: { videoURL: videoURL } })
+      .exec();
   }
 }
