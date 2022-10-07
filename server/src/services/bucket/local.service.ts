@@ -34,6 +34,10 @@ export class LocalStorage extends BucketStorage {
   }
 
   objectDelete(target: string): Promise<void> {
-    return unlink(join(this.folder, target));
+    // Get just the name of the file, this is for the case when the file name
+    // is `/media/<filename>`
+    const filename = join('Entries', target.slice(target.lastIndexOf('/') + 1));
+
+    return unlink(join(this.folder, filename));
   }
 }
