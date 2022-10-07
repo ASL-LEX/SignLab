@@ -1,3 +1,10 @@
-<div>
-  <video class="video" #recordVideo control autoplay></video>
+<div fxLayout="column" fxLayoutAlign="start" >
+  <video class="video" #recordVideo controls></video>
+
+  <!-- Button to start/stop recording -->
+  <div>
+    <button (click)="toggleRecording()" mat-stroked-button>
+      {{ mediaRecorder && mediaRecorder.state == 'recording' ? 'Stop Recording' : 'Start Recording' }}
+    </button>
+  </div>
 </div>
