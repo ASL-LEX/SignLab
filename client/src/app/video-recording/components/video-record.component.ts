@@ -45,18 +45,10 @@ export class VideoRecordComponent implements OnInit {
     this.mediaRecorder = new MediaRecorder(stream);
     this.mediaRecorder.start();
     this.recordVideo.nativeElement.play();
-    this.mediaRecorder.ondataavailable = (event) => {
-      console.log(event);
-      this.blobs.push(event.data);
-    };
-    this.mediaRecorder.onstop = (_event) => {
-      console.log(JSON.parse(JSON.stringify(this.blobs)));
-      const videoBuffer = new Blob(this.blobs, {type: 'video/webm'});
-      const videoUrl = URL.createObjectURL(videoBuffer);
-      this.recordVideo.nativeElement.srcObject = null;
-      this.recordVideo.nativeElement.src = videoUrl;
-      // this.recordVideo.nativeElement.load();
-    };
+
+    // Set up event listeners
+    this.mediaRecorder.ondataavailable = (event) => { this.onBlobAvailable(event); };
+    this.mediaRecorder.onstop = (_event) => { this.onMediaStop() };
 
     this.isRecording = true;
   }
@@ -65,8 +57,25 @@ export class VideoRecordComponent implements OnInit {
     this.mediaRecorder.stop();
     this.recordVideo.nativeElement.pause();
 
-    // Create the video buffer
-
     this.isRecording = false;
+  }
+
+  /**
+   * Handles the logic of storing produced blobs into an array
+   */
+  onBlobAvailable(event: BlobEvent): void {
+    this.blobs.push(event.data);
+  }
+
+  /**
+   * Handles the logic of collecting the blobs, producing the
+   * cooresponding video, and updating the video element to show the
+   * user the recorded video.
+   */
+  onMediaStop(): void {
+    const videoBuffer = new Blob(this.blobs, {type: 'video/webm'});
+    const videoUrl = URL.createObjectURL(videoBuffer);
+    this.recordVideo.nativeElement.srcObject = null;
+    this.recordVideo.nativeElement.src = videoUrl;
   }
 }
