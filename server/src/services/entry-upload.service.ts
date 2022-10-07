@@ -252,23 +252,24 @@ export class EntryUploadService {
       };
     }
 
-    // Move the file into the bucket
-    const uploadResult = await this.bucketService.objectUpload(
-      `upload/entries/${entryUpload.filename}`,
-      `Entries/${basename(entryUpload.filename)}`,
-    );
-
     // Make a entry entity
     // TODO: Determine duration or have default on error
-    // TODO: Replace video URL with location in bucket storage
     const newEntry: Entry = {
       entryID: entryUpload.entryID,
-      videoURL: uploadResult.uri,
+      videoURL: 'placeholder',
       recordedInSignLab: false,
       responderID: entryUpload.responderID,
       meta: entryUpload.meta,
     };
     const entry = await this.entryService.createEntry(newEntry);
+
+    // Move the file into the bucket
+    const fileExtension = filename.slice(filename.lastIndexOf('.') + 1);
+    const uploadResult = await this.bucketService.objectUpload(
+      `upload/entries/${entryUpload.filename}`,
+      `Entries/${entry._id!}.${fileExtension}`,
+    );
+    this.entryService.updateVideoURL(entry, uploadResult.uri);
 
     // Remove the EntryUpload entity
     this.entryUploadModel.deleteOne({
