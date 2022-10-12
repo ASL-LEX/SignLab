@@ -15,7 +15,6 @@
   animation: pulse 2s infinite;
 }
 
-
 @keyframes pulse {
 	0% {
 		transform: scale(0.95);

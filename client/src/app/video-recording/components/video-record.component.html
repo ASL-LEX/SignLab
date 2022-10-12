@@ -1,8 +1,8 @@
 <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer">
   <!-- Recording info message -->
-  <div *ngIf="isRecording" fxLayout="row" fxLayoutAlign="start center" class="recording-info">
-    <mat-icon class="recordingIndicator">videocam</mat-icon>
-    <span>Recording...</span>
+  <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
+    <mat-icon *ngIf="isRecording" class="recordingIndicator">videocam</mat-icon>
+    <span>{{ isRecording ? "Recording..." : "Preview" }}</span>
   </div>
 
   <video class="video" #recordVideo controls class="videoView"></video>

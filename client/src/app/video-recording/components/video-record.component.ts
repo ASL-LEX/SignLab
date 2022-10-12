@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 /**
  * Interface for recording a single video. The video will be stored and
@@ -9,7 +9,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   templateUrl: './video-record.component.html',
   styleUrls: ['./video-record.component.css']
 })
-export class VideoRecordComponent {
+export class VideoRecordComponent implements OnInit{
+  /** The view element for the video element */
   @ViewChild('recordVideo') recordVideo: ElementRef;
   /** Keeps track of if the user is actively recording a video. */
   isRecording: boolean = false;
@@ -18,7 +19,17 @@ export class VideoRecordComponent {
   /** The blobs of the video. */
   blobs: Blob[] = [];
 
-  constructor() {
+  ngOnInit(): void {
+    // Make a stream for the video, don't store any data
+    navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false
+    }).then(stream => {
+      const mediaRecorder = new MediaRecorder(stream);
+      this.recordVideo.nativeElement.srcObject = stream;
+      mediaRecorder.start();
+      this.recordVideo.nativeElement.play();
+    });
   }
 
   toggleRecording() : void {
@@ -29,7 +40,7 @@ export class VideoRecordComponent {
     }
   }
 
-  async startRecording(): Promise<void> {
+  private async startRecording(): Promise<void> {
     // Make a new stream, clear out original data
     this.recordVideo.nativeElement.currentTime = 0;
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -61,7 +72,7 @@ export class VideoRecordComponent {
   /**
    * Handles the logic of storing produced blobs into an array
    */
-  onBlobAvailable(event: BlobEvent): void {
+  private onBlobAvailable(event: BlobEvent): void {
     this.blobs.push(event.data);
   }
 
@@ -70,7 +81,7 @@ export class VideoRecordComponent {
    * cooresponding video, and updating the video element to show the
    * user the recorded video.
    */
-  onMediaStop(): void {
+  private onMediaStop(): void {
     const videoBuffer = new Blob(this.blobs, {type: 'video/webm'});
     const videoUrl = URL.createObjectURL(videoBuffer);
     this.recordVideo.nativeElement.srcObject = null;
