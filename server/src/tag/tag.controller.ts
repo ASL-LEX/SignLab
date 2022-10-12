@@ -7,6 +7,8 @@ import {
   Post,
   Body,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StudyService } from '../study/study.service';
 import { TagService } from '../tag/tag.service';
@@ -19,6 +21,8 @@ import { UserPipe } from '../shared/pipes/user.pipe';
 import { StudyPipe } from '../shared/pipes/study.pipe';
 import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BucketStorage } from '../bucket/bucket.service';
 
 @Controller('/api/tag')
 export class TagController {
@@ -27,6 +31,7 @@ export class TagController {
     private tagService: TagService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
+    private bucketService: BucketStorage,
   ) {}
 
   /**
@@ -156,5 +161,34 @@ export class TagController {
     @Query('userID', UserPipe) user: User,
   ): Promise<Tag[]> {
     return this.tagService.getCompleteTrainingTags(user, study);
+  }
+
+  /**
+   * Save a video that is part of a tag. This will store the video in a
+   * bucket
+   */
+  @Post('/video_field')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tag: Tag, @Body('field') field: string) {
+    // Ensure the tag exists
+    const existingTag = await this.tagService.find(tag._id);
+    if (!existingTag) {
+      throw new HttpException(
+        `Tag with ID '${tag._id}' not found`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Ensure the field exists
+    if (!existingTag.study.tagSchema.dataSchema.properties[field]) {
+      throw new HttpException(
+        `Field '${field}' not found on tag`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Save the file
+    // const video = this.bucketService.objectUpload(path, target);
+
   }
 }

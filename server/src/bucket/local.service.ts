@@ -1,5 +1,5 @@
 import { BucketStorage, BucketFile } from './bucket.service';
-import { copyFile, access, unlink } from 'fs/promises';
+import { copyFile, access, unlink, writeFile } from 'fs/promises';
 import { join, basename } from 'path';
 
 /**
@@ -16,8 +16,12 @@ export class LocalStorage extends BucketStorage {
     super(bucketName);
   }
 
-  async objectUpload(path: string, target: string): Promise<BucketFile> {
-    await copyFile(path, join(this.folder, target));
+  async objectUpload(file: string | Buffer, target: string): Promise<BucketFile> {
+    if (file instanceof Buffer) {
+     await writeFile(join(this.folder, target), file, {});
+    } else {
+      await copyFile(file, join(this.folder, target));
+    }
     return { name: target, uri: `/media/${basename(target)}` };
   }
 
