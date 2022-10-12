@@ -10,6 +10,7 @@ export enum TagFieldType {
   EmbeddedVideoOption,
   FreeText,
   Numeric,
+  VideoRecord,
 }
 
 /**
@@ -75,6 +76,8 @@ export abstract class TagField {
         return new FreeTextField();
       case TagFieldType.Numeric:
         return new NumericField();
+      case TagFieldType.VideoRecord:
+        return new VideoRecordField();
       default:
         return new FreeTextField();
     }
@@ -458,5 +461,24 @@ class NumericField extends TagField {
     return {
       [this.getFieldName()]: schema,
     };
+  }
+}
+
+class VideoRecordField extends TagField {
+  constructor() {
+    super(TagFieldType.VideoRecord, 'Video Record', 'string');
+  }
+
+  asUIProperty(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: `#/properties/${this.getFieldName()}`,
+        options: {
+          customType: 'video',
+          showUnfocusedDescription: true,
+        },
+      },
+    ];
   }
 }

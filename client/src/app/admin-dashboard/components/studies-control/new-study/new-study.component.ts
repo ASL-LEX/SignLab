@@ -25,6 +25,7 @@ import {
   userVideoOptionRendererTester,
   UserVideoOption,
 } from '../../../../shared/components/custom-fields/user-video-option-field.component';
+import { VideoFieldComponent, videoFieldTester } from 'src/app/video-recording/components/video-field.component';
 
 @Component({
   selector: 'new-study',
@@ -71,6 +72,7 @@ export class NewStudyComponent implements AfterViewInit {
     { tester: fileListControlRendererTester, renderer: FileListField },
     { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
     { tester: userVideoOptionRendererTester, renderer: UserVideoOption },
+    { tester: videoFieldTester, renderer: VideoFieldComponent },
   ];
   /** Possible tag options */
   tagFieldOptions = [
@@ -88,6 +90,7 @@ export class NewStudyComponent implements AfterViewInit {
     },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
+    { type: TagFieldType.VideoRecord, name: 'Record Video', icon: 'videocam' },
   ];
 
   constructor(
