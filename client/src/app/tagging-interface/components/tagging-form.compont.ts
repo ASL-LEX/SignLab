@@ -17,6 +17,7 @@ import {
   UserVideoOption,
   userVideoOptionRendererTester,
 } from '../../shared/components/custom-fields/user-video-option-field.component';
+import { VideoFieldComponent, videoFieldTester } from '../../video-recording/components/video-field.component';
 
 @Component({
   selector: 'tagging-form',
@@ -31,8 +32,8 @@ import {
       <div class="video-tag-child">
         <jsonforms
           [data]="tagData"
-          [schema]="tag.study.tagSchema.dataSchema"
-          [uischema]="tag.study.tagSchema.uiSchema"
+          [schema]="TEST_DATA_SCHEMA"
+          [uischema]="TEST_UI_SCHEMA"
           [renderers]="renderers"
           [ajv]="ajv"
           (dataChange)="formChange($event)"
@@ -83,11 +84,51 @@ export class TaggingForm implements OnChanges {
       tester: userVideoOptionRendererTester,
       renderer: UserVideoOption,
     },
+    {
+      tester: videoFieldTester,
+      renderer: VideoFieldComponent,
+    },
   ];
   /** Configure how errors are presented */
   ajv = createAjv({ schemaId: 'id', allErrors: true });
   /** Used for clearing the form */
   tagData: any = {};
+
+  // TODO: Remove these after testing
+  TEST_DATA_SCHEMA = {
+    type: 'object',
+    properties: {
+      entryA: {
+        type: 'string',
+        description: 'The entry video',
+      },
+      entryB: {
+        type: 'string',
+        description: 'The entry video',
+      },
+    },
+  };
+
+  TEST_UI_SCHEMA = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/entryA',
+        options: {
+          customType: 'video'
+        }
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/entryB',
+        options: {
+          customType: 'video'
+        }
+      }
+    ]
+  };
+
 
   /** Handles changes made in the form */
   formChange(data: any) {

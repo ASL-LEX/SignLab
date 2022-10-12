@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 
 /**
  * Interface for recording a single video. The video will be stored and
@@ -18,6 +25,8 @@ export class VideoRecordComponent implements OnInit{
   mediaRecorder: MediaRecorder;
   /** The blobs of the video. */
   blobs: Blob[] = [];
+  /** Output to emit completed video blob */
+  @Output() videoBlob = new EventEmitter<Blob>();
 
   ngOnInit(): void {
     // Make a stream for the video, don't store any data
@@ -38,6 +47,7 @@ export class VideoRecordComponent implements OnInit{
     } else {
       this.startRecording();
     }
+    this.isRecording = !this.isRecording;
   }
 
   private async startRecording(): Promise<void> {
@@ -58,15 +68,11 @@ export class VideoRecordComponent implements OnInit{
     // Set up event listeners
     this.mediaRecorder.ondataavailable = (event) => { this.onBlobAvailable(event); };
     this.mediaRecorder.onstop = (_event) => { this.onMediaStop() };
-
-    this.isRecording = true;
   }
 
   stopRecording(): void {
     this.mediaRecorder.stop();
     this.recordVideo.nativeElement.pause();
-
-    this.isRecording = false;
   }
 
   /**
@@ -86,5 +92,8 @@ export class VideoRecordComponent implements OnInit{
     const videoUrl = URL.createObjectURL(videoBuffer);
     this.recordVideo.nativeElement.srcObject = null;
     this.recordVideo.nativeElement.src = videoUrl;
+
+    // Emit the completed video
+    this.videoBlob.emit(videoBuffer);
   }
 }
