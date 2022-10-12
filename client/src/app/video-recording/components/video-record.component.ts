@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 /**
  * Interface for recording a single video. The video will be stored and
@@ -7,8 +7,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 @Component({
   selector: 'video-record',
   templateUrl: './video-record.component.html',
+  styleUrls: ['./video-record.component.css']
 })
-export class VideoRecordComponent implements OnInit {
+export class VideoRecordComponent {
   @ViewChild('recordVideo') recordVideo: ElementRef;
   /** Keeps track of if the user is actively recording a video. */
   isRecording: boolean = false;
@@ -18,9 +19,6 @@ export class VideoRecordComponent implements OnInit {
   blobs: Blob[] = [];
 
   constructor() {
-  }
-
-  async ngOnInit() {
   }
 
   toggleRecording() : void {
