@@ -169,9 +169,10 @@ export class TagController {
    */
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tag: Tag, @Body('field') field: string) {
+  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body() tag: any): Promise<string> {
     // Ensure the tag exists
     const existingTag = await this.tagService.find(tag._id);
+    console.log(tag);
     if (!existingTag) {
       throw new HttpException(
         `Tag with ID '${tag._id}' not found`,
@@ -180,15 +181,18 @@ export class TagController {
     }
 
     // Ensure the field exists
-    if (!existingTag.study.tagSchema.dataSchema.properties[field]) {
+    if (!existingTag.study.tagSchema.dataSchema.properties[tag.field]) {
+      console.log('here');
       throw new HttpException(
-        `Field '${field}' not found on tag`,
+        `Field '${tag.field}' not found on tag`,
         HttpStatus.BAD_REQUEST,
       );
     }
 
     // Save the file
-    // const video = this.bucketService.objectUpload(path, target);
-
+    const fileExtension = file.originalname.split('.').pop();
+    const target = `Tag/videos/${existingTag._id}/${tag.field}.${fileExtension}`;
+    const video = await this.bucketService.objectUpload(file.buffer, target);
+    return video.uri;
   }
 }
