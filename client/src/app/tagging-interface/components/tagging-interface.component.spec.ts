@@ -6,16 +6,16 @@ import {
 } from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { Tag } from 'shared/dtos/tag.dto';
-import { EntryService } from '../../core/services/entry.service';
 import { TaggingInterface } from './tagging-interface.component';
 import { StudyService } from '../../core/services/study.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from '../../core/services/auth.service';
+import { TagService } from '../../core/services/tag.service';
 
 describe('TaggingInterface', () => {
   // Unit under test
   let tagInterface: ComponentFixture<TaggingInterface>;
-  let entrySpy: jasmine.SpyObj<EntryService>;
+  let tagSpy: jasmine.SpyObj<TagService>;
 
   const testTag1: Tag = {
     _id: 'something unique',
@@ -130,9 +130,9 @@ describe('TaggingInterface', () => {
   };
 
   beforeEach(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', [
+    tagSpy = jasmine.createSpyObj('TagService', [
       'getNextUntaggedEntry',
-      'addTag',
+      'saveTag',
     ]);
     const studySpy = jasmine.createSpyObj('StudyService', ['getStudies']);
     studySpy.getStudies.and.returnValue(Promise.resolve([]));
@@ -141,7 +141,7 @@ describe('TaggingInterface', () => {
       declarations: [TaggingInterface],
       imports: [SharedModule, BrowserAnimationsModule],
       providers: [
-        { provide: EntryService, useValue: entrySpy },
+        { provide: TagService, useValue: tagSpy },
         { provide: StudyService, useValue: studySpy },
         { provide: AuthService, useValue: authSpy },
       ],
@@ -151,7 +151,7 @@ describe('TaggingInterface', () => {
   });
 
   it('should handle no remaing tags', fakeAsync(() => {
-    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
+    tagSpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
 
     // Have ngOnInit run and let changes take place
     tagInterface.detectChanges();
@@ -167,8 +167,8 @@ describe('TaggingInterface', () => {
   }));
 
   it('should handle submitting one tag and getting no more tags', fakeAsync(() => {
-    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(testTag1));
-    entrySpy.addTag.and.resolveTo();
+    tagSpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(testTag1));
+    tagSpy.saveTag.and.resolveTo();
 
     // Have ngOnInit run and let changes take place
     tagInterface.detectChanges();
@@ -176,7 +176,7 @@ describe('TaggingInterface', () => {
     tagInterface.detectChanges();
 
     // Attempt to submit and render the "no more tags" message
-    entrySpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
+    tagSpy.getNextUntaggedEntry.and.returnValue(Promise.resolve(null));
     tagInterface.componentInstance.formSubmit(testTag2);
     tick();
     tagInterface.detectChanges();
