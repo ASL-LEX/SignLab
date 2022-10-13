@@ -17,6 +17,9 @@ export class LocalStorage extends BucketStorage {
   }
 
   async objectUpload(file: string | Buffer, target: string): Promise<BucketFile> {
+    // Replace '/' with '-' to avoid issues with folders
+    target = target.replace(/\//g, '-');
+
     if (file instanceof Buffer) {
      await writeFile(join(this.folder, target), file, {});
     } else {

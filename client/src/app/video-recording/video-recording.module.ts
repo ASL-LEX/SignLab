@@ -12,6 +12,7 @@ import { CoreModule } from '../core/core.module';
   ],
   imports: [
     SharedModule,
+    CoreModule
   ],
   exports: [
     VideoRecordComponent,

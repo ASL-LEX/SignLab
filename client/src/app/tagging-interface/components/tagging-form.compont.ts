@@ -32,8 +32,8 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
       <div class="video-tag-child">
         <jsonforms
           [data]="tagData"
-          [schema]="TEST_DATA_SCHEMA"
-          [uischema]="TEST_UI_SCHEMA"
+          [schema]="tag.study.tagSchema.dataSchema"
+          [uischema]="tag.study.tagSchema.uiSchema"
           [renderers]="renderers"
           [ajv]="ajv"
           (dataChange)="formChange($event)"
@@ -93,42 +93,6 @@ export class TaggingForm implements OnChanges {
   ajv = createAjv({ schemaId: 'id', allErrors: true });
   /** Used for clearing the form */
   tagData: any = {};
-
-  // TODO: Remove these after testing
-  TEST_DATA_SCHEMA = {
-    type: 'object',
-    properties: {
-      entryA: {
-        type: 'string',
-        description: 'The entry video',
-      },
-      entryB: {
-        type: 'string',
-        description: 'The entry video',
-      },
-    },
-  };
-
-  TEST_UI_SCHEMA = {
-    type: 'VerticalLayout',
-    elements: [
-      {
-        type: 'Control',
-        scope: '#/properties/entryA',
-        options: {
-          customType: 'video'
-        }
-      },
-      {
-        type: 'Control',
-        scope: '#/properties/entryB',
-        options: {
-          customType: 'video'
-        }
-      }
-    ]
-  };
-
 
   /** Handles changes made in the form */
   formChange(data: any) {

@@ -7,6 +7,7 @@ import {
   Actions,
 } from '@jsonforms/core';
 import { VideoTagUploadService } from '../services/video-tag-upload.service';
+import { TagService } from '../../core/services/tag.service';
 
 /**
  * JSON Forms field for a single video. The video will be passed to the backend
@@ -29,14 +30,18 @@ import { VideoTagUploadService } from '../services/video-tag-upload.service';
   `,
 })
 export class VideoFieldComponent extends JsonFormsControl implements OnInit {
-  constructor(jsonFormsService: JsonFormsAngularService, private videoUpload: VideoTagUploadService) {
+  constructor(
+    jsonFormsService: JsonFormsAngularService,
+    private videoUpload: VideoTagUploadService,
+    private tagService: TagService
+  ) {
     super(jsonFormsService);
   }
 
   async saveVideo(videoBlob: Blob): Promise<void> {
     // Get the fieldname from the uischema
     const fieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
-    const uri = await this.videoUpload.uploadVideo(this.data, videoBlob, fieldName);
+    const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, fieldName);
 
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
