@@ -54,7 +54,7 @@ export class TaggingInterface implements OnChanges, OnInit {
 
   constructor(
     private authService: AuthService,
-    private tagService: TagService,
+    private tagService: TagService
   ) {}
 
   ngOnInit(): void {

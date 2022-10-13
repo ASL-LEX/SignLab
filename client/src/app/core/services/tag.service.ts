@@ -11,11 +11,11 @@ import { Study } from 'shared/dtos/study.dto';
 @Injectable()
 export class TagService {
   /**
-  * The current tag the user may be working on.
-  *
-  * NOTE: This is updated when `getNextUntaggedEntry` is called, so changing
-  * studies and recalling that method will update this value
-  */
+   * The current tag the user may be working on.
+   *
+   * NOTE: This is updated when `getNextUntaggedEntry` is called, so changing
+   * studies and recalling that method will update this value
+   */
   private currentTag: Tag | null = null;
 
   constructor(private signLab: SignLabHttpClient) {}
@@ -43,7 +43,6 @@ export class TagService {
     study: Study,
     isTraining: boolean
   ): Promise<Tag | null> {
-
     const query = {
       params: { userID: user._id, studyID: study._id! },
       provideToken: true,
@@ -51,7 +50,10 @@ export class TagService {
 
     let nextTag: Tag | null = null;
     if (isTraining) {
-      nextTag = await this.signLab.get<Tag | null>('api/tag/nextTraining', query);
+      nextTag = await this.signLab.get<Tag | null>(
+        'api/tag/nextTraining',
+        query
+      );
     } else {
       nextTag = await this.signLab.get<Tag | null>('api/tag/assign', query);
     }
