@@ -5,10 +5,10 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { EntryService } from '../../core/services/entry.service';
 import { Tag } from 'shared/dtos/tag.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
+import { TagService } from '../../core/services/tag.service';
 
 @Component({
   selector: 'tagging-interface',
@@ -53,8 +53,8 @@ export class TaggingInterface implements OnChanges, OnInit {
   @Input() isTraining = false;
 
   constructor(
-    private entryService: EntryService,
-    private authService: AuthService
+    private authService: AuthService,
+    private tagService: TagService
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,7 @@ export class TaggingInterface implements OnChanges, OnInit {
    * the user.
    */
   async getNextTag() {
-    const tag = await this.entryService.getNextUntaggedEntry(
+    const tag = await this.tagService.getNextUntaggedEntry(
       this.authService.user,
       this.study,
       this.isTraining
@@ -107,7 +107,7 @@ export class TaggingInterface implements OnChanges, OnInit {
   async formSubmit(tag: Tag) {
     try {
       // Add on the tag data
-      await this.entryService.addTag(tag, this.isTraining);
+      await this.tagService.saveTag(tag, this.isTraining);
 
       // Get next tag to complete
       this.getNextTag();

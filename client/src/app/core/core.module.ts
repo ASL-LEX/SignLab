@@ -13,6 +13,7 @@ import {
   OwnerAuthGuard,
 } from './guards/auth.guard';
 import { TokenService } from './services/token.service';
+import { TagService } from './services/tag.service';
 
 @NgModule({
   declarations: [],
@@ -32,6 +33,7 @@ export class CoreModule {
         AdminAuthGuard,
         OwnerAuthGuard,
         TokenService,
+        TagService,
         {
           provide: SignLabHttpClient,
           useFactory: (http: HttpClient, tokenService: TokenService) => {

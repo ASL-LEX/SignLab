@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
-import { Tag } from 'shared/dtos/tag.dto';
-import { Study } from 'shared/dtos/study.dto';
-import { User } from 'shared/dtos/user.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
 
@@ -70,45 +67,6 @@ export class EntryService {
     return this.signLab.post<SaveAttempt>('api/entry/upload/zip', form, {
       provideToken: true,
     });
-  }
-
-  /**
-   * Get the next entry that needs to be tagged. This will return an
-   * incomplete tag for the user to complete.
-   */
-  async getNextUntaggedEntry(
-    user: User,
-    study: Study,
-    isTraining: boolean
-  ): Promise<Tag | null> {
-    const query = {
-      params: { userID: user._id, studyID: study._id! },
-      provideToken: true,
-    };
-
-    if (isTraining) {
-      return this.signLab.get<Tag | null>('api/tag/nextTraining', query);
-    } else {
-      return this.signLab.get<Tag | null>('api/tag/assign', query);
-    }
-  }
-
-  /**
-   * Attempt to apply the given tag to the associated entry.
-   *
-   * @param tag The tag that is being applied
-   * @return Success or error
-   */
-  async addTag(tag: Tag, isTraining: boolean): Promise<void> {
-    if (isTraining) {
-      return this.signLab.post<any>('api/tag/completeTraining', tag, {
-        provideToken: true,
-      });
-    } else {
-      return this.signLab.post<any>('api/tag/complete', tag, {
-        provideToken: true,
-      });
-    }
   }
 
   /**
