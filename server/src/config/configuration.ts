@@ -30,6 +30,7 @@ export default () => ({
       secretKey: process.env.S3_SECRET_ACCESS_KEY,
       baseUrl: process.env.S3_BASE_URL,
       endpoint: process.env.S3_ENDPOINT,
+      version: process.env.S3_VERSION,
     },
     /** Gooogle cloud buckets */
     gcp: {},

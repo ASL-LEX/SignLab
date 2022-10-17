@@ -1,11 +1,14 @@
-import { BucketStorage, BucketFile } from './bucket.service';
-import { S3 } from '@aws-sdk/client-s3';
+import { BucketFile, BucketStorage } from './bucket.service';
 import { readFile } from 'fs/promises';
 import { Readable } from 'stream';
 import { createWriteStream } from 'fs';
+import { S3, Endpoint } from 'aws-sdk';
 
-export class S3Storage extends BucketStorage {
-  private s3: S3;
+/**
+ * Implmentation of the S3 service for the V2 API.
+ */
+export class S3V2Storage extends BucketStorage {
+  private s3: AWS.S3;
   private baseURL: string;
 
   constructor(
@@ -18,11 +21,13 @@ export class S3Storage extends BucketStorage {
   ) {
     super(bucketName);
 
+    const ep = new Endpoint(config.endpoint!);
     this.s3 = new S3({
       credentials: config.credentials,
-      endpoint: config.endpoint,
+      endpoint: ep,
+      apiVersion: '2006-03-01',
       region: 'us-east-1',
-      forcePathStyle: true,
+      s3ForcePathStyle: true,
     });
 
     this.baseURL = config.baseURL;
@@ -34,20 +39,22 @@ export class S3Storage extends BucketStorage {
       Key: target,
       Body: await readFile(path),
     };
-    const result = await this.s3.putObject(params);
+    await this.s3.putObject(params).promise();
 
-    if (result.$metadata.httpStatusCode != 200) {
-      throw new Error(
-        `Failed to upload file to S3 with HTTP Code ${result.$metadata.httpStatusCode}`,
-      );
-    }
-
-    return { name: target, uri: `${this.baseURL}/${target}` };
+    return new Promise((resolve, reject) => {
+      this.s3.upload(params, (err: any, _data: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ name: target, uri: `${this.baseURL}/${target}` });
+        }
+      });
+    });
   }
 
   async objectDownload(path: string, target: string): Promise<void> {
     const params = { Bucket: this.bucketName, Key: target };
-    const result = await this.s3.getObject(params);
+    const result = await this.s3.getObject(params).promise();
     if (result.Body) {
       return this.writeToFile(result.Body as Readable, path);
     } else {
@@ -55,40 +62,33 @@ export class S3Storage extends BucketStorage {
     }
   }
 
-  // NOTE: Untested
   async objectExists(target: string): Promise<boolean> {
     const params = { Bucket: this.bucketName, Key: target };
-
     try {
-      await this.s3.headObject(params);
+      await this.s3.headObject(params).promise();
       return true;
-    } catch (error: any) {
-      if (error.code == 'NotFound') {
+    } catch (err: any) {
+      if (err.code === 'NotFound') {
         return false;
+      } else {
+        throw err;
       }
     }
-    return false;
   }
 
   async objectDelete(target: string): Promise<void> {
-    // If the target is provided with the base url, remove the base URL portion
-    target = target.replace(`${this.baseURL}/`, '');
-
     const params = { Bucket: this.bucketName, Key: target };
-    await this.s3.deleteObject(params);
+    await this.s3.deleteObject(params).promise();
   }
 
-  /**
-   * Helper to write out the data into a file
-   */
-  async writeToFile(body: Readable, path: string): Promise<void> {
-    const fileStream = createWriteStream(path);
+  private writeToFile(stream: Readable, path: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      body.on('data', (chunk: any) => {
-        fileStream.write(chunk);
+      const writeStream = createWriteStream(path);
+      stream.pipe(writeStream);
+      stream.on('error', (err) => {
+        reject(err);
       });
-      body.on('error', reject);
-      body.on('end', () => {
+      writeStream.on('finish', () => {
         resolve();
       });
     });

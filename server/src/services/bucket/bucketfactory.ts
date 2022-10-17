@@ -1,11 +1,12 @@
 import { ConfigService } from '@nestjs/config';
-import { S3Storage } from './s3.service';
+import { S3V3Storage } from './s3_v3.service';
 import { GCPBucketStorage } from './gcp.service';
 import { BucketStorage } from './bucket.service';
 import { LocalStorage } from './local.service';
+import { S3V2Storage } from './s3_v2.service';
 
 export class BucketFactory {
-  static getS3(bucketName: string, configService: ConfigService): S3Storage {
+  static getS3(bucketName: string, configService: ConfigService): BucketStorage {
     const accessKeyId = configService.getOrThrow<string>('bucket.s3.accessKey');
     const secretAccessKey = configService.getOrThrow<string>(
       'bucket.s3.secretKey',
@@ -23,7 +24,15 @@ export class BucketFactory {
       endpoint: endpoint,
     };
 
-    return new S3Storage(bucketName, config);
+    // Get the correct version
+    const s3Version = configService.getOrThrow<string>('bucket.s3.version');
+    if (s3Version === 'v3') {
+      return new S3V3Storage(bucketName, config);
+    } else if (s3Version == 'v2') {
+      return new S3V2Storage(bucketName, config);
+    } else {
+      throw new Error(`S3 Version ${s3Version} is not supported`);
+    }
   }
 
   static getGCP(
@@ -55,6 +64,7 @@ export class BucketFactory {
    *   * `S3_SECRET_ACCESS_KEY`: The secret access key associated with the S3 interface
    *   * `S3_BASE_URL`: Base public URL for reconstructing URLs for objects
    *   * `S3_ENDPOINT`: S3 complient endpoint to make requests against
+   *   * `S3_VERSION`: Version of the S3 API to use
    *
    * Local Required Config
    *  * `BUCKET_LOCAL_FOLDER`: Where to locally store the objects
