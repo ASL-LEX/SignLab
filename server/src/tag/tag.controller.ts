@@ -169,7 +169,7 @@ export class TagController {
    */
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tagStr: string, @Body('field') field: string): Promise<string> {
+  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tagStr: string, @Body('field') field: string): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
     // Ensure the tag exists
@@ -193,6 +193,6 @@ export class TagController {
     const fileExtension = file.originalname.split('.').pop();
     const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
-    return video.uri;
+    return { uri: video.uri };
   }
 }

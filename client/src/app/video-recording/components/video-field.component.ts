@@ -43,6 +43,8 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     const fieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
     const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, fieldName);
 
+    console.log(uri);
+
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
     this.jsonFormsService.updateCore(Actions.update(path, () => uri));
