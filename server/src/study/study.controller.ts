@@ -17,6 +17,9 @@ import { UserStudy } from '../userstudy/userstudy.schema';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { UserService } from '../user/user.service';
 import { Auth } from '../auth/auth.guard';
+import { StudyPipe } from '../shared/pipes/study.pipe';
+import { UserPipe } from '../shared/pipes/user.pipe';
+import { User } from 'shared/dtos/user.dto';
 
 @Controller('/api/study')
 export class StudyController {
@@ -51,13 +54,8 @@ export class StudyController {
   @Get('/users')
   @Auth('admin')
   async getUserStudies(
-    @Query('studyID') studyID: string,
+    @Query('studyID', StudyPipe) study: Study,
   ): Promise<UserStudy[]> {
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      return [];
-    }
-
     return this.userStudyService.getUserStudies(study);
   }
 
@@ -68,24 +66,9 @@ export class StudyController {
    */
   @Get('/user')
   async getUserStudy(
-    @Query('studyID') studyID: string,
-    @Query('userID') userID: string,
+    @Query('studyID', StudyPipe) study: Study,
+    @Query('userID', UserPipe) user: User,
   ): Promise<UserStudy> {
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `The study with id ${studyID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    const user = await this.userService.find(userID);
-    if (!user) {
-      throw new HttpException(
-        `The user with id ${userID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     return this.userStudyService.getUserStudy(user, study);
   }
 
