@@ -8,7 +8,6 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from '../user/user.service';
 import { StudyService } from '../study/study.service';
 import { TagService } from '../tag/tag.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
@@ -16,11 +15,14 @@ import { Tag } from 'shared/dtos/tag.dto';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { TagGuard } from './tag.guard';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserPipe } from '../shared/pipes/user.pipe';
+import { StudyPipe } from '../shared/pipes/study.pipe';
+import { User } from 'shared/dtos/user.dto';
+import { Study } from 'shared/dtos/study.dto';
 
 @Controller('/api/tag')
 export class TagController {
   constructor(
-    private userService: UserService,
     private studyService: StudyService,
     private tagService: TagService,
     private entryStudyService: EntryStudyService,
@@ -39,27 +41,9 @@ export class TagController {
   @Get('/assign')
   @UseGuards(JwtAuthGuard, TagGuard)
   async getNextTag(
-    @Query('userID') userID: string,
-    @Query('studyID') studyID: string,
+    @Query('userID', UserPipe) user: User,
+    @Query('studyID', StudyPipe) study: Study,
   ): Promise<Tag | null> {
-    // Ensure the user exists
-    const user = await this.userService.find(userID);
-    if (!user) {
-      throw new HttpException(
-        `User with ID '${userID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // Ensure the study exists
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `Study with ID '${studyID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     // Check if the user already has an assigned tag for the study
     const incompleteTag = await this.tagService.getIncompleteTag(user, study);
     if (incompleteTag) {
@@ -85,27 +69,9 @@ export class TagController {
    */
   @Get('/nextTraining')
   async getNextTrainingTag(
-    @Query('userID') userID: string,
-    @Query('studyID') studyID: string,
+    @Query('userID', UserPipe) user: User,
+    @Query('studyID', StudyPipe) study: Study,
   ): Promise<Tag | null> {
-    // Ensure the user exists
-    const user = await this.userService.find(userID);
-    if (!user) {
-      throw new HttpException(
-        `User with ID '${userID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // Ensure the study exists
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `Study with ID '${studyID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     // Check if the user has an incomplete training tag first
     const incompleteTag = await this.tagService.getIncompleteTrainingTag(
       user,
@@ -175,16 +141,7 @@ export class TagController {
    *       replaces by a more flexible view users can export from.
    */
   @Get('/forStudy')
-  async getTagsForStudy(@Query('studyID') studyID: string): Promise<Tag[]> {
-    // Ensure the study exists
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `Study with ID '${studyID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
+  async getTagsForStudy(@Query('studyID', StudyPipe) study: Study): Promise<Tag[]> {
     return this.tagService.getCompleteTags(study);
   }
 
@@ -193,27 +150,9 @@ export class TagController {
    */
   @Get('/training')
   async getTrainingTags(
-    @Query('studyID') studyID: string,
-    @Query('userID') userID: string,
+    @Query('studyID', StudyPipe) study: Study,
+    @Query('userID', UserPipe) user: User,
   ): Promise<Tag[]> {
-    // Ensure the user exists
-    const user = await this.userService.find(userID);
-    if (!user) {
-      throw new HttpException(
-        `User with ID '${userID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // Ensure the study exists
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `Study with ID '${studyID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     return this.tagService.getCompleteTrainingTags(user, study);
   }
 }

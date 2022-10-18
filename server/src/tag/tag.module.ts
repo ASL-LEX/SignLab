@@ -8,6 +8,7 @@ import { TagGuard } from './tag.guard';
 import { Tag, TagSchema } from './tag.schema';
 import { TagService } from './tag.service';
 import { EntryStudyModule } from '../entrystudy/entrystudy.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EntryStudyModule } from '../entrystudy/entrystudy.module';
     forwardRef(() => StudyModule),
     forwardRef(() => UserStudyModule),
     forwardRef(() => EntryStudyModule),
+    forwardRef(() => SharedModule),
   ],
   controllers: [TagController],
   providers: [TagService, TagGuard],

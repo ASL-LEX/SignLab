@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
+import * as dto from 'shared/dtos/study.dto';
 
 /**
  * Defined the two aspects of the tag schema which is the properties and
@@ -23,7 +24,7 @@ export class TagSchema {
 const TagSchemaSchema = SchemaFactory.createForClass(TagSchema);
 
 @Schema()
-export class Study {
+export class Study implements dto.Study {
   /** MongoDB assigned ID */
   _id?: string;
 

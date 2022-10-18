@@ -1,5 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as dto from 'shared/dtos/user.dto';
 
 @Schema()
 export class Roles {
@@ -22,7 +23,7 @@ export class Roles {
 const RolesSchema = SchemaFactory.createForClass(Roles);
 
 @Schema()
-export class User {
+export class User implements dto.User {
   _id: string;
 
   @Prop()

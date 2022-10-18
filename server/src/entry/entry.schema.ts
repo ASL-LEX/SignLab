@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { User } from '../user/user.schema';
 import { app } from '../main';
 import { SchemaService } from './schema.service';
+import * as dto from 'shared/dtos/entry.dto';
 
 /**
  * A Entry is a complete video entity in the SignLab system. A Entry
@@ -11,7 +12,7 @@ import { SchemaService } from './schema.service';
  * step with missing information
  */
 @Schema()
-export class Entry {
+export class Entry implements dto.Entry {
   /** MongoDB assigned ID */
   _id?: string;
 

@@ -16,7 +16,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { Entry } from './entry.schema';
 import { MetadataDefinition, SaveAttempt } from 'shared/dtos/entry.dto';
 import { SchemaService } from './schema.service';
 import { EntryUploadService } from './entry-upload.service';
@@ -27,6 +26,10 @@ import { Auth } from '../auth/auth.guard';
 import { TagService } from '../tag/tag.service';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { BucketStorage } from '../bucket/bucket.service';
+import { StudyPipe } from '../shared/pipes/study.pipe';
+import { Study } from 'shared/dtos/study.dto';
+import { EntryPipe } from '../shared/pipes/entry.pipe';
+import { Entry } from 'shared/dtos/entry.dto';
 
 @Controller('/api/entry')
 export class EntryController {
@@ -178,17 +181,8 @@ export class EntryController {
   @Get('/entriestudies')
   @Auth('admin')
   async getEntryStudies(
-    @Query('studyID') studyID: string,
+    @Query('studyID', StudyPipe) study: Study,
   ): Promise<EntryStudy[]> {
-    // Ensure that the service exists
-    const study = await this.studyService.find(studyID);
-    if (!study) {
-      throw new HttpException(
-        `The study with id ${studyID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     return this.entryStudyService.getEntryStudies(study);
   }
 
@@ -245,19 +239,11 @@ export class EntryController {
    * the entry's relation to any study as well as any tags that may
    * exist for the entry.
    *
-   * @param entryID The database generated ID
+   * @param entry The entry to delete
    */
   @Delete('/:id')
   @Auth('admin')
-  async deleteEntry(@Param('id') entryID: string): Promise<void> {
-    const entry = await this.entryService.find(entryID);
-    if (!entry) {
-      throw new HttpException(
-        `Entry does not exist with that ID: ${entryID}`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
+  async deleteEntry(@Param('id', EntryPipe) entry: Entry): Promise<void> {
     // First, handle the case that the entry is part of the training set,
     // this will remove the corresponding entry studies from the list of
     // training set
