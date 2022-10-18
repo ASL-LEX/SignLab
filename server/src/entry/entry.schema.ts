@@ -1,8 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { User } from './user.schema';
+import { User } from '../user/user.schema';
 import { app } from '../main';
-import { SchemaService } from '../services/schema.service';
+import { SchemaService } from './schema.service';
 
 /**
  * A Entry is a complete video entity in the SignLab system. A Entry

@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import {
   DynamicSchema,
   DynamicSchemaDocument,
-} from '../schemas/dyanmicschema.schema';
+} from './dyanmicschema.schema';
 
 /**
  * The schema service handles validation of dynamic schema. Dynamic schema

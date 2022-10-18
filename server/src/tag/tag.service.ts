@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Study } from '../schemas/study.schema';
-import { User } from '../schemas/user.schema';
-import { Tag, TagDocument } from '../schemas/tag.schema';
-import { Entry } from '../schemas/entry.schema';
+import { Study } from '../study/study.schema';
+import { User } from '../user/user.schema';
+import { Tag, TagDocument } from './tag.schema';
+import { Entry } from '../entry/entry.schema';
 
 @Injectable()
 export class TagService {

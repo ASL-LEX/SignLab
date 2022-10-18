@@ -1,8 +1,8 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { EntryStudy } from './entrystudy.schema';
-import { Study } from './study.schema';
-import { User } from './user.schema';
+import { EntryStudy } from '../entrystudy/entrystudy.schema';
+import { Study } from '../study/study.schema';
+import { User } from '../user/user.schema';
 
 /**
  * A `UserStudy` is used to represent information on a given user in relation

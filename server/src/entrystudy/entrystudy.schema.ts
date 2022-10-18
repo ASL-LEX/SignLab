@@ -1,7 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Entry } from './entry.schema';
-import { Study } from './study.schema';
+import { Entry } from '../entry/entry.schema';
+import { Study } from '../study/study.schema';
 
 /**
  * A `EntryStudy` is used to represent information about a entry

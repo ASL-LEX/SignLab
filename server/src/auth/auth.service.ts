@@ -8,10 +8,10 @@ import {
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { User, UserDocument } from '../schemas/user.schema';
+import { User, UserDocument } from '../user/user.schema';
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
-import * as usercredentials from '../schemas/usercredentials.schema';
+import * as usercredentials from '../auth/usercredentials.schema';
 
 /**
  * Handles authentication level logic. This involves checking user credentials

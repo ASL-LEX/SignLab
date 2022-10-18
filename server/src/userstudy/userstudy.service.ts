@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserStudy, UserStudyDocument } from '../schemas/userstudy.schema';
+import { UserStudy, UserStudyDocument } from './userstudy.schema';
 import { Model } from 'mongoose';
-import { User } from '../schemas/user.schema';
-import { Study } from '../schemas/study.schema';
-import { EntryStudyService } from './entrystudy.service';
-import { EntryStudy } from '../schemas/entrystudy.schema';
+import { User } from '../user/user.schema';
+import { Study } from '../study/study.schema';
+import { EntryStudyService } from '../entrystudy/entrystudy.service';
+import { EntryStudy } from '../entrystudy/entrystudy.schema';
 
 @Injectable()
 export class UserStudyService {

@@ -8,15 +8,15 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ComplexityOptions } from 'joi-password-complexity';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from './auth.service';
 import {
   UserAvailability,
   UserCredentials,
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { StudyService } from '../../services/study.service';
-import { UserStudyService } from '../../services/userstudy.service';
+import { StudyService } from '../study/study.service';
+import { UserStudyService } from '../userstudy/userstudy.service';
 import { AuthResponse } from 'shared/dtos/auth.dto';
 
 const passwordValidator = require('joi-password-complexity');

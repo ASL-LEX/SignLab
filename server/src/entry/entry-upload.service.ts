@@ -3,16 +3,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import {
   EntryUpload,
   EntryUploadDocument,
-} from '../schemas/entry-upload.schema';
+} from './entry-upload.schema';
 import { EntryService } from './entry.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';
 import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { createReadStream } from 'fs';
 import { readdir, rm, stat } from 'fs/promises';
-import { join, basename } from 'path';
-import { Entry } from '../schemas/entry.schema';
-import { BucketStorage } from './bucket/bucket.service';
+import { join } from 'path';
+import { Entry } from './entry.schema';
+import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 
 const csv = require('csv-parser');

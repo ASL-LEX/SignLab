@@ -1,7 +1,7 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './jwt.guard';
+import { Roles } from './roles.decorator';
 import { RolesGuard } from './role.guard';
-import { Roles } from '../decorators/roles.decorator';
 
 /**
  * Wraps up multiple decorators together to reduce duplicated need for many

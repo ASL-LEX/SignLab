@@ -13,20 +13,20 @@ import {
   Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { EntryService } from '../../services/entry.service';
+import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { Entry } from '../../schemas/entry.schema';
+import { Entry } from './entry.schema';
 import { MetadataDefinition, SaveAttempt } from 'shared/dtos/entry.dto';
-import { SchemaService } from '../../services/schema.service';
-import { EntryUploadService } from '../../services/entry-upload.service';
-import { StudyService } from '../../services/study.service';
-import { EntryStudyService } from '../../services/entrystudy.service';
+import { SchemaService } from './schema.service';
+import { EntryUploadService } from './entry-upload.service';
+import { StudyService } from '../study/study.service';
+import { EntryStudyService } from '../entrystudy/entrystudy.service';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
-import { Auth } from '../../guards/auth.guard';
-import { TagService } from '../../services/tag.service';
-import { UserStudyService } from '../../services/userstudy.service';
-import { BucketStorage } from '../../services/bucket/bucket.service';
+import { Auth } from '../auth/auth.guard';
+import { TagService } from '../tag/tag.service';
+import { UserStudyService } from '../userstudy/userstudy.service';
+import { BucketStorage } from '../bucket/bucket.service';
 
 @Controller('/api/entry')
 export class EntryController {

@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { SchemaService } from '../services/schema.service';
+import { SchemaService } from './schema.service';
 import { app } from '../main';
 
 /**

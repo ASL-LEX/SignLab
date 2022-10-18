@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Study, StudyDocument } from '../schemas/study.schema';
+import { Study, StudyDocument } from '../study/study.schema';
 import { Model } from 'mongoose';
-import { Tag } from '../schemas/tag.schema';
+import { Tag } from '../tag/tag.schema';
 import { Validator, ValidatorResult } from 'jsonschema';
 
 @Injectable()

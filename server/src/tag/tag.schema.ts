@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Entry } from './entry.schema';
-import { Study } from './study.schema';
-import { User } from './user.schema';
+import { Entry } from '../entry/entry.schema';
+import { Study } from '../study/study.schema';
+import { User } from '../user/user.schema';
 
 @Schema()
 export class Tag {

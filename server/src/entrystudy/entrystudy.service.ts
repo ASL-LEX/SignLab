@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Study } from '../schemas/study.schema';
-import { EntryStudy, EntryStudyDocument } from '../schemas/entrystudy.schema';
-import { Entry } from '../schemas/entry.schema';
+import { Study } from '../study/study.schema';
+import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
+import { Entry } from '../entry/entry.schema';
 
 @Injectable()
 export class EntryStudyService {

@@ -5,9 +5,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { StudyService } from '../services/study.service';
-import { UserStudyService } from '../services/userstudy.service';
-import { UserService } from '../services/user.service';
+import { StudyService } from '../study/study.service';
+import { UserStudyService } from '../userstudy/userstudy.service';
+import { UserService } from '../user/user.service';
 
 /**
  * Check to see if the given user has access to tag on a given study.

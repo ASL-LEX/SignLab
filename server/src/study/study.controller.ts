@@ -8,15 +8,15 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
-import { EntryService } from '../../services/entry.service';
-import { Study } from '../../schemas/study.schema';
-import { StudyService } from '../../services/study.service';
-import { EntryStudyService } from '../../services/entrystudy.service';
+import { EntryService } from '../entry/entry.service';
+import { Study } from '../study/study.schema';
+import { StudyService } from '../study/study.service';
+import { EntryStudyService } from '../entrystudy/entrystudy.service';
 import { StudyCreation } from 'shared/dtos/study.dto';
-import { UserStudy } from '../../schemas/userstudy.schema';
-import { UserStudyService } from '../../services/userstudy.service';
-import { UserService } from '../../services/user.service';
-import { Auth } from '../../guards/auth.guard';
+import { UserStudy } from '../userstudy/userstudy.schema';
+import { UserStudyService } from '../userstudy/userstudy.service';
+import { UserService } from '../user/user.service';
+import { Auth } from '../auth/auth.guard';
 
 @Controller('/api/study')
 export class StudyController {

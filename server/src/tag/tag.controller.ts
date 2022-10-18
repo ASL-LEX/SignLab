@@ -8,14 +8,14 @@ import {
   Body,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from '../../services/user.service';
-import { StudyService } from '../../services/study.service';
-import { TagService } from '../../services/tag.service';
-import { EntryStudyService } from '../../services/entrystudy.service';
+import { UserService } from '../user/user.service';
+import { StudyService } from '../study/study.service';
+import { TagService } from '../tag/tag.service';
+import { EntryStudyService } from '../entrystudy/entrystudy.service';
 import { Tag } from 'shared/dtos/tag.dto';
-import { UserStudyService } from '../../services/userstudy.service';
-import { TagGuard } from '../../guards/tag.guard';
-import { JwtAuthGuard } from '../../guards/jwt.guard';
+import { UserStudyService } from '../userstudy/userstudy.service';
+import { TagGuard } from './tag.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('/api/tag')
 export class TagController {

@@ -9,9 +9,9 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
-import { User } from '../../schemas/user.schema';
-import { UserService } from '../../services/user.service';
-import { Auth } from '../../guards/auth.guard';
+import { User } from './user.schema';
+import { UserService } from './user.service';
+import { Auth } from '../auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 
 @Controller('/api/users')

@@ -1,6 +1,6 @@
 import { Injectable, ExecutionContext, CanActivate } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 /**
  * Check to see if the endpoint is accessible to a give user. The following
