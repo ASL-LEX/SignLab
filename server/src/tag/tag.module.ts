@@ -12,9 +12,7 @@ import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Tag.name, schema: TagSchema },
-    ]),
+    MongooseModule.forFeature([{ name: Tag.name, schema: TagSchema }]),
     forwardRef(() => UserModule),
     forwardRef(() => StudyModule),
     forwardRef(() => UserStudyModule),

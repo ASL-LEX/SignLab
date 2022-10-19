@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Validator } from 'jsonschema';
 import { Model } from 'mongoose';
-import {
-  DynamicSchema,
-  DynamicSchemaDocument,
-} from './dyanmicschema.schema';
+import { DynamicSchema, DynamicSchemaDocument } from './dyanmicschema.schema';
 
 /**
  * The schema service handles validation of dynamic schema. Dynamic schema

@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  EntryUpload,
-  EntryUploadDocument,
-} from './entry-upload.schema';
+import { EntryUpload, EntryUploadDocument } from './entry-upload.schema';
 import { EntryService } from './entry.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';

@@ -5,14 +5,8 @@ import { UserPipe } from './pipes/user.pipe';
 import { StudyPipe } from './pipes/study.pipe';
 
 @Module({
-  imports: [
-    forwardRef(() => UserModule),
-    forwardRef(() => StudyModule),
-  ],
-  providers: [
-    UserPipe,
-    StudyPipe,
-  ],
+  imports: [forwardRef(() => UserModule), forwardRef(() => StudyModule)],
+  providers: [UserPipe, StudyPipe],
   exports: [UserPipe, StudyPipe],
 })
 export class SharedModule {}

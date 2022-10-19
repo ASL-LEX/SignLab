@@ -30,7 +30,7 @@ import { UserStudyModule } from '../userstudy/userstudy.module';
     forwardRef(() => TagModule),
     forwardRef(() => UserStudyModule),
   ],
-  controllers: [ EntryController ],
+  controllers: [EntryController],
   providers: [EntryService, EntryUploadService, SchemaService],
   exports: [EntryService, SchemaService],
 })

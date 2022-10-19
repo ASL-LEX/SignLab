@@ -11,9 +11,7 @@ import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Study.name, schema: StudySchema },
-    ]),
+    MongooseModule.forFeature([{ name: Study.name, schema: StudySchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => EntryModule),
     forwardRef(() => EntryStudyModule),

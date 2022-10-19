@@ -36,10 +36,12 @@ export class AuthService {
     credentials: UserCredentials,
   ): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
-    const userCredentials = await this.userCredentialsModel
-      .findOne({ username: credentials.username })
-    const user = await this.userService
-      .findOne({ username: credentials.username })
+    const userCredentials = await this.userCredentialsModel.findOne({
+      username: credentials.username,
+    });
+    const user = await this.userService.findOne({
+      username: credentials.username,
+    });
 
     // If a user is not found with that username, return null
     if (userCredentials === null || user === null) {
@@ -66,7 +68,7 @@ export class AuthService {
     const availability = { username: true, email: true };
 
     // Check username availability
-    let user = await this.userService.findOne({ username: userId.username })
+    let user = await this.userService.findOne({ username: userId.username });
     if (user) {
       availability.username = false;
     }

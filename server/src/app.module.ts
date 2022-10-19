@@ -59,8 +59,6 @@ if (process.env.NODE_ENV) {
     UserStudyModule,
     BucketModule,
   ],
-  controllers: [
-    AppController,
-  ],
+  controllers: [AppController],
 })
 export class AppModule {}

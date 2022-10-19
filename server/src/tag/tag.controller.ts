@@ -141,7 +141,9 @@ export class TagController {
    *       replaces by a more flexible view users can export from.
    */
   @Get('/forStudy')
-  async getTagsForStudy(@Query('studyID', StudyPipe) study: Study): Promise<Tag[]> {
+  async getTagsForStudy(
+    @Query('studyID', StudyPipe) study: Study,
+  ): Promise<Tag[]> {
     return this.tagService.getCompleteTags(study);
   }
 

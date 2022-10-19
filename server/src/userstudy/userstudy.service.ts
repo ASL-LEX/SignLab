@@ -14,7 +14,7 @@ export class UserStudyService {
     @InjectModel(UserStudy.name)
     private userStudyModel: Model<UserStudyDocument>,
     private entryStudyService: EntryStudyService,
-    private studyService: StudyService
+    private studyService: StudyService,
   ) {}
 
   /**
@@ -45,7 +45,6 @@ export class UserStudyService {
     );
     return userStudies;
   }
-
 
   /**
    * Get the UserStudy for the given user + study combination.

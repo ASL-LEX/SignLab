@@ -109,7 +109,7 @@ export class AuthController {
     const authResponse = await this.authService.signup(userSignup);
 
     // Make a user study for each study
-    await this.userStudyService.makeForUser(authResponse.user)
+    await this.userStudyService.makeForUser(authResponse.user);
 
     return authResponse;
   }

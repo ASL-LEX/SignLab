@@ -10,9 +10,7 @@ import { EntryStudyService } from './entrystudy.service';
     ]),
   ],
   controllers: [],
-  providers: [
-    EntryStudyService
-  ],
-  exports: [ EntryStudyService ],
+  providers: [EntryStudyService],
+  exports: [EntryStudyService],
 })
 export class EntryStudyModule {}

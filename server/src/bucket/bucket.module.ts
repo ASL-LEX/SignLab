@@ -10,9 +10,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       provide: BucketStorage,
       useFactory: BucketFactory.getBucket,
       inject: [ConfigService],
-    }
+    },
   ],
   exports: [BucketStorage],
 })
-export class BucketModule {
-}
+export class BucketModule {}

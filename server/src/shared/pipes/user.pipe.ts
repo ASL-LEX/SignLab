@@ -1,7 +1,11 @@
-import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  BadRequestException,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
 import { User } from 'shared/dtos/user.dto';
 import { UserService } from '../../user/user.service';
-
 
 @Injectable()
 export class UserPipe implements PipeTransform<string, Promise<User>> {

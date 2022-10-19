@@ -150,16 +150,18 @@ export class UserController {
     @Body() transferRequest: { originalID: string; newOwnerID: string },
   ) {
     // Verify that both users exist
-    const originalOwner = await this.userService.findOne(
-      { _id: transferRequest.originalID },
-    );
+    const originalOwner = await this.userService.findOne({
+      _id: transferRequest.originalID,
+    });
     if (!originalOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
         HttpStatus.BAD_REQUEST,
       );
     }
-    const newOwner = await this.userService.findOne({ _id: transferRequest.newOwnerID });
+    const newOwner = await this.userService.findOne({
+      _id: transferRequest.newOwnerID,
+    });
     if (!newOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,
