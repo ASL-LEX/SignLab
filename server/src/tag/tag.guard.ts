@@ -48,7 +48,7 @@ export class TagGuard implements CanActivate {
     //       guard, should see if there is a better approach that doesn't
     //       involve making the query again
     // Ensure the user exists
-    const user = await this.userService.find(userID);
+    const user = await this.userService.findOne({ _id: userID });
     if (!user) {
       throw new HttpException(
         `User with ID '${query.userID}' not found`,

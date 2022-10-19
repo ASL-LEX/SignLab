@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
 
 /**
@@ -16,19 +16,15 @@ export class UserService {
    * Get user based on User ID. Will return null if no user with that ID is
    * found.
    */
-  async find(userID: string): Promise<User | null> {
-    return this.userModel
-      .findOne({
-        _id: userID,
-      })
-      .exec();
+  async findOne(query: FilterQuery<User>): Promise<User | null> {
+    return this.userModel.findOne(query).exec();
   }
 
   /**
    * Get all users in the system. This will return all user information.
    */
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(query: FilterQuery<User>): Promise<User[]> {
+    return this.userModel.find(query).exec();
   }
 
   /**

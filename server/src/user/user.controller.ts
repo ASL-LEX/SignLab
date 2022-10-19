@@ -27,7 +27,7 @@ export class UserController {
   @Get('/')
   @Auth('admin')
   async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll();
+    return this.userService.findAll({});
   }
 
   /**
@@ -80,7 +80,7 @@ export class UserController {
     }
 
     // Get the user and ensure the user exists
-    const user = await this.userService.find(id);
+    const user = await this.userService.findOne({ _id: id });
     if (!user) {
       throw new HttpException(
         `User with ID: ${id} not found`,
@@ -130,7 +130,7 @@ export class UserController {
     }
 
     // Get the user and ensure the user exists
-    const user = await this.userService.find(id);
+    const user = await this.userService.findOne({ _id: id });
     if (!user) {
       throw new HttpException(
         `User with ID: ${id} not found`,
@@ -150,8 +150,8 @@ export class UserController {
     @Body() transferRequest: { originalID: string; newOwnerID: string },
   ) {
     // Verify that both users exist
-    const originalOwner = await this.userService.find(
-      transferRequest.originalID,
+    const originalOwner = await this.userService.findOne(
+      { _id: transferRequest.originalID },
     );
     if (!originalOwner) {
       throw new HttpException(
@@ -159,7 +159,7 @@ export class UserController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const newOwner = await this.userService.find(transferRequest.newOwnerID);
+    const newOwner = await this.userService.findOne({ _id: transferRequest.newOwnerID });
     if (!newOwner) {
       throw new HttpException(
         `User with ID: ${transferRequest.originalID} not found`,

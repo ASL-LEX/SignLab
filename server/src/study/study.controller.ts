@@ -92,7 +92,7 @@ export class StudyController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const user = await this.userService.find(changeRequest.userID);
+    const user = await this.userService.findOne({ _id: changeRequest.userID });
     if (!user) {
       throw new HttpException(
         `The user with id ${changeRequest.userID} does not exist`,
@@ -143,7 +143,7 @@ export class StudyController {
     ]);
 
     // Create user studies for all existing users
-    const users = await this.userService.findAll();
+    const users = await this.userService.findAll({});
     await Promise.all(
       users.map((user) => {
         return this.userStudyService.create(user, newStudy);
