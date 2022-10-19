@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Study } from '../../schemas/study.schema';
-import { StudyService } from '../../services/study.service';
+import { Study } from '../study/study.schema';
+import { StudyService } from '../study/study.service';
 import {
   UserAvailability,
   UserCredentials,
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { User } from '../../schemas/user.schema';
-import { AuthService } from '../../services/auth.service';
+import { User } from '../user/user.schema';
+import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { UserStudyService } from '../../services/userstudy.service';
+import { UserStudyService } from '../userstudy/userstudy.service';
 
 // Test values which are used for testing authentication
 const validCredentials: UserCredentials = {
@@ -75,18 +75,19 @@ const mockStudyService = {
 
 const mockUserStudyService = {
   async create(_user: User, _study: Study) {},
+  async makeForUser(_user: User) {},
 };
 
 /**
  * Mock the entry schema since it indirectly gets a different module
  * declaration from the `app`
  */
-jest.mock('../../schemas/entry.schema', () => ({
+jest.mock('../entry/entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
   },
 }));
-jest.mock('../../schemas/entry-upload.schema', () => ({
+jest.mock('../entry/entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
   },

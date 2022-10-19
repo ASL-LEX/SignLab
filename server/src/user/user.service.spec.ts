@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import { User } from '../schemas/user.schema';
+import { User } from './user.schema';
 import { UserService } from './user.service';
 
 const testUsers: User[] = [
@@ -76,7 +76,7 @@ describe('UserService', () => {
 
   describe('findAll()', () => {
     it('should be able to find all users', async () => {
-      const result = await userService.findAll();
+      const result = await userService.findAll({});
 
       expect(result).toEqual(testUsers);
       expect(userModel.find).toHaveBeenCalled();

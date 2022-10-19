@@ -2,10 +2,11 @@ import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserCredentials, UserSignup } from 'shared/dtos/user.dto';
-import { User } from '../schemas/user.schema';
+import { User } from '../user/user.schema';
 import { AuthService } from './auth.service';
 import { hashSync } from 'bcrypt';
-import * as usercredentials from '../schemas/usercredentials.schema';
+import * as usercredentials from './usercredentials.schema';
+import { UserService } from '../user/user.service';
 
 // Test user in the system
 const testUser: User = {
@@ -28,7 +29,7 @@ const testCredentials: UserCredentials = {
 };
 
 // Test interface for user storage
-const userModel = {
+const userService = {
   // Find that supports looking up by username or email
   findOne(params: any) {
     let user: User | null = null;
@@ -41,12 +42,7 @@ const userModel = {
     if (params._id == testUser._id) {
       user = testUser;
     }
-
-    return {
-      async exec() {
-        return user;
-      },
-    };
+    return user;
   },
 
   async count() {
@@ -90,12 +86,12 @@ const jwtService = {
  * Mock the entry schema since it indirectly gets a different module
  * declaration from the `app`
  */
-jest.mock('../schemas/entry.schema', () => ({
+jest.mock('../entry/entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
   },
 }));
-jest.mock('../schemas/entry-upload.schema', () => ({
+jest.mock('../entry/entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
   },
@@ -110,8 +106,8 @@ describe('AuthService', () => {
       providers: [
         AuthService,
         {
-          provide: getModelToken(User.name),
-          useValue: userModel,
+          provide: UserService,
+          useValue: userService,
         },
         {
           provide: JwtService,

@@ -11,7 +11,7 @@ import {
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
 import * as usercredentials from '../auth/usercredentials.schema';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { User } from 'shared/dtos/user.dto';
 
 /**
@@ -38,7 +38,7 @@ export class AuthService {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel.findOne({
       username: credentials.username,
-    });
+    }).exec();
     const user = await this.userService.findOne({
       username: credentials.username,
     });

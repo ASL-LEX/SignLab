@@ -1,13 +1,13 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EntryStudy } from '../schemas/entrystudy.schema';
+import { EntryStudy } from '../entrystudy/entrystudy.schema';
 import { Readable } from 'stream';
-import { EntryUpload } from '../schemas/entry-upload.schema';
+import { EntryUpload } from './entry-upload.schema';
 import { EntryService } from './entry.service';
-import { StudyService } from './study.service';
-import { TagService } from './tag.service';
+import { StudyService } from '../study/study.service';
+import { TagService } from '../tag/tag.service';
 import { EntryUploadService } from './entry-upload.service';
-import { BucketStorage, BucketFile } from './bucket/bucket.service';
+import { BucketStorage, BucketFile } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 
 /**
@@ -144,12 +144,12 @@ const configService = {
  * Mock the entry schema since it indirectly gets a different module
  * declaration from the `app`
  */
-jest.mock('../schemas/entry.schema', () => ({
+jest.mock('./entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
   },
 }));
-jest.mock('../schemas/entry-upload.schema', () => ({
+jest.mock('./entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
   },

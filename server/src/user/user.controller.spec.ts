@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { UserService } from '../../services/user.service';
-import { User } from '../../schemas/user.schema';
+import { UserService } from './user.service';
+import { User } from './user.schema';
 import { UserController } from './user.controller';
-import { RolesGuard } from '../../guards/role.guard';
+import { RolesGuard } from '../auth/role.guard';
 import { ConfigService } from '@nestjs/config';
 
 const testUser1: User = {
@@ -39,7 +39,7 @@ const userService = {
     return [testUser1, testUser2];
   },
 
-  async find(_id: string) {
+  async findOne(_query: any) {
     return testUser1;
   },
 
