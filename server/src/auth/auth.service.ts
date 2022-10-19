@@ -36,9 +36,11 @@ export class AuthService {
     credentials: UserCredentials,
   ): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
-    const userCredentials = await this.userCredentialsModel.findOne({
-      username: credentials.username,
-    }).exec();
+    const userCredentials = await this.userCredentialsModel
+      .findOne({
+        username: credentials.username,
+      })
+      .exec();
     const user = await this.userService.findOne({
       username: credentials.username,
     });
