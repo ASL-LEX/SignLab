@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
-import { SchemaService } from './services/schema.service';
+import { SchemaService } from './entry/schema.service';
 
 @Controller()
 export class AppController {

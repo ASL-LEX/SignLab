@@ -11,6 +11,7 @@ Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'tags' });
   cy.deleteMany({}, { collection: 'users' });
   cy.deleteMany({}, { collection: 'userstudies' });
+  cy.deleteMany({}, { collection: 'usercredentials' });
 });
 
 Cypress.Commands.add('login', (user: { username: string, password: string }) => {
