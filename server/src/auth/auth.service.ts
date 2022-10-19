@@ -8,10 +8,11 @@ import {
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { User, UserDocument } from '../user/user.schema';
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
 import * as usercredentials from '../auth/usercredentials.schema';
+import { UserService } from 'src/user/user.service';
+import { User } from 'shared/dtos/user.dto';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -20,10 +21,10 @@ import * as usercredentials from '../auth/usercredentials.schema';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService,
     @InjectModel(usercredentials.UserCredentials.name)
     private userCredentialsModel: Model<usercredentials.UserCredentialsDocument>,
+    private userService: UserService,
   ) {}
 
   /**
@@ -37,10 +38,8 @@ export class AuthService {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel
       .findOne({ username: credentials.username })
-      .exec();
-    const user = await this.userModel
+    const user = await this.userService
       .findOne({ username: credentials.username })
-      .exec();
 
     // If a user is not found with that username, return null
     if (userCredentials === null || user === null) {
@@ -67,15 +66,13 @@ export class AuthService {
     const availability = { username: true, email: true };
 
     // Check username availability
-    let user = await this.userModel
-      .findOne({ username: userId.username })
-      .exec();
+    let user = await this.userService.findOne({ username: userId.username })
     if (user) {
       availability.username = false;
     }
 
     // Check email availability
-    user = await this.userModel.findOne({ email: userId.email }).exec();
+    user = await this.userService.findOne({ email: userId.email });
     if (user) {
       availability.email = false;
     }
@@ -90,7 +87,7 @@ export class AuthService {
    */
   public async signup(userSignup: UserSignup): Promise<AuthResponse> {
     // First user is always the owner
-    const numUsers = await this.userModel.count();
+    const numUsers = await this.userService.count();
     const isOwner = numUsers == 0;
 
     const hashedPassword = await hash(userSignup.password, 10);
@@ -113,7 +110,7 @@ export class AuthService {
       password: hashedPassword,
     };
 
-    const newUser = await this.userModel.create(user);
+    const newUser = await this.userService.create(user);
     await this.userCredentialsModel.create(userCredentials);
     return { user: newUser, token: this.generateToken(newUser) };
   }

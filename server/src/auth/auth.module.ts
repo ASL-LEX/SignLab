@@ -27,7 +27,6 @@ import { UserStudyModule } from '../userstudy/userstudy.module';
     }),
     MongooseModule.forFeature([
       { name: UserCredentials.name, schema: UserCredentialsSchema },
-      { name: User.name, schema: UserSchema },
     ]),
     ConfigModule,
     forwardRef(() => UserModule),

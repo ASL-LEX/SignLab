@@ -13,8 +13,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   /**
-   * Get user based on User ID. Will return null if no user with that ID is
-   * found.
+   * Find a single user based on the query provided
    */
   async findOne(query: FilterQuery<User>): Promise<User | null> {
     return this.userModel.findOne(query).exec();
@@ -36,6 +35,21 @@ export class UserService {
         [`roles.${role}`]: true,
       })
       .exec();
+  }
+
+  /**
+   * Get the number of users registered in the system
+   */
+  async count(): Promise<number> {
+    return this.userModel.countDocuments().exec();
+  }
+
+  /**
+   * Make a new user in the system where the ID is not provided.
+   */
+  async create(user: Pick<User, Exclude<keyof User, '_id'>>): Promise<User> {
+    const newUser = new this.userModel(user);
+    return newUser.save();
   }
 
   /**
