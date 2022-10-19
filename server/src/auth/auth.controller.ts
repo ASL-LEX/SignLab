@@ -15,7 +15,6 @@ import {
   UserIdentification,
   UserSignup,
 } from 'shared/dtos/user.dto';
-import { StudyService } from '../study/study.service';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { AuthResponse } from 'shared/dtos/auth.dto';
 
@@ -36,7 +35,6 @@ export class AuthController {
 
   constructor(
     private authService: AuthService,
-    private studyService: StudyService,
     private userStudyService: UserStudyService,
   ) {}
 
@@ -111,13 +109,7 @@ export class AuthController {
     const authResponse = await this.authService.signup(userSignup);
 
     // Make a user study for each study
-    const studies = await this.studyService.getStudies();
-
-    await Promise.all(
-      studies.map((study) => {
-        return this.userStudyService.create(authResponse.user, study);
-      }),
-    );
+    await this.userStudyService.makeForUser(authResponse.user)
 
     return authResponse;
   }

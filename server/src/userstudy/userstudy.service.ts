@@ -6,6 +6,7 @@ import { User } from '../user/user.schema';
 import { Study } from '../study/study.schema';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
 import { EntryStudy } from '../entrystudy/entrystudy.schema';
+import { StudyService } from '../study/study.service';
 
 @Injectable()
 export class UserStudyService {
@@ -13,6 +14,7 @@ export class UserStudyService {
     @InjectModel(UserStudy.name)
     private userStudyModel: Model<UserStudyDocument>,
     private entryStudyService: EntryStudyService,
+    private studyService: StudyService
   ) {}
 
   /**
@@ -32,6 +34,18 @@ export class UserStudyService {
     await this.userStudyModel.create(newUserStudy);
     return newUserStudy;
   }
+
+  /**
+   * Make user studies for the given user against all studies
+   */
+  async makeForUser(user: User): Promise<UserStudy[]> {
+    const studies = await this.studyService.getStudies();
+    const userStudies = await Promise.all(
+      studies.map((study) => this.create(user, study)),
+    );
+    return userStudies;
+  }
+
 
   /**
    * Get the UserStudy for the given user + study combination.

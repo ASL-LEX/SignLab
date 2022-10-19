@@ -8,10 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserCredentials, UserCredentialsSchema } from './usercredentials.schema';
 import { JwtStrategy } from './jwt.strategy';
-import { User, UserSchema } from '../user/user.schema';
 import { UserModule } from '../user/user.module';
 import { RolesGuard } from './role.guard';
-import { StudyModule } from '../study/study.module';
 import { UserStudyModule } from '../userstudy/userstudy.module';
 
 @Module({
@@ -30,7 +28,6 @@ import { UserStudyModule } from '../userstudy/userstudy.module';
     ]),
     ConfigModule,
     forwardRef(() => UserModule),
-    forwardRef(() => StudyModule),
     forwardRef(() => UserStudyModule),
   ],
   controllers: [ AuthController ],
