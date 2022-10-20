@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Dataset } from './dataset.schema';
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 
 @Injectable()
 export class DatasetService {
@@ -12,6 +12,13 @@ export class DatasetService {
    */
   async findAll(): Promise<Dataset[]> {
     return this.datasetModel.find().exec();
+  }
+
+  /**
+   * Find a single dataset based on the query provided
+   */
+  async findOne(query: FilterQuery<Dataset>): Promise<Dataset | null> {
+    return this.datasetModel.findOne(query).exec();
   }
 
   /**
