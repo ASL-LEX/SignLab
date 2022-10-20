@@ -148,9 +148,16 @@ export class EntryController {
   async uploadZIP(
     @UploadedFile() _file: Express.Multer.File,
   ): Promise<SaveAttempt> {
+    const testDataset = {
+      _id: 'test',
+      name: 'Test Dataset',
+      description: 'Test dataset for testing',
+    };
+
     // TODO: Add error handling on file type
     const result = await this.entryUploadService.uploadEntryVideos(
       './upload/upload.zip',
+      testDataset
     );
 
     // Now create a EntryStudy for each entry for each study
