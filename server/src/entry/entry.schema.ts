@@ -4,6 +4,7 @@ import { User } from '../user/user.schema';
 import { app } from '../main';
 import { SchemaService } from './schema.service';
 import * as dto from 'shared/dtos/entry.dto';
+import { Dataset } from '../dataset/dataset.schema';
 
 /**
  * A Entry is a complete video entity in the SignLab system. A Entry
@@ -56,6 +57,12 @@ export class Entry implements dto.Entry {
    */
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
   recorder?: User;
+
+  /**
+   * The dataset that the entry belongs to
+   */
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Dataset.name, required: true })
+  dataset: Dataset;
 
   /**
    * Stores information specific to the research and decided by the researcher.

@@ -1,10 +1,11 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import * as dtos from 'shared/dtos/dataset.dto';
 
 /**
  * Schema for the dataset collection
  */
 @Schema()
-export class Dataset {
+export class Dataset implements dtos.Dataset {
   _id: string;
 
   @Prop()

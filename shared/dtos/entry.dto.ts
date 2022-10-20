@@ -1,3 +1,5 @@
+import { Dataset } from './dataset.dto';
+
 /**
  * Way of conveying information about a location an error took place. This
  * is used for conveying what line the error took place and what that error
@@ -67,6 +69,10 @@ export interface Entry {
    * SignLab user will be associated with the entry.
    */
   responderID?: string;
+  /**
+   * The dataset that this entry is a part of
+   */
+  dataset: Dataset;
   /**
    * This defines any additional meta data which is specific to the instance
    * of SignLab and can thus change instance to instance

@@ -13,4 +13,11 @@ export class DatasetService {
   async findAll(): Promise<Dataset[]> {
     return this.datasetModel.find().exec();
   }
+
+  /**
+   * Make a new dataset in the system where the ID is not provided.
+   */
+  async create(dataset: Pick<Dataset, Exclude<keyof Dataset, '_id'>>): Promise<Dataset> {
+    return this.datasetModel.create(dataset);
+  }
 }

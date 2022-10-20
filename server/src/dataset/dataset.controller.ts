@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { Auth } from '../auth/auth.guard';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
@@ -12,6 +12,12 @@ export class DatasetController {
   @Auth('admin')
   async getDatasets(): Promise<Dataset[]> {
     return this.datasetService.findAll();
+  }
+
+  @Post('/')
+  @Auth('admin')
+  async createDataset(@Body() dataset: Dataset): Promise<Dataset> {
+    return this.datasetService.create(dataset);
   }
 
 }
