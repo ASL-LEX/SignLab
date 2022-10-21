@@ -46,7 +46,10 @@ export class EntryControlComponent {
 
   openUploadDialog() {
     this.dialog
-      .open(EntryUploadDialog)
+      .open(EntryUploadDialog, {
+        height: '400px',
+        width: '2000px',
+      })
       .afterClosed()
       .subscribe(() => {
         this.entryTableView.loadEntries();

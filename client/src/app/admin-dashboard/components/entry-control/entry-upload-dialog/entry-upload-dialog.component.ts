@@ -1,6 +1,41 @@
 import { Component } from '@angular/core';
 import { EntryService } from '../../../../core/services/entry.service';
 import { LocationInfo } from 'shared/dtos/entry.dto';
+import { AbstractControl } from '@angular/forms';
+
+/**
+ * Implementation of an abstract control that has a method for marking the
+ * control as valid.
+ */
+class ManualControl extends AbstractControl {
+  /** Represents if the control is valid or not */
+  isValid: boolean;
+
+  constructor() {
+    super(null, null);
+  }
+
+  /** Marks the control as valid.*/
+  markAsValid() { this.isValid = true; }
+
+  /** Make the control as invalid */
+  markAsInvalid() { this.isValid = false;}
+
+  get valid(): boolean { return this.isValid; }
+
+  get invalid(): boolean { return !this.valid; }
+
+  // Placeholder for the abstract methods that need to be implemented.
+  patchValue(_value: any, _options?: { onlySelf?: boolean; emitEvent?: boolean; }) {
+  }
+
+  setValue(_value: any, _options?: { onlySelf?: boolean; emitEvent?: boolean; }) {
+  }
+
+  reset(_value?: any, _options?: { onlySelf?: boolean; emitEvent?: boolean; }) {
+  }
+
+}
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -24,11 +59,17 @@ export class EntryUploadDialog {
    * Array of potential locations of errors to display to the user
    */
   errorLocations: LocationInfo[];
+  /**
+   * Controls if the user can move from selecting the dataset to uploading
+   * the metadata
+   */
+  datasetSelectControl = new ManualControl();
 
   constructor(private entryService: EntryService) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
+    this.datasetSelectControl.markAsValid()
   }
 
   async uploadCSV(event: any) {
