@@ -6,16 +6,16 @@
       <!-- Select dataset placeholder -->
       <mat-step label="Select Dataset to Upload To" [stepControl]="datasetSelectControl">
         <mat-form-field>
-          <mat-select placeholder="Select dataset">
-            <mat-option>
+          <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)">
+            <mat-option [value]="'First'">
               First
             </mat-option>
 
-            <mat-option>
+            <mat-option [value]="'Second'">
               Second
             </mat-option>
 
-            <mat-option>
+            <mat-option [value]="'Third'">
               Third
             </mat-option>
           </mat-select>
@@ -23,7 +23,7 @@
       </mat-step>
 
       <!-- CSV Upload -->
-      <mat-step label="Upload Information on Entries">
+      <mat-step label="Upload Information on Entries" [stepControl]="metadataUploadControl">
         <div>
           <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput" accept=".csv">
           <button mat-raised-button
@@ -39,7 +39,7 @@
       </mat-step>
 
       <!-- Video ZIP Upload -->
-      <mat-step label="Upload Entry Videos">
+      <mat-step label="Upload Entry Videos" [stepControl]="videoUploadControl">
         <div>
           <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput" accept=".zip">
           <button mat-raised-button
