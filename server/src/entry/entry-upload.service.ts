@@ -257,7 +257,6 @@ export class EntryUploadService {
       entryID: entryUpload.entryID,
       videoURL: 'placeholder',
       recordedInSignLab: false,
-      responderID: entryUpload.responderID,
       meta: entryUpload.meta,
       dataset: dataset
     };

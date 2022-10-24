@@ -1,10 +1,10 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { User } from '../user/user.schema';
 import { app } from '../main';
 import { SchemaService } from './schema.service';
 import * as dto from 'shared/dtos/entry.dto';
 import { Dataset } from '../dataset/dataset.schema';
+import type { SignLabEntryRecording } from './signlab-recording.schema';
 
 /**
  * A Entry is a complete video entity in the SignLab system. A Entry
@@ -43,20 +43,11 @@ export class Entry implements dto.Entry {
   recordedInSignLab: boolean;
 
   /**
-   * This Entry ID is present if the Entry was uploaded to SignLab
-   * instead of being recorded in SignLab. This is a way for researchers
-   * to tell who make their entry against their own records.
+   * If the data is recorded in SignLab. This field will be present which
+   * represents the tag the video was recorded for.
    */
-  @Prop({ required: false, trim: true })
-  responderID?: string;
-
-  /**
-   * This field is present if the entry was recorded in SignLab. If that
-   * is the case, then a user of SignLab made the recording and that is how
-   * the recorder of the entry can be identified.
-   */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
-  recorder?: User;
+  @Prop({ required: false })
+  signLabRecording?: SignLabEntryRecording;
 
   /**
    * The dataset that the entry belongs to

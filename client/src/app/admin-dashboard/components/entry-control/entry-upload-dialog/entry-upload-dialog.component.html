@@ -5,21 +5,39 @@
     <mat-vertical-stepper [linear]="true">
       <!-- Select dataset placeholder -->
       <mat-step label="Select Dataset to Upload To" [stepControl]="datasetSelectControl">
-        <mat-form-field>
-          <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)">
-            <mat-option [value]="'First'">
-              First
-            </mat-option>
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+          <div>
+            <h2>Select Existing Dataset</h2>
+            <mat-form-field>
+              <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)">
+                <mat-option [value]="'First'">
+                  First
+                </mat-option>
 
-            <mat-option [value]="'Second'">
-              Second
-            </mat-option>
+                <mat-option [value]="'Second'">
+                  Second
+                </mat-option>
 
-            <mat-option [value]="'Third'">
-              Third
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+                <mat-option [value]="'Third'">
+                  Third
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <h2> OR </h2>
+          </div>
+
+          <div>
+            <h2>Create New Dataset</h2>
+            <mat-form-field>
+                <input matInput placeholder="Dataset Name">
+            </mat-form-field>
+          </div>
+        </div>
+
+
       </mat-step>
 
       <!-- CSV Upload -->
