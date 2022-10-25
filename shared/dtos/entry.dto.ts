@@ -1,4 +1,5 @@
 import { Dataset } from './dataset.dto';
+import {User} from './user.dto';
 
 /**
  * Way of conveying information about a location an error took place. This
@@ -73,6 +74,15 @@ export interface Entry {
    * The dataset that this entry is a part of
    */
   dataset: Dataset;
+  /**
+   * The person who created this entry. This could be done either through
+   * uploading or recording in SignLab
+   */
+  creator: User;
+  /**
+   * The date that this entry was created
+   */
+  dateCreated: Date;
   /**
    * This defines any additional meta data which is specific to the instance
    * of SignLab and can thus change instance to instance

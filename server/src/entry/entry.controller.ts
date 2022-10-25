@@ -152,6 +152,19 @@ export class EntryController {
       _id: 'test',
       name: 'Test Dataset',
       description: 'Test dataset for testing',
+      creator: {
+        _id: 'test',
+        name: 'Test User',
+        email: '',
+        username: 'test',
+        roles: {
+          admin: true,
+          owner: false,
+          tagging: false,
+          recording: false,
+          accessing: false,
+        }
+      }
     };
 
     // TODO: Add error handling on file type
