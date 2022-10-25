@@ -11,7 +11,6 @@ import { join } from 'path';
 import { Entry } from './entry.schema';
 import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
-import { Dataset } from 'shared/dtos/dataset.dto';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -107,7 +106,7 @@ export class EntryUploadService {
    *
    * @param zipFile Path to the zip file containing the videos
    */
-  async uploadEntryVideos(zipFile: string, dataset: Dataset): Promise<EntryUploadResult> {
+  async uploadEntryVideos(zipFile: string): Promise<EntryUploadResult> {
     // Extract the zip
     const unzipResult = await this.extractZIP(zipFile);
     if (unzipResult.type == 'error') {
@@ -156,7 +155,7 @@ export class EntryUploadService {
       }
 
       // Attempt to save the entry based on the filename
-      const entryUploadResult = await this.saveEntry(file, filePath, dataset);
+      const entryUploadResult = await this.saveEntry(file, filePath);
       if (entryUploadResult.saveResult.type == 'warning') {
         fileWarnings.push(entryUploadResult.saveResult);
         continue;
@@ -229,7 +228,6 @@ export class EntryUploadService {
   private async saveEntry(
     filename: string,
     _filePath: string,
-    dataset: Dataset
   ): Promise<EntryUploadResult> {
     // Try to find a cooresponding EntryUpload based on filename
     const entryUpload = await this.entryUploadModel
@@ -257,8 +255,8 @@ export class EntryUploadService {
       entryID: entryUpload.entryID,
       videoURL: 'placeholder',
       recordedInSignLab: false,
+      responderID: entryUpload.responderID,
       meta: entryUpload.meta,
-      dataset: dataset
     };
     const entry = await this.entryService.createEntry(newEntry);
 
