@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import { DatasetService } from '../../core/services/dataset.service';
 
 /**
  * Component which wraps up displaying the different datasets with their
@@ -8,19 +9,10 @@ import { Dataset } from 'shared/dtos/dataset.dto';
 @Component({
   selector: 'dataset-table',
   template: `
-    <mat-expansion-panel>
+    <mat-expansion-panel *ngFor="let dataset of datasets">
       <mat-expansion-panel-header>
-        <mat-panel-title>Dataset A</mat-panel-title>
-        <mat-panel-description>Collection of animals</mat-panel-description>
-      </mat-expansion-panel-header>
-
-      <entry-table></entry-table>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Dataset B</mat-panel-title>
-        <mat-panel-description>Collection of locations</mat-panel-description>
+        <mat-panel-title>{{ dataset.name }}</mat-panel-title>
+        <mat-panel-description>{{ dataset.description }}</mat-panel-description>
       </mat-expansion-panel-header>
 
       <entry-table></entry-table>
@@ -30,4 +22,13 @@ import { Dataset } from 'shared/dtos/dataset.dto';
 export class DatasetTable {
   /** All of the available datasets */
   datasets: Dataset[] = [];
+
+  constructor(private datasetService: DatasetService) {
+    this.loadDatasets();
+  }
+
+
+  async loadDatasets(): Promise<void> {
+    this.datasets = await this.datasetService.getDatasets();
+  }
 }
