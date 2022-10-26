@@ -30,6 +30,8 @@ import { StudyPipe } from '../shared/pipes/study.pipe';
 import { Study } from 'shared/dtos/study.dto';
 import { EntryPipe } from '../shared/pipes/entry.pipe';
 import { Entry } from 'shared/dtos/entry.dto';
+import { DatasetPipe } from '../shared/pipes/dataset.pipe';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 @Controller('/api/entry')
 export class EntryController {
@@ -119,6 +121,15 @@ export class EntryController {
     }
 
     return { header: header };
+  }
+
+  /**
+   * Get the entries for the given dataset
+   */
+  @Get('/dataset/:datasetID')
+  @Auth('admin')
+  async getEntriesForDataset(@Param('datasetID', DatasetPipe) dataset: Dataset): Promise<Entry[]> {
+    return this.entryService.getEntriesForDataset(dataset);
   }
 
   /**
@@ -228,7 +239,7 @@ export class EntryController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const entry = await this.entryService.find(changeRequest.entryID);
+    const entry = await this.entryService.find({ _id: changeRequest.entryID });
     if (!entry) {
       throw new HttpException(
         `The entry with id ${changeRequest.entryID} does not exist`,

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
+import { Dataset } from 'shared/dtos/dataset.dto';
 import { Entry, EntryDocument } from './entry.schema';
 
 @Injectable()
@@ -10,8 +11,8 @@ export class EntryService {
     private entryModel: Model<EntryDocument>,
   ) {}
 
-  async find(entryID: string): Promise<Entry | null> {
-    return this.entryModel.findOne({ _id: entryID }).exec();
+  async find(query: FilterQuery<Entry>): Promise<Entry | null> {
+    return this.entryModel.findOne(query).exec();
   }
 
   /**
@@ -34,6 +35,13 @@ export class EntryService {
 
   async createEntry(entry: Entry): Promise<Entry> {
     return this.entryModel.create(entry);
+  }
+
+  /**
+   * Get all entries for the given dataset
+   */
+  async getEntriesForDataset(dataset: Dataset): Promise<Entry[]> {
+    return this.entryModel.find({ dataset: dataset._id }).exec();
   }
 
   /**

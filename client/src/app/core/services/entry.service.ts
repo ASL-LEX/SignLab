@@ -3,6 +3,7 @@ import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
+import {Dataset} from 'shared/dtos/dataset.dto';
 
 /**
  * Handle access and modifications make to entries.
@@ -27,6 +28,15 @@ export class EntryService {
    */
   async getEntries(): Promise<Entry[]> {
     return this.signLab.get<Entry[]>('api/entry/', {
+      provideToken: true,
+    });
+  }
+
+  /**
+   * Get all entries for the given dataset
+   */
+  async getEntriesForDataset(dataset: Dataset): Promise<Entry[]> {
+    return this.signLab.get<Entry[]>(`api/entry/dataset/${dataset._id}`, {
       provideToken: true,
     });
   }

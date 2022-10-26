@@ -15,7 +15,7 @@ import { DatasetService } from '../../core/services/dataset.service';
         <mat-panel-description>{{ dataset.description }}</mat-panel-description>
       </mat-expansion-panel-header>
 
-      <entry-table></entry-table>
+      <entry-table [dataset]="dataset"></entry-table>
     </mat-expansion-panel>
   `,
 })

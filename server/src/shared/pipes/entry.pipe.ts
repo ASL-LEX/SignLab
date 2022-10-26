@@ -12,7 +12,7 @@ export class EntryPipe implements PipeTransform<string, Promise<Entry>> {
   constructor(private readonly entryService: EntryService) {}
 
   async transform(value: string, _metatype: ArgumentMetadata): Promise<Entry> {
-    const entry = await this.entryService.find(value);
+    const entry = await this.entryService.find({ _id: value });
     if (!entry) {
       throw new BadRequestException(`Entry with id ${value} not found`);
     }
