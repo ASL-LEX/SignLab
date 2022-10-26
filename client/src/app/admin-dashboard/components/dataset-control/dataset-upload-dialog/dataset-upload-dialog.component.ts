@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DatasetService } from '../../../../core/services/dataset.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -16,7 +17,9 @@ import { DatasetService } from '../../../../core/services/dataset.service';
   styleUrls: ['./dataset-upload-dialog.component.css'],
 })
 export class DatasetUploadDialog {
-  constructor(private datasetService: DatasetService, private authService: AuthService) {}
+  constructor(private datasetService: DatasetService,
+              private authService: AuthService,
+              private dialogRef: MatDialogRef<DatasetUploadDialog>) {}
 
   createForm = new FormGroup(
     {
@@ -51,5 +54,6 @@ export class DatasetUploadDialog {
     };
 
     this.datasetService.createDataset(dataset);
+    this.dialogRef.close();
   }
 }

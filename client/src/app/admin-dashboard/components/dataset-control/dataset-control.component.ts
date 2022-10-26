@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import {DatasetTable} from 'src/app/dataset-table/components/dataset-table.component';
 import { DatasetUploadDialog } from './dataset-upload-dialog/dataset-upload-dialog.component';
 
 /**
@@ -40,6 +41,8 @@ import { DatasetUploadDialog } from './dataset-upload-dialog/dataset-upload-dial
   ],
 })
 export class DatasetControlComponent {
+  @ViewChild(DatasetTable) datasetTable: DatasetTable;
+
   constructor(private dialog: MatDialog) {}
 
   openDatasetCreateDialog() {
@@ -47,6 +50,8 @@ export class DatasetControlComponent {
       .open(DatasetUploadDialog, {
         height: '300px',
         width: '400px',
-      })
+      }).afterClosed().pipe().subscribe(() => {
+        this.datasetTable.loadDatasets();
+      });
   }
 }
