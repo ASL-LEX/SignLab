@@ -46,7 +46,7 @@ export class DatasetControlComponent {
     this.dialog
       .open(DatasetUploadDialog, {
         height: '400px',
-        width: '2000px',
+        width: '400px',
       })
   }
 }

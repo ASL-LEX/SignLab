@@ -1,8 +1,16 @@
 <div>
+  <h1>Create New Dataset</h1>
   <form>
-    <h1>Create New Dataset</h1>
-    <mat-form-field>
-      <input matInput placeholder="Dataset Name">
-    </mat-form-field>
+    <div fxLayout="column" fxLayoutAlign="space-around center" >
+      <mat-form-field>
+        <input matInput placeholder="Dataset Name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Dataset Description">
+      </mat-form-field>
+
+      <button mat-stroked-button type="submit">Create</button>
+    </div>
   </form>
 </div>
