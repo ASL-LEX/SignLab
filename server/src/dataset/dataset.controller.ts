@@ -20,4 +20,10 @@ export class DatasetController {
     return this.datasetService.create(dataset);
   }
 
+  @Get('/exists/:datasetName')
+  @Auth('admin')
+  async datasetExists(@Body() datasetName: string): Promise<boolean> {
+    return this.datasetService.findOne({ name: datasetName }) !== null;
+  }
+
 }
