@@ -45,7 +45,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatProgressBarModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   exports: [
     MatButtonModule,
@@ -69,7 +69,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatProgressBarModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
 })
 export class MaterialModule {}

@@ -14,7 +14,7 @@ import { DatasetTable } from './components/dataset-table.component';
     EntryTableCoreComponent,
     EntryTable,
     EntryPreview,
-    DatasetTable
+    DatasetTable,
   ],
   imports: [SharedModule],
   exports: [EntryNewStudyTable, EntryStudyTable, EntryTable, DatasetTable],

@@ -27,7 +27,6 @@ export class DatasetTable {
     this.loadDatasets();
   }
 
-
   async loadDatasets(): Promise<void> {
     this.datasets = await this.datasetService.getDatasets();
   }

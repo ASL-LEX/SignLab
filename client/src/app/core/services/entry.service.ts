@@ -3,7 +3,7 @@ import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
-import {Dataset} from 'shared/dtos/dataset.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 /**
  * Handle access and modifications make to entries.

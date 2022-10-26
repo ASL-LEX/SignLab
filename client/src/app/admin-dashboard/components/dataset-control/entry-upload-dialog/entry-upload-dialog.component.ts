@@ -48,7 +48,7 @@ export class EntryUploadDialog {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
-    this.datasetSelectControl.markAsInvalid()
+    this.datasetSelectControl.markAsInvalid();
   }
 
   async datasetSelection(_dataset: MatSelectChange) {
