@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { Auth } from '../auth/auth.guard';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
@@ -22,8 +22,8 @@ export class DatasetController {
 
   @Get('/exists/:datasetName')
   @Auth('admin')
-  async datasetExists(@Body() datasetName: string): Promise<boolean> {
-    return this.datasetService.findOne({ name: datasetName }) !== null;
+  async datasetExists(@Param('datasetName') datasetName: string): Promise<boolean> {
+    return (await this.datasetService.findOne({ name: datasetName })) !== null;
   }
 
 }

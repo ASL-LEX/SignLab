@@ -17,6 +17,9 @@ export class DatasetService {
    * Get if the given dataset exists or not
    */
   async datasetExists(datasetName: string): Promise<boolean> {
+    if (!datasetName || datasetName.length === 0) {
+      return false;
+    }
     return this.http.get<boolean>(`/api/dataset/exists/${datasetName}`, { provideToken: true });
   }
 }
