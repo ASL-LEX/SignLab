@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EntryService } from '../../core/services/entry.service';
-import { EntryTableElement } from '../models/entry-table-element';
+import { EntryService } from '../../../core/services/entry.service';
+import { EntryTableElement } from '../../models/entry-table-element';
 
 /**
  * Provides a view of just the entries with no study context
@@ -22,6 +22,7 @@ export class EntryTable {
 
   async loadEntries(): Promise<void> {
     const entries = await this.entryService.getEntries();
+    console.log(entries);
     this.entryData = entries.map((entry) => {
       return {
         entry: entry,

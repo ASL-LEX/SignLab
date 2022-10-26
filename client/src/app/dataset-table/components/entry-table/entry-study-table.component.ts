@@ -8,8 +8,8 @@ import {
 import {
   EntryTableElement,
   EntryTableToggleChange,
-} from '../models/entry-table-element';
-import { EntryService } from '../../core/services/entry.service';
+} from '../../models/entry-table-element';
+import { EntryService } from '../../../core/services/entry.service';
 import { Study } from 'shared/dtos/study.dto';
 
 /**

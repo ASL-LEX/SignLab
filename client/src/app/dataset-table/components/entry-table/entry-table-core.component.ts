@@ -12,7 +12,7 @@ import {
 import {
   EntryTableElement,
   EntryTableToggleChange,
-} from '../models/entry-table-element';
+} from '../../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 

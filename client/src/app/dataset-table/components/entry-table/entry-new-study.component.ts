@@ -1,9 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { EntryService } from '../../core/services/entry.service';
+import { EntryService } from '../../../core/services/entry.service';
 import {
   EntryTableElement,
   EntryTableToggleChange,
-} from '../models/entry-table-element';
+} from '../../models/entry-table-element';
 
 /**
  * The EntryNewStudyTable provides the entry study table view for the
