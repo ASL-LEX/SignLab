@@ -22,23 +22,7 @@ import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.com
       </button>
       <label>Add New Dataset</label>
 
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Dataset A</mat-panel-title>
-          <mat-panel-description>Collection of animals</mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <entry-table></entry-table>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Dataset B</mat-panel-title>
-          <mat-panel-description>Collection of locations</mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <entry-table></entry-table>
-      </mat-expansion-panel>
+      <dataset-table></dataset-table>
     </div>
   `,
   styles: [

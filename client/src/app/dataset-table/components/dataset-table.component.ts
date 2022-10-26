@@ -8,7 +8,6 @@ import { Dataset } from 'shared/dtos/dataset.dto';
 @Component({
   selector: 'dataset-table',
   template: `
-  <div>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>Dataset A</mat-panel-title>
@@ -26,7 +25,6 @@ import { Dataset } from 'shared/dtos/dataset.dto';
 
       <entry-table></entry-table>
     </mat-expansion-panel>
-  </div>
   `,
 })
 export class DatasetTable {
