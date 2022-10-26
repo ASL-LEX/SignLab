@@ -22,4 +22,11 @@ export class DatasetService {
     }
     return this.http.get<boolean>(`/api/dataset/exists/${datasetName}`, { provideToken: true });
   }
+
+  /**
+   * Create a new dataset
+   */
+  async createDataset(dataset: Pick<Dataset, Exclude<keyof Dataset, '_id'>>): Promise<void> {
+    await this.http.post('/api/dataset', dataset, { provideToken: true });
+  }
 }

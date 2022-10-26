@@ -4,6 +4,7 @@ import {
   Validators,
   FormControl,
 } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth.service';
 import { DatasetService } from '../../../../core/services/dataset.service';
 
 /**
@@ -15,7 +16,7 @@ import { DatasetService } from '../../../../core/services/dataset.service';
   styleUrls: ['./dataset-upload-dialog.component.css'],
 })
 export class DatasetUploadDialog {
-  constructor(private datasetService: DatasetService) {}
+  constructor(private datasetService: DatasetService, private authService: AuthService) {}
 
   createForm = new FormGroup(
     {
@@ -42,5 +43,13 @@ export class DatasetUploadDialog {
       alert('Dataset with that name already exists');
       return;
     }
+
+    const dataset = {
+      name: this.name!.value!,
+      description: this.description!.value!,
+      creator: this.authService.user,
+    };
+
+    this.datasetService.createDataset(dataset);
   }
 }
