@@ -11,6 +11,8 @@ import { NewStudyComponent } from './components/studies-control/new-study/new-st
 import { TagFieldComponent } from './components/studies-control/new-study/tag-field.component';
 import { RequiredInfoComponent } from './components/studies-control/new-study/required-info.component';
 
+import { DatasetUploadDialog } from './components/dataset-control/dataset-upload-dialog/dataset-upload-dialog.component';
+
 // Modules
 import { NgModule } from '@angular/core';
 import { AdminDashboardRoutingModule } from './admin-dashboard-routing.module';
@@ -30,6 +32,7 @@ import { UserTableModule } from '../user-table/user-table.module';
     TagFieldComponent,
     RequiredInfoComponent,
     TagFormPreviewDialog,
+    DatasetUploadDialog,
   ],
   imports: [
     AdminDashboardRoutingModule,

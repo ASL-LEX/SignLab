@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EntryTable } from '../../../dataset-table/components/entry-table/entry-table.component';
-import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.component';
+import { DatasetUploadDialog } from './dataset-upload-dialog/dataset-upload-dialog.component';
 
 /**
  * The video control view allows Admins to view all of the currently uploaded
@@ -15,7 +14,7 @@ import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.com
       <button
         mat-mini-fab
         aria-label="Add a new dataset"
-        (click)="openUploadDialog()"
+        (click)="openDatasetCreateDialog()"
         data-cy="uploadEntriesButton"
       >
         <mat-icon>add_circle</mat-icon>
@@ -41,19 +40,13 @@ import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.com
   ],
 })
 export class DatasetControlComponent {
-  @ViewChild(EntryTable) entryTableView: EntryTable;
-
   constructor(private dialog: MatDialog) {}
 
-  openUploadDialog() {
+  openDatasetCreateDialog() {
     this.dialog
-      .open(EntryUploadDialog, {
+      .open(DatasetUploadDialog, {
         height: '400px',
         width: '2000px',
       })
-      .afterClosed()
-      .subscribe(() => {
-        this.entryTableView.loadEntries();
-      });
   }
 }
