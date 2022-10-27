@@ -4,6 +4,7 @@ import { LocationInfo } from 'shared/dtos/entry.dto';
 import { ManualControl } from '../../../../shared/helpers/manual-control';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { MatSelectChange } from '@angular/material/select';
+import { DatasetService } from '../../../../core/services/dataset.service';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -43,12 +44,17 @@ export class EntryUploadDialog {
    * The dataset that was selected
    */
   dataset: Dataset | null = null;
+  /** The available dataset options */
+  datasetOptions: Dataset[] = [];
 
-  constructor(private entryService: EntryService) {
+  constructor(private entryService: EntryService, datasetService: DatasetService) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
     this.datasetSelectControl.markAsInvalid();
+    datasetService.getDatasets().then((datasets) => {
+      this.datasetOptions = datasets;
+    });
   }
 
   async datasetSelection(_dataset: MatSelectChange) {
