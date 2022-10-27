@@ -4,6 +4,7 @@ import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
 
 /**
  * Handle access and modifications make to entries.
@@ -50,6 +51,20 @@ export class EntryService {
       params: { studyID: studyID },
       provideToken: true,
     });
+  }
+
+  /**
+   * Set the dataset that the user is uploading entries for.
+   */
+  async setTargetDataset(dataset: Dataset) {
+    this.signLab.put(`api/entry/upload/dataset/${dataset._id}`, null, { provideToken: true });
+  }
+
+  /**
+   * Set the target user for the entry upload
+   */
+  async setTargetUser(user: User) {
+    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, { provideToken: true });
   }
 
   /**

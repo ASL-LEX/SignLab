@@ -5,6 +5,7 @@ import { ManualControl } from '../../../../shared/helpers/manual-control';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { MatSelectChange } from '@angular/material/select';
 import { DatasetService } from '../../../../core/services/dataset.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -47,7 +48,9 @@ export class EntryUploadDialog {
   /** The available dataset options */
   datasetOptions: Dataset[] = [];
 
-  constructor(private entryService: EntryService, datasetService: DatasetService) {
+  constructor(private entryService: EntryService,
+              datasetService: DatasetService,
+              private authService: AuthService) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
@@ -57,13 +60,16 @@ export class EntryUploadDialog {
     });
   }
 
-  async datasetSelection(_dataset: MatSelectChange) {
-    // this.dataset = dataset;
+  async datasetSelection(dataset: MatSelectChange) {
+    this.dataset = dataset.value;
     this.datasetSelectControl.markAsValid();
   }
 
   async uploadCSV(event: any) {
     const result = await this.entryService.uploadCSV(event.target.files[0]);
+
+    this.entryService.setTargetUser(this.authService.user);
+    this.entryService.setTargetDataset(this.dataset!);
 
     // Update status message displayed to user
     if (result.type != 'success') {
@@ -80,6 +86,7 @@ export class EntryUploadDialog {
     // As long as the result wasn't an error, can upload the ZIP
     if (result.type != 'error') {
       this.csvUploadComplete = true;
+      this.metadataUploadControl.markAsValid();
     }
   }
 

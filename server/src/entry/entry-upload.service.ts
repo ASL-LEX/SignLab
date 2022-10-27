@@ -11,7 +11,8 @@ import { join } from 'path';
 import { Entry } from './entry.schema';
 import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
-import {Dataset} from 'shared/dtos/dataset.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -29,6 +30,15 @@ export interface EntryUploadResult {
 @Injectable()
 export class EntryUploadService {
   private supportedVideoFormats: Set<string>;
+  /**
+   * The dataset that is being uploaded to.
+   *
+   * NOTE: This will be fine for supporting a single user making an upload
+   * at a time, but not ideal for larger use cases. In the future seperate
+   * sessions should exists to support multiple users uploading at a time
+   */
+  private dataset: Dataset | null = null;
+  private user: User | null = null;
 
   constructor(
     @InjectModel(EntryUpload.name)
@@ -40,6 +50,14 @@ export class EntryUploadService {
     this.supportedVideoFormats = new Set<string>(
       configService.getOrThrow<string[]>('videoSettings.supportedTypes'),
     );
+  }
+
+  setTargetDataset(dataset: Dataset) {
+    this.dataset = dataset;
+  }
+
+  setTargetUser(user: User) {
+    this.user = user;
   }
 
   /**
@@ -107,7 +125,7 @@ export class EntryUploadService {
    *
    * @param zipFile Path to the zip file containing the videos
    */
-  async uploadEntryVideos(zipFile: string, dataset: Dataset): Promise<EntryUploadResult> {
+  async uploadEntryVideos(zipFile: string): Promise<EntryUploadResult> {
     // Extract the zip
     const unzipResult = await this.extractZIP(zipFile);
     if (unzipResult.type == 'error') {
@@ -156,7 +174,7 @@ export class EntryUploadService {
       }
 
       // Attempt to save the entry based on the filename
-      const entryUploadResult = await this.saveEntry(file, filePath, dataset);
+      const entryUploadResult = await this.saveEntry(file, filePath);
       if (entryUploadResult.saveResult.type == 'warning') {
         fileWarnings.push(entryUploadResult.saveResult);
         continue;
@@ -229,7 +247,6 @@ export class EntryUploadService {
   private async saveEntry(
     filename: string,
     _filePath: string,
-    dataset: Dataset,
   ): Promise<EntryUploadResult> {
     // Try to find a cooresponding EntryUpload based on filename
     const entryUpload = await this.entryUploadModel
@@ -253,13 +270,14 @@ export class EntryUploadService {
 
     // Make a entry entity
     // TODO: Determine duration or have default on error
-    // TODO: Add in dataset
-    const newEntry: any = {
+    const newEntry: Entry = {
       entryID: entryUpload.entryID,
       videoURL: 'placeholder',
       recordedInSignLab: false,
       meta: entryUpload.meta,
-      dataset: dataset
+      dataset: this.dataset!,
+      creator: this.user!,
+      dateCreated: new Date(),
     };
     const entry = await this.entryService.createEntry(newEntry);
 

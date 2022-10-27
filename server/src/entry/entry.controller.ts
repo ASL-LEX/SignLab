@@ -32,6 +32,8 @@ import { EntryPipe } from '../shared/pipes/entry.pipe';
 import { Entry } from 'shared/dtos/entry.dto';
 import { DatasetPipe } from '../shared/pipes/dataset.pipe';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import { UserPipe } from '../shared/pipes/user.pipe';
+import { User } from 'shared/dtos/user.dto';
 
 @Controller('/api/entry')
 export class EntryController {
@@ -133,6 +135,25 @@ export class EntryController {
   }
 
   /**
+   * Set the dataset that the next series of entries will be uploaded to.
+   * This should be called first before uploading the metadat
+   */
+  @Put('/upload/dataset/:datasetID')
+  @Auth('admin')
+  setTargetDataset(@Param('datasetID', DatasetPipe) dataset: Dataset) {
+    this.entryUploadService.setTargetDataset(dataset);
+  }
+
+  /**
+   * Set the user that is making the upload
+   */
+  @Put('/upload/user/:userID')
+  @Auth('admin')
+  setUser(@Param('userID', UserPipe) user: User) {
+    this.entryUploadService.setTargetUser(user);
+  }
+
+  /**
    * Handles uploading the ZIP file containing all of the entry videos
    * to SignLab. This must take place after a request to
    * `/api/entry/upload/csv` otherwise the call will quickly error out
@@ -159,29 +180,9 @@ export class EntryController {
   async uploadZIP(
     @UploadedFile() _file: Express.Multer.File,
   ): Promise<SaveAttempt> {
-    const testDataset = {
-      _id: 'test',
-      name: 'Test Dataset',
-      description: 'Test dataset for testing',
-      creator: {
-        _id: 'test',
-        name: 'Test User',
-        email: '',
-        username: 'test',
-        roles: {
-          admin: true,
-          owner: false,
-          tagging: false,
-          recording: false,
-          accessing: false,
-        }
-      }
-    };
-
     // TODO: Add error handling on file type
     const result = await this.entryUploadService.uploadEntryVideos(
       './upload/upload.zip',
-      testDataset
     );
 
     // Now create a EntryStudy for each entry for each study
