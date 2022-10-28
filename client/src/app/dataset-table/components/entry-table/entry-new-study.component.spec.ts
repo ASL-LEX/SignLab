@@ -1,4 +1,4 @@
-import { EntryService } from '../../core/services/entry.service';
+import { EntryService } from '../../../core/services/entry.service';
 import { Entry } from 'shared/dtos/entry.dto';
 import {
   ComponentFixture,
@@ -7,11 +7,34 @@ import {
   tick,
 } from '@angular/core/testing';
 import { EntryNewStudyTable } from './entry-new-study.component';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { User } from 'shared/dtos/user.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 describe('EntryNewStudyTable', () => {
+  const creator: User = {
+    _id: '1',
+    name: 'test',
+    username: 'test',
+    email: '',
+    roles: {
+      admin: true,
+      tagging: false,
+      accessing: false,
+      owner: false,
+      recording: false
+    },
+  };
+
+  const dataset: Dataset = {
+    _id: '1',
+    name: 'test',
+    description: 'test',
+    creator: creator,
+  };
+
   const exampleEntryData: Entry[] = [
     {
       _id: '1',
@@ -21,6 +44,9 @@ describe('EntryNewStudyTable', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     {
       _id: '2',
@@ -30,6 +56,9 @@ describe('EntryNewStudyTable', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     {
       _id: '3',
@@ -39,6 +68,9 @@ describe('EntryNewStudyTable', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     {
       _id: '4',
@@ -48,6 +80,9 @@ describe('EntryNewStudyTable', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
   ];
 
@@ -57,8 +92,8 @@ describe('EntryNewStudyTable', () => {
   let entryTable: ComponentFixture<EntryNewStudyTable>;
 
   beforeEach(fakeAsync(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', ['getEntries']);
-    entrySpy.getEntries.and.returnValue(Promise.resolve(exampleEntryData));
+    entrySpy = jasmine.createSpyObj('EntryService', ['getEntriesForDataset']);
+    entrySpy.getEntriesForDataset.and.returnValue(Promise.resolve(exampleEntryData));
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],

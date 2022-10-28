@@ -4,14 +4,34 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { EntryService } from '../../core/services/entry.service';
+import { EntryService } from '../../../core/services/entry.service';
 import { EntryStudyTable } from './entry-study-table.component';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('EntryStudyTable', () => {
+  const creator = {
+    _id: '1',
+    name: 'test',
+    username: 'test',
+    email: '',
+    roles: {
+      admin: true,
+      tagging: false,
+      accessing: false,
+      owner: false,
+      recording: false
+    },
+  };
+
+  const dataset = {
+    _id: '1',
+    name: 'test',
+    description: 'test',
+    creator: creator,
+  };
   const exampleEntryData: EntryStudy[] = [
     {
       _id: '1',
@@ -23,6 +43,9 @@ describe('EntryStudyTable', () => {
         recordedInSignLab: false,
         responderID: '1',
         meta: {},
+        dateCreated: new Date(),
+        creator: creator,
+        dataset: dataset,
       },
       study: {
         _id: '1',
@@ -48,6 +71,9 @@ describe('EntryStudyTable', () => {
         recordedInSignLab: false,
         responderID: '1',
         meta: {},
+        dateCreated: new Date(),
+        creator: creator,
+        dataset: dataset,
       },
       study: {
         _id: '1',
@@ -73,6 +99,9 @@ describe('EntryStudyTable', () => {
         recordedInSignLab: false,
         responderID: '1',
         meta: {},
+        dateCreated: new Date(),
+        creator: creator,
+        dataset: dataset,
       },
       study: {
         _id: '1',
