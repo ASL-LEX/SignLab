@@ -56,10 +56,10 @@
     <!-- Main view -->
     <div fxFlex="85" [ngSwitch]="activeView">
       <!-- TODO: Have the study ID be dynamically inserted -->
-      <entry-study-table
+      <dataset-study-table
         *ngSwitchCase="'entries'"
          [study]="activeStudy">
-      </entry-study-table>
+      </dataset-study-table>
 
       <user-study-table
         *ngSwitchCase="'users'"

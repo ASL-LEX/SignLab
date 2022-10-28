@@ -214,8 +214,9 @@ export class EntryController {
   @Auth('admin')
   async getEntryStudies(
     @Query('studyID', StudyPipe) study: Study,
+    @Query('datasetID', DatasetPipe) dataset: Dataset,
   ): Promise<EntryStudy[]> {
-    return this.entryStudyService.getEntryStudies(study);
+    return this.entryStudyService.getEntryStudies(study, dataset);
   }
 
   /**

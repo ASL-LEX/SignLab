@@ -6,6 +6,7 @@ import { EntryTableCoreComponent } from './components/entry-table/entry-table-co
 import { EntryTable } from './components/entry-table/entry-table.component';
 import { EntryPreview } from './components/entry-table/entry-preview.component';
 import { DatasetTable } from './components/dataset-table.component';
+import { DatasetStudyTable } from './components/dataset-study-table.component';
 
 @NgModule({
   declarations: [
@@ -15,9 +16,10 @@ import { DatasetTable } from './components/dataset-table.component';
     EntryTable,
     EntryPreview,
     DatasetTable,
+    DatasetStudyTable,
   ],
   imports: [SharedModule],
-  exports: [EntryNewStudyTable, EntryStudyTable, EntryTable, DatasetTable],
+  exports: [EntryNewStudyTable, EntryStudyTable, EntryTable, DatasetTable, DatasetStudyTable],
   providers: [],
 })
 export class DatasetTableModule {}
