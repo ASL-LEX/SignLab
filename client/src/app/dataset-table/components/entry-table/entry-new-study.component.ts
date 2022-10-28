@@ -1,9 +1,10 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { EntryService } from '../../../core/services/entry.service';
 import {
   EntryTableElement,
   EntryTableToggleChange,
 } from '../../models/entry-table-element';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 /**
  * The EntryNewStudyTable provides the entry study table view for the
@@ -26,20 +27,24 @@ import {
     (partOfTrainingChange)="markEntryAsTraining($event)"
   ></entry-table-core>`,
 })
-export class EntryNewStudyTable {
+export class EntryNewStudyTable implements OnInit {
   /** Set of entry IDs that should be marked as disabled for the study */
   markedDisabled = new Set<string>();
   @Output() markedDisabledChange = new EventEmitter<Set<string>>();
   /** Set of entry IDs that should be marked as used for training for the study */
   markedTraining = new Set<string>();
   @Output() markedTrainingChange = new EventEmitter<Set<string>>();
+  /** The dataset to display for */
+  @Input() dataset: Dataset;
 
   /** The entry information to display */
   entryData: EntryTableElement[];
 
-  constructor(entryService: EntryService) {
+  constructor(private entryService: EntryService) {}
+
+  ngOnInit(): void {
     // Load in entries and convert them to EntryTableElement(s)
-    entryService.getEntries().then((entries) => {
+    this.entryService.getEntriesForDataset(this.dataset).then((entries) => {
       this.entryData = entries.map((entry) => {
         return {
           entry: entry,
