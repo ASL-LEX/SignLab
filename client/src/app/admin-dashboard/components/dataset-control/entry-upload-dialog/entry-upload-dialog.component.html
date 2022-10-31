@@ -9,7 +9,7 @@
           <div>
             <h2>Select Existing Dataset</h2>
             <mat-form-field>
-              <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)">
+              <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)" data-cy="datasetSelect">
                 <mat-option *ngFor="let dataset of datasetOptions" [value]="dataset">
                   {{ dataset.name }}
                 </mat-option>
