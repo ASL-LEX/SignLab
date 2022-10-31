@@ -53,14 +53,22 @@ export class Entry implements dto.Entry {
   /**
    * The dataset that the entry belongs to
    */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Dataset.name, required: true })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Dataset.name,
+    required: true,
+  })
   dataset: Dataset;
 
   /**
    * The person who created this entry. This could be done either through
    * uploading or recording in SignLab
    */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+    required: true,
+  })
   creator: User;
 
   /**

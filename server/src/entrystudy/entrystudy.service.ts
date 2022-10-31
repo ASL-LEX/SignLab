@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { Study } from '../study/study.schema';
 import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
-import {Dataset} from 'shared/dtos/dataset.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 @Injectable()
 export class EntryStudyService {
@@ -66,32 +66,37 @@ export class EntryStudyService {
    * Get all entry studies for a given study.
    */
   async getEntryStudies(study: Study, dataset: Dataset): Promise<EntryStudy[]> {
-   /*  return this.entryStudyModel
+    /*  return this.entryStudyModel
       .find({ study: study._id, entrydataset: dataset._id })
       .populate('study')
       .populate('entry')
       .exec();
       */
     const result = await this.entryStudyModel
-      .aggregate([{
+      .aggregate([
+        {
           $lookup: {
             from: 'entries',
             localField: 'entry',
             foreignField: '_id',
-            as: 'entryForeign'
-          }
+            as: 'entryForeign',
+          },
         },
         {
           $match: {
             'entryForeign.dataset': dataset._id,
-            'study': study._id
-          }
-        }])
+            study: study._id,
+          },
+        },
+      ])
       .exec();
 
-      await this.entryStudyModel.populate(result, [{ path: 'entry' }, { path: 'study' }]);
+    await this.entryStudyModel.populate(result, [
+      { path: 'entry' },
+      { path: 'study' },
+    ]);
 
-      return result;
+    return result;
   }
 
   /**

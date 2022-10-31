@@ -58,14 +58,18 @@ export class EntryService {
    * Set the dataset that the user is uploading entries for.
    */
   async setTargetDataset(dataset: Dataset) {
-    this.signLab.put(`api/entry/upload/dataset/${dataset._id}`, null, { provideToken: true });
+    this.signLab.put(`api/entry/upload/dataset/${dataset._id}`, null, {
+      provideToken: true,
+    });
   }
 
   /**
    * Set the target user for the entry upload
    */
   async setTargetUser(user: User) {
-    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, { provideToken: true });
+    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, {
+      provideToken: true,
+    });
   }
 
   /**

@@ -39,21 +39,25 @@ describe('EntryUploadDialog', () => {
       tagging: false,
       accessing: false,
       owner: false,
-      recording: false
+      recording: false,
     },
   };
 
   beforeEach(() => {
     entrySpy = jasmine.createSpyObj('EntryService', ['uploadCSV', 'uploadZIP']);
     datasetService = jasmine.createSpyObj('DatasetService', ['getDatasets']);
-    datasetService.getDatasets.and.returnValue(Promise.resolve([{
-      _id: '1',
-      name: 'test',
-      description: 'test',
-      creator: testUser
-    }]));
+    datasetService.getDatasets.and.returnValue(
+      Promise.resolve([
+        {
+          _id: '1',
+          name: 'test',
+          description: 'test',
+          creator: testUser,
+        },
+      ])
+    );
     const authSpy = jasmine.createSpyObj('AuthService', [], {
-      users: testUser
+      users: testUser,
     });
 
     TestBed.configureTestingModule({
@@ -61,7 +65,7 @@ describe('EntryUploadDialog', () => {
       providers: [
         { provide: EntryService, useValue: entrySpy },
         { provide: DatasetService, useValue: datasetService },
-        { provide: AuthService, useValue: authSpy }
+        { provide: AuthService, useValue: authSpy },
       ],
     });
 

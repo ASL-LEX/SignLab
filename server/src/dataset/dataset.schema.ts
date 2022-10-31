@@ -20,7 +20,11 @@ export class Dataset implements dtos.Dataset {
   description: string;
 
   /** The user who created the dataset */
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: User.name,
+  })
   creator: User;
 }
 

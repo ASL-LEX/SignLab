@@ -130,7 +130,9 @@ export class EntryController {
    */
   @Get('/dataset/:datasetID')
   @Auth('admin')
-  async getEntriesForDataset(@Param('datasetID', DatasetPipe) dataset: Dataset): Promise<Entry[]> {
+  async getEntriesForDataset(
+    @Param('datasetID', DatasetPipe) dataset: Dataset,
+  ): Promise<Entry[]> {
     return this.entryService.getEntriesForDataset(dataset);
   }
 

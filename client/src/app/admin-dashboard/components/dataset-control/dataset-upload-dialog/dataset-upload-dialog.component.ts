@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  FormGroup,
-  Validators,
-  FormControl,
-} from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { DatasetService } from '../../../../core/services/dataset.service';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -17,16 +13,16 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./dataset-upload-dialog.component.css'],
 })
 export class DatasetUploadDialog {
-  constructor(private datasetService: DatasetService,
-              private authService: AuthService,
-              private dialogRef: MatDialogRef<DatasetUploadDialog>) {}
+  constructor(
+    private datasetService: DatasetService,
+    private authService: AuthService,
+    private dialogRef: MatDialogRef<DatasetUploadDialog>
+  ) {}
 
-  createForm = new FormGroup(
-    {
-      name: new FormControl('', [Validators.required]),
-      description: new FormControl('', [Validators.required]),
-    }
-  );
+  createForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
+  });
 
   get name() {
     return this.createForm.get('name');
@@ -41,7 +37,9 @@ export class DatasetUploadDialog {
       return; // Nothing to submit, should not reach here with proper Validators
     }
 
-    const datasetExists = await this.datasetService.datasetExists(this.name?.value);
+    const datasetExists = await this.datasetService.datasetExists(
+      this.name?.value
+    );
     if (datasetExists) {
       alert('Dataset with that name already exists');
       return;

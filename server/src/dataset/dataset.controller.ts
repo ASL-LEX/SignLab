@@ -5,7 +5,6 @@ import { Dataset } from './dataset.schema';
 
 @Controller('/api/dataset')
 export class DatasetController {
-
   constructor(private datasetService: DatasetService) {}
 
   @Get('/')
@@ -22,8 +21,9 @@ export class DatasetController {
 
   @Get('/exists/:datasetName')
   @Auth('admin')
-  async datasetExists(@Param('datasetName') datasetName: string): Promise<boolean> {
+  async datasetExists(
+    @Param('datasetName') datasetName: string,
+  ): Promise<boolean> {
     return (await this.datasetService.findOne({ name: datasetName })) !== null;
   }
-
 }

@@ -24,7 +24,7 @@ describe('EntryNewStudyTable', () => {
       tagging: false,
       accessing: false,
       owner: false,
-      recording: false
+      recording: false,
     },
   };
 
@@ -93,7 +93,9 @@ describe('EntryNewStudyTable', () => {
 
   beforeEach(fakeAsync(() => {
     entrySpy = jasmine.createSpyObj('EntryService', ['getEntriesForDataset']);
-    entrySpy.getEntriesForDataset.and.returnValue(Promise.resolve(exampleEntryData));
+    entrySpy.getEntriesForDataset.and.returnValue(
+      Promise.resolve(exampleEntryData)
+    );
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],

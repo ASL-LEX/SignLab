@@ -11,7 +11,10 @@ import { DatasetService } from '../../dataset/dataset.service';
 export class DatasetPipe implements PipeTransform<string, Promise<Dataset>> {
   constructor(private readonly datasetService: DatasetService) {}
 
-  async transform(value: string, _metadata: ArgumentMetadata): Promise<Dataset> {
+  async transform(
+    value: string,
+    _metadata: ArgumentMetadata,
+  ): Promise<Dataset> {
     const dataset = await this.datasetService.findOne({ _id: value });
     if (!dataset) {
       throw new BadRequestException(`Dataset ${value} does not exist`);

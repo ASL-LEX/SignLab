@@ -8,17 +8,20 @@ import { DatasetService } from '../../core/services/dataset.service';
  * a per study basis.
  */
 @Component({
-    selector: 'dataset-study-table',
-    template: `
-      <mat-expansion-panel *ngFor="let dataset of datasets">
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ dataset.name }}</mat-panel-title>
-          <mat-panel-description>{{ dataset.description }}</mat-panel-description>
-        </mat-expansion-panel-header>
+  selector: 'dataset-study-table',
+  template: `
+    <mat-expansion-panel *ngFor="let dataset of datasets">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ dataset.name }}</mat-panel-title>
+        <mat-panel-description>{{ dataset.description }}</mat-panel-description>
+      </mat-expansion-panel-header>
 
-        <entry-study-table [dataset]="dataset" [study]="study"></entry-study-table>
-      </mat-expansion-panel>
-    `
+      <entry-study-table
+        [dataset]="dataset"
+        [study]="study"
+      ></entry-study-table>
+    </mat-expansion-panel>
+  `,
 })
 export class DatasetStudyTable {
   /** The study to display the entries for */
@@ -28,7 +31,7 @@ export class DatasetStudyTable {
 
   constructor(datasetService: DatasetService) {
     // Get the datasets
-    datasetService.getDatasets().then(datasets => {
+    datasetService.getDatasets().then((datasets) => {
       this.datasets = datasets;
     });
   }

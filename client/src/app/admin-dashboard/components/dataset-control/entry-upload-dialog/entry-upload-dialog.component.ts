@@ -48,9 +48,11 @@ export class EntryUploadDialog {
   /** The available dataset options */
   datasetOptions: Dataset[] = [];
 
-  constructor(private entryService: EntryService,
-              datasetService: DatasetService,
-              private authService: AuthService) {
+  constructor(
+    private entryService: EntryService,
+    datasetService: DatasetService,
+    private authService: AuthService
+  ) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];

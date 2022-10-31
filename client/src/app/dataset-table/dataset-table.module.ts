@@ -18,7 +18,7 @@ import { DatasetNewStudy } from './components/dataset-new-study.component';
     EntryPreview,
     DatasetTable,
     DatasetStudyTable,
-    DatasetNewStudy
+    DatasetNewStudy,
   ],
   imports: [SharedModule],
   exports: [

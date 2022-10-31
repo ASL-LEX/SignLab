@@ -22,7 +22,7 @@ describe('EntryStudyTable', () => {
       tagging: false,
       accessing: false,
       owner: false,
-      recording: false
+      recording: false,
     },
   };
 

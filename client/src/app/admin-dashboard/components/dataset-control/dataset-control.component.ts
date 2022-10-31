@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DatasetTable } from 'src/app/dataset-table/components/dataset-table.component';
 import { DatasetUploadDialog } from './dataset-upload-dialog/dataset-upload-dialog.component';
-import {EntryUploadDialog} from './entry-upload-dialog/entry-upload-dialog.component';
+import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.component';
 
 /**
  * The video control view allows Admins to view all of the currently uploaded
@@ -34,7 +34,6 @@ import {EntryUploadDialog} from './entry-upload-dialog/entry-upload-dialog.compo
       </button>
       <label>Upload Entries</label>
 
-
       <dataset-table></dataset-table>
     </div>
   `,
@@ -63,7 +62,10 @@ export class DatasetControlComponent {
       .open(DatasetUploadDialog, {
         height: '300px',
         width: '400px',
-      }).afterClosed().pipe().subscribe(() => {
+      })
+      .afterClosed()
+      .pipe()
+      .subscribe(() => {
         this.datasetTable.loadDatasets();
       });
   }
@@ -73,7 +75,10 @@ export class DatasetControlComponent {
       .open(EntryUploadDialog, {
         height: '500px',
         width: '500px',
-      }).afterClosed().pipe().subscribe(() => {
+      })
+      .afterClosed()
+      .pipe()
+      .subscribe(() => {
         this.datasetTable.loadDatasets();
       });
   }

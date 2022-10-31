@@ -7,7 +7,7 @@ import { Dataset } from 'shared/dtos/dataset.dto';
  */
 @Component({
   selector: 'dataset-new-study-table',
-  template:`
+  template: `
     <mat-expansion-panel *ngFor="let dataset of datasets">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ dataset.name }}</mat-panel-title>
@@ -20,7 +20,7 @@ import { Dataset } from 'shared/dtos/dataset.dto';
         (markedTrainingChange)="markedTrainingChange.emit($event)"
       ></entry-new-study>
     </mat-expansion-panel>
-  `
+  `,
 })
 export class DatasetNewStudy {
   /** Aggregated set of all entries that will not be part of the tagging */
@@ -31,7 +31,7 @@ export class DatasetNewStudy {
   datasets: Dataset[] = [];
 
   constructor(datasetService: DatasetService) {
-    datasetService.getDatasets().then(datasets => {
+    datasetService.getDatasets().then((datasets) => {
       this.datasets = datasets;
     });
   }
