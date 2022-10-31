@@ -10,15 +10,17 @@ const zipFileUploadInput = '[data-cy="zipFileUploadInput"]';
 describe('Upload CSV', () => {
   beforeEach(() => {
     // Clear out any existing data
-    cy.resetDB();
-    cy.firstTimeSetup();
+    cy.resetDB()
+      .firstTimeSetup()
+      .login(users.existingUser)
+      .makeDefaultDataset();
 
     // Navigate to the entry interface and select the upload option
     cy
       .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Entries')
+      .contains('Datasets')
       .click()
       .wait(100)
       .get(uploadEntriesButton)
@@ -110,7 +112,7 @@ describe('Upload Entry ZIP', () => {
       .login(users.existingUser)
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Entries')
+      .contains('Datasets')
       .click()
       .wait(100)
       .get(uploadEntriesButton)
