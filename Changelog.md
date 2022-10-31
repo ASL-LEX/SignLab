@@ -6,6 +6,7 @@
 
 * Have videos autoplay and loop in the tagging interface
 * Allow for adding new owners and transferring ownership
+* Datasets as a way to group entries together
 
 ### Changed
 
