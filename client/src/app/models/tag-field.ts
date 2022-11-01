@@ -59,30 +59,6 @@ export abstract class TagField {
     this.type = type;
   }
 
-  /**
-   * Factory method to get a given tag field
-   */
-  static getTagField(tagFieldType: TagFieldType): TagField {
-    switch (tagFieldType) {
-      case TagFieldType.AslLex:
-        return new AslLexField();
-      case TagFieldType.Autocomplete:
-        return new AutocompleteField();
-      case TagFieldType.BooleanOption:
-        return new BooleanField();
-      case TagFieldType.EmbeddedVideoOption:
-        return new EmbeddedVideoOption();
-      case TagFieldType.FreeText:
-        return new FreeTextField();
-      case TagFieldType.Numeric:
-        return new NumericField();
-      case TagFieldType.VideoRecord:
-        return new VideoRecordField();
-      default:
-        return new FreeTextField();
-    }
-  }
-
   getFieldName(): string {
     return this.data.fieldName || '';
   }
@@ -228,7 +204,7 @@ export abstract class TagField {
  * as ASL-LEX sign videos and store the cooresponding ASL-LEX sign code as
  * a string.
  */
-class AslLexField extends TagField {
+export class AslLexField extends TagField {
   constructor() {
     super(TagFieldType.AslLex, 'ASL-LEX Sign', 'string');
   }
@@ -271,7 +247,7 @@ class AslLexField extends TagField {
   }
 }
 
-class AutocompleteField extends TagField {
+export class AutocompleteField extends TagField {
   constructor() {
     super(TagFieldType.Autocomplete, 'Autocomplete', 'string');
   }
@@ -328,13 +304,13 @@ class AutocompleteField extends TagField {
   }
 }
 
-class BooleanField extends TagField {
+export class BooleanField extends TagField {
   constructor() {
     super(TagFieldType.BooleanOption, 'Boolean Option', 'boolean');
   }
 }
 
-class EmbeddedVideoOption extends TagField {
+export class EmbeddedVideoOption extends TagField {
   constructor() {
     super(TagFieldType.EmbeddedVideoOption, 'Video Option', 'string');
   }
@@ -406,13 +382,13 @@ class EmbeddedVideoOption extends TagField {
   }
 }
 
-class FreeTextField extends TagField {
+export class FreeTextField extends TagField {
   constructor() {
     super(TagFieldType.FreeText, 'Free Text', 'string');
   }
 }
 
-class NumericField extends TagField {
+export class NumericField extends TagField {
   constructor() {
     super(TagFieldType.Numeric, 'Numeric', 'number');
   }
@@ -464,7 +440,7 @@ class NumericField extends TagField {
   }
 }
 
-class VideoRecordField extends TagField {
+export class VideoRecordField extends TagField {
   constructor() {
     super(TagFieldType.VideoRecord, 'Video Record', 'string');
   }
