@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { EntryService } from '../../core/services/entry.service';
-import { EntryTableElement } from '../models/entry-table-element';
+import { Component, Input, OnInit } from '@angular/core';
+import { Dataset } from 'shared/dtos/dataset.dto';
+import { EntryService } from '../../../core/services/entry.service';
+import { EntryTableElement } from '../../models/entry-table-element';
 
 /**
  * Provides a view of just the entries with no study context
@@ -13,15 +14,25 @@ import { EntryTableElement } from '../models/entry-table-element';
     (deleteEntry)="handleDeletion($event)"
   ></entry-table-core>`,
 })
-export class EntryTable {
+export class EntryTable implements OnInit {
+  /** The dataset this entry table is displaying for */
+  @Input() dataset: Dataset;
+
   entryData: EntryTableElement[];
 
-  constructor(private entryService: EntryService) {
+  constructor(private entryService: EntryService) {}
+
+  ngOnInit(): void {
     this.loadEntries();
   }
 
   async loadEntries(): Promise<void> {
-    const entries = await this.entryService.getEntries();
+    // TODO: Log error
+    if (this.dataset === undefined) {
+      return;
+    }
+
+    const entries = await this.entryService.getEntriesForDataset(this.dataset);
     this.entryData = entries.map((entry) => {
       return {
         entry: entry,

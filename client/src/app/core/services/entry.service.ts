@@ -3,6 +3,9 @@ import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
+import { Study } from 'shared/dtos/study.dto';
 
 /**
  * Handle access and modifications make to entries.
@@ -32,12 +35,39 @@ export class EntryService {
   }
 
   /**
+   * Get all entries for the given dataset
+   */
+  async getEntriesForDataset(dataset: Dataset): Promise<Entry[]> {
+    return this.signLab.get<Entry[]>(`api/entry/dataset/${dataset._id}`, {
+      provideToken: true,
+    });
+  }
+
+  /**
    * Get all entries with the cooresponding information about how the
    * entry is used in a study.
    */
-  async getEntryStudies(studyID: string): Promise<EntryStudy[]> {
+  async getEntryStudies(study: Study, dataset: Dataset): Promise<EntryStudy[]> {
     return this.signLab.get<EntryStudy[]>('api/entry/entriestudies', {
-      params: { studyID: studyID },
+      params: { studyID: study._id!, datasetID: dataset._id },
+      provideToken: true,
+    });
+  }
+
+  /**
+   * Set the dataset that the user is uploading entries for.
+   */
+  async setTargetDataset(dataset: Dataset) {
+    this.signLab.put(`api/entry/upload/dataset/${dataset._id}`, null, {
+      provideToken: true,
+    });
+  }
+
+  /**
+   * Set the target user for the entry upload
+   */
+  async setTargetUser(user: User) {
+    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, {
       provideToken: true,
     });
   }

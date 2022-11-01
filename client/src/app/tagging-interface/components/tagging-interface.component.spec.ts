@@ -17,6 +17,27 @@ describe('TaggingInterface', () => {
   let tagInterface: ComponentFixture<TaggingInterface>;
   let tagSpy: jasmine.SpyObj<TagService>;
 
+  const creator = {
+    _id: '1',
+    name: 'test',
+    username: 'test',
+    email: '',
+    roles: {
+      admin: true,
+      tagging: false,
+      accessing: false,
+      owner: false,
+      recording: false,
+    },
+  };
+
+  const dataset = {
+    _id: '1',
+    name: 'test',
+    description: 'test',
+    creator: creator,
+  };
+
   const testTag1: Tag = {
     _id: 'something unique',
     entry: {
@@ -25,6 +46,9 @@ describe('TaggingInterface', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     study: {
       _id: 'study1',
@@ -78,6 +102,9 @@ describe('TaggingInterface', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     study: {
       _id: 'study1',

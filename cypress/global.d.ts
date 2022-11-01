@@ -22,5 +22,9 @@ declare namespace Cypress {
      * Signup the given user into the signlab system
      */
     signup(user: any): Chainable<any>;
+    /**
+     * Make the default dataset
+     */
+    makeDefaultDataset(): Chainable<any>;
   }
 }

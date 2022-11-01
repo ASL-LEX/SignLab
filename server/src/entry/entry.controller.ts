@@ -30,6 +30,10 @@ import { StudyPipe } from '../shared/pipes/study.pipe';
 import { Study } from 'shared/dtos/study.dto';
 import { EntryPipe } from '../shared/pipes/entry.pipe';
 import { Entry } from 'shared/dtos/entry.dto';
+import { DatasetPipe } from '../shared/pipes/dataset.pipe';
+import { Dataset } from 'shared/dtos/dataset.dto';
+import { UserPipe } from '../shared/pipes/user.pipe';
+import { User } from 'shared/dtos/user.dto';
 
 @Controller('/api/entry')
 export class EntryController {
@@ -122,6 +126,36 @@ export class EntryController {
   }
 
   /**
+   * Get the entries for the given dataset
+   */
+  @Get('/dataset/:datasetID')
+  @Auth('admin')
+  async getEntriesForDataset(
+    @Param('datasetID', DatasetPipe) dataset: Dataset,
+  ): Promise<Entry[]> {
+    return this.entryService.getEntriesForDataset(dataset);
+  }
+
+  /**
+   * Set the dataset that the next series of entries will be uploaded to.
+   * This should be called first before uploading the metadat
+   */
+  @Put('/upload/dataset/:datasetID')
+  @Auth('admin')
+  setTargetDataset(@Param('datasetID', DatasetPipe) dataset: Dataset) {
+    this.entryUploadService.setTargetDataset(dataset);
+  }
+
+  /**
+   * Set the user that is making the upload
+   */
+  @Put('/upload/user/:userID')
+  @Auth('admin')
+  setUser(@Param('userID', UserPipe) user: User) {
+    this.entryUploadService.setTargetUser(user);
+  }
+
+  /**
    * Handles uploading the ZIP file containing all of the entry videos
    * to SignLab. This must take place after a request to
    * `/api/entry/upload/csv` otherwise the call will quickly error out
@@ -182,8 +216,9 @@ export class EntryController {
   @Auth('admin')
   async getEntryStudies(
     @Query('studyID', StudyPipe) study: Study,
+    @Query('datasetID', DatasetPipe) dataset: Dataset,
   ): Promise<EntryStudy[]> {
-    return this.entryStudyService.getEntryStudies(study);
+    return this.entryStudyService.getEntryStudies(study, dataset);
   }
 
   /**
@@ -208,7 +243,7 @@ export class EntryController {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const entry = await this.entryService.find(changeRequest.entryID);
+    const entry = await this.entryService.find({ _id: changeRequest.entryID });
     if (!entry) {
       throw new HttpException(
         `The entry with id ${changeRequest.entryID} does not exist`,

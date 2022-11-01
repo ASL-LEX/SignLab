@@ -6,19 +6,19 @@ const uploadZIPButton = '[data-cy="uploadZIPButton"]';
 const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
 const uploadStatusMessage = '[data-cy="uploadStatusMessage"]';
 const zipFileUploadInput = '[data-cy="zipFileUploadInput"]';
+const datasetSelect = '[data-cy="datasetSelect"]';
 
 describe('Upload CSV', () => {
   beforeEach(() => {
     // Clear out any existing data
-    cy.resetDB();
-    cy.firstTimeSetup();
-
-    // Navigate to the entry interface and select the upload option
-    cy
+    cy.resetDB()
+      .firstTimeSetup()
       .login(users.existingUser)
+      .makeDefaultDataset()
+      // Navigate to the entry interface and select the upload option
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Entries')
+      .contains('Datasets')
       .click()
       .wait(100)
       .get(uploadEntriesButton)
@@ -108,15 +108,23 @@ describe('Upload Entry ZIP', () => {
     // then upload the small dataset
     cy
       .login(users.existingUser)
+      .makeDefaultDataset()
       .visit('/admin')
       .get('div[class="mat-tab-label-content"]')
-      .contains('Entries')
+      .contains('Datasets')
       .click()
       .wait(100)
       .get(uploadEntriesButton)
       .click()
+      // Select the first dataset
+      .get(datasetSelect)
+      .click()
+      .get('mat-option')
+      .contains('Test')
+      .click()
+      // Upload a sample CSV
       .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/entries/small-set.csv', { force: true })
+      .selectFile('cypress/fixtures/entries/small-set.csv', { force: true });
   });
 
   it('should not break if a directory is present', () => {

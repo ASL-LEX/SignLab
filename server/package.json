@@ -31,6 +31,7 @@
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/serve-static": "^2.2.2",
+    "@sniptt/monads": "^0.5.10",
     "@types/unzipper": "^0.10.5",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",

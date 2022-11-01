@@ -8,9 +8,10 @@ import {
 import {
   EntryTableElement,
   EntryTableToggleChange,
-} from '../models/entry-table-element';
-import { EntryService } from '../../core/services/entry.service';
+} from '../../models/entry-table-element';
+import { EntryService } from '../../../core/services/entry.service';
 import { Study } from 'shared/dtos/study.dto';
+import { Dataset } from 'shared/dtos/dataset.dto';
 
 /**
  * The EntryStudyTable provides the view for editing entry information
@@ -35,6 +36,8 @@ export class EntryStudyTable implements OnInit, OnChanges {
   @Input() study: Study | null;
   /** The entry information including the study specific information */
   entryData: EntryTableElement[];
+  /** The dataset that is being viewed */
+  @Input() dataset: Dataset | null;
 
   constructor(private entryService: EntryService) {
     this.updatePartOfStudy = this.updatePartOfStudy.bind(this);
@@ -52,8 +55,11 @@ export class EntryStudyTable implements OnInit, OnChanges {
   }
 
   async loadEntries() {
-    if (this.study) {
-      this.entryData = await this.entryService.getEntryStudies(this.study._id!);
+    if (this.study && this.dataset) {
+      this.entryData = await this.entryService.getEntryStudies(
+        this.study,
+        this.dataset
+      );
     }
   }
 

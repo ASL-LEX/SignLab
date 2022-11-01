@@ -11,6 +11,8 @@ import { join } from 'path';
 import { Entry } from './entry.schema';
 import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
+import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -28,6 +30,15 @@ export interface EntryUploadResult {
 @Injectable()
 export class EntryUploadService {
   private supportedVideoFormats: Set<string>;
+  /**
+   * The dataset that is being uploaded to.
+   *
+   * NOTE: This will be fine for supporting a single user making an upload
+   * at a time, but not ideal for larger use cases. In the future seperate
+   * sessions should exists to support multiple users uploading at a time
+   */
+  private dataset: Dataset | null = null;
+  private user: User | null = null;
 
   constructor(
     @InjectModel(EntryUpload.name)
@@ -39,6 +50,14 @@ export class EntryUploadService {
     this.supportedVideoFormats = new Set<string>(
       configService.getOrThrow<string[]>('videoSettings.supportedTypes'),
     );
+  }
+
+  setTargetDataset(dataset: Dataset) {
+    this.dataset = dataset;
+  }
+
+  setTargetUser(user: User) {
+    this.user = user;
   }
 
   /**
@@ -255,8 +274,10 @@ export class EntryUploadService {
       entryID: entryUpload.entryID,
       videoURL: 'placeholder',
       recordedInSignLab: false,
-      responderID: entryUpload.responderID,
       meta: entryUpload.meta,
+      dataset: this.dataset!,
+      creator: this.user!,
+      dateCreated: new Date(),
     };
     const entry = await this.entryService.createEntry(newEntry);
 

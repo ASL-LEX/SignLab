@@ -10,6 +10,27 @@ import { SharedModule } from '../../shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TaggingForm', () => {
+  const creator = {
+    _id: '1',
+    name: 'test',
+    username: 'test',
+    email: '',
+    roles: {
+      admin: true,
+      tagging: false,
+      accessing: false,
+      owner: false,
+      recording: false,
+    },
+  };
+
+  const dataset = {
+    _id: '1',
+    name: 'test',
+    description: 'test',
+    creator: creator,
+  };
+
   const testTag1: Tag = {
     _id: 'something unique',
     entry: {
@@ -18,6 +39,9 @@ describe('TaggingForm', () => {
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
+      creator: creator,
+      dateCreated: new Date(),
+      dataset: dataset,
     },
     study: {
       _id: 'study1',

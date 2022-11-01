@@ -5,7 +5,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import { EntryTableElement } from '../models/entry-table-element';
+import { EntryTableElement } from '../../models/entry-table-element';
 
 @Component({
   selector: 'entry-preview',
