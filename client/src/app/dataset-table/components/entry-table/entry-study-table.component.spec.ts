@@ -142,6 +142,7 @@ describe('EntryStudyTable', () => {
 
     entryTable = TestBed.createComponent(EntryStudyTable);
     entryTable.componentInstance.study = exampleEntryData[0].study;
+    entryTable.componentInstance.dataset = dataset;
     tick();
     entryTable.detectChanges();
     tick();

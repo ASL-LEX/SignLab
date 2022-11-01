@@ -44,7 +44,7 @@ describe('EntryUploadDialog', () => {
   };
 
   beforeEach(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', ['uploadCSV', 'uploadZIP']);
+    entrySpy = jasmine.createSpyObj('EntryService', ['uploadCSV', 'uploadZIP', 'setTargetUser', 'setTargetDataset']);
     datasetService = jasmine.createSpyObj('DatasetService', ['getDatasets']);
     datasetService.getDatasets.and.returnValue(
       Promise.resolve([

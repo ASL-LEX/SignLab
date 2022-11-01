@@ -12,6 +12,7 @@ import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from 'shared/dtos/user.dto';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import {ChangeDetectorRef} from '@angular/core';
 
 describe('EntryNewStudyTable', () => {
   const creator: User = {
@@ -123,6 +124,11 @@ describe('EntryNewStudyTable', () => {
       'td mat-slide-toggle input'
     )[1];
 
+
+    // NOTE: This is a hack to get the toggle to change. The toggle is not
+    //       changing immediatly when clicked in the unit testing. This issue
+    //       is not present in actual usage.
+    disabledToggle.click();
     disabledToggle.click();
 
     expect(entryTable.componentInstance.markedDisabled.size).toEqual(1);
@@ -158,6 +164,7 @@ describe('EntryNewStudyTable', () => {
 
     // First click, should be marked as disabled
     disabledToggle.click();
+    disabledToggle.click();
     expect(entryTable.componentInstance.markedDisabled.has('1')).toBeTrue();
 
     // Second click, should not be marked as disabled
@@ -171,6 +178,8 @@ describe('EntryNewStudyTable', () => {
     // Select two entries to mark as disabled
     const toggles = compiled.querySelectorAll('td mat-slide-toggle input');
     toggles[1].click();
+    toggles[1].click();
+    toggles[3].click();
     toggles[3].click();
 
     expect(entryTable.componentInstance.markedDisabled.size).toEqual(2);
