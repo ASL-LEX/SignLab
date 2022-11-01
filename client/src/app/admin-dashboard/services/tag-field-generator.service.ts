@@ -10,12 +10,14 @@ import {
   NumericField,
   VideoRecordField
 } from '../../models/tag-field';
+import { DatasetService } from '../../core/services/dataset.service';
 
 /**
  * Service which provides factor methods for generating tag field options.
  */
 @Injectable()
 export class TagFieldGeneratorService {
+  constructor(private datasetService: DatasetService) {}
 
   /**
    * Factory method to get the field definition associated with the given
@@ -36,7 +38,7 @@ export class TagFieldGeneratorService {
       case TagFieldType.Numeric:
         return new NumericField();
       case TagFieldType.VideoRecord:
-        return new VideoRecordField();
+        return new VideoRecordField(this.datasetService);
       default:
         return new FreeTextField();
     }

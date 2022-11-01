@@ -51,7 +51,11 @@ export class TagFieldComponent implements OnInit {
   @Input() field: TagField;
 
   ngOnInit(): void {
-    this.schema = this.field.getDataSchema();
+    this.loadSchema();
+  }
+
+  async loadSchema() {
+    this.schema = await this.field.getDataSchema();
     this.uischema = this.field.getUISchema();
   }
 
