@@ -32,6 +32,8 @@ import { TagService } from '../../core/services/tag.service';
 export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   /** The ID of the dataset that the video is being reocrded for */
   datasetID: string;
+  /** The fieldname of the video */
+  tagFieldName: string;
 
   constructor(
     jsonFormsService: JsonFormsAngularService,
@@ -61,10 +63,12 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     // Get the dataset ID from the schema
     if (this.uischema.options != undefined && this.uischema.options.dataset != undefined) {
       this.datasetID = this.uischema.options.dataset;
-      console.log(this.datasetID);
     } else {
       console.error('No dataset ID provided for video field');
     }
+
+    // Get the fieldname from the uischema
+    this.tagFieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
   }
 }
 
