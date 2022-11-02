@@ -30,6 +30,9 @@ import { TagService } from '../../core/services/tag.service';
   `,
 })
 export class VideoFieldComponent extends JsonFormsControl implements OnInit {
+  /** The ID of the dataset that the video is being reocrded for */
+  datasetID: string;
+
   constructor(
     jsonFormsService: JsonFormsAngularService,
     private videoUpload: VideoTagUploadService,
@@ -41,6 +44,7 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   async saveVideo(videoBlob: Blob): Promise<void> {
     // Get the fieldname from the uischema
     const fieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
+    VideoTagUploadService
 
     // Upload the video to the backend
     const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, fieldName);
@@ -53,6 +57,14 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    // Get the dataset ID from the schema
+    if (this.uischema.options != undefined && this.uischema.options.dataset != undefined) {
+      this.datasetID = this.uischema.options.dataset;
+      console.log(this.datasetID);
+    } else {
+      console.error('No dataset ID provided for video field');
+    }
   }
 }
 
