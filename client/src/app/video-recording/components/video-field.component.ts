@@ -6,7 +6,7 @@ import {
   rankWith,
   Actions,
 } from '@jsonforms/core';
-import { VideoTagUploadService } from '../services/video-tag-upload.service';
+import { VideoTagUploadService } from '../../core/services/video-tag-upload.service';
 import { TagService } from '../../core/services/tag.service';
 
 /**
