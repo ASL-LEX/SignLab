@@ -453,13 +453,17 @@ export class VideoRecordField extends TagField {
    */
   async getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
     const datasets = await this.datasetService.getDatasets();
-    const names = datasets.map(dataset => {
-      return dataset.name;
+    const options = datasets.map((dataset) => {
+      return {
+        const: dataset._id,
+        title: dataset.name,
+      }
     });
+    console.log(options);
     return {
       dataset: {
         type: 'string',
-        enum: names,
+        oneOf: options,
         description: 'The dataset to save the videos into'
       },
     };
@@ -479,12 +483,14 @@ export class VideoRecordField extends TagField {
   }
 
   asUIProperty(): any[] {
+    console.log(this.data.dataset);
     return [
       {
         type: 'Control',
         scope: `#/properties/${this.getFieldName()}`,
         options: {
           customType: 'video',
+          dataset: this.data.dataset,
           showUnfocusedDescription: true,
         },
       },

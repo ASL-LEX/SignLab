@@ -27,6 +27,7 @@ import {
 } from '../../../../shared/components/custom-fields/user-video-option-field.component';
 import { VideoFieldComponent, videoFieldTester } from '../../../../video-recording/components/video-field.component';
 import { TagFieldGeneratorService } from '../../../services/tag-field-generator.service';
+import { OneOfField, oneOfFieldTester } from '../../../../shared/components/custom-fields/one-of.component';
 
 @Component({
   selector: 'new-study',
@@ -74,6 +75,7 @@ export class NewStudyComponent implements AfterViewInit {
     { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
     { tester: userVideoOptionRendererTester, renderer: UserVideoOption },
     { tester: videoFieldTester, renderer: VideoFieldComponent },
+    { tester: oneOfFieldTester, renderer: OneOfField },
   ];
   /** Possible tag options */
   tagFieldOptions = [
