@@ -67,6 +67,7 @@ import { startWith } from 'rxjs/operators';
         [id]="id"
         [formControl]="form"
         [matAutocomplete]="auto"
+        [ngModel]="valueTitle"
         (keydown)="updateFilter($event)"
       />
       <mat-autocomplete
@@ -90,6 +91,10 @@ import { startWith } from 'rxjs/operators';
 export class OneOfField extends JsonFormsControl {
   filteredOptions: Observable<{ title: string, const: any}[]>;
   shouldFilter: boolean;
+  /** The different options which are supported by the "oneOf" field */
+  options: { title: string, const: any }[] = [];
+  /** The title of the value to display */
+  valueTitle: string;
 
   constructor(jsonformsService: JsonFormsAngularService) {
     super(jsonformsService);
@@ -99,6 +104,24 @@ export class OneOfField extends JsonFormsControl {
   ngOnInit() {
     super.ngOnInit();
     this.shouldFilter = false;
+
+    // Get the options from the JSON Forms schema
+    if (this.scopedSchema.oneOf === undefined) {
+      this.options = [];
+    } else {
+      // Get the options from the schema only requiring the needed fields
+      const formOptions = this.scopedSchema.oneOf as { title?: string, const?: any }[];
+
+      // Filter out any option that does not have a title and const value.
+      // After the filtering the required fields are known to exist
+      this.options = formOptions.filter(option => {
+        if (option.title === undefined || option.const === undefined) {
+          return false;
+        }
+        return true;
+      }) as { title: string, const: any }[];
+    }
+
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
       map(val => this.filter(val))
@@ -115,28 +138,22 @@ export class OneOfField extends JsonFormsControl {
   }
 
   onSelect(ev: MatAutocompleteSelectedEvent) {
+    // Update the value with JSON Forms
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
     this.jsonFormsService.updateCore(Actions.update(path, () => ev.option.value));
     this.triggerValidation();
+
+    // Have the input display the title value not the const value
+    this.valueTitle = this.options.filter(option => option.const === ev.option.value)[0].title;
   }
 
   filter(val: string): { title: string, const: any }[] {
-    const options = this.scopedSchema.oneOf as { title?: string, const?: any }[];
-    if (options === undefined) {
-      return [];
-    }
-
-    const filtered = options.filter(option => {
-      if (option.title === undefined || option.const === undefined) {
-        return false;
-      }
+    // Filter based on `title`
+    return this.options.filter(option => {
       return option.title.toLowerCase().indexOf(val.toLowerCase()) === 0;
     });
 
-    // At this point because of the filtering, both the title and const
-    // value will be present
-    return filtered as { title: string, const: any }[];
   }
 }
 
