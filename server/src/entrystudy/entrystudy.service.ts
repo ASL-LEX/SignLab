@@ -47,14 +47,15 @@ export class EntryStudyService {
    *
    * @param entries The entries to make corresponding ResposeStudies for
    * @param study The study each EntryStudy will be associated with
+   * @param isPartOfStudy If the entry is part of the study
    */
-  async createEntryStudies(entries: Entry[], study: Study): Promise<void> {
+  async createEntryStudies(entries: Entry[], study: Study, isPartOfStudy: boolean): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
         await this.entryStudyModel.create({
           entry: entry,
           study: study,
-          isPartOfStudy: true,
+          isPartOfStudy: isPartOfStudy,
           isUsedForTraining: false,
           hasTag: false,
         });
@@ -66,12 +67,6 @@ export class EntryStudyService {
    * Get all entry studies for a given study.
    */
   async getEntryStudies(study: Study, dataset: Dataset): Promise<EntryStudy[]> {
-    /*  return this.entryStudyModel
-      .find({ study: study._id, entrydataset: dataset._id })
-      .populate('study')
-      .populate('entry')
-      .exec();
-      */
     const result = await this.entryStudyModel
       .aggregate([
         {

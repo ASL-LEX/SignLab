@@ -45,11 +45,9 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
 
   async saveVideo(videoBlob: Blob): Promise<void> {
     // Get the fieldname from the uischema
-    const fieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
-    VideoTagUploadService
 
     // Upload the video to the backend
-    const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, fieldName);
+    const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, this.tagFieldName, this.datasetID);
 
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);

@@ -23,6 +23,8 @@ import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { BucketStorage } from '../bucket/bucket.service';
+import { DatasetService } from '../dataset/dataset.service';
+import { EntryService } from '../entry/entry.service';
 
 @Controller('/api/tag')
 export class TagController {
@@ -32,6 +34,8 @@ export class TagController {
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
     private bucketService: BucketStorage,
+    private datasetService: DatasetService,
+    private entryService: EntryService,
   ) {}
 
   /**
@@ -169,7 +173,7 @@ export class TagController {
    */
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tagStr: string, @Body('field') field: string): Promise<{ uri: string }> {
+  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tagStr: string, @Body('field') field: string, @Body('datasetID') datasetID: string): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
     // Ensure the tag exists
@@ -189,10 +193,59 @@ export class TagController {
       );
     }
 
+    // Ensure that the dataset that is the target exists
+    const dataset = await this.datasetService.findOne({ _id: datasetID });
+    if (dataset === null) {
+      throw new HttpException(
+        `Dataset with ID ${datasetID} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     // Save the file
     const fileExtension = file.originalname.split('.').pop();
     const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
+
+    // Make a new entry for the saved video if the entry does not already
+    // exist
+    const existingEntry = await this.entryService.find({
+      dataset: datasetID,
+      signLabRecording: {
+        tag: existingTag._id,
+      }
+    });
+    if (existingEntry === null) {
+      console.log(`${datasetID} ${existingTag._id}`);
+      // TODO: Remove concept of the `entryID`
+      const entry = await this.entryService.createEntry({
+        entryID: 'TODO: Remove entryID',
+        videoURL: video.uri,
+        recordedInSignLab: true,
+        dataset: dataset,
+        creator: existingTag.user,
+        dateCreated: new Date(),
+        signLabRecording: {
+          tag: existingTag,
+          fieldName: field,
+        },
+        // TODO: Make it so validation does not run on metadata for entries
+        //       recorded in SignLab
+        meta: {
+          prompt: 'placeholder',
+          responderID: existingTag.user._id
+        }
+      });
+
+      const studies = await this.studyService.getStudies();
+      const entries = [entry];
+      Promise.all(studies.map(async (study) => {
+        return this.entryStudyService.createEntryStudies(entries, study, false)
+      }));
+    }
+
+
+    // Make the cooresponding entry studies
     return { uri: video.uri };
   }
 }

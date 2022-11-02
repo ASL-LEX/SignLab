@@ -128,7 +128,7 @@ export class StudyController {
 
     // Now add a EntryStudy for each entry
     const entries = await this.entryService.getAllEntries();
-    await this.entryStudyService.createEntryStudies(entries, newStudy);
+    await this.entryStudyService.createEntryStudies(entries, newStudy, true);
 
     // Mark training and disabled entries
     await Promise.all([

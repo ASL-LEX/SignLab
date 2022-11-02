@@ -29,7 +29,7 @@ export class LocalStorage extends BucketStorage {
   }
 
   objectDownload(path: string, target: string): Promise<void> {
-    return copyFile(join(this.folder, target), path);
+    return copyFile(join('Entries', this.folder, target), path);
   }
 
   objectExists(target: string): Promise<boolean> {
