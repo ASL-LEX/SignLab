@@ -459,7 +459,6 @@ export class VideoRecordField extends TagField {
         title: dataset.name,
       }
     });
-    console.log(options);
     return {
       dataset: {
         type: 'string',
@@ -483,7 +482,6 @@ export class VideoRecordField extends TagField {
   }
 
   asUIProperty(): any[] {
-    console.log(this.data.dataset);
     return [
       {
         type: 'Control',
