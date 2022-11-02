@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Entry } from '../entry/entry.schema';
+import type { Entry } from '../entry/entry.schema';
 import { Study } from '../study/study.schema';
 import { User } from '../user/user.schema';
 import * as dto from 'shared/dtos/tag.dto';
@@ -15,8 +15,11 @@ export class Tag implements dto.Tag {
    *
    * NOTE: This is the `_id` of the Entry instead of the user defined
    *       `entryID`
+   *
+   * NOTE: The `ref` property has to be hardcoded to handle the circular
+   *       dependency between `Entry`, `Tag`, and `SignLabEntryRecording`
    */
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Entry.name })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Entry' })
   entry: Entry;
 
   /**

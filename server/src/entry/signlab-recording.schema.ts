@@ -1,4 +1,4 @@
-import { Schema, Prop } from '@nestjs/mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Tag } from '../tag/tag.schema';
 import mongoose from 'mongoose';
 
@@ -17,3 +17,5 @@ export class SignLabEntryRecording {
   @Prop({ required: true })
   fieldName: string;
 }
+
+export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(SignLabEntryRecording);
