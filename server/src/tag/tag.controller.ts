@@ -211,9 +211,7 @@ export class TagController {
     // exist
     const existingEntry = await this.entryService.find({
       dataset: datasetID,
-      signLabRecording: {
-        tag: existingTag._id,
-      }
+      'signLabRecording.tag': existingTag._id,
     });
     if (existingEntry === null) {
       console.log(`${datasetID} ${existingTag._id}`);
