@@ -214,7 +214,6 @@ export class TagController {
       'signLabRecording.tag': existingTag._id,
     });
     if (existingEntry === null) {
-      console.log(`${datasetID} ${existingTag._id}`);
       // TODO: Remove concept of the `entryID`
       const entry = await this.entryService.createEntry({
         entryID: 'TODO: Remove entryID',

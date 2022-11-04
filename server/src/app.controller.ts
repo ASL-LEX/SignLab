@@ -27,7 +27,7 @@ export class AppController {
   ) {
     try {
       const file = createReadStream(
-        join(process.cwd(), `bucket/Entries/${filename}`),
+        join(process.cwd(), `bucket/${filename}`),
       );
 
       res.set({

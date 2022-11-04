@@ -110,6 +110,7 @@ export class TaggingForm implements OnChanges {
   /** Handles in coming errors */
   formErrorHandler(errors: any[]) {
     this.formValid = errors.length == 0;
+    console.log(this.formValid);
   }
 
   /** Handles when the tag changes */
