@@ -44,7 +44,10 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   }
 
   async saveVideo(videoBlob: Blob): Promise<void> {
-    // Get the fieldname from the uischema
+    if (!this.tagService.hasCurrentTag()) {
+      console.info('No tag selected, not saving video');
+      return;
+    }
 
     // Upload the video to the backend
     const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, this.tagFieldName, this.datasetID);

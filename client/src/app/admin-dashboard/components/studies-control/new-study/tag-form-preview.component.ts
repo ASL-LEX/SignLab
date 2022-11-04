@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JsonSchema } from '@jsonforms/core';
+import { TagService } from '../../../../core/services/tag.service';
 
 type TagPreviewInformation = {
   previewDataSchema: JsonSchema;
@@ -36,6 +37,9 @@ type TagPreviewInformation = {
 export class TagFormPreviewDialog {
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: TagPreviewInformation
-  ) {}
+    public data: TagPreviewInformation,
+    tagService: TagService
+  ) {
+    tagService.clearCurrentTag();
+  }
 }
