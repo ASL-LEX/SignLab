@@ -192,7 +192,11 @@ export class EntryController {
       const studies = await this.studyService.getStudies();
       await Promise.all(
         studies.map(async (study) => {
-          this.entryStudyService.createEntryStudies(result.entries, study, true);
+          this.entryStudyService.createEntryStudies(
+            result.entries,
+            study,
+            true,
+          );
         }),
       );
     }

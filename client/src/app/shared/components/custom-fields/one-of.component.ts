@@ -82,17 +82,19 @@ import { startWith } from 'rxjs/operators';
           {{ option.title }}
         </mat-option>
       </mat-autocomplete>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{
+        description
+      }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OneOfField extends JsonFormsControl {
-  filteredOptions: Observable<{ title: string, const: any}[]>;
+  filteredOptions: Observable<{ title: string; const: any }[]>;
   shouldFilter: boolean;
   /** The different options which are supported by the "oneOf" field */
-  options: { title: string, const: any }[] = [];
+  options: { title: string; const: any }[] = [];
   /** The title of the value to display */
   valueTitle: string;
 
@@ -110,21 +112,24 @@ export class OneOfField extends JsonFormsControl {
       this.options = [];
     } else {
       // Get the options from the schema only requiring the needed fields
-      const formOptions = this.scopedSchema.oneOf as { title?: string, const?: any }[];
+      const formOptions = this.scopedSchema.oneOf as {
+        title?: string;
+        const?: any;
+      }[];
 
       // Filter out any option that does not have a title and const value.
       // After the filtering the required fields are known to exist
-      this.options = formOptions.filter(option => {
+      this.options = formOptions.filter((option) => {
         if (option.title === undefined || option.const === undefined) {
           return false;
         }
         return true;
-      }) as { title: string, const: any }[];
+      }) as { title: string; const: any }[];
     }
 
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
-      map(val => this.filter(val))
+      map((val) => this.filter(val))
     );
   }
 
@@ -141,19 +146,22 @@ export class OneOfField extends JsonFormsControl {
     // Update the value with JSON Forms
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(Actions.update(path, () => ev.option.value));
+    this.jsonFormsService.updateCore(
+      Actions.update(path, () => ev.option.value)
+    );
     this.triggerValidation();
 
     // Have the input display the title value not the const value
-    this.valueTitle = this.options.filter(option => option.const === ev.option.value)[0].title;
+    this.valueTitle = this.options.filter(
+      (option) => option.const === ev.option.value
+    )[0].title;
   }
 
-  filter(val: string): { title: string, const: any }[] {
+  filter(val: string): { title: string; const: any }[] {
     // Filter based on `title`
-    return this.options.filter(option => {
+    return this.options.filter((option) => {
       return option.title.toLowerCase().indexOf(val.toLowerCase()) === 0;
     });
-
   }
 }
 

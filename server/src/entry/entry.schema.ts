@@ -4,7 +4,10 @@ import { app } from '../main';
 import { SchemaService } from './schema.service';
 import * as dto from 'shared/dtos/entry.dto';
 import { Dataset } from '../dataset/dataset.schema';
-import { SignLabEntryRecording, SignLabEntryRecordingSchema } from './signlab-recording.schema';
+import {
+  SignLabEntryRecording,
+  SignLabEntryRecordingSchema,
+} from './signlab-recording.schema';
 import { User } from '../user/user.schema';
 
 /**
@@ -15,7 +18,6 @@ import { User } from '../user/user.schema';
  */
 @Schema()
 export class Entry implements dto.Entry {
-
   /** MongoDB assigned ID */
   _id?: string;
 

@@ -49,7 +49,11 @@ export class EntryStudyService {
    * @param study The study each EntryStudy will be associated with
    * @param isPartOfStudy If the entry is part of the study
    */
-  async createEntryStudies(entries: Entry[], study: Study, isPartOfStudy: boolean): Promise<void> {
+  async createEntryStudies(
+    entries: Entry[],
+    study: Study,
+    isPartOfStudy: boolean,
+  ): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
         await this.entryStudyModel.create({

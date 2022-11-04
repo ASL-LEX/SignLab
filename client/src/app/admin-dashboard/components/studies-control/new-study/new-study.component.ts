@@ -25,9 +25,15 @@ import {
   userVideoOptionRendererTester,
   UserVideoOption,
 } from '../../../../shared/components/custom-fields/user-video-option-field.component';
-import { VideoFieldComponent, videoFieldTester } from '../../../../video-recording/components/video-field.component';
+import {
+  VideoFieldComponent,
+  videoFieldTester,
+} from '../../../../video-recording/components/video-field.component';
 import { TagFieldGeneratorService } from '../../../services/tag-field-generator.service';
-import { OneOfField, oneOfFieldTester } from '../../../../shared/components/custom-fields/one-of.component';
+import {
+  OneOfField,
+  oneOfFieldTester,
+} from '../../../../shared/components/custom-fields/one-of.component';
 
 @Component({
   selector: 'new-study',
@@ -100,7 +106,7 @@ export class NewStudyComponent implements AfterViewInit {
     private studyService: StudyService,
     private dialog: MatDialog,
     private router: Router,
-    private tagFieldService: TagFieldGeneratorService,
+    private tagFieldService: TagFieldGeneratorService
   ) {}
 
   ngAfterViewInit(): void {

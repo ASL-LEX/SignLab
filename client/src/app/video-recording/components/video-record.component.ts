@@ -14,13 +14,13 @@ import {
 @Component({
   selector: 'video-record',
   templateUrl: './video-record.component.html',
-  styleUrls: ['./video-record.component.css']
+  styleUrls: ['./video-record.component.css'],
 })
 export class VideoRecordComponent implements OnDestroy {
   /** The view element for the video element */
   @ViewChild('recordVideo') recordVideo: ElementRef;
   /** Keeps track of if the user is actively recording a video. */
-  isRecording: boolean = false;
+  isRecording = false;
   /** The video stream from the user's webcam. */
   mediaRecorder: MediaRecorder;
   /** The blobs of the video. */
@@ -28,7 +28,7 @@ export class VideoRecordComponent implements OnDestroy {
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
 
-  toggleRecording() : void {
+  toggleRecording(): void {
     if (this.isRecording) {
       this.stopRecording();
     } else {
@@ -48,9 +48,9 @@ export class VideoRecordComponent implements OnDestroy {
 
     let options: MediaRecorderOptions = { mimeType: 'video/webm' };
     if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-      options = {mimeType: 'video/webm; codecs=vp9'};
+      options = { mimeType: 'video/webm; codecs=vp9' };
     } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
-      options = {mimeType: 'video/webm; codecs=vp8'};
+      options = { mimeType: 'video/webm; codecs=vp8' };
     } else {
       console.error('Cannot instantiate mediaRecorder');
       return;
@@ -62,8 +62,12 @@ export class VideoRecordComponent implements OnDestroy {
     this.recordVideo.nativeElement.play();
 
     // Set up event listeners
-    this.mediaRecorder.ondataavailable = (event) => { this.onBlobAvailable(event); };
-    this.mediaRecorder.onstop = (_event) => { this.onMediaStop() };
+    this.mediaRecorder.ondataavailable = (event) => {
+      this.onBlobAvailable(event);
+    };
+    this.mediaRecorder.onstop = (_event) => {
+      this.onMediaStop();
+    };
   }
 
   stopRecording(): void {
@@ -92,7 +96,7 @@ export class VideoRecordComponent implements OnDestroy {
    * user the recorded video.
    */
   private onMediaStop(): void {
-    const videoBuffer = new Blob(this.blobs, {type: 'video/webm'});
+    const videoBuffer = new Blob(this.blobs, { type: 'video/webm' });
     const videoUrl = URL.createObjectURL(videoBuffer);
     this.recordVideo.nativeElement.srcObject = null;
     this.recordVideo.nativeElement.src = videoUrl;

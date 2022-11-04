@@ -173,7 +173,12 @@ export class TagController {
    */
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadVideoField(@UploadedFile() file: Express.Multer.File, @Body('tag') tagStr: string, @Body('field') field: string, @Body('datasetID') datasetID: string): Promise<{ uri: string }> {
+  async uploadVideoField(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('tag') tagStr: string,
+    @Body('field') field: string,
+    @Body('datasetID') datasetID: string,
+  ): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
     // Ensure the tag exists
@@ -207,7 +212,6 @@ export class TagController {
     const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
 
-
     // Only make entries of non-tagging videos
     if (!existingTag.isTraining) {
       // Make a new entry for the saved video if the entry does not already
@@ -233,18 +237,23 @@ export class TagController {
           //       recorded in SignLab
           meta: {
             prompt: 'placeholder',
-            responderID: existingTag.user._id
-          }
+            responderID: existingTag.user._id,
+          },
         });
 
         const studies = await this.studyService.getStudies();
         const entries = [entry];
-        Promise.all(studies.map(async (study) => {
-          return this.entryStudyService.createEntryStudies(entries, study, false)
-        }));
+        Promise.all(
+          studies.map(async (study) => {
+            return this.entryStudyService.createEntryStudies(
+              entries,
+              study,
+              false,
+            );
+          }),
+        );
       }
     }
-
 
     // Make the cooresponding entry studies
     return { uri: video.uri };

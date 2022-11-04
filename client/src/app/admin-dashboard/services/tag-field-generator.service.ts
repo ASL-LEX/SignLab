@@ -8,7 +8,7 @@ import {
   EmbeddedVideoOption,
   FreeTextField,
   NumericField,
-  VideoRecordField
+  VideoRecordField,
 } from '../../models/tag-field';
 import { DatasetService } from '../../core/services/dataset.service';
 
@@ -24,7 +24,7 @@ export class TagFieldGeneratorService {
    * field type.
    */
   async getTagField(tagFieldType: TagFieldType): Promise<TagField> {
-      switch (tagFieldType) {
+    switch (tagFieldType) {
       case TagFieldType.AslLex:
         return new AslLexField();
       case TagFieldType.Autocomplete:

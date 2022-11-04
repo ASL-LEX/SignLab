@@ -5,18 +5,9 @@ import { VideoRecordComponent } from './components/video-record.component';
 import { CoreModule } from '../core/core.module';
 
 @NgModule({
-  declarations: [
-    VideoRecordComponent,
-    VideoFieldComponent
-  ],
-  imports: [
-    SharedModule,
-    CoreModule
-  ],
-  exports: [
-    VideoRecordComponent,
-    VideoFieldComponent,
-  ],
-  providers: []
+  declarations: [VideoRecordComponent, VideoFieldComponent],
+  imports: [SharedModule, CoreModule],
+  exports: [VideoRecordComponent, VideoFieldComponent],
+  providers: [],
 })
 export class VideoRecordingModule {}

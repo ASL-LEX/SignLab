@@ -10,7 +10,10 @@ import {
   VideoOptionUpload,
   videoOptionUploadRendererTester,
 } from '../../../../shared/components/custom-fields/video-option-upload.component';
-import { OneOfField, oneOfFieldTester } from '../../../../shared/components/custom-fields/one-of.component';
+import {
+  OneOfField,
+  oneOfFieldTester,
+} from '../../../../shared/components/custom-fields/one-of.component';
 
 @Component({
   selector: 'tag-field',

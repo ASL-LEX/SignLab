@@ -18,4 +18,6 @@ export class SignLabEntryRecording {
   fieldName: string;
 }
 
-export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(SignLabEntryRecording);
+export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(
+  SignLabEntryRecording,
+);

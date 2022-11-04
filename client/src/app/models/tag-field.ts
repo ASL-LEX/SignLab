@@ -134,7 +134,9 @@ export abstract class TagField {
    * a field. Sub-classes can override this method with there own required
    * field.
    */
-  protected getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
     return Promise.resolve({});
   }
 
@@ -212,7 +214,9 @@ export class AslLexField extends TagField {
   }
 
   /** Option for custom labels */
-  protected getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
     return Promise.resolve({
       allowCustomLabels: {
         type: 'boolean',
@@ -258,7 +262,9 @@ export class AutocompleteField extends TagField {
    * The autocomplete field needs a list of options as a data field which
    * will later become the enum values in the tag field.
    */
-  protected getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
     return Promise.resolve({
       userOptions: {
         type: 'array',
@@ -321,7 +327,9 @@ export class EmbeddedVideoOption extends TagField {
    * Provides options to allow users to select a custom intpu and the format
    * of the video options
    */
-  protected getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
     return Promise.resolve({
       allowCustomLabels: {
         type: 'boolean',
@@ -451,19 +459,21 @@ export class VideoRecordField extends TagField {
    * The video record field requires a dataset to record to. This will provide
    * the user creating the form with a list of datasets to choose from.
    */
-  async getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+  async getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
     const datasets = await this.datasetService.getDatasets();
     const options = datasets.map((dataset) => {
       return {
         const: dataset._id,
         title: dataset.name,
-      }
+      };
     });
     return {
       dataset: {
         type: 'string',
         oneOf: options,
-        description: 'The dataset to save the videos into'
+        description: 'The dataset to save the videos into',
       },
     };
   }

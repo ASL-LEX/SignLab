@@ -17,7 +17,10 @@ import {
   UserVideoOption,
   userVideoOptionRendererTester,
 } from '../../shared/components/custom-fields/user-video-option-field.component';
-import { VideoFieldComponent, videoFieldTester } from '../../video-recording/components/video-field.component';
+import {
+  VideoFieldComponent,
+  videoFieldTester,
+} from '../../video-recording/components/video-field.component';
 
 @Component({
   selector: 'tagging-form',

@@ -18,9 +18,7 @@ import { TagService } from '../../core/services/tag.service';
   template: `
     <mat-expansion-panel>
       <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ label }} - Video Recording
-        </mat-panel-title>
+        <mat-panel-title> {{ label }} - Video Recording </mat-panel-title>
         <mat-panel-description>
           {{ description }}
         </mat-panel-description>
@@ -50,7 +48,12 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     }
 
     // Upload the video to the backend
-    const uri = await this.videoUpload.uploadVideo(this.tagService.current, videoBlob, this.tagFieldName, this.datasetID);
+    const uri = await this.videoUpload.uploadVideo(
+      this.tagService.current,
+      videoBlob,
+      this.tagFieldName,
+      this.datasetID
+    );
 
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
@@ -62,14 +65,19 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     super.ngOnInit();
 
     // Get the dataset ID from the schema
-    if (this.uischema.options != undefined && this.uischema.options.dataset != undefined) {
+    if (
+      this.uischema.options != undefined &&
+      this.uischema.options.dataset != undefined
+    ) {
       this.datasetID = this.uischema.options.dataset;
     } else {
       console.error('No dataset ID provided for video field');
     }
 
     // Get the fieldname from the uischema
-    this.tagFieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
+    this.tagFieldName = this.uischema.scope.slice(
+      this.uischema.scope.lastIndexOf('/') + 1
+    );
   }
 }
 
@@ -77,8 +85,7 @@ export const videoFieldTester: RankedTester = rankWith(
   10,
   (uischema, _schema, _rootSchema) => {
     return (
-      uischema.options != undefined &&
-      uischema.options.customType === 'video'
+      uischema.options != undefined && uischema.options.customType === 'video'
     );
   }
 );
