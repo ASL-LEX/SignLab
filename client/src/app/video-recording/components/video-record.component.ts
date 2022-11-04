@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  OnInit,
   ViewChild,
   EventEmitter,
   Output,
@@ -16,7 +15,7 @@ import {
   templateUrl: './video-record.component.html',
   styleUrls: ['./video-record.component.css']
 })
-export class VideoRecordComponent implements OnInit{
+export class VideoRecordComponent {
   /** The view element for the video element */
   @ViewChild('recordVideo') recordVideo: ElementRef;
   /** Keeps track of if the user is actively recording a video. */
@@ -27,19 +26,6 @@ export class VideoRecordComponent implements OnInit{
   blobs: Blob[] = [];
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
-
-  ngOnInit(): void {
-    // Make a stream for the video, don't store any data
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: false
-    }).then(stream => {
-      const mediaRecorder = new MediaRecorder(stream);
-      this.recordVideo.nativeElement.srcObject = stream;
-      mediaRecorder.start();
-      this.recordVideo.nativeElement.play();
-    });
-  }
 
   toggleRecording() : void {
     if (this.isRecording) {
@@ -55,13 +41,22 @@ export class VideoRecordComponent implements OnInit{
     this.recordVideo.nativeElement.currentTime = 0;
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: true,
     });
     this.recordVideo.nativeElement.srcObject = stream;
     this.blobs = [];
 
+    let options: MediaRecorderOptions = { mimeType: 'video/webm' };
+    if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+      options = {mimeType: 'video/webm; codecs=vp9'};
+    } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+      options = {mimeType: 'video/webm; codecs=vp8'};
+    } else {
+      console.error('Cannot instantiate mediaRecorder');
+      return;
+    }
+
     // Start the recording
-    this.mediaRecorder = new MediaRecorder(stream);
+    this.mediaRecorder = new MediaRecorder(stream, options);
     this.mediaRecorder.start();
     this.recordVideo.nativeElement.play();
 
