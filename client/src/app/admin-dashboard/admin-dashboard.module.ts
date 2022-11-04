@@ -21,6 +21,9 @@ import { DatasetTableModule } from '../dataset-table/dataset-table.module';
 import { TagFormPreviewDialog } from './components/studies-control/new-study/tag-form-preview.component';
 import { UserTableModule } from '../user-table/user-table.module';
 
+// Services
+import { TagFieldGeneratorService } from './services/tag-field-generator.service';
+
 @NgModule({
   declarations: [
     AdminDashboardComponent,
@@ -40,6 +43,6 @@ import { UserTableModule } from '../user-table/user-table.module';
     DatasetTableModule,
     UserTableModule,
   ],
-  providers: [],
+  providers: [TagFieldGeneratorService],
 })
 export class AdminDashboardModule {}

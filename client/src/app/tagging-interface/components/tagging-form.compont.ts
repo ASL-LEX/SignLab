@@ -17,6 +17,10 @@ import {
   UserVideoOption,
   userVideoOptionRendererTester,
 } from '../../shared/components/custom-fields/user-video-option-field.component';
+import {
+  VideoFieldComponent,
+  videoFieldTester,
+} from '../../video-recording/components/video-field.component';
 
 @Component({
   selector: 'tagging-form',
@@ -82,6 +86,10 @@ export class TaggingForm implements OnChanges {
     {
       tester: userVideoOptionRendererTester,
       renderer: UserVideoOption,
+    },
+    {
+      tester: videoFieldTester,
+      renderer: VideoFieldComponent,
     },
   ];
   /** Configure how errors are presented */

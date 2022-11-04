@@ -1,4 +1,5 @@
 import { JsonSchema, Layout } from '@jsonforms/core';
+import { DatasetService } from '../core/services/dataset.service';
 
 /**
  * The different kind of tag fields that are supported
@@ -10,6 +11,7 @@ export enum TagFieldType {
   EmbeddedVideoOption,
   FreeText,
   Numeric,
+  VideoRecord,
 }
 
 /**
@@ -58,28 +60,6 @@ export abstract class TagField {
     this.type = type;
   }
 
-  /**
-   * Factory method to get a given tag field
-   */
-  static getTagField(tagFieldType: TagFieldType): TagField {
-    switch (tagFieldType) {
-      case TagFieldType.AslLex:
-        return new AslLexField();
-      case TagFieldType.Autocomplete:
-        return new AutocompleteField();
-      case TagFieldType.BooleanOption:
-        return new BooleanField();
-      case TagFieldType.EmbeddedVideoOption:
-        return new EmbeddedVideoOption();
-      case TagFieldType.FreeText:
-        return new FreeTextField();
-      case TagFieldType.Numeric:
-        return new NumericField();
-      default:
-        return new FreeTextField();
-    }
-  }
-
   getFieldName(): string {
     return this.data.fieldName || '';
   }
@@ -100,7 +80,8 @@ export abstract class TagField {
    * Additional fields may be needed (for example a Numeric field may have
    * information like a minimum and maximum value).
    */
-  getDataSchema(): JsonSchema {
+  async getDataSchema(): Promise<JsonSchema> {
+    const properties = await this.getFieldSpecificProperties();
     return {
       type: 'object',
       properties: {
@@ -110,7 +91,7 @@ export abstract class TagField {
         shortDescription: {
           type: 'string',
         },
-        ...this.getFieldSpecificProperties(),
+        ...properties,
         required: {
           type: 'boolean',
         },
@@ -153,8 +134,10 @@ export abstract class TagField {
    * a field. Sub-classes can override this method with there own required
    * field.
    */
-  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
-    return {};
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
+    return Promise.resolve({});
   }
 
   /**
@@ -225,18 +208,20 @@ export abstract class TagField {
  * as ASL-LEX sign videos and store the cooresponding ASL-LEX sign code as
  * a string.
  */
-class AslLexField extends TagField {
+export class AslLexField extends TagField {
   constructor() {
     super(TagFieldType.AslLex, 'ASL-LEX Sign', 'string');
   }
 
   /** Option for custom labels */
-  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
-    return {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
+    return Promise.resolve({
       allowCustomLabels: {
         type: 'boolean',
       },
-    };
+    });
   }
 
   /** Option for custom labels */
@@ -268,7 +253,7 @@ class AslLexField extends TagField {
   }
 }
 
-class AutocompleteField extends TagField {
+export class AutocompleteField extends TagField {
   constructor() {
     super(TagFieldType.Autocomplete, 'Autocomplete', 'string');
   }
@@ -277,15 +262,17 @@ class AutocompleteField extends TagField {
    * The autocomplete field needs a list of options as a data field which
    * will later become the enum values in the tag field.
    */
-  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
-    return {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
+    return Promise.resolve({
       userOptions: {
         type: 'array',
         items: {
           type: 'string',
         },
       },
-    };
+    });
   }
 
   /**
@@ -325,13 +312,13 @@ class AutocompleteField extends TagField {
   }
 }
 
-class BooleanField extends TagField {
+export class BooleanField extends TagField {
   constructor() {
     super(TagFieldType.BooleanOption, 'Boolean Option', 'boolean');
   }
 }
 
-class EmbeddedVideoOption extends TagField {
+export class EmbeddedVideoOption extends TagField {
   constructor() {
     super(TagFieldType.EmbeddedVideoOption, 'Video Option', 'string');
   }
@@ -340,8 +327,10 @@ class EmbeddedVideoOption extends TagField {
    * Provides options to allow users to select a custom intpu and the format
    * of the video options
    */
-  protected getFieldSpecificProperties(): { [property: string]: JsonSchema } {
-    return {
+  protected getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
+    return Promise.resolve({
       allowCustomLabels: {
         type: 'boolean',
       },
@@ -363,7 +352,7 @@ class EmbeddedVideoOption extends TagField {
           required: ['videoURL', 'code', 'searchTerm'],
         },
       },
-    };
+    });
   }
 
   /** Option for custom labels */
@@ -403,13 +392,13 @@ class EmbeddedVideoOption extends TagField {
   }
 }
 
-class FreeTextField extends TagField {
+export class FreeTextField extends TagField {
   constructor() {
     super(TagFieldType.FreeText, 'Free Text', 'string');
   }
 }
 
-class NumericField extends TagField {
+export class NumericField extends TagField {
   constructor() {
     super(TagFieldType.Numeric, 'Numeric', 'number');
   }
@@ -417,15 +406,15 @@ class NumericField extends TagField {
   /**
    * A Numeric field optionally allows a minimum and maximum value
    */
-  getFieldSpecificProperties(): { [property: string]: JsonSchema } {
-    return {
+  getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+    return Promise.resolve({
       minimum: {
         type: 'number',
       },
       maximum: {
         type: 'number',
       },
-    };
+    });
   }
 
   getFieldSpecificUiSchema(): any[] {
@@ -458,5 +447,61 @@ class NumericField extends TagField {
     return {
       [this.getFieldName()]: schema,
     };
+  }
+}
+
+export class VideoRecordField extends TagField {
+  constructor(private datasetService: DatasetService) {
+    super(TagFieldType.VideoRecord, 'Video Record', 'string');
+  }
+
+  /**
+   * The video record field requires a dataset to record to. This will provide
+   * the user creating the form with a list of datasets to choose from.
+   */
+  async getFieldSpecificProperties(): Promise<{
+    [property: string]: JsonSchema;
+  }> {
+    const datasets = await this.datasetService.getDatasets();
+    const options = datasets.map((dataset) => {
+      return {
+        const: dataset._id,
+        title: dataset.name,
+      };
+    });
+    return {
+      dataset: {
+        type: 'string',
+        oneOf: options,
+        description: 'The dataset to save the videos into',
+      },
+    };
+  }
+
+  protected getFieldSpecificUiSchema(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: '#/properties/dataset',
+      },
+    ];
+  }
+
+  protected getRequiredFieldProperties(): string[] {
+    return ['dataset'];
+  }
+
+  asUIProperty(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: `#/properties/${this.getFieldName()}`,
+        options: {
+          customType: 'video',
+          dataset: this.data.dataset,
+          showUnfocusedDescription: true,
+        },
+      },
+    ];
   }
 }

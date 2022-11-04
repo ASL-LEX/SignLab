@@ -34,6 +34,21 @@ export class TagService {
   }
 
   /**
+   * Check to see if a current tag exists
+   */
+  hasCurrentTag(): boolean {
+    return this.currentTag !== null;
+  }
+
+  /**
+   * Clear out the currently selected tag. Helpful when displaying
+   * previews of a tag form.
+   */
+  clearCurrentTag(): void {
+    this.currentTag = null;
+  }
+
+  /**
    * Get the next untgged entry for the given user and study. The return
    * value is an incompleted tag if there is another entry to tag for this
    * study, otherwise null is returned.

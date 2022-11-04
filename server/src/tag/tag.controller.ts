@@ -7,6 +7,8 @@ import {
   Post,
   Body,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StudyService } from '../study/study.service';
 import { TagService } from '../tag/tag.service';
@@ -19,6 +21,10 @@ import { UserPipe } from '../shared/pipes/user.pipe';
 import { StudyPipe } from '../shared/pipes/study.pipe';
 import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BucketStorage } from '../bucket/bucket.service';
+import { DatasetService } from '../dataset/dataset.service';
+import { EntryService } from '../entry/entry.service';
 
 @Controller('/api/tag')
 export class TagController {
@@ -27,6 +33,9 @@ export class TagController {
     private tagService: TagService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
+    private bucketService: BucketStorage,
+    private datasetService: DatasetService,
+    private entryService: EntryService,
   ) {}
 
   /**
@@ -156,5 +165,97 @@ export class TagController {
     @Query('userID', UserPipe) user: User,
   ): Promise<Tag[]> {
     return this.tagService.getCompleteTrainingTags(user, study);
+  }
+
+  /**
+   * Save a video that is part of a tag. This will store the video in a
+   * bucket
+   */
+  @Post('/video_field')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadVideoField(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('tag') tagStr: string,
+    @Body('field') field: string,
+    @Body('datasetID') datasetID: string,
+  ): Promise<{ uri: string }> {
+    const tagID = JSON.parse(tagStr)._id;
+
+    // Ensure the tag exists
+    const existingTag = await this.tagService.find(tagID);
+    if (!existingTag) {
+      throw new HttpException(
+        `Tag with ID '${tagID}' not found`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Ensure the field exists
+    if (!existingTag.study.tagSchema.dataSchema.properties[field]) {
+      throw new HttpException(
+        `Field '${field}' not found on tag`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Ensure that the dataset that is the target exists
+    const dataset = await this.datasetService.findOne({ _id: datasetID });
+    if (dataset === null) {
+      throw new HttpException(
+        `Dataset with ID ${datasetID} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    // Save the file
+    const fileExtension = file.originalname.split('.').pop();
+    const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
+    const video = await this.bucketService.objectUpload(file.buffer, target);
+
+    // Only make entries of non-tagging videos
+    if (!existingTag.isTraining) {
+      // Make a new entry for the saved video if the entry does not already
+      // exist
+      const existingEntry = await this.entryService.find({
+        dataset: datasetID,
+        'signLabRecording.tag': existingTag._id,
+      });
+      if (existingEntry === null) {
+        // TODO: Remove concept of the `entryID`
+        const entry = await this.entryService.createEntry({
+          entryID: 'TODO: Remove entryID',
+          videoURL: video.uri,
+          recordedInSignLab: true,
+          dataset: dataset,
+          creator: existingTag.user,
+          dateCreated: new Date(),
+          signLabRecording: {
+            tag: existingTag,
+            fieldName: field,
+          },
+          // TODO: Make it so validation does not run on metadata for entries
+          //       recorded in SignLab
+          meta: {
+            prompt: 'placeholder',
+            responderID: existingTag.user._id,
+          },
+        });
+
+        const studies = await this.studyService.getStudies();
+        const entries = [entry];
+        Promise.all(
+          studies.map(async (study) => {
+            return this.entryStudyService.createEntryStudies(
+              entries,
+              study,
+              false,
+            );
+          }),
+        );
+      }
+    }
+
+    // Make the cooresponding entry studies
+    return { uri: video.uri };
   }
 }

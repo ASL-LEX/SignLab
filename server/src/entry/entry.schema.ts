@@ -4,7 +4,10 @@ import { app } from '../main';
 import { SchemaService } from './schema.service';
 import * as dto from 'shared/dtos/entry.dto';
 import { Dataset } from '../dataset/dataset.schema';
-import type { SignLabEntryRecording } from './signlab-recording.schema';
+import {
+  SignLabEntryRecording,
+  SignLabEntryRecordingSchema,
+} from './signlab-recording.schema';
 import { User } from '../user/user.schema';
 
 /**
@@ -47,7 +50,7 @@ export class Entry implements dto.Entry {
    * If the data is recorded in SignLab. This field will be present which
    * represents the tag the video was recorded for.
    */
-  @Prop({ required: false })
+  @Prop({ required: false, type: SignLabEntryRecordingSchema })
   signLabRecording?: SignLabEntryRecording;
 
   /**

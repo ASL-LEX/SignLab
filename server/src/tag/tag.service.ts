@@ -11,6 +11,13 @@ export class TagService {
   constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>) {}
 
   /**
+   * Get the tag with the given id
+   */
+  async find(id: string): Promise<Tag | null> {
+    return this.tagModel.findById(id).populate('study').populate('user').exec();
+  }
+
+  /**
    * Make a new tag for the given user, study, and entry. When the tag is
    * created, it is considered incomplete
    *

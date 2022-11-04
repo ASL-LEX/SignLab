@@ -26,9 +26,7 @@ export class AppController {
     @Param('filename') filename: string,
   ) {
     try {
-      const file = createReadStream(
-        join(process.cwd(), `bucket/Entries/${filename}`),
-      );
+      const file = createReadStream(join(process.cwd(), `bucket/${filename}`));
 
       res.set({
         'Content-Type': 'video/webm',

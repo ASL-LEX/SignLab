@@ -15,11 +15,18 @@ export abstract class BucketStorage {
   /**
    * Upload a file to the bucket.
    *
-   * @param path Path to the locally stored file to upload
+   * If the file is provided as a string, it will be treated as a path
+   * to a file t to read. If the file is a buffer, it will be assumed to be
+   * the contents of the file to upload.
+   *
+   * @param file Path to the locally stored file to upload or the contents of the file
    * @param target The target location to store the file in the bucket
    * @return The generated bucket file
    */
-  abstract objectUpload(path: string, target: string): Promise<BucketFile>;
+  abstract objectUpload(
+    file: string | Buffer,
+    target: string,
+  ): Promise<BucketFile>;
 
   /**
    * Download a file from the bucket to local storage

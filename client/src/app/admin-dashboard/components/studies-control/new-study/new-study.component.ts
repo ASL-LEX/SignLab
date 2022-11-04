@@ -25,6 +25,15 @@ import {
   userVideoOptionRendererTester,
   UserVideoOption,
 } from '../../../../shared/components/custom-fields/user-video-option-field.component';
+import {
+  VideoFieldComponent,
+  videoFieldTester,
+} from '../../../../video-recording/components/video-field.component';
+import { TagFieldGeneratorService } from '../../../services/tag-field-generator.service';
+import {
+  OneOfField,
+  oneOfFieldTester,
+} from '../../../../shared/components/custom-fields/one-of.component';
 
 @Component({
   selector: 'new-study',
@@ -71,6 +80,8 @@ export class NewStudyComponent implements AfterViewInit {
     { tester: fileListControlRendererTester, renderer: FileListField },
     { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
     { tester: userVideoOptionRendererTester, renderer: UserVideoOption },
+    { tester: videoFieldTester, renderer: VideoFieldComponent },
+    { tester: oneOfFieldTester, renderer: OneOfField },
   ];
   /** Possible tag options */
   tagFieldOptions = [
@@ -88,12 +99,14 @@ export class NewStudyComponent implements AfterViewInit {
     },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
+    { type: TagFieldType.VideoRecord, name: 'Record Video', icon: 'videocam' },
   ];
 
   constructor(
     private studyService: StudyService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private tagFieldService: TagFieldGeneratorService
   ) {}
 
   ngAfterViewInit(): void {
@@ -101,8 +114,9 @@ export class NewStudyComponent implements AfterViewInit {
   }
 
   /** Add a field to the tag */
-  addTagField(tagFieldType: TagFieldType) {
-    this.tagFields.push(TagField.getTagField(tagFieldType));
+  async addTagField(tagFieldType: TagFieldType) {
+    const field = await this.tagFieldService.getTagField(tagFieldType);
+    this.tagFields.push(field);
   }
 
   /** Remove a field from the tag */
