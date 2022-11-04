@@ -207,38 +207,42 @@ export class TagController {
     const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
 
-    // Make a new entry for the saved video if the entry does not already
-    // exist
-    const existingEntry = await this.entryService.find({
-      dataset: datasetID,
-      'signLabRecording.tag': existingTag._id,
-    });
-    if (existingEntry === null) {
-      // TODO: Remove concept of the `entryID`
-      const entry = await this.entryService.createEntry({
-        entryID: 'TODO: Remove entryID',
-        videoURL: video.uri,
-        recordedInSignLab: true,
-        dataset: dataset,
-        creator: existingTag.user,
-        dateCreated: new Date(),
-        signLabRecording: {
-          tag: existingTag,
-          fieldName: field,
-        },
-        // TODO: Make it so validation does not run on metadata for entries
-        //       recorded in SignLab
-        meta: {
-          prompt: 'placeholder',
-          responderID: existingTag.user._id
-        }
-      });
 
-      const studies = await this.studyService.getStudies();
-      const entries = [entry];
-      Promise.all(studies.map(async (study) => {
-        return this.entryStudyService.createEntryStudies(entries, study, false)
-      }));
+    // Only make entries of non-tagging videos
+    if (!existingTag.isTraining) {
+      // Make a new entry for the saved video if the entry does not already
+      // exist
+      const existingEntry = await this.entryService.find({
+        dataset: datasetID,
+        'signLabRecording.tag': existingTag._id,
+      });
+      if (existingEntry === null) {
+        // TODO: Remove concept of the `entryID`
+        const entry = await this.entryService.createEntry({
+          entryID: 'TODO: Remove entryID',
+          videoURL: video.uri,
+          recordedInSignLab: true,
+          dataset: dataset,
+          creator: existingTag.user,
+          dateCreated: new Date(),
+          signLabRecording: {
+            tag: existingTag,
+            fieldName: field,
+          },
+          // TODO: Make it so validation does not run on metadata for entries
+          //       recorded in SignLab
+          meta: {
+            prompt: 'placeholder',
+            responderID: existingTag.user._id
+          }
+        });
+
+        const studies = await this.studyService.getStudies();
+        const entries = [entry];
+        Promise.all(studies.map(async (study) => {
+          return this.entryStudyService.createEntryStudies(entries, study, false)
+        }));
+      }
     }
 
 
