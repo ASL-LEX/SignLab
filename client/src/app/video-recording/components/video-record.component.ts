@@ -4,6 +4,7 @@ import {
   ViewChild,
   EventEmitter,
   Output,
+  OnDestroy,
 } from '@angular/core';
 
 /**
@@ -15,7 +16,7 @@ import {
   templateUrl: './video-record.component.html',
   styleUrls: ['./video-record.component.css']
 })
-export class VideoRecordComponent {
+export class VideoRecordComponent implements OnDestroy {
   /** The view element for the video element */
   @ViewChild('recordVideo') recordVideo: ElementRef;
   /** Keeps track of if the user is actively recording a video. */
@@ -68,6 +69,14 @@ export class VideoRecordComponent {
   stopRecording(): void {
     this.mediaRecorder.stop();
     this.recordVideo.nativeElement.pause();
+  }
+
+  ngOnDestroy(): void {
+    // Clear out the video element
+    this.recordVideo.nativeElement.pause();
+    this.recordVideo.nativeElement.src = '';
+    this.recordVideo.nativeElement.load();
+    this.recordVideo.nativeElement.remove();
   }
 
   /**
