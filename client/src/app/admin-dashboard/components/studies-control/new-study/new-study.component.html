@@ -18,7 +18,7 @@
     <button class="stepControl" mat-stroked-button (click)="stepNextOrSubmit()"> {{ selectedStepNumber == maxSteps ? "Submit" : "Next" }} </button>
   </div>
 
-  <mat-stepper linear="true" *ngIf="!studyCreated">
+  <mat-stepper linear="true" *ngIf="!studyCreated" (selectionChange)="stepperStepChange($event)">
     <!-- Required Study Metadata -->
     <mat-step label="Study Identification">
       <study-required-info (requiredDataChange)="requiredDataChange($event)"></study-required-info>
