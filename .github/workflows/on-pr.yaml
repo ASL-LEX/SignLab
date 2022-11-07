@@ -112,3 +112,9 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [lint, client-unit-tests, server-unit-tests, e2e-tests]
+    steps:
+      - name:
