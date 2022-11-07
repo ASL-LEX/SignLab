@@ -34,6 +34,7 @@ import {
   OneOfField,
   oneOfFieldTester,
 } from '../../../../shared/components/custom-fields/one-of.component';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'new-study',
@@ -195,7 +196,6 @@ export class NewStudyComponent implements AfterViewInit {
 
   stepPrevious() {
     this.matStepper.previous();
-    this.selectedStepNumber -= 1;
   }
 
   /**
@@ -205,10 +205,13 @@ export class NewStudyComponent implements AfterViewInit {
   stepNextOrSubmit() {
     if (this.selectedStepNumber < this.maxSteps) {
       this.matStepper.next();
-      this.selectedStepNumber += 1;
     } else {
       this.makeNewStudy();
     }
+  }
+
+  stepperStepChange(event: StepperSelectionEvent) {
+    this.selectedStepNumber = event.selectedIndex + 1;
   }
 
   /** Make the JSON Forms schema */
