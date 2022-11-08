@@ -112,3 +112,15 @@ jobs:
         with:
           name: cypress-videos
           path: cypress/videos
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Verify Build Works
+        uses: docker/build-push-action@v3
+        with:
+          push: false
