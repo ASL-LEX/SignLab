@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mongo:
+    image: mongo
+    ports: ["27017:27017"]
+    volumes:
+      - ./db:/data/db
+  signlab:
+    image: hicsail/signlab:unstable
+    restart: always
+    depends_on:
+      - mongo
+    ports: ["6000:3000"]
+    env_file:
+      - stack.env
+
