@@ -1,5 +1,19 @@
 <div class="entry-grid">
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+  <!-- Table view controls -->
+  <div fxLayout="row" fxLayoutAlign="end none" >
+    <!-- Paginator for selecting the number of elements to show at a time -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+
+    <!-- Menu for controlling the displayed columns -->
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <mat-checkbox *ngFor="let column of possibleColumns" [(ngModel)]="column.visible" (change)="updateColumns()">
+        {{column.name}}
+      </mat-checkbox>
+    </mat-menu>
+  </div>
 
   <!-- Entries table view -->
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
