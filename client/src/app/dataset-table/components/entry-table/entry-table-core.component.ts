@@ -39,7 +39,12 @@ export class EntryTableCoreComponent
    *
    * TODO: Add meta data display
    */
-  displayedColumns: string[] = ['view', 'entryID', 'responderID'];
+  possibleColumns: { name: string; visible: boolean }[] = [
+    { name: 'Video Preview', visible: true },
+    { name: 'Entry ID', visible: true },
+    { name: 'Responder ID', visible: true },
+  ];
+  displayedColumns: string[] = [];
 
   /** Determine if the study enable controls should be provided */
   @Input() displayStudyEnableControls: boolean;
@@ -67,14 +72,15 @@ export class EntryTableCoreComponent
   ngOnInit(): void {
     // Determine which additional controls should be displayed
     if (this.displayStudyTrainingControls) {
-      this.displayedColumns.push('studyTrainingControls');
+      this.possibleColumns.push({ name: 'Training Control', visible: true });
     }
     if (this.displayStudyEnableControls) {
-      this.displayedColumns.push('studyEnableControls');
+      this.possibleColumns.push({ name: 'Study Enable', visible: true });
     }
     if (this.displayDeletion) {
-      this.displayedColumns.push('deleteEntry');
+      this.possibleColumns.push({ name: 'Delete Entry', visible: true });
     }
+    this.updateColumns();
   }
 
   ngAfterViewInit(): void {
@@ -89,5 +95,11 @@ export class EntryTableCoreComponent
 
   handleDeletion(entryElem: EntryTableElement) {
     this.deleteEntry.emit(entryElem);
+  }
+
+  updateColumns() {
+    this.displayedColumns = this.possibleColumns
+      .filter((column) => column.visible)
+      .map((column) => column.name);
   }
 }
