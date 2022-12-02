@@ -40,9 +40,9 @@ export class EntryTableCoreComponent
    * TODO: Add meta data display
    */
   possibleColumns: { name: string, visible: boolean }[] = [
-    { name: 'view', visible: true },
-    { name: 'entryID', visible: true },
-    { name: 'responderID', visible: true },
+    { name: 'Video Preview', visible: true },
+    { name: 'Entry ID', visible: true },
+    { name: 'Responder ID', visible: true },
   ];
   displayedColumns: string[] = [];
 
@@ -73,13 +73,13 @@ export class EntryTableCoreComponent
   ngOnInit(): void {
     // Determine which additional controls should be displayed
     if (this.displayStudyTrainingControls) {
-      this.possibleColumns.push({ name: 'studyTrainingControls', visible: true });
+      this.possibleColumns.push({ name: 'Training Control', visible: true });
     }
     if (this.displayStudyEnableControls) {
-      this.possibleColumns.push({ name: 'studyEnableControls', visible: true });
+      this.possibleColumns.push({ name: 'Study Enable', visible: true });
     }
     if (this.displayDeletion) {
-      this.possibleColumns.push({ name: 'deleteEntry', visible: true });
+      this.possibleColumns.push({ name: 'Delete Entry', visible: true });
     }
   }
 

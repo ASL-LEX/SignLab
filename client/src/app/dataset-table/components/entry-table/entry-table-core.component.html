@@ -9,9 +9,13 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <mat-checkbox *ngFor="let column of possibleColumns" [(ngModel)]="column.visible" (change)="updateColumns()">
-        {{column.name}}
-      </mat-checkbox>
+      <ul style="list-style-type: none">
+        <li *ngFor="let column of possibleColumns">
+          <mat-checkbox (change)="updateColumns()" [(ngModel)]="column.visible">
+            {{column.name}}
+          </mat-checkbox>
+        </li>
+      </ul>
     </mat-menu>
   </div>
 
@@ -23,7 +27,7 @@
     <!-- TODO: Add tool tip help for each column -->
 
     <!-- View Column -->
-    <ng-container matColumnDef="view">
+    <ng-container matColumnDef="Video Preview">
       <th mat-header-cell *matHeaderCellDef> View </th>
       <td mat-cell *matCellDef="let entryElem; let idx = index">
         <entry-preview [entryElem]="entryElem"></entry-preview>
@@ -31,7 +35,7 @@
     </ng-container>
 
     <!-- Enabled Column -->
-    <ng-container matColumnDef="studyEnableControls">
+    <ng-container matColumnDef="Study Enable">
       <th mat-header-cell
           *matHeaderCellDef>
         Available for Tagging
@@ -44,7 +48,7 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="studyTrainingControls">
+    <ng-container matColumnDef="Training Control">
       <th mat-header-cell *matHeaderCellDef>
         Is Part of Training Set
         <mat-icon matTooltip="Videos part of this set will be part of what the users will tag to complete their training">help_outline</mat-icon>
@@ -57,19 +61,19 @@
     </ng-container>
 
     <!-- User set ID for the given entry -->
-    <ng-container matColumnDef="entryID">
+    <ng-container matColumnDef="Entry ID">
       <th mat-header-cell *matHeaderCellDef> Entry ID </th>
       <td mat-cell *matCellDef="let entryElem"> {{entryElem.entry.entryID}} </td>
     </ng-container>
 
     <!-- Person who recorded the entry -->
-    <ng-container matColumnDef="responderID">
+    <ng-container matColumnDef="Responder ID">
       <th mat-header-cell *matHeaderCellDef> Responder ID </th>
       <td mat-cell *matCellDef="let entryElem"> {{entryElem.entry.responderID}} </td>
     </ng-container>
 
     <!-- Button for deleting the entry -->
-    <ng-container matColumnDef="deleteEntry">
+    <ng-container matColumnDef="Delete Entry">
       <th mat-header-cell *matHeaderCellDef>
         Delete
         <mat-icon matTooltip="Delete the entry, this will delete all associated data including tags made for the entry">help_outline</mat-icon>
