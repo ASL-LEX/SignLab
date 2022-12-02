@@ -67,7 +67,6 @@ export class EntryTableCoreComponent
 
   constructor() {
     this.dataSource = new MatTableDataSource();
-    this.updateColumns();
   }
 
   ngOnInit(): void {
@@ -81,6 +80,7 @@ export class EntryTableCoreComponent
     if (this.displayDeletion) {
       this.possibleColumns.push({ name: 'Delete Entry', visible: true });
     }
+    this.updateColumns();
   }
 
   ngAfterViewInit(): void {
