@@ -39,7 +39,7 @@ export class EntryTableCoreComponent
    *
    * TODO: Add meta data display
    */
-  possibleColumns: { name: string, visible: boolean }[] = [
+  possibleColumns: { name: string; visible: boolean }[] = [
     { name: 'Video Preview', visible: true },
     { name: 'Entry ID', visible: true },
     { name: 'Responder ID', visible: true },
@@ -99,7 +99,7 @@ export class EntryTableCoreComponent
 
   updateColumns() {
     this.displayedColumns = this.possibleColumns
-      .filter(column => column.visible)
-      .map(column => column.name);
+      .filter((column) => column.visible)
+      .map((column) => column.name);
   }
 }
