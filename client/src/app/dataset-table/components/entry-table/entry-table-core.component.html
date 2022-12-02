@@ -9,7 +9,7 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <ul style="list-style-type: none">
+      <ul style="list-style-type: none; padding: 10px;">
         <li *ngFor="let column of possibleColumns">
           <mat-checkbox (change)="updateColumns()" [(ngModel)]="column.visible">
             {{column.name}}
