@@ -516,7 +516,7 @@ export class SliderField extends TagField {
         options: {
           slider: true,
           showUnfocusedDescription: true,
-        }
+        },
       },
     ];
   }
