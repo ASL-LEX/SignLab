@@ -205,6 +205,18 @@ export class EntryUploadService {
       }),
     );
 
+    // Get the entry-uploads that were found in the CSV, but not in the zip.
+    // Since the entry uploads are deleted as entries are made, all remaining
+    // entry uploads are those that were not found in the zip
+    const entryUploads = await this.entryUploadModel.find({}).exec();
+    for (const entryUpload of entryUploads) {
+      fileWarnings.push({
+        type: 'warning',
+        message: `Entry not found in ZIP, entry not saved`,
+        where: [{ place: `${entryUpload.filename}`, message: '' }],
+      });
+    }
+
     const result: SaveAttempt = {
       type: 'success',
     };

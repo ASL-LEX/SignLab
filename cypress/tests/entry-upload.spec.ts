@@ -140,7 +140,7 @@ describe('Upload Entry ZIP', () => {
       .get(zipFileUploadInput)
       .selectFile('cypress/fixtures/entries/small-set-missing.zip', { force: true })
       .get('p')
-      .should('contain.text', 'Entry uploaded successfully, reload page to see new entries');
+      .should('contain.text', 'Uploading video files caused warnings');
   });
 
   it('should produce a warning when the ZIP has extra videos provides', () => {

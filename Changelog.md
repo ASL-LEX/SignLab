@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Fixed
+
+* Extra videos in CSV not found in ZIP are reported to the user
+
 ## 0.3.0
 
 ### Added

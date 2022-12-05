@@ -43,6 +43,14 @@ const entryUploadFindOneMock = jest.fn((params: any) => {
     },
   };
 });
+const entryUploadFindMock = jest.fn((_params: any) => {
+  return {
+    async exec() {
+      return [];
+    },
+  };
+});
+
 const entryUploadModel = {
   // Delete many implementation to avoid errors
   deleteMany(_params: any) {
@@ -53,6 +61,10 @@ const entryUploadModel = {
 
   findOne(params: any) {
     return entryUploadFindOneMock(params);
+  },
+
+  find(params: any) {
+    return entryUploadFindMock(params);
   },
 
   create(params: any) {
@@ -370,6 +382,51 @@ describe('EntryService', () => {
       const result = await entryUploadService.uploadEntryVideos('all_good.zip');
 
       expect(result.saveResult.type).toEqual('success');
+    });
+
+    it('should work for ZIPs that contain additional videos then the initial CSV', async () => {
+      readdirMock.mockImplementation((_path: string) => {
+        return ['tree_entry.mp4', 'bread_entry.mp4', 'grass_entry.mp4'];
+      });
+
+      entryUploadFindOneMock.mockImplementation((params: any) => {
+        let result: any = null;
+
+        if (params.filename == 'tree_entry.mp4') {
+          result = {
+            entryID: '1',
+            responderID: '2',
+            filename: 'tree_entry.mp4',
+            meta: {
+              prompt: 'tree',
+            },
+          };
+        } else if (params.filename == 'bread_entry.mp4') {
+          result = {
+            entryID: '1',
+            responderID: '2',
+            filename: 'bread_entry.mp4',
+            meta: {
+              prompt: 'bread',
+            },
+          };
+        }
+
+        return {
+          async exec() {
+            return result;
+          },
+        };
+      });
+
+      const result = await entryUploadService.uploadEntryVideos(
+        'additional_videos.zip',
+      );
+
+      expect(result.saveResult.type).toEqual('warning');
+      expect(result.saveResult.where![0].message).toContain(
+        'Entry for file grass_entry.mp4 was not found in original CSV',
+      );
     });
   });
 });
