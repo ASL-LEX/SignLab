@@ -100,6 +100,7 @@ export class NewStudyComponent implements AfterViewInit {
     },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
+    { type: TagFieldType.Slider, name: 'Slider', icon: 'tune' },
     { type: TagFieldType.VideoRecord, name: 'Record Video', icon: 'videocam' },
   ];
 

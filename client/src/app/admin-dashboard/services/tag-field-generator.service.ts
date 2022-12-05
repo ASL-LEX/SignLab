@@ -8,6 +8,7 @@ import {
   EmbeddedVideoOption,
   FreeTextField,
   NumericField,
+  SliderField,
   VideoRecordField,
 } from '../../models/tag-field';
 import { DatasetService } from '../../core/services/dataset.service';
@@ -37,6 +38,8 @@ export class TagFieldGeneratorService {
         return new FreeTextField();
       case TagFieldType.Numeric:
         return new NumericField();
+      case TagFieldType.Slider:
+        return new SliderField();
       case TagFieldType.VideoRecord:
         return new VideoRecordField(this.datasetService);
       default:

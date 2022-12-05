@@ -40,6 +40,7 @@ export class TagFormPreviewDialog {
     public data: TagPreviewInformation,
     tagService: TagService
   ) {
+    console.log(data.previewUiSchema);
     tagService.clearCurrentTag();
   }
 }
