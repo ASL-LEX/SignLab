@@ -424,7 +424,9 @@ describe('EntryService', () => {
       );
 
       expect(result.saveResult.type).toEqual('warning');
-      expect(result.saveResult.where![0].message).toContain('Entry for file grass_entry.mp4 was not found in original CSV');
+      expect(result.saveResult.where![0].message).toContain(
+        'Entry for file grass_entry.mp4 was not found in original CSV',
+      );
     });
   });
 });
