@@ -91,7 +91,7 @@ export class UserStudyTable implements OnInit, OnChanges {
     const flattenedData = tags.map((tag) => {
       return {
         entryID: tag.entry.entryID,
-        videoURL: tag.entry.videoURL,
+        mediaURL: tag.entry.mediaURL,
         study: tag.study.name,
         user: tag.user.username,
         ...tag.entry.meta,

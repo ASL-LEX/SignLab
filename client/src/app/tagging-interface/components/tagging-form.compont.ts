@@ -28,7 +28,8 @@ import {
     <div fxLayout="row" fxLayoutAlign="space-around">
       <!-- Entry Video View -->
       <div class="video-tag-child">
-        <video src="{{ tag.entry.videoURL }}" controls autoplay loop></video>
+        <video *ngIf="tag.entry.mediaType === 'video'" src="{{ tag.entry.mediaURL }}" controls autoplay loop></video>
+        <img *ngIf="tag.entry.mediaType === 'image'" src="{{ tag.entry.mediaURL }}" />
       </div>
 
       <!-- Form View -->

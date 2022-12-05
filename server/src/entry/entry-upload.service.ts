@@ -307,12 +307,12 @@ export class EntryUploadService {
       `upload/entries/${entryUpload.filename}`,
       `Entries/${entry._id!}.${fileExtension}`,
     );
-    this.entryService.updateVideoURL(entry, uploadResult.uri);
+    this.entryService.updateMediaURL(entry, uploadResult.uri);
 
     // Remove the EntryUpload entity
-    this.entryUploadModel.deleteOne({
+    await this.entryUploadModel.deleteOne({
       entryID: entryUpload.entryID,
-    });
+    }).exec();
 
     // Success
     return {

@@ -224,7 +224,8 @@ export class TagController {
         // TODO: Remove concept of the `entryID`
         const entry = await this.entryService.createEntry({
           entryID: 'TODO: Remove entryID',
-          videoURL: video.uri,
+          mediaURL: video.uri,
+          mediaType: 'video',
           recordedInSignLab: true,
           dataset: dataset,
           creator: existingTag.user,
