@@ -2,6 +2,10 @@
 
 ## 0.4.0
 
+### Added
+
+* Slider field for tagging
+
 ### Fixed
 
 * Extra videos in CSV not found in ZIP are reported to the user
