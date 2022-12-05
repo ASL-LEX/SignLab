@@ -35,7 +35,8 @@ describe('TaggingForm', () => {
     _id: 'something unique',
     entry: {
       entryID: 'I am a entry, trust me',
-      videoURL: '/media/video.mp4',
+      mediaURL: '/media/video.mp4',
+      mediaType: 'video',
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
@@ -112,7 +113,7 @@ describe('TaggingForm', () => {
     const form = compiled.querySelector('jsonforms');
 
     expect(video).toBeTruthy();
-    expect(video.getAttribute('src')).toEqual(testTag1.entry.videoURL);
+    expect(video.getAttribute('src')).toEqual(testTag1.entry.mediaURL);
     expect(form).toBeTruthy();
   }));
 
@@ -131,6 +132,6 @@ describe('TaggingForm', () => {
     const video = compiled.querySelector('video');
 
     expect(video).toBeTruthy();
-    expect(video.getAttribute('src')).toEqual(testTag1.entry.videoURL);
+    expect(video.getAttribute('src')).toEqual(testTag1.entry.mediaURL);
   }));
 });

@@ -40,7 +40,8 @@ describe('EntryNewStudyTable', () => {
     {
       _id: '1',
       entryID: '1',
-      videoURL: 'video',
+      mediaURL: 'video',
+      mediaType: 'video',
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
@@ -52,7 +53,8 @@ describe('EntryNewStudyTable', () => {
     {
       _id: '2',
       entryID: '1',
-      videoURL: 'video',
+      mediaURL: 'video',
+      mediaType: 'video',
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
@@ -64,7 +66,8 @@ describe('EntryNewStudyTable', () => {
     {
       _id: '3',
       entryID: '1',
-      videoURL: 'video',
+      mediaURL: 'video',
+      mediaType: 'video',
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',
@@ -76,7 +79,8 @@ describe('EntryNewStudyTable', () => {
     {
       _id: '4',
       entryID: '1',
-      videoURL: 'video',
+      mediaURL: 'video',
+      mediaType: 'video',
       duration: 5,
       recordedInSignLab: false,
       responderID: '1',

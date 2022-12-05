@@ -42,7 +42,8 @@ describe('TaggingInterface', () => {
     _id: 'something unique',
     entry: {
       entryID: 'I am a entry, trust me',
-      videoURL: '/media/video.mp4',
+      mediaURL: '/media/video.mp4',
+      mediaType: 'video',
       recordedInSignLab: false,
       responderID: '1',
       meta: {},
@@ -98,7 +99,8 @@ describe('TaggingInterface', () => {
     _id: 'a differe ID',
     entry: {
       entryID: 'I am a entry, trust me',
-      videoURL: '/media/another-video.mp4',
+      mediaURL: '/media/another-video.mp4',
+      mediaType: 'video',
       recordedInSignLab: false,
       responderID: '1',
       meta: {},

@@ -108,7 +108,11 @@ const entryUploadModel = {
     }
   },
 
-  deleteOne(_params: any) {},
+  deleteOne(_params: any) {
+    return {
+      async exec() {},
+    };
+  },
 };
 
 const entryService = {
@@ -137,7 +141,7 @@ const entryService = {
     };
   },
 
-  updateVideoURL(_params: any) {},
+  updateMediaURL(_params: any) {},
 };
 
 const studyService = {
