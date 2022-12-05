@@ -30,6 +30,7 @@ export interface EntryUploadResult {
 @Injectable()
 export class EntryUploadService {
   private supportedVideoFormats: Set<string>;
+  private supportedImageFormsts: Set<string>;
   /**
    * The dataset that is being uploaded to.
    *
@@ -48,7 +49,10 @@ export class EntryUploadService {
     configService: ConfigService,
   ) {
     this.supportedVideoFormats = new Set<string>(
-      configService.getOrThrow<string[]>('videoSettings.supportedTypes'),
+      configService.getOrThrow<string[]>('mediaSettings.supportedVideoTypes'),
+    );
+    this.supportedImageFormsts = new Set<string>(
+      configService.getOrThrow<string[]>('mediaSettings.supportedImageTypes'),
     );
   }
 
@@ -159,14 +163,20 @@ export class EntryUploadService {
 
       // Check the file type based on the extension
       const fileExtension = file.slice(file.lastIndexOf('.') + 1);
-      if (!this.supportedVideoFormats.has(fileExtension)) {
+      if (
+        !this.supportedVideoFormats.has(fileExtension) &&
+        !this.supportedImageFormsts.has(fileExtension)
+      ) {
         console.warn(`Unsupported file type uploaded: ${fileExtension}`);
+        // Supported file types is all video and image types
+        const supportedFileTypes = [
+          ...this.supportedVideoFormats,
+          ...this.supportedImageFormsts,
+        ].join(', ');
 
         fileWarnings.push({
           type: 'warning',
-          message: `File has unsupported type "${fileExtension}", supported formats ${Array.from(
-            this.supportedVideoFormats,
-          ).join(', ')}`,
+          message: `File has unsupported type "${fileExtension}", supported formats ${supportedFileTypes}`,
           where: [{ place: `${file}`, message: 'Invalid extension' }],
         });
 
@@ -282,9 +292,13 @@ export class EntryUploadService {
 
     // Make a entry entity
     // TODO: Determine duration or have default on error
+    const fileExtension = filename.slice(filename.lastIndexOf('.') + 1);
     const newEntry: Entry = {
       entryID: entryUpload.entryID,
-      videoURL: 'placeholder',
+      mediaURL: 'placeholder',
+      mediaType: this.supportedVideoFormats.has(fileExtension)
+        ? 'video'
+        : 'image',
       recordedInSignLab: false,
       meta: entryUpload.meta,
       dataset: this.dataset!,
@@ -294,17 +308,18 @@ export class EntryUploadService {
     const entry = await this.entryService.createEntry(newEntry);
 
     // Move the file into the bucket
-    const fileExtension = filename.slice(filename.lastIndexOf('.') + 1);
     const uploadResult = await this.bucketService.objectUpload(
       `upload/entries/${entryUpload.filename}`,
       `Entries/${entry._id!}.${fileExtension}`,
     );
-    this.entryService.updateVideoURL(entry, uploadResult.uri);
+    this.entryService.updateMediaURL(entry, uploadResult.uri);
 
     // Remove the EntryUpload entity
-    this.entryUploadModel.deleteOne({
-      entryID: entryUpload.entryID,
-    });
+    await this.entryUploadModel
+      .deleteOne({
+        entryID: entryUpload.entryID,
+      })
+      .exec();
 
     // Success
     return {

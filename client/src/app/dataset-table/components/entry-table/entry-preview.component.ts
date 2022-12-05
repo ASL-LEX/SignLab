@@ -4,6 +4,7 @@ import {
   Input,
   ElementRef,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 import { EntryTableElement } from '../../models/entry-table-element';
 
@@ -12,21 +13,33 @@ import { EntryTableElement } from '../../models/entry-table-element';
   template: `
     <div class="video-preview">
       <video
+        *ngIf="entryElem.entry.mediaType === 'video'"
         (mouseenter)="playVideo()"
         (mouseleave)="stopVideo()"
         (durationchange)="loadedVideoData()"
         loop
         #previewVideo
       >
-        <source src="{{ entryElem ? entryElem.entry.videoURL : '' }}" />
+        <source src="{{ entryElem ? entryElem.entry.mediaURL : '' }}" />
       </video>
+
+      <img
+        *ngIf="entryElem.entry.mediaType === 'image'"
+        src="{{ entryElem ? entryElem.entry.mediaURL : '' }}"
+        #previewImage
+      />
     </div>
   `,
   styleUrls: ['./entry-preview.component.css'],
 })
-export class EntryPreview implements OnDestroy {
+export class EntryPreview implements OnDestroy, OnInit {
   @Input() entryElem: EntryTableElement;
   @ViewChild('previewVideo') video: ElementRef;
+  isVideo = false;
+
+  ngOnInit(): void {
+    this.isVideo = this.entryElem.entry.mediaType === 'video';
+  }
 
   /**
    * There is a performance issue where the video elements are not cleaned up
@@ -38,20 +51,19 @@ export class EntryPreview implements OnDestroy {
    * https://stackoverflow.com/questions/31078061/many-video-tags-on-page-in-single-page-application-angular-makes-page-frozen
    */
   ngOnDestroy(): void {
-    if (!this.video) {
+    if (!this.video || !this.isVideo) {
       return;
     }
 
     this.video.nativeElement.pause();
     this.video.nativeElement.src = '';
-    // this.video.nativeElement.empty();
     this.video.nativeElement.load();
     this.video.nativeElement.remove();
   }
 
   playVideo() {
     // Get the video which was hovered over
-    if (!this.video) {
+    if (!this.video || !this.isVideo) {
       return;
     }
 
@@ -62,7 +74,7 @@ export class EntryPreview implements OnDestroy {
 
   stopVideo() {
     // Get the video that is no longer being hovered over
-    if (!this.video) {
+    if (!this.video || !this.isVideo) {
       return;
     }
 
@@ -79,7 +91,7 @@ export class EntryPreview implements OnDestroy {
    * Have the video preview the middle frame
    */
   async setToMiddleFrame() {
-    if (!this.video) {
+    if (!this.video || !this.isVideo) {
       return;
     }
 

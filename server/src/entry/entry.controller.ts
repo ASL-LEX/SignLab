@@ -302,6 +302,6 @@ export class EntryController {
     this.entryService.delete(entry);
 
     // Now remove the entry from the bucket
-    this.bucketStorage.objectDelete(entry.videoURL);
+    this.bucketStorage.objectDelete(entry.mediaURL);
   }
 }

@@ -79,7 +79,7 @@ export class StudiesControlComponent {
     const flattenedData = tags.map((tag) => {
       return {
         entryID: tag.entry.entryID,
-        videoURL: tag.entry.videoURL,
+        mediaURL: tag.entry.mediaURL,
         study: tag.study.name,
         user: tag.user.username,
         ...tag.entry.meta,
@@ -94,7 +94,7 @@ export class StudiesControlComponent {
 
     const headerElements = [
       'entryID',
-      'videoURL',
+      'mediaURL',
       'study',
       'user',
       ...Object.keys(tags[0].study.tagSchema.dataSchema.properties),
