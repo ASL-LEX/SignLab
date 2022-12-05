@@ -11,6 +11,7 @@ export enum TagFieldType {
   EmbeddedVideoOption,
   FreeText,
   Numeric,
+  Slider,
   VideoRecord,
 }
 
@@ -447,6 +448,77 @@ export class NumericField extends TagField {
     return {
       [this.getFieldName()]: schema,
     };
+  }
+}
+
+export class SliderField extends TagField {
+  constructor() {
+    super(TagFieldType.Slider, 'Slider', 'number');
+  }
+
+  /**
+   * A slider field requires a minimum and maximum value
+   */
+  getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
+    return Promise.resolve({
+      minimum: {
+        type: 'number',
+      },
+      maximum: {
+        type: 'number',
+      },
+      stepSize: {
+        type: 'number',
+        description: 'The step size of the slider',
+      },
+    });
+  }
+
+  getFieldSpecificUiSchema(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: '#/properties/minimum',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/maximum',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/stepSize',
+      },
+    ];
+  }
+
+  getRequiredFieldProperties(): string[] {
+    return ['minimum', 'maximum'];
+  }
+
+  asDataProperty(): JsonSchema {
+    return {
+      [this.getFieldName()]: {
+        type: 'number',
+        description: this.getDescription(),
+        minimum: this.data.minimum,
+        maximum: this.data.maximum,
+        multipleOf: this.data.stepSize,
+        default: this.data.minimum,
+      },
+    };
+  }
+
+  asUIProperty(): any[] {
+    return [
+      {
+        type: 'Control',
+        scope: `#/properties/${this.getFieldName()}`,
+        options: {
+          slider: true,
+          showUnfocusedDescription: true,
+        },
+      },
+    ];
   }
 }
 
