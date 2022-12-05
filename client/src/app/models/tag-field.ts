@@ -467,6 +467,10 @@ export class SliderField extends TagField {
       maximum: {
         type: 'number',
       },
+      stepSize: {
+        type: 'number',
+        description: 'The step size of the slider',
+      },
     });
   }
 
@@ -479,6 +483,10 @@ export class SliderField extends TagField {
       {
         type: 'Control',
         scope: '#/properties/maximum',
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/stepSize',
       },
     ];
   }
@@ -494,6 +502,7 @@ export class SliderField extends TagField {
         description: this.getDescription(),
         minimum: this.data.minimum,
         maximum: this.data.maximum,
+        multipleOf: this.data.stepSize,
         default: this.data.minimum,
       },
     };
