@@ -35,7 +35,7 @@ import { EntryTableElement } from '../../models/entry-table-element';
 export class EntryPreview implements OnDestroy, OnInit {
   @Input() entryElem: EntryTableElement;
   @ViewChild('previewVideo') video: ElementRef;
-  isVideo: boolean = false;
+  isVideo = false;
 
   ngOnInit(): void {
     this.isVideo = this.entryElem.entry.mediaType === 'video';
@@ -62,7 +62,6 @@ export class EntryPreview implements OnDestroy, OnInit {
   }
 
   playVideo() {
-
     // Get the video which was hovered over
     if (!this.video || !this.isVideo) {
       return;

@@ -163,7 +163,10 @@ export class EntryUploadService {
 
       // Check the file type based on the extension
       const fileExtension = file.slice(file.lastIndexOf('.') + 1);
-      if (!this.supportedVideoFormats.has(fileExtension) && !this.supportedImageFormsts.has(fileExtension)) {
+      if (
+        !this.supportedVideoFormats.has(fileExtension) &&
+        !this.supportedImageFormsts.has(fileExtension)
+      ) {
         console.warn(`Unsupported file type uploaded: ${fileExtension}`);
         // Supported file types is all video and image types
         const supportedFileTypes = [
@@ -293,7 +296,9 @@ export class EntryUploadService {
     const newEntry: Entry = {
       entryID: entryUpload.entryID,
       mediaURL: 'placeholder',
-      mediaType: this.supportedVideoFormats.has(fileExtension) ? 'video' : 'image',
+      mediaType: this.supportedVideoFormats.has(fileExtension)
+        ? 'video'
+        : 'image',
       recordedInSignLab: false,
       meta: entryUpload.meta,
       dataset: this.dataset!,
@@ -310,9 +315,11 @@ export class EntryUploadService {
     this.entryService.updateMediaURL(entry, uploadResult.uri);
 
     // Remove the EntryUpload entity
-    await this.entryUploadModel.deleteOne({
-      entryID: entryUpload.entryID,
-    }).exec();
+    await this.entryUploadModel
+      .deleteOne({
+        entryID: entryUpload.entryID,
+      })
+      .exec();
 
     // Success
     return {
