@@ -34,8 +34,10 @@ export default () => ({
     /** Gooogle cloud buckets */
     gcp: {},
   },
-  videoSettings: {
-    /** Specifies the types that users can upload to SignLab */
-    supportedTypes: ['webm', 'mp4', 'ogg'],
+  mediaSettings: {
+    /** Specifies the supported video types for SignLab */
+    supportedVideoTypes: ['webm', 'mp4', 'ogg'],
+    /** Specified the supported image types for SignLab */
+    supportedImageTypes: ['png', 'jpg', 'jpeg', 'gif'],
   },
 });

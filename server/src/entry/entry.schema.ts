@@ -11,7 +11,7 @@ import {
 import { User } from '../user/user.schema';
 
 /**
- * A Entry is a complete video entity in the SignLab system. A Entry
+ * A Entry is a complete media entity in the SignLab system. A Entry
  * differes from a EntryUpload in that a Entry has all information needed
  * to be in the SignLab system while a EntryUpload is an intermediate
  * step with missing information
@@ -29,10 +29,16 @@ export class Entry implements dto.Entry {
   entryID: string;
 
   /**
-   * URL of the video associated with this entry.
+   * URL of the media associated with this entry.
    */
   @Prop({ required: true, trim: true })
-  videoURL: string;
+  mediaURL: string;
+
+  /**
+   * The type of media. Currently supports video or image
+   */
+  @Prop({ required: true, trim: true })
+  mediaType: 'video' | 'image';
 
   /**
    * The duration of the video in milliseconds

@@ -54,9 +54,13 @@ export interface Entry {
   /**
    * This is the location of the entry itself as a URL.
    */
-  videoURL: string;
+  mediaURL: string;
   /**
-   * This is how long the video is in milliseconds.
+   * The type of media. Currently supports video or image
+   */
+  mediaType: 'video' | 'image';
+  /**
+   * This is how long the media is in milliseconds.
    */
   duration?: number;
   /**
