@@ -5,6 +5,7 @@
 ### Added
 
 * Slider field for tagging
+* Support for tagging images
 
 ### Fixed
 
