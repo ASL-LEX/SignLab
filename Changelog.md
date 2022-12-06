@@ -7,6 +7,11 @@
 * Slider field for tagging
 * Support for tagging images
 
+### Changed
+
+* Force user to select a study
+* Keep track of selected study across components
+
 ### Fixed
 
 * Extra videos in CSV not found in ZIP are reported to the user
