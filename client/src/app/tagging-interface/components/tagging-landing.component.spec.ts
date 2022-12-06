@@ -57,9 +57,11 @@ describe('TaggingLanding', () => {
     studySpy = jasmine.createSpyObj('StudyService', [
       'getUserStudy',
       'getStudies',
+      'getActiveStudy',
     ]);
     studySpy.getUserStudy.and.returnValue(Promise.resolve(testUserStudy));
     studySpy.getStudies.and.returnValue(Promise.resolve([testStudy]));
+    studySpy.getActiveStudy.and.returnValue(testStudy);
 
     TestBed.configureTestingModule({
       imports: [SharedModule],
