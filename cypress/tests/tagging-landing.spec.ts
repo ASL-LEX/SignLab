@@ -15,6 +15,8 @@ describe('Tagging Landing Page', () => {
 
   it('should default to the first study', () => {
     cy
+      .get(`[data-cy="${studies.noTraining.study.name}-button"]`)
+      .click()
       .get('mat-card-title')
       .should('contain.text', `Study: ${studies.noTraining.study.name}`);
   });
