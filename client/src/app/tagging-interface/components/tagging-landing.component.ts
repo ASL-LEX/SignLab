@@ -23,14 +23,13 @@ export class TaggingLanding implements OnInit {
     private dialog: MatDialog,
     private authService: AuthService
   ) {
-    this.activeStudy = this.studyService.getActiveStudy();
+    this.updateUserInformation();
   }
 
   ngOnInit(): void {
     if (!this.activeStudy) {
       this.openStudySelectDialog();
     }
-    this.activeStudy = this.studyService.getActiveStudy();
     this.updateUserInformation();
   }
 
@@ -49,7 +48,6 @@ export class TaggingLanding implements OnInit {
       .subscribe((selectedStudy: any) => {
         // Update the active study
         if (selectedStudy && selectedStudy.data) {
-          this.activeStudy = selectedStudy.data;
           this.updateUserInformation();
         }
       });
@@ -64,6 +62,7 @@ export class TaggingLanding implements OnInit {
    * Get the user for the currently selected study
    */
   private async updateUserInformation() {
+    this.activeStudy = this.studyService.getActiveStudy();
     if (!this.activeStudy) {
       console.debug('No active study');
       return;
