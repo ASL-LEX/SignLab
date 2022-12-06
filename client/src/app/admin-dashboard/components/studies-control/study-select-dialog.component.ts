@@ -49,7 +49,12 @@ import { StudyService } from '../../../core/services/study.service';
             </ng-template>
 
             <!-- Option to select button -->
-            <button mat-stroked-button fxFlex="90" (click)="changeStudy(study)" [attr.data-cy]="study.name + '-button'">
+            <button
+              mat-stroked-button
+              fxFlex="90"
+              (click)="changeStudy(study)"
+              [attr.data-cy]="study.name + '-button'"
+            >
               {{ study.name }}
             </button>
           </div>
