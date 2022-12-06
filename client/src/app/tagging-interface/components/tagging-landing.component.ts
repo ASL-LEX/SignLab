@@ -11,8 +11,6 @@ import { UserStudy } from 'shared/dtos/userstudy.dto';
   templateUrl: './tagging-landing.component.html',
 })
 export class TaggingLanding implements OnInit {
-  /** The available studies */
-  studies: Study[];
   /** The study that the user is currently viewing */
   activeStudy: Study | null = null;
   /** The view that the user is seeing */
@@ -24,10 +22,21 @@ export class TaggingLanding implements OnInit {
     private studyService: StudyService,
     private dialog: MatDialog,
     private authService: AuthService
-  ) {}
+  ) {
+    this.updateUserInformation();
+  }
 
   ngOnInit(): void {
-    this.loadStudies();
+    if (!this.activeStudy) {
+      this.selectActiveStudy();
+    }
+    this.updateUserInformation();
+  }
+
+  async selectActiveStudy() {
+    if (await this.studyService.hasStudies()) {
+      this.openStudySelectDialog();
+    }
   }
 
   /** Open the study select interface */
@@ -35,8 +44,6 @@ export class TaggingLanding implements OnInit {
     const dialogOpenParams = {
       width: '400px',
       data: {
-        studies: this.studies,
-        activeStudy: this.activeStudy,
         newStudyOption: false,
       },
     };
@@ -47,7 +54,6 @@ export class TaggingLanding implements OnInit {
       .subscribe((selectedStudy: any) => {
         // Update the active study
         if (selectedStudy && selectedStudy.data) {
-          this.activeStudy = selectedStudy.data;
           this.updateUserInformation();
         }
       });
@@ -62,6 +68,7 @@ export class TaggingLanding implements OnInit {
    * Get the user for the currently selected study
    */
   private async updateUserInformation() {
+    this.activeStudy = this.studyService.getActiveStudy();
     if (!this.activeStudy) {
       console.debug('No active study');
       return;
@@ -72,15 +79,5 @@ export class TaggingLanding implements OnInit {
       user,
       this.activeStudy
     );
-  }
-
-  /**
-   * Load in the studies and set the active study to the first study or
-   * null if no studies are available.
-   */
-  private async loadStudies() {
-    this.studies = await this.studyService.getStudies();
-    this.activeStudy = this.studies.length > 0 ? this.studies[0] : null;
-    this.updateUserInformation();
   }
 }

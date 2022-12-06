@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StudyService } from '../../../core/services/study.service';
 import { StudySelectDialog } from './study-select-dialog.component';
@@ -10,9 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './studies-control.component.html',
   styleUrls: ['./studies-control.component.css'],
 })
-export class StudiesControlComponent {
-  /** List of all studies loaded from backend */
-  studies: Study[] = [];
+export class StudiesControlComponent implements OnInit {
   /** The current study that is being displayed to the user */
   activeStudy: Study | null = null;
   /** Which study control view is active */
@@ -23,12 +21,20 @@ export class StudiesControlComponent {
     private studyService: StudyService,
     private router: Router
   ) {
-    this.studyService.getStudies().then((studies) => {
-      this.studies = studies;
-      if (this.studies.length > 0) {
-        this.activeStudy = this.studies[0];
-      }
-    });
+    this.activeStudy = this.studyService.getActiveStudy();
+  }
+
+  ngOnInit(): void {
+    // If there is not an active study, force the user to select one
+    if (!this.activeStudy) {
+      this.selectActiveStudy();
+    }
+  }
+
+  async selectActiveStudy() {
+    if (await this.studyService.hasStudies()) {
+      this.openStudySelectDialog();
+    }
   }
 
   /**
@@ -38,8 +44,6 @@ export class StudiesControlComponent {
     const dialogOpenParams = {
       width: '400px',
       data: {
-        studies: this.studies,
-        activeStudy: this.activeStudy,
         newStudyOption: true,
       },
     };

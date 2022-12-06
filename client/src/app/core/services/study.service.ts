@@ -7,7 +7,23 @@ import { SignLabHttpClient } from './http.service';
 
 @Injectable()
 export class StudyService {
+  /**
+   * Keeps track of the currently active study the user selected. This allows
+   * for the active study to be accessed from any component.
+   */
+  activeStudy: Study | null = null;
+
   constructor(private signLab: SignLabHttpClient) {}
+
+  /** Set the currently selected study */
+  setActiveStudy(study: Study | null) {
+    this.activeStudy = study;
+  }
+
+  /** Get the currently selected study */
+  getActiveStudy(): Study | null {
+    return this.activeStudy;
+  }
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {
     return this.signLab.post<any>('api/study/create', studyCreation, {
@@ -39,6 +55,11 @@ export class StudyService {
 
   async getStudies(): Promise<Study[]> {
     return this.signLab.get<Study[]>('api/study', { provideToken: true });
+  }
+
+  async hasStudies(): Promise<boolean> {
+    const studies = await this.getStudies();
+    return studies.length > 0;
   }
 
   /**

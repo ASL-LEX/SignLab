@@ -2,7 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Study } from 'shared/dtos/study.dto';
+import { StudyService } from '../../../core/services/study.service';
 
+/**
+ * Dialog which provides an interface for selecting the study to view.
+ * This will update the study in the study service.
+ */
 @Component({
   selector: 'study-select-dialog',
   template: `
@@ -21,20 +26,20 @@ import { Study } from 'shared/dtos/study.dto';
       </div>
 
       <!-- List of studies -->
-      <div *ngFor="let study of data.studies">
+      <div *ngFor="let study of studies">
         <mat-list-item>
           <div fxLayout fxFlex>
             <!-- Indicator of selected study -->
             <div
               *ngIf="
-                data.activeStudy && study._id == data.activeStudy._id;
+                activeStudy && study._id == activeStudy._id;
                 then selectIcon;
                 else placeHolder
               "
             ></div>
             <ng-template #selectIcon>
               <mat-icon
-                *ngIf="data.activeStudy && study._id == data.activeStudy._id"
+                *ngIf="activeStudy && study._id == activeStudy._id"
                 fxFlex="10"
                 >check</mat-icon
               >
@@ -44,7 +49,12 @@ import { Study } from 'shared/dtos/study.dto';
             </ng-template>
 
             <!-- Option to select button -->
-            <button mat-stroked-button fxFlex="90" (click)="changeStudy(study)">
+            <button
+              mat-stroked-button
+              fxFlex="90"
+              (click)="changeStudy(study)"
+              [attr.data-cy]="study.name + '-button'"
+            >
               {{ study.name }}
             </button>
           </div>
@@ -55,16 +65,24 @@ import { Study } from 'shared/dtos/study.dto';
   `,
 })
 export class StudySelectDialog {
+  studies: Study[];
+  activeStudy: Study | null = null;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      studies: Study[];
       activeStudy?: Study;
       newStudyOption: boolean;
     },
     private router: Router,
-    private dialogRef: MatDialogRef<StudySelectDialog>
-  ) {}
+    private dialogRef: MatDialogRef<StudySelectDialog>,
+    private studyService: StudyService
+  ) {
+    this.studyService.getStudies().then((studies) => {
+      this.studies = studies;
+    });
+    this.activeStudy = this.studyService.getActiveStudy();
+  }
 
   /** Handle redirecting to page for making a new study */
   newStudyNav() {
@@ -73,6 +91,7 @@ export class StudySelectDialog {
 
   /** Handles selecting a study */
   changeStudy(study: Study) {
+    this.studyService.setActiveStudy(study);
     this.dialogRef.close({ data: study });
   }
 }
