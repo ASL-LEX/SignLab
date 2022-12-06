@@ -57,6 +57,11 @@ export class StudyService {
     return this.signLab.get<Study[]>('api/study', { provideToken: true });
   }
 
+  async hasStudies(): Promise<boolean> {
+    const studies = await this.getStudies();
+    return studies.length > 0;
+  }
+
   /**
    * Get all tags associated with the given study
    */

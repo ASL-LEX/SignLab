@@ -28,9 +28,15 @@ export class TaggingLanding implements OnInit {
 
   ngOnInit(): void {
     if (!this.activeStudy) {
-      this.openStudySelectDialog();
+      this.selectActiveStudy();
     }
     this.updateUserInformation();
+  }
+
+  async selectActiveStudy() {
+    if (await this.studyService.hasStudies()) {
+      this.openStudySelectDialog();
+    }
   }
 
   /** Open the study select interface */

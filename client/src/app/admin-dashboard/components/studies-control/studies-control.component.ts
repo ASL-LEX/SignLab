@@ -27,6 +27,12 @@ export class StudiesControlComponent implements OnInit {
   ngOnInit(): void {
     // If there is not an active study, force the user to select one
     if (!this.activeStudy) {
+      this.selectActiveStudy();
+    }
+  }
+
+  async selectActiveStudy() {
+    if (await this.studyService.hasStudies()) {
       this.openStudySelectDialog();
     }
   }
