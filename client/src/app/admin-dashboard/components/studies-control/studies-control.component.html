@@ -17,57 +17,59 @@
 
 <!-- View when there is at least one study -->
 <ng-template #hasStudy>
-  <h2>{{ activeStudy?.name }}</h2>
+  <div fxLayout="column" fxLayoutAlign="space-around none" style="width: 100%">
+    <h2>Study: {{ activeStudy?.name }}</h2>
 
-  <div fxLayout fxFlex>
-    <!-- Sidebar View -->
-    <mat-list fxFlex="15">
-      <mat-list-item>
-        <button mat-stroked-button class="nav-button" (click)="setActiveView('entries')">
-          Entries Control
-        </button>
-      </mat-list-item>
+    <div fxLayout fxFlex style="width: 100%">
+      <!-- Sidebar View -->
+      <mat-list fxFlex="15">
+        <mat-list-item>
+          <button mat-stroked-button class="nav-button" (click)="setActiveView('entries')">
+            Entries Control
+          </button>
+        </mat-list-item>
 
-      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-      <mat-list-item>
-        <button mat-stroked-button class="nav-button" (click)="setActiveView('users')">
-          User Access Control
-        </button>
-      </mat-list-item>
+        <mat-list-item>
+          <button mat-stroked-button class="nav-button" (click)="setActiveView('users')">
+            User Access Control
+          </button>
+        </mat-list-item>
 
-      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-      <mat-list-item>
-        <button mat-stroked-button class="nav-button" (click)="setActiveView('tags')">
-          Tags
-        </button>
-      </mat-list-item>
+        <mat-list-item>
+          <button mat-stroked-button class="nav-button" (click)="setActiveView('tags')">
+            Tags
+          </button>
+        </mat-list-item>
 
-      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-      <mat-list-item>
-        <button mat-stroked-button class="nav-button" (click)="openStudySelectDialog()">
-          Change Study <mat-icon>swap_vert</mat-icon>
-        </button>
-      </mat-list-item>
-    </mat-list>
+        <mat-list-item>
+          <button mat-stroked-button class="nav-button" (click)="openStudySelectDialog()">
+            Change Study <mat-icon>swap_vert</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
 
-    <!-- Main view -->
-    <div fxFlex="85" [ngSwitch]="activeView">
-      <!-- TODO: Have the study ID be dynamically inserted -->
-      <dataset-study-table
-        *ngSwitchCase="'entries'"
-         [study]="activeStudy">
-      </dataset-study-table>
+      <!-- Main view -->
+      <div fxFlex="85" [ngSwitch]="activeView">
+        <!-- TODO: Have the study ID be dynamically inserted -->
+        <dataset-study-table
+          *ngSwitchCase="'entries'"
+           [study]="activeStudy">
+        </dataset-study-table>
 
-      <user-study-table
-        *ngSwitchCase="'users'"
-        [study]="activeStudy!"></user-study-table>
+        <user-study-table
+          *ngSwitchCase="'users'"
+          [study]="activeStudy!"></user-study-table>
 
-      <div *ngSwitchCase="'tags'">
-        <!-- TODO: Have this be a table view with an export option -->
-        <button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>
+        <div *ngSwitchCase="'tags'">
+          <!-- TODO: Have this be a table view with an export option -->
+          <button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>
+        </div>
       </div>
     </div>
   </div>

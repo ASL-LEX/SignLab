@@ -89,10 +89,14 @@ export class NewStudyComponent implements AfterViewInit {
     { type: TagFieldType.AslLex, name: 'ASL-LEX Sign', icon: 'accessibility' },
     {
       type: TagFieldType.Autocomplete,
-      name: 'Autocomplete',
+      name: 'Categorical',
       icon: 'text_format',
     },
-    { type: TagFieldType.BooleanOption, name: 'Boolean Option', icon: 'flag' },
+    {
+      type: TagFieldType.BooleanOption,
+      name: 'True/False Option',
+      icon: 'flag',
+    },
     {
       type: TagFieldType.EmbeddedVideoOption,
       name: 'Video Option',
