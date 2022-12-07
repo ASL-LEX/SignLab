@@ -4,7 +4,7 @@ services:
     image: mongo
     ports: ["27017:27017"]
     volumes:
-      - ./db:/data/db
+      - signlab:/data/db
   signlab:
     image: hicsail/signlab:unstable
     restart: always
@@ -13,4 +13,5 @@ services:
     ports: ["6000:3000"]
     env_file:
       - stack.env
-
+volumes:
+  signlab: ~
