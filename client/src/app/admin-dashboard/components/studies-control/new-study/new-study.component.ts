@@ -92,7 +92,11 @@ export class NewStudyComponent implements AfterViewInit {
       name: 'Categorical',
       icon: 'text_format',
     },
-    { type: TagFieldType.BooleanOption, name: 'True/False Option', icon: 'flag' },
+    {
+      type: TagFieldType.BooleanOption,
+      name: 'True/False Option',
+      icon: 'flag',
+    },
     {
       type: TagFieldType.EmbeddedVideoOption,
       name: 'Video Option',
