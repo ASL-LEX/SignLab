@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
@@ -28,21 +29,40 @@ export class VideoRecordComponent implements OnDestroy {
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
 
+  constructor(private changeDetector: ChangeDetectorRef) {}
+
   toggleRecording(): void {
     if (this.isRecording) {
       this.stopRecording();
+      this.isRecording = false;
     } else {
-      this.startRecording();
+      this.startRecording().then((isSuccess) => {
+        this.isRecording = isSuccess;
+        this.changeDetector.detectChanges();
+      });
     }
-    this.isRecording = !this.isRecording;
   }
 
-  private async startRecording(): Promise<void> {
+  /** Start the recording, return true if successful */
+  private async startRecording(): Promise<boolean> {
     // Make a new stream, clear out original data
     this.recordVideo.nativeElement.currentTime = 0;
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-    });
+    let stream: MediaStream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+    } catch(err: any) {
+      console.debug('Could not get user media', err);
+      this.isRecording = false;
+
+      // Let the user know that they need to enable their webcam.
+      const message = 'Unable to access webcam, make sure you have given permission' +
+        'to access your webcam and that no other application is using it.';
+      this.displayWebcamError(message);
+      return false;
+    }
+
     this.recordVideo.nativeElement.srcObject = stream;
     this.blobs = [];
 
@@ -53,7 +73,9 @@ export class VideoRecordComponent implements OnDestroy {
       options = { mimeType: 'video/webm; codecs=vp8' };
     } else {
       console.error('Cannot instantiate mediaRecorder');
-      return;
+      this.displayWebcamError('Unable to record video, please try again and ' +
+                              'report this issue if it persists.');
+      return false;
     }
 
     // Start the recording
@@ -68,6 +90,9 @@ export class VideoRecordComponent implements OnDestroy {
     this.mediaRecorder.onstop = (_event) => {
       this.onMediaStop();
     };
+
+    // Return success
+    return true;
   }
 
   stopRecording(): void {
@@ -81,6 +106,12 @@ export class VideoRecordComponent implements OnDestroy {
     this.recordVideo.nativeElement.src = '';
     this.recordVideo.nativeElement.load();
     this.recordVideo.nativeElement.remove();
+  }
+
+  /** Let the user know that they need to enable their webcam. */
+  displayWebcamError(message: string): void {
+    console.debug(message);
+    alert(message);
   }
 
   /**
