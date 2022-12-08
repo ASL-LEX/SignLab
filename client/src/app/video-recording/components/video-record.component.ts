@@ -52,12 +52,13 @@ export class VideoRecordComponent implements OnDestroy {
       stream = await navigator.mediaDevices.getUserMedia({
         video: true,
       });
-    } catch(err: any) {
+    } catch (err: any) {
       console.debug('Could not get user media', err);
       this.isRecording = false;
 
       // Let the user know that they need to enable their webcam.
-      const message = 'Unable to access webcam, make sure you have given permission' +
+      const message =
+        'Unable to access webcam, make sure you have given permission' +
         'to access your webcam and that no other application is using it.';
       this.displayWebcamError(message);
       return false;
@@ -73,8 +74,10 @@ export class VideoRecordComponent implements OnDestroy {
       options = { mimeType: 'video/webm; codecs=vp8' };
     } else {
       console.error('Cannot instantiate mediaRecorder');
-      this.displayWebcamError('Unable to record video, please try again and ' +
-                              'report this issue if it persists.');
+      this.displayWebcamError(
+        'Unable to record video, please try again and ' +
+          'report this issue if it persists.'
+      );
       return false;
     }
 
