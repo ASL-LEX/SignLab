@@ -6,6 +6,7 @@
 
 * Slider field for tagging
 * Support for tagging images
+* Alert when accessing the webcam for video recording failes
 
 ### Changed
 
