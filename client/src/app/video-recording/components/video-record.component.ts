@@ -16,6 +16,13 @@ import { VideoPreviewComponent } from './video-preview.component';
   template:
     `
     <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer">
+      <!-- Circles representing the number of videos recorded -->
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="circle recordedIndicator"></div>
+        <div class="circle recordedIndicator selectedVideoIndicator"></div>
+        <div class="circle"></div>
+      </div>
+
       <!-- Recording info message -->
       <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
         <mat-icon *ngIf="isRecording" class="recordingIndicator">videocam</mat-icon>
