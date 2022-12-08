@@ -38,6 +38,9 @@ export class VideoRecordComponent implements OnDestroy {
     } else {
       this.startRecording().then((isSuccess) => {
         this.isRecording = isSuccess;
+
+        // Force change detection to update view. The view was not detecting
+        // this change automatically
         this.changeDetector.detectChanges();
       });
     }
