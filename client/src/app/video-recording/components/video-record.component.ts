@@ -70,7 +70,7 @@ export class VideoRecordComponent implements OnInit {
   /** The video stream from the user's webcam. */
   mediaRecorder: MediaRecorder;
   /** The blobs of the video. */
-  videos: Blob[] = [];
+  videos: (Blob | null)[] = [];
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
 
@@ -93,6 +93,9 @@ export class VideoRecordComponent implements OnInit {
     } else {
       this.recordVideo.startRecording().then((isSuccess: boolean) => {
         this.isRecording = isSuccess;
+
+        // Clear out the original video blob (if any)
+        this.videos[this.selectedVideoIndex] = null;
 
         // Force change detection to update view. The view was not detecting
         // this change automatically
