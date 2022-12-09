@@ -547,6 +547,18 @@ export class VideoRecordField extends TagField {
         oneOf: options,
         description: 'The dataset to save the videos into',
       },
+      minimumRequired: {
+        type: 'number',
+        description: 'The minimum number of videos the user needs to record',
+      },
+      maximumRequired: {
+        type: 'number',
+        description: 'The maximum number of videos the user needs to record',
+      },
+      maximumOptional: {
+        type: 'number',
+        description: 'The maximum number of videos the user can record (including required)',
+      }
     };
   }
 
@@ -556,11 +568,32 @@ export class VideoRecordField extends TagField {
         type: 'Control',
         scope: '#/properties/dataset',
       },
+      {
+        type: 'Control',
+        scope: '#/properties/minimumRequired',
+        options: {
+          showUnfocusedDescription: true,
+        }
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/maximumRequired',
+        options: {
+          showUnfocusedDescription: true,
+        }
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/maximumOptional',
+        options: {
+          showUnfocusedDescription: true,
+        }
+      },
     ];
   }
 
   protected getRequiredFieldProperties(): string[] {
-    return ['dataset'];
+    return ['dataset', 'minimumRequired', 'maximumRequired'];
   }
 
   asUIProperty(): any[] {
