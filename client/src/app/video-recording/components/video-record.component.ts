@@ -37,16 +37,16 @@ import { VideoPreviewComponent } from './video-preview.component';
         <!-- Left arrow -->
         <div fxLayout="row" fxLayoutAlign="start center">
           <button mat-icon-button (click)="previousVideo()">
-            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === 0">keyboard_arrow_left</mat-icon>
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording">keyboard_arrow_left</mat-icon>
           </button>
         </div>
 
         <video-preview #videoPreview (video)="videoBlob.emit($event)"></video-preview>
 
         <!-- Right arrow -->
-        <div fxLayout="row" fxLayoutAlign="end center" disabled="selectedVideoIndex === (numVideos - 1)">
+        <div fxLayout="row" fxLayoutAlign="end center">
           <button mat-icon-button (click)="nextVideo()">
-            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (numVideos - 1)">keyboard_arrow_right</mat-icon>
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (numVideos - 1) || isRecording">keyboard_arrow_right</mat-icon>
           </button>
         </div>
       </div>
@@ -76,7 +76,7 @@ export class VideoRecordComponent {
   /** Index of the selected video being displayed */
   selectedVideoIndex = 0;
   /** Number of videos being recorded, this will change later */
-  videos = [true, false, false];
+  videos = [false, false, false];
   /** Number of videos that will be recorded */
   numVideos = 3;
 
@@ -86,9 +86,11 @@ export class VideoRecordComponent {
     if (this.isRecording) {
       this.recordVideo.stopRecording();
       this.isRecording = false;
+      this.videos[this.selectedVideoIndex] = true;
     } else {
       this.recordVideo.startRecording().then((isSuccess: boolean) => {
         this.isRecording = isSuccess;
+        this.videos[this.selectedVideoIndex] = false;
 
         // Force change detection to update view. The view was not detecting
         // this change automatically
@@ -97,15 +99,24 @@ export class VideoRecordComponent {
     }
   }
 
+
+  /**
+   * Move to the next video as long as there is another video to move to
+   * and the user is not recording
+   */
   nextVideo(): void {
-    if (this.selectedVideoIndex < this.numVideos - 1) {
+    if (this.selectedVideoIndex < this.numVideos - 1 && !this.isRecording) {
       this.selectedVideoIndex++;
     }
     console.log(this.selectedVideoIndex);
   }
 
+  /**
+   * Move to the previous video as long as there is another video to move to
+   * and the user is not recording
+   */
   previousVideo(): void {
-    if (this.selectedVideoIndex > 0) {
+    if (this.selectedVideoIndex > 0 && !this.isRecording) {
       this.selectedVideoIndex--;
     }
   }
