@@ -118,6 +118,7 @@ export class VideoRecordComponent implements OnInit {
   nextVideo(): void {
     if (this.selectedVideoIndex < this.numVideos - 1 && !this.isRecording) {
       this.selectedVideoIndex++;
+      this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
     }
   }
 
@@ -128,6 +129,7 @@ export class VideoRecordComponent implements OnInit {
   previousVideo(): void {
     if (this.selectedVideoIndex > 0 && !this.isRecording) {
       this.selectedVideoIndex--;
+      this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
     }
   }
 }

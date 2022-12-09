@@ -107,15 +107,20 @@ export class VideoPreviewComponent implements OnDestroy {
     this.blobs.push(event.data);
   }
 
+  /**
+   * Set the preview, helpful when the user is changing which video
+   * to preview.
+   */
+  setPreviewVideo(video: Blob | null): void {
+    this.displayVideo(video);
+  }
+
   /** Save the video, display a preview of the video, and emit the URL */
   private onMediaStop(): void {
     // Gather the blobs
     const blob = new Blob(this.blobs, {type: 'video/webm'});
 
-    // Make a URL for the video preview
-    const url = URL.createObjectURL(blob);
-    this.previewVideo.nativeElement.srcObject = null;
-    this.previewVideo.nativeElement.src = url;
+    this.displayVideo(blob);
 
     // Emit the blob
     this.video.emit(blob);
@@ -125,5 +130,19 @@ export class VideoPreviewComponent implements OnDestroy {
   private displayWebcamError(message: string): void {
     console.debug(message);
     alert(message);
+  }
+
+  /** Helper that displays the video in blob format */
+  private displayVideo(blob: Blob | null): void {
+    if (!blob) {
+      // Clear the video
+      this.previewVideo.nativeElement.src = null;
+      this.previewVideo.nativeElement.load();
+      return;
+    }
+
+    const url = URL.createObjectURL(blob);
+    this.previewVideo.nativeElement.srcObject = null;
+    this.previewVideo.nativeElement.src = url;
   }
 }
