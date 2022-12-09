@@ -18,7 +18,7 @@ import {
       <video class="video" #previewVideo class="videoView" controls></video>
     </div>
   `,
-  styles: ['.videoView { width: 100%; height: 100%; overflow: hidden; }'],
+  styles: ['.videoView { width: 100%; height: 100%; min-width: 300px; min-height: 300px; overflow: hidden; }'],
 })
 export class VideoPreviewComponent implements OnDestroy {
   /** The view element for the video element */
