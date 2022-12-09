@@ -44,6 +44,9 @@ export class VideoPreviewComponent implements OnDestroy {
 
   /** Start the recording. Return true on success */
   async startRecording(): Promise<boolean> {
+    // Clear the blobs
+    this.blobs = [];
+
     // Try to get the video stream, return any issue to the user
     let stream: MediaStream;
     try {
