@@ -18,9 +18,11 @@ import { VideoPreviewComponent } from './video-preview.component';
     <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer">
       <!-- Circles representing the number of videos recorded -->
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div class="circle recordedIndicator"></div>
-        <div class="circle recordedIndicator selectedVideoIndicator"></div>
-        <div class="circle"></div>
+        <div *ngFor="let video of videos; let i = index"
+          class="circle"
+          [class.selectedVideoIndicator]="i === selectedVideoIndex"
+          [class.recordedIndicator]="video"
+        ></div>
       </div>
 
       <!-- Recording info message -->
@@ -29,7 +31,25 @@ import { VideoPreviewComponent } from './video-preview.component';
         <span>{{ isRecording ? "Recording..." : "Preview" }}</span>
       </div>
 
-      <video-preview #videoPreview (video)="videoBlob.emit($event)"></video-preview>
+      <!-- Video preview and navigation buttons -->
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="videoSwitcher">
+
+        <!-- Left arrow -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button mat-icon-button (click)="previousVideo()">
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === 0">keyboard_arrow_left</mat-icon>
+          </button>
+        </div>
+
+        <video-preview #videoPreview (video)="videoBlob.emit($event)"></video-preview>
+
+        <!-- Right arrow -->
+        <div fxLayout="row" fxLayoutAlign="end center" disabled="selectedVideoIndex === (numVideos - 1)">
+          <button mat-icon-button (click)="nextVideo()">
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (numVideos - 1)">keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </div>
 
       <!-- Button to start/stop recording -->
       <div>
@@ -53,6 +73,13 @@ export class VideoRecordComponent {
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
 
+  /** Index of the selected video being displayed */
+  selectedVideoIndex = 0;
+  /** Number of videos being recorded, this will change later */
+  videos = [true, false, false];
+  /** Number of videos that will be recorded */
+  numVideos = 3;
+
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   toggleRecording(): void {
@@ -67,6 +94,19 @@ export class VideoRecordComponent {
         // this change automatically
         this.changeDetector.detectChanges();
       });
+    }
+  }
+
+  nextVideo(): void {
+    if (this.selectedVideoIndex < this.numVideos - 1) {
+      this.selectedVideoIndex++;
+    }
+    console.log(this.selectedVideoIndex);
+  }
+
+  previousVideo(): void {
+    if (this.selectedVideoIndex > 0) {
+      this.selectedVideoIndex--;
     }
   }
 }
