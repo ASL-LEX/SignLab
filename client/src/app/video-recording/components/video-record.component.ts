@@ -4,6 +4,7 @@ import {
   ViewChild,
   EventEmitter,
   Output,
+  OnInit,
 } from '@angular/core';
 import { VideoPreviewComponent } from './video-preview.component';
 
@@ -21,7 +22,7 @@ import { VideoPreviewComponent } from './video-preview.component';
         <div *ngFor="let video of videos; let i = index"
           class="circle"
           [class.selectedVideoIndicator]="i === selectedVideoIndex"
-          [class.recordedIndicator]="video"
+          [class.recordedIndicator]="video !== null"
         ></div>
       </div>
 
@@ -41,7 +42,7 @@ import { VideoPreviewComponent } from './video-preview.component';
           </button>
         </div>
 
-        <video-preview #videoPreview (video)="videoBlob.emit($event)"></video-preview>
+        <video-preview #videoPreview (video)="saveBlob($event)"></video-preview>
 
         <!-- Right arrow -->
         <div fxLayout="row" fxLayoutAlign="end center">
@@ -61,7 +62,7 @@ import { VideoPreviewComponent } from './video-preview.component';
   `,
   styleUrls: ['./video-record.component.css'],
 })
-export class VideoRecordComponent {
+export class VideoRecordComponent implements OnInit {
   /** The view element for the video element */
   @ViewChild('videoPreview') recordVideo: VideoPreviewComponent;
   /** Keeps track of if the user is actively recording a video. */
@@ -69,34 +70,41 @@ export class VideoRecordComponent {
   /** The video stream from the user's webcam. */
   mediaRecorder: MediaRecorder;
   /** The blobs of the video. */
-  blobs: Blob[] = [];
+  videos: Blob[] = [];
   /** Output to emit completed video blob */
   @Output() videoBlob = new EventEmitter<Blob>();
 
   /** Index of the selected video being displayed */
   selectedVideoIndex = 0;
-  /** Number of videos being recorded, this will change later */
-  videos = [false, false, false];
   /** Number of videos that will be recorded */
   numVideos = 3;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
+  ngOnInit() {
+    // Initially all the vdeo blobs are null
+    this.videos = new Array(this.numVideos).fill(null);
+  }
+
   toggleRecording(): void {
     if (this.isRecording) {
       this.recordVideo.stopRecording();
       this.isRecording = false;
-      this.videos[this.selectedVideoIndex] = true;
     } else {
       this.recordVideo.startRecording().then((isSuccess: boolean) => {
         this.isRecording = isSuccess;
-        this.videos[this.selectedVideoIndex] = false;
 
         // Force change detection to update view. The view was not detecting
         // this change automatically
         this.changeDetector.detectChanges();
       });
     }
+  }
+
+  saveBlob(blob: Blob): void {
+    this.videos[this.selectedVideoIndex] = blob;
+    this.videoBlob.emit(blob);
+    this.changeDetector.detectChanges();
   }
 
 
@@ -108,7 +116,6 @@ export class VideoRecordComponent {
     if (this.selectedVideoIndex < this.numVideos - 1 && !this.isRecording) {
       this.selectedVideoIndex++;
     }
-    console.log(this.selectedVideoIndex);
   }
 
   /**
