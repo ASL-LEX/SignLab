@@ -116,8 +116,9 @@ export class StudiesControlComponent implements OnInit {
       if (Array.isArray(value)) {
         return value.join(' ');
       }
-      return value; // specify how you want to handle null values here
+      return value;
     }
+
     const csv = data.map((row) =>
       headerElements
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))
