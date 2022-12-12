@@ -588,6 +588,19 @@ export class VideoRecordField extends TagField {
     return ['dataset'];
   }
 
+  asDataProperty(): JsonSchema {
+    return {
+      [this.getFieldName()]: {
+        type: 'array',
+        description: this.getDescription(),
+        items: {
+          type: 'string',
+        },
+        minItems: this.data.minimumRequired || 1,
+      }
+    }
+  }
+
   asUIProperty(): any[] {
     return [
       {

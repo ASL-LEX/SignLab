@@ -5,6 +5,7 @@ import {
   RankedTester,
   rankWith,
   Actions,
+  updateErrors
 } from '@jsonforms/core';
 import { VideoTagUploadService } from '../../core/services/video-tag-upload.service';
 import { TagService } from '../../core/services/tag.service';
@@ -38,6 +39,8 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   minVideos: number;
   /** The upper limit on the number of videos that can be recorded */
   maxVideos: number;
+  /** List of videos URIs for the fields saved */
+  videoURIs: string[] = [];
 
   constructor(
     jsonFormsService: JsonFormsAngularService,
@@ -70,14 +73,19 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
       videoInfo.videoNumber
     );
 
+    // Update the video URIs
+    this.videoURIs[videoInfo.videoNumber] = uri;
+
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
-    this.jsonFormsService.updateCore(Actions.update(path, () => uri));
+    this.jsonFormsService.updateCore(Actions.update(path, () => this.videoURIs.filter(uri => uri !== '')));
     this.triggerValidation();
   }
 
   ngOnInit(): void {
     super.ngOnInit();
+
+    console.log(this.uischema);
 
     // Get the dataset ID from the schema
     if (this.uischema.options != undefined) {
@@ -98,10 +106,35 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
       console.error('No dataset ID provided for video field');
     }
 
+    this.videoURIs = new Array(this.maxVideos).fill('');
+
     // Get the fieldname from the uischema
     this.tagFieldName = this.uischema.scope.slice(
       this.uischema.scope.lastIndexOf('/') + 1
     );
+  }
+
+  /**
+   * Override of default validator to ensure that the correct number of videos
+   * have been recorded
+   */
+  triggerValidation(): void {
+    if (!this.videoURIs) {
+      // super.triggerValidation();
+      return;
+    }
+
+    const isValid = this.videoURIs.filter(uri => uri !== '').length >= this.minVideos;
+
+    const errorObject = {
+      instancePath: this.tagFieldName,
+      schemaPath: '#/properties/' + this.tagFieldName,
+      message: 'Must record at least ' + this.minVideos + ' videos',
+      params: {},
+      keyword: 'minItems',
+    };
+
+    this.jsonFormsService.updateCore(updateErrors(isValid ? [] : [errorObject]));
   }
 }
 
