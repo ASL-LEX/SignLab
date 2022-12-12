@@ -72,7 +72,7 @@ export class VideoRecordComponent implements OnInit {
   /** The blobs of the video. */
   videos: (Blob | null)[] = [];
   /** Output to emit completed video blob */
-  @Output() videoBlob = new EventEmitter<Blob>();
+  @Output() videoBlob = new EventEmitter<{ videoBlob: Blob, videoNumber: number }>();
 
   /** Index of the selected video being displayed */
   selectedVideoIndex = 0;
@@ -106,7 +106,7 @@ export class VideoRecordComponent implements OnInit {
 
   saveBlob(blob: Blob): void {
     this.videos[this.selectedVideoIndex] = blob;
-    this.videoBlob.emit(blob);
+    this.videoBlob.emit({ videoBlob: blob, videoNumber: this.selectedVideoIndex });
     this.changeDetector.detectChanges();
   }
 

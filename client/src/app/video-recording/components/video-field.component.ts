@@ -32,6 +32,10 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   datasetID: string;
   /** The fieldname of the video */
   tagFieldName: string;
+  /** Mimumim number of videos that must be recorded */
+  minVideos: number;
+  /** The upper limit on the number of videos that can be recorded */
+  maxVideos: number;
 
   constructor(
     jsonFormsService: JsonFormsAngularService,
@@ -41,7 +45,15 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     super(jsonFormsService);
   }
 
-  async saveVideo(videoBlob: Blob): Promise<void> {
+  /**
+   * Save the video to the backend. The video is saved as part of a tag
+   * in the context of the field of the tag as well as the video number
+   * in that field.
+   *
+   * ie) For a tag on a study, there can be many fields, each field could
+   * require some range of videos to be recorded
+   */
+  async saveVideo(videoInfo: { videoBlob: Blob, videoNumber: number }): Promise<void> {
     if (!this.tagService.hasCurrentTag()) {
       console.info('No tag selected, not saving video');
       return;
@@ -50,9 +62,10 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     // Upload the video to the backend
     const uri = await this.videoUpload.uploadVideo(
       this.tagService.current,
-      videoBlob,
+      videoInfo.videoBlob,
       this.tagFieldName,
-      this.datasetID
+      this.datasetID,
+      videoInfo.videoNumber
     );
 
     // Update the value of the form to be the URI of the video
@@ -65,14 +78,14 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     super.ngOnInit();
 
     // Get the dataset ID from the schema
-    if (
-      this.uischema.options != undefined &&
-      this.uischema.options.dataset != undefined
-    ) {
+    if (this.uischema.options != undefined) {
       this.datasetID = this.uischema.options.dataset;
+      this.minVideos = this.uischema.options.minimumRequired;
+      this.maxVideos = this.uischema.options.maximumOptional;
     } else {
       console.error('No dataset ID provided for video field');
     }
+
 
     // Get the fieldname from the uischema
     this.tagFieldName = this.uischema.scope.slice(

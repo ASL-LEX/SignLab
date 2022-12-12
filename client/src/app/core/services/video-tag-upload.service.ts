@@ -16,7 +16,8 @@ export class VideoTagUploadService {
     tag: Tag,
     video: Blob,
     fieldName: string,
-    datasetID: string
+    datasetID: string,
+    videoNumber: number
   ): Promise<string> {
     // Make a file from the blob
     // TODO: Check file type
@@ -28,6 +29,7 @@ export class VideoTagUploadService {
     formParams.append('tag', JSON.stringify(tag));
     formParams.append('field', fieldName);
     formParams.append('datasetID', datasetID);
+    formParams.append('videoNumber', videoNumber.toString());
 
     // Submit the form
     return (

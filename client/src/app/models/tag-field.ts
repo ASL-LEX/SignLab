@@ -530,6 +530,9 @@ export class VideoRecordField extends TagField {
   /**
    * The video record field requires a dataset to record to. This will provide
    * the user creating the form with a list of datasets to choose from.
+   *
+   * TODO: Need to validate that the minimumRequired is not greater than the
+   * maximumOptional
    */
   async getFieldSpecificProperties(): Promise<{
     [property: string]: JsonSchema;
@@ -549,15 +552,11 @@ export class VideoRecordField extends TagField {
       },
       minimumRequired: {
         type: 'number',
-        description: 'The minimum number of videos the user needs to record',
-      },
-      maximumRequired: {
-        type: 'number',
-        description: 'The maximum number of videos the user needs to record',
+        description: 'The minimum number of videos the user needs to record, (defaults to 1)',
       },
       maximumOptional: {
         type: 'number',
-        description: 'The maximum number of videos the user can record (including required)',
+        description: 'The maximum number of videos the user can record (including required, defaults to 1)',
       }
     };
   }
@@ -577,13 +576,6 @@ export class VideoRecordField extends TagField {
       },
       {
         type: 'Control',
-        scope: '#/properties/maximumRequired',
-        options: {
-          showUnfocusedDescription: true,
-        }
-      },
-      {
-        type: 'Control',
         scope: '#/properties/maximumOptional',
         options: {
           showUnfocusedDescription: true,
@@ -593,7 +585,7 @@ export class VideoRecordField extends TagField {
   }
 
   protected getRequiredFieldProperties(): string[] {
-    return ['dataset', 'minimumRequired', 'maximumRequired'];
+    return ['dataset'];
   }
 
   asUIProperty(): any[] {
@@ -604,6 +596,8 @@ export class VideoRecordField extends TagField {
         options: {
           customType: 'video',
           dataset: this.data.dataset,
+          minimumRequired: this.data.minimumRequired || 1,
+          maximumOptional: this.data.maximumOptional || 1,
           showUnfocusedDescription: true,
         },
       },
