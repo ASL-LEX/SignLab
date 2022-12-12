@@ -27,8 +27,11 @@ import { VideoPreviewComponent } from './video-preview.component';
         ></div>
       </div>
 
-      <!-- Showing how many videos that have to be required -->
-      <h3>Required: {{ minVideos }} {{ minVideos > 1 ? "Videos" : "Video" }}</h3>
+      <!-- Showing how many videos that have to be required, check icon if the required number of videos are required -->
+      <div fxLayout="row" fxLayoutAlign="space-evenly none" >
+        <h3>Required: {{ minVideos }} {{ minVideos > 1 ? "Videos" : "Video" }} Optional: {{ maxVideos }}</h3>
+        <mat-icon *ngIf="numVideosRecorded >= minVideos">check_circle</mat-icon>
+      </div>
 
       <!-- Recording info message -->
       <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
@@ -84,6 +87,7 @@ export class VideoRecordComponent implements OnInit {
   @Input() minVideos: number;
   /** The maximum number of videos the user can record */
   @Input() maxVideos: number;
+  numVideosRecorded: number = 0;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
@@ -118,6 +122,7 @@ export class VideoRecordComponent implements OnInit {
 
   saveBlob(blob: Blob): void {
     this.videos[this.selectedVideoIndex] = blob;
+    this.numVideosRecorded = this.videos.filter((video) => video !== null).length;
     this.videoBlob.emit({ videoBlob: blob, videoNumber: this.selectedVideoIndex });
     this.changeDetector.detectChanges();
   }
