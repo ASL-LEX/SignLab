@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Output,
   OnInit,
+  Input,
 } from '@angular/core';
 import { VideoPreviewComponent } from './video-preview.component';
 
@@ -25,6 +26,9 @@ import { VideoPreviewComponent } from './video-preview.component';
           [class.recordedIndicator]="video !== null"
         ></div>
       </div>
+
+      <!-- Showing how many videos that have to be required -->
+      <h3>Required: {{ minVideos }} {{ minVideos > 1 ? "Videos" : "Video" }}</h3>
 
       <!-- Recording info message -->
       <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
@@ -47,7 +51,7 @@ import { VideoPreviewComponent } from './video-preview.component';
         <!-- Right arrow -->
         <div fxLayout="row" fxLayoutAlign="end center">
           <button mat-icon-button (click)="nextVideo()">
-            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (numVideos - 1) || isRecording">keyboard_arrow_right</mat-icon>
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (maxVideos - 1) || isRecording">keyboard_arrow_right</mat-icon>
           </button>
         </div>
       </div>
@@ -76,14 +80,22 @@ export class VideoRecordComponent implements OnInit {
 
   /** Index of the selected video being displayed */
   selectedVideoIndex = 0;
-  /** Number of videos that will be recorded */
-  numVideos = 3;
+  /** The minimum number of videos the user must record */
+  @Input() minVideos: number;
+  /** The maximum number of videos the user can record */
+  @Input() maxVideos: number;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit() {
     // Initially all the vdeo blobs are null
-    this.videos = new Array(this.numVideos).fill(null);
+    this.videos = new Array(this.maxVideos).fill(null);
+
+    // Cannot setup component until the min and max videos are set
+    if (this.minVideos === undefined || this.maxVideos === undefined) {
+      console.debug(`Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`);
+      throw new Error('minVideos and maxVideos must be defined');
+    }
   }
 
   toggleRecording(): void {
@@ -116,7 +128,7 @@ export class VideoRecordComponent implements OnInit {
    * and the user is not recording
    */
   nextVideo(): void {
-    if (this.selectedVideoIndex < this.numVideos - 1 && !this.isRecording) {
+    if (this.selectedVideoIndex < this.maxVideos - 1 && !this.isRecording) {
       this.selectedVideoIndex++;
       this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
     }

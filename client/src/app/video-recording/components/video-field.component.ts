@@ -23,7 +23,9 @@ import { TagService } from '../../core/services/tag.service';
           {{ description }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <video-record (videoBlob)="saveVideo($event)"></video-record>
+      <video-record (videoBlob)="saveVideo($event)"
+                    [minVideos]="minVideos"
+                    [maxVideos]="maxVideos"></video-record>
     </mat-expansion-panel>
   `,
 })
@@ -79,13 +81,22 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
 
     // Get the dataset ID from the schema
     if (this.uischema.options != undefined) {
+      // Get the dataset to save to
       this.datasetID = this.uischema.options.dataset;
+
+      // Determine the minimum and maximum number of videos that can be
+      // recorded
       this.minVideos = this.uischema.options.minimumRequired;
-      this.maxVideos = this.uischema.options.maximumOptional;
+
+      // If the maximum number of videos is not specified, default to minVideos
+      if (!this.uischema.options.maximumOptional) {
+        this.maxVideos = this.minVideos;
+      } else {
+        this.maxVideos = this.uischema.options.maximumOptional;
+      }
     } else {
       console.error('No dataset ID provided for video field');
     }
-
 
     // Get the fieldname from the uischema
     this.tagFieldName = this.uischema.scope.slice(
