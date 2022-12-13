@@ -1,5 +1,5 @@
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   composeWithUi,
   RankedTester,
@@ -9,6 +9,7 @@ import {
 } from '@jsonforms/core';
 import { VideoTagUploadService } from '../../core/services/video-tag-upload.service';
 import { TagService } from '../../core/services/tag.service';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 
 /**
  * JSON Forms field for a single video. The video will be passed to the backend
@@ -45,7 +46,8 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   constructor(
     jsonFormsService: JsonFormsAngularService,
     private videoUpload: VideoTagUploadService,
-    private tagService: TagService
+    private tagService: TagService,
+    private changeDetector: ChangeDetectorRef
   ) {
     super(jsonFormsService);
   }
@@ -85,8 +87,6 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   ngOnInit(): void {
     super.ngOnInit();
 
-    console.log(this.uischema);
-
     // Get the dataset ID from the schema
     if (this.uischema.options != undefined) {
       // Get the dataset to save to
@@ -112,29 +112,10 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     this.tagFieldName = this.uischema.scope.slice(
       this.uischema.scope.lastIndexOf('/') + 1
     );
-  }
 
-  /**
-   * Override of default validator to ensure that the correct number of videos
-   * have been recorded
-   */
-  triggerValidation(): void {
-    if (!this.videoURIs) {
-      // super.triggerValidation();
-      return;
-    }
-
-    const isValid = this.videoURIs.filter(uri => uri !== '').length >= this.minVideos;
-
-    const errorObject = {
-      instancePath: this.tagFieldName,
-      schemaPath: '#/properties/' + this.tagFieldName,
-      message: 'Must record at least ' + this.minVideos + ' videos',
-      params: {},
-      keyword: 'minItems',
-    };
-
-    this.jsonFormsService.updateCore(updateErrors(isValid ? [] : [errorObject]));
+    // Set the values stored as empty initially
+    this.jsonFormsService.updateCore(Actions.update(this.path, () => []));
+    this.triggerValidation();
   }
 }
 
