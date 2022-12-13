@@ -170,6 +170,11 @@ export class TagController {
   /**
    * Save a video that is part of a tag. This will store the video in a
    * bucket
+   *
+   * @param tagStr The tag that the video is being recorded for
+   * @param field The field in the tag form this video is for
+   * @param datasetID The dataset to save into
+   * @param videoNumber The number of the video in the field being recorded
    */
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
@@ -178,6 +183,7 @@ export class TagController {
     @Body('tag') tagStr: string,
     @Body('field') field: string,
     @Body('datasetID') datasetID: string,
+    @Body('videoNumber') videoNumber: number,
   ): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
@@ -209,7 +215,7 @@ export class TagController {
 
     // Save the file
     const fileExtension = file.originalname.split('.').pop();
-    const target = `Tag/videos/${existingTag._id}/${field}.${fileExtension}`;
+    const target = `Tag/videos/${existingTag._id}/${videoNumber}/${field}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
 
     // Only make entries of non-tagging videos

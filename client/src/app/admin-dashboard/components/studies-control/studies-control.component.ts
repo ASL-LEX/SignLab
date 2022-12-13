@@ -108,8 +108,17 @@ export class StudiesControlComponent implements OnInit {
   }
 
   downloadFile(headerElements: string[], data: any[]) {
-    const replacer = (_key: string, value: any) =>
-      value === null ? '' : value; // specify how you want to handle null values here
+    const replacer = (_key: string, value: any) => {
+      if (value === null) {
+        return '';
+      }
+      // For arrays, join the elements with a space
+      if (Array.isArray(value)) {
+        return value.join(' ');
+      }
+      return value;
+    };
+
     const csv = data.map((row) =>
       headerElements
         .map((fieldName) => JSON.stringify(row[fieldName], replacer))

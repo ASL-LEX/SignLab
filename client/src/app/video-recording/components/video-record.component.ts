@@ -1,12 +1,13 @@
 import {
   ChangeDetectorRef,
   Component,
-  ElementRef,
   ViewChild,
   EventEmitter,
   Output,
-  OnDestroy,
+  OnInit,
+  Input,
 } from '@angular/core';
+import { VideoPreviewComponent } from './video-preview.component';
 
 /**
  * Interface for recording a single video. The video will be stored and
@@ -14,30 +15,137 @@ import {
  */
 @Component({
   selector: 'video-record',
-  templateUrl: './video-record.component.html',
+  template: `
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      class="videoContainer"
+      (mouseover)="mouseOver = true"
+      (mouseout)="mouseOver = false"
+    >
+      <!-- Circles representing the number of videos recorded -->
+      <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div
+          *ngFor="let video of videos; let i = index"
+          class="circle"
+          [class.selectedVideoIndicator]="i === selectedVideoIndex"
+          [class.recordedIndicator]="video !== null"
+        ></div>
+      </div>
+
+      <!-- Showing how many videos that have to be required, check icon if the required number of videos are required -->
+      <div fxLayout="row" fxLayoutAlign="space-evenly none">
+        <h3>
+          Required: {{ minVideos }}
+          {{ minVideos > 1 ? 'Videos' : 'Video' }} Optional: {{ maxVideos }}
+        </h3>
+        <mat-icon *ngIf="numVideosRecorded >= minVideos">check_circle</mat-icon>
+      </div>
+
+      <!-- Recording info message -->
+      <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
+        <mat-icon *ngIf="isRecording" class="recordingIndicator"
+          >videocam</mat-icon
+        >
+        <span>{{ isRecording ? 'Recording...' : 'Preview' }}</span>
+      </div>
+
+      <!-- Video preview and navigation buttons -->
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        class="videoSwitcher"
+      >
+        <!-- Left arrow -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button mat-icon-button (click)="previousVideo()">
+            <mat-icon
+              class="arrow"
+              [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording"
+              >keyboard_arrow_left</mat-icon
+            >
+          </button>
+        </div>
+
+        <video-preview #videoPreview (video)="saveBlob($event)"></video-preview>
+
+        <!-- Right arrow -->
+        <div fxLayout="row" fxLayoutAlign="end center">
+          <button mat-icon-button (click)="nextVideo()">
+            <mat-icon
+              class="arrow"
+              [class.arrowDisabled]="
+                selectedVideoIndex === maxVideos - 1 || isRecording
+              "
+              >keyboard_arrow_right</mat-icon
+            >
+          </button>
+        </div>
+      </div>
+
+      <!-- Button to start/stop recording -->
+      <div>
+        <button (click)="toggleRecording()" mat-stroked-button>
+          {{ isRecording ? 'Stop Recording' : 'Start Recording' }}
+        </button>
+      </div>
+    </div>
+  `,
   styleUrls: ['./video-record.component.css'],
+  host: {
+    '(document:keydown)': 'handleKeyboardEvent($event)',
+  },
 })
-export class VideoRecordComponent implements OnDestroy {
+export class VideoRecordComponent implements OnInit {
   /** The view element for the video element */
-  @ViewChild('recordVideo') recordVideo: ElementRef;
+  @ViewChild('videoPreview') recordVideo: VideoPreviewComponent;
   /** Keeps track of if the user is actively recording a video. */
   isRecording = false;
   /** The video stream from the user's webcam. */
   mediaRecorder: MediaRecorder;
   /** The blobs of the video. */
-  blobs: Blob[] = [];
+  videos: (Blob | null)[] = [];
   /** Output to emit completed video blob */
-  @Output() videoBlob = new EventEmitter<Blob>();
+  @Output() videoBlob = new EventEmitter<{
+    videoBlob: Blob;
+    videoNumber: number;
+  }>();
+
+  /** Index of the selected video being displayed */
+  selectedVideoIndex = 0;
+  /** The minimum number of videos the user must record */
+  @Input() minVideos: number;
+  /** The maximum number of videos the user can record */
+  @Input() maxVideos: number;
+  numVideosRecorded = 0;
+  /** Used to determine if the keypresses should be considered */
+  mouseOver = false;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
+  ngOnInit() {
+    // Initially all the vdeo blobs are null
+    this.videos = new Array(this.maxVideos).fill(null);
+
+    // Cannot setup component until the min and max videos are set
+    if (this.minVideos === undefined || this.maxVideos === undefined) {
+      console.debug(
+        `Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`
+      );
+      throw new Error('minVideos and maxVideos must be defined');
+    }
+  }
+
   toggleRecording(): void {
     if (this.isRecording) {
-      this.stopRecording();
+      this.recordVideo.stopRecording();
       this.isRecording = false;
     } else {
-      this.startRecording().then((isSuccess) => {
+      this.recordVideo.startRecording().then((isSuccess: boolean) => {
         this.isRecording = isSuccess;
+
+        // Clear out the original video blob (if any)
+        this.videos[this.selectedVideoIndex] = null;
 
         // Force change detection to update view. The view was not detecting
         // this change automatically
@@ -46,99 +154,51 @@ export class VideoRecordComponent implements OnDestroy {
     }
   }
 
-  /** Start the recording, return true if successful */
-  private async startRecording(): Promise<boolean> {
-    // Make a new stream, clear out original data
-    this.recordVideo.nativeElement.currentTime = 0;
-    let stream: MediaStream;
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-      });
-    } catch (err: any) {
-      console.debug('Could not get user media', err);
-      this.isRecording = false;
-
-      // Let the user know that they need to enable their webcam.
-      const message =
-        'Unable to access webcam, make sure you have given permission' +
-        'to access your webcam and that no other application is using it.';
-      this.displayWebcamError(message);
-      return false;
-    }
-
-    this.recordVideo.nativeElement.srcObject = stream;
-    this.blobs = [];
-
-    let options: MediaRecorderOptions = { mimeType: 'video/webm' };
-    if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-      options = { mimeType: 'video/webm; codecs=vp9' };
-    } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
-      options = { mimeType: 'video/webm; codecs=vp8' };
-    } else {
-      console.error('Cannot instantiate mediaRecorder');
-      this.displayWebcamError(
-        'Unable to record video, please try again and ' +
-          'report this issue if it persists.'
-      );
-      return false;
-    }
-
-    // Start the recording
-    this.mediaRecorder = new MediaRecorder(stream, options);
-    this.mediaRecorder.start();
-    this.recordVideo.nativeElement.play();
-
-    // Set up event listeners
-    this.mediaRecorder.ondataavailable = (event) => {
-      this.onBlobAvailable(event);
-    };
-    this.mediaRecorder.onstop = (_event) => {
-      this.onMediaStop();
-    };
-
-    // Return success
-    return true;
-  }
-
-  stopRecording(): void {
-    this.mediaRecorder.stop();
-    this.recordVideo.nativeElement.pause();
-  }
-
-  ngOnDestroy(): void {
-    // Clear out the video element
-    this.recordVideo.nativeElement.pause();
-    this.recordVideo.nativeElement.src = '';
-    this.recordVideo.nativeElement.load();
-    this.recordVideo.nativeElement.remove();
-  }
-
-  /** Let the user know that they need to enable their webcam. */
-  displayWebcamError(message: string): void {
-    console.debug(message);
-    alert(message);
+  saveBlob(blob: Blob): void {
+    this.videos[this.selectedVideoIndex] = blob;
+    this.numVideosRecorded = this.videos.filter(
+      (video) => video !== null
+    ).length;
+    this.videoBlob.emit({
+      videoBlob: blob,
+      videoNumber: this.selectedVideoIndex,
+    });
+    this.changeDetector.detectChanges();
   }
 
   /**
-   * Handles the logic of storing produced blobs into an array
+   * Move to the next video as long as there is another video to move to
+   * and the user is not recording
    */
-  private onBlobAvailable(event: BlobEvent): void {
-    this.blobs.push(event.data);
+  nextVideo(): void {
+    if (this.selectedVideoIndex < this.maxVideos - 1 && !this.isRecording) {
+      this.selectedVideoIndex++;
+      this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
+    }
   }
 
   /**
-   * Handles the logic of collecting the blobs, producing the
-   * cooresponding video, and updating the video element to show the
-   * user the recorded video.
+   * Move to the previous video as long as there is another video to move to
+   * and the user is not recording
    */
-  private onMediaStop(): void {
-    const videoBuffer = new Blob(this.blobs, { type: 'video/webm' });
-    const videoUrl = URL.createObjectURL(videoBuffer);
-    this.recordVideo.nativeElement.srcObject = null;
-    this.recordVideo.nativeElement.src = videoUrl;
+  previousVideo(): void {
+    if (this.selectedVideoIndex > 0 && !this.isRecording) {
+      this.selectedVideoIndex--;
+      this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
+    }
+  }
 
-    // Emit the completed video
-    this.videoBlob.emit(videoBuffer);
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (!this.mouseOver) {
+      return;
+    }
+
+    if (event.key === 'ArrowRight') {
+      this.nextVideo();
+    } else if (event.key === 'ArrowLeft') {
+      this.previousVideo();
+    } else if (event.key === ' ') {
+      this.toggleRecording();
+    }
   }
 }

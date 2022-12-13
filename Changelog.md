@@ -7,6 +7,7 @@
 * Slider field for tagging
 * Support for tagging images
 * Alert when accessing the webcam for video recording failes
+* Ability to record multiple videos for a single tag field
 
 ### Changed
 

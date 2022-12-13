@@ -1,8 +1,10 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -77,7 +79,7 @@ import {
     `,
   ],
 })
-export class TaggingForm implements OnChanges {
+export class TaggingForm implements OnChanges, OnInit {
   /** The tag to complete */
   @Input() tag: Tag;
   /** Emits the tag when the tag form has been completed successfully */
@@ -107,6 +109,12 @@ export class TaggingForm implements OnChanges {
   /** Used for clearing the form */
   tagData: any = {};
 
+  constructor(private changeDetector: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.formValid = false;
+  }
+
   /** Handles changes made in the form */
   formChange(data: any) {
     this.formData = data;
@@ -123,6 +131,7 @@ export class TaggingForm implements OnChanges {
   /** Handles in coming errors */
   formErrorHandler(errors: any[]) {
     this.formValid = errors.length == 0;
+    this.changeDetector.detectChanges();
   }
 
   /** Handles when the tag changes */
