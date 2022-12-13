@@ -17,7 +17,7 @@ import { VideoPreviewComponent } from './video-preview.component';
   selector: 'video-record',
   template:
     `
-    <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer">
+    <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer" (mouseover)="mouseOver=true" (mouseout)="mouseOver=false">
       <!-- Circles representing the number of videos recorded -->
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <div *ngFor="let video of videos; let i = index"
@@ -68,6 +68,9 @@ import { VideoPreviewComponent } from './video-preview.component';
     </div>
   `,
   styleUrls: ['./video-record.component.css'],
+  host: {
+    '(document:keydown)': 'handleKeyboardEvent($event)'
+  }
 })
 export class VideoRecordComponent implements OnInit {
   /** The view element for the video element */
@@ -88,6 +91,8 @@ export class VideoRecordComponent implements OnInit {
   /** The maximum number of videos the user can record */
   @Input() maxVideos: number;
   numVideosRecorded: number = 0;
+  /** Used to determine if the keypresses should be considered */
+  mouseOver = false;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
 
@@ -147,6 +152,20 @@ export class VideoRecordComponent implements OnInit {
     if (this.selectedVideoIndex > 0 && !this.isRecording) {
       this.selectedVideoIndex--;
       this.recordVideo.setPreviewVideo(this.videos[this.selectedVideoIndex]);
+    }
+  }
+
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (!this.mouseOver) {
+      return;
+    }
+
+    if (event.key === 'ArrowRight') {
+      this.nextVideo();
+    } else if (event.key === 'ArrowLeft') {
+      this.previousVideo();
+    } else if (event.key === ' ') {
+      this.toggleRecording();
     }
   }
 }
