@@ -552,12 +552,14 @@ export class VideoRecordField extends TagField {
       },
       minimumRequired: {
         type: 'number',
-        description: 'The minimum number of videos the user needs to record, (defaults to 1)',
+        description:
+          'The minimum number of videos the user needs to record, (defaults to 1)',
       },
       maximumOptional: {
         type: 'number',
-        description: 'The maximum number of videos the user can record (including required, defaults to 1)',
-      }
+        description:
+          'The maximum number of videos the user can record (including required, defaults to 1)',
+      },
     };
   }
 
@@ -572,14 +574,14 @@ export class VideoRecordField extends TagField {
         scope: '#/properties/minimumRequired',
         options: {
           showUnfocusedDescription: true,
-        }
+        },
       },
       {
         type: 'Control',
         scope: '#/properties/maximumOptional',
         options: {
           showUnfocusedDescription: true,
-        }
+        },
       },
     ];
   }
@@ -597,8 +599,8 @@ export class VideoRecordField extends TagField {
           type: 'string',
         },
         minItems: this.data.minimumRequired || 1,
-      }
-    }
+      },
+    };
   }
 
   asUIProperty(): any[] {

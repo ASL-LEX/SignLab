@@ -18,7 +18,9 @@ import {
       <video class="video" #previewVideo class="videoView" controls></video>
     </div>
   `,
-  styles: ['.videoView { width: 100%; height: 100%; min-width: 300px; min-height: 300px; overflow: hidden; }'],
+  styles: [
+    '.videoView { width: 100%; height: 100%; min-width: 300px; min-height: 300px; overflow: hidden; }',
+  ],
 })
 export class VideoPreviewComponent implements OnDestroy {
   /** The view element for the video element */
@@ -57,10 +59,11 @@ export class VideoPreviewComponent implements OnDestroy {
     } catch (err: any) {
       // Display the error to the user
       console.debug('Could not get user media', err);
-      this.displayWebcamError('Unable to access webcam, make sure you have given '+
-                              'permission to access your webcam and that no other ' +
-                              'application is using it.');
-
+      this.displayWebcamError(
+        'Unable to access webcam, make sure you have given ' +
+          'permission to access your webcam and that no other ' +
+          'application is using it.'
+      );
 
       return false;
     }
@@ -118,7 +121,7 @@ export class VideoPreviewComponent implements OnDestroy {
   /** Save the video, display a preview of the video, and emit the URL */
   private onMediaStop(): void {
     // Gather the blobs
-    const blob = new Blob(this.blobs, {type: 'video/webm'});
+    const blob = new Blob(this.blobs, { type: 'video/webm' });
 
     this.displayVideo(blob);
 

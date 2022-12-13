@@ -117,7 +117,7 @@ export class StudiesControlComponent implements OnInit {
         return value.join(' ');
       }
       return value;
-    }
+    };
 
     const csv = data.map((row) =>
       headerElements

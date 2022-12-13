@@ -6,7 +6,11 @@ import { VideoPreviewComponent } from './components/video-preview.component';
 import { CoreModule } from '../core/core.module';
 
 @NgModule({
-  declarations: [VideoRecordComponent, VideoFieldComponent, VideoPreviewComponent],
+  declarations: [
+    VideoRecordComponent,
+    VideoFieldComponent,
+    VideoPreviewComponent,
+  ],
   imports: [SharedModule, CoreModule],
   exports: [VideoRecordComponent, VideoFieldComponent],
   providers: [],

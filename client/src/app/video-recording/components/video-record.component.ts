@@ -15,12 +15,18 @@ import { VideoPreviewComponent } from './video-preview.component';
  */
 @Component({
   selector: 'video-record',
-  template:
-    `
-    <div fxLayout="column" fxLayoutAlign="center center" class="videoContainer" (mouseover)="mouseOver=true" (mouseout)="mouseOver=false">
+  template: `
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      class="videoContainer"
+      (mouseover)="mouseOver = true"
+      (mouseout)="mouseOver = false"
+    >
       <!-- Circles representing the number of videos recorded -->
       <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div *ngFor="let video of videos; let i = index"
+        <div
+          *ngFor="let video of videos; let i = index"
           class="circle"
           [class.selectedVideoIndicator]="i === selectedVideoIndex"
           [class.recordedIndicator]="video !== null"
@@ -28,24 +34,36 @@ import { VideoPreviewComponent } from './video-preview.component';
       </div>
 
       <!-- Showing how many videos that have to be required, check icon if the required number of videos are required -->
-      <div fxLayout="row" fxLayoutAlign="space-evenly none" >
-        <h3>Required: {{ minVideos }} {{ minVideos > 1 ? "Videos" : "Video" }} Optional: {{ maxVideos }}</h3>
+      <div fxLayout="row" fxLayoutAlign="space-evenly none">
+        <h3>
+          Required: {{ minVideos }}
+          {{ minVideos > 1 ? 'Videos' : 'Video' }} Optional: {{ maxVideos }}
+        </h3>
         <mat-icon *ngIf="numVideosRecorded >= minVideos">check_circle</mat-icon>
       </div>
 
       <!-- Recording info message -->
       <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
-        <mat-icon *ngIf="isRecording" class="recordingIndicator">videocam</mat-icon>
-        <span>{{ isRecording ? "Recording..." : "Preview" }}</span>
+        <mat-icon *ngIf="isRecording" class="recordingIndicator"
+          >videocam</mat-icon
+        >
+        <span>{{ isRecording ? 'Recording...' : 'Preview' }}</span>
       </div>
 
       <!-- Video preview and navigation buttons -->
-      <div fxLayout="row" fxLayoutAlign="space-between center" class="videoSwitcher">
-
+      <div
+        fxLayout="row"
+        fxLayoutAlign="space-between center"
+        class="videoSwitcher"
+      >
         <!-- Left arrow -->
         <div fxLayout="row" fxLayoutAlign="start center">
           <button mat-icon-button (click)="previousVideo()">
-            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording">keyboard_arrow_left</mat-icon>
+            <mat-icon
+              class="arrow"
+              [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording"
+              >keyboard_arrow_left</mat-icon
+            >
           </button>
         </div>
 
@@ -54,7 +72,13 @@ import { VideoPreviewComponent } from './video-preview.component';
         <!-- Right arrow -->
         <div fxLayout="row" fxLayoutAlign="end center">
           <button mat-icon-button (click)="nextVideo()">
-            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === (maxVideos - 1) || isRecording">keyboard_arrow_right</mat-icon>
+            <mat-icon
+              class="arrow"
+              [class.arrowDisabled]="
+                selectedVideoIndex === maxVideos - 1 || isRecording
+              "
+              >keyboard_arrow_right</mat-icon
+            >
           </button>
         </div>
       </div>
@@ -69,8 +93,8 @@ import { VideoPreviewComponent } from './video-preview.component';
   `,
   styleUrls: ['./video-record.component.css'],
   host: {
-    '(document:keydown)': 'handleKeyboardEvent($event)'
-  }
+    '(document:keydown)': 'handleKeyboardEvent($event)',
+  },
 })
 export class VideoRecordComponent implements OnInit {
   /** The view element for the video element */
@@ -82,7 +106,10 @@ export class VideoRecordComponent implements OnInit {
   /** The blobs of the video. */
   videos: (Blob | null)[] = [];
   /** Output to emit completed video blob */
-  @Output() videoBlob = new EventEmitter<{ videoBlob: Blob, videoNumber: number }>();
+  @Output() videoBlob = new EventEmitter<{
+    videoBlob: Blob;
+    videoNumber: number;
+  }>();
 
   /** Index of the selected video being displayed */
   selectedVideoIndex = 0;
@@ -90,7 +117,7 @@ export class VideoRecordComponent implements OnInit {
   @Input() minVideos: number;
   /** The maximum number of videos the user can record */
   @Input() maxVideos: number;
-  numVideosRecorded: number = 0;
+  numVideosRecorded = 0;
   /** Used to determine if the keypresses should be considered */
   mouseOver = false;
 
@@ -102,7 +129,9 @@ export class VideoRecordComponent implements OnInit {
 
     // Cannot setup component until the min and max videos are set
     if (this.minVideos === undefined || this.maxVideos === undefined) {
-      console.debug(`Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`);
+      console.debug(
+        `Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`
+      );
       throw new Error('minVideos and maxVideos must be defined');
     }
   }
@@ -127,11 +156,15 @@ export class VideoRecordComponent implements OnInit {
 
   saveBlob(blob: Blob): void {
     this.videos[this.selectedVideoIndex] = blob;
-    this.numVideosRecorded = this.videos.filter((video) => video !== null).length;
-    this.videoBlob.emit({ videoBlob: blob, videoNumber: this.selectedVideoIndex });
+    this.numVideosRecorded = this.videos.filter(
+      (video) => video !== null
+    ).length;
+    this.videoBlob.emit({
+      videoBlob: blob,
+      videoNumber: this.selectedVideoIndex,
+    });
     this.changeDetector.detectChanges();
   }
-
 
   /**
    * Move to the next video as long as there is another video to move to

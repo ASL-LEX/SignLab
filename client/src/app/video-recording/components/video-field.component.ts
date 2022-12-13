@@ -5,11 +5,11 @@ import {
   RankedTester,
   rankWith,
   Actions,
-  updateErrors
+  updateErrors,
 } from '@jsonforms/core';
 import { VideoTagUploadService } from '../../core/services/video-tag-upload.service';
 import { TagService } from '../../core/services/tag.service';
-import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
  * JSON Forms field for a single video. The video will be passed to the backend
@@ -25,9 +25,11 @@ import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
           {{ description }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <video-record (videoBlob)="saveVideo($event)"
-                    [minVideos]="minVideos"
-                    [maxVideos]="maxVideos"></video-record>
+      <video-record
+        (videoBlob)="saveVideo($event)"
+        [minVideos]="minVideos"
+        [maxVideos]="maxVideos"
+      ></video-record>
     </mat-expansion-panel>
   `,
 })
@@ -60,7 +62,10 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
    * ie) For a tag on a study, there can be many fields, each field could
    * require some range of videos to be recorded
    */
-  async saveVideo(videoInfo: { videoBlob: Blob, videoNumber: number }): Promise<void> {
+  async saveVideo(videoInfo: {
+    videoBlob: Blob;
+    videoNumber: number;
+  }): Promise<void> {
     if (!this.tagService.hasCurrentTag()) {
       console.info('No tag selected, not saving video');
       return;
@@ -80,7 +85,9 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
 
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
-    this.jsonFormsService.updateCore(Actions.update(path, () => this.videoURIs.filter(uri => uri !== '')));
+    this.jsonFormsService.updateCore(
+      Actions.update(path, () => this.videoURIs.filter((uri) => uri !== ''))
+    );
     this.triggerValidation();
   }
 
