@@ -225,6 +225,8 @@ export class TagController {
       const existingEntry = await this.entryService.find({
         dataset: datasetID,
         'signLabRecording.tag': existingTag._id,
+        'signLabRecording.fieldName': field,
+        'signLabRecording.videoNumber': videoNumber,
       });
       if (existingEntry === null) {
         // TODO: Remove concept of the `entryID`
@@ -239,6 +241,7 @@ export class TagController {
           signLabRecording: {
             tag: existingTag,
             fieldName: field,
+            videoNumber: videoNumber,
           },
           // TODO: Make it so validation does not run on metadata for entries
           //       recorded in SignLab
