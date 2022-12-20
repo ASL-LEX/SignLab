@@ -215,13 +215,11 @@ export class TagController {
 
     // URL encode the fieldname for saving the video in the bucket
     const encodedField = encodeURIComponent(field);
-    console.log(encodedField);
 
     // Save the file
     const fileExtension = file.originalname.split('.').pop();
     const target = `Tag/videos/${existingTag._id}/${videoNumber}/${encodedField}.${fileExtension}`;
     const video = await this.bucketService.objectUpload(file.buffer, target);
-    console.log(video);
 
     // Only make entries of non-tagging videos
     if (!existingTag.isTraining) {
