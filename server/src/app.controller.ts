@@ -26,6 +26,10 @@ export class AppController {
     @Param('filename') filename: string,
   ) {
     try {
+      // Param is automatically URI decoded, for this testing, should not
+      // take place here so the input is re-encoded. Since this route is used
+      // only or local testing, this hack is ok
+      filename = encodeURI(filename);
       const file = createReadStream(join(process.cwd(), `bucket/${filename}`));
 
       res.set({
