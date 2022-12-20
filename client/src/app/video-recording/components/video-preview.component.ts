@@ -50,10 +50,12 @@ export class VideoPreviewComponent implements OnDestroy {
     this.blobs = [];
 
     // Try to get the video stream, return any issue to the user
+    // TODO: Support the end user deciding if they want to use audio or
+    //       not.
     let stream: MediaStream;
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
+        audio: false,
         video: true,
       });
     } catch (err: any) {
