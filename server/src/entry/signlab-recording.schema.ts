@@ -16,6 +16,10 @@ export class SignLabEntryRecording {
   /** The name of the field within the tag that the entry was recorded for */
   @Prop({ required: true })
   fieldName: string;
+
+  /** The video number, one tag field could have multiple videos (0 indexed) */
+  @Prop({ required: true })
+  videoNumber: number;
 }
 
 export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(
