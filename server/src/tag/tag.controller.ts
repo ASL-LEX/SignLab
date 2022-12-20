@@ -225,6 +225,7 @@ export class TagController {
       const existingEntry = await this.entryService.find({
         dataset: datasetID,
         'signLabRecording.tag': existingTag._id,
+        'signLabRecording.fieldName': field,
       });
       if (existingEntry === null) {
         // TODO: Remove concept of the `entryID`
