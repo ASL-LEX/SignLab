@@ -4,7 +4,7 @@
     "ng": "ng",
     "start:watch": "ng build --watch",
     "build:dev": "ng build",
-    "build:prod": "ng build --prod",
+    "build:prod": "ng build --configuration production",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
     "test:watch": "ng test",
     "lint:fix": "ng lint --fix",
