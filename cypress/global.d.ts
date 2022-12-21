@@ -26,5 +26,9 @@ declare namespace Cypress {
      * Make the default dataset
      */
     makeDefaultDataset(): Chainable<any>;
+    /**
+     * Add a user as a tagger to a study.
+     */
+    grantTaggingAccess(studyID: string, userID: string): Chainable<any>;
   }
 }

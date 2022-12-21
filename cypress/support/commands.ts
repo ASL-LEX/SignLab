@@ -71,6 +71,8 @@ Cypress.Commands.add('makeStudy', (studyCreation: any) => {
     url: 'api/study/create',
     body: studyCreation,
     headers: { authorization }
+  }).then(response => {
+    console.log(response);
   });
 });
 
@@ -83,6 +85,17 @@ Cypress.Commands.add('makeDefaultDataset', () => {
     method: 'POST',
     url: 'api/dataset',
     body: { ...dataset, user: localStorage.getItem('SIGNLAB_AUTH_INFO') },
+    headers: { authorization }
+  });
+});
+
+Cypress.Commands.add('grantTaggingAccess', (studyID: string, userID: string) => {
+  const authorization = `Bearer ${Cypress.env('token')}`;
+
+  cy.request({
+    method: 'PUT',
+    url: '/study/user/enable',
+    body: { studyID: studyID, userID: userID, hasAccess: true },
     headers: { authorization }
   });
 });
