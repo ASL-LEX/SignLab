@@ -1,17 +1,20 @@
 {
   "existingUser": {
+    "_id": "empty",
     "name": "bobby",
     "email": "bobby@bu.edu",
     "username": "bobby",
     "password": "alsobobby"
   },
   "newUser": {
+    "_id": "empty",
     "name": "sam",
     "email": "sam@bu.edu",
     "username": "sam",
     "password": "sammy"
   },
   "nonAdmin": {
+    "_id": "empty",
     "name": "basic",
     "email": "basic@bu.edu",
     "username": "basic",
@@ -19,24 +22,28 @@
   },
   "others": [
     {
+      "_id": "empty",
       "name": "a",
       "email": "a@bu.edu",
       "username": "a",
       "password": "aaaa"
     },
     {
+      "_id": "empty",
       "name": "b",
       "email": "b@bu.edu",
       "username": "b",
       "password": "bbbb"
     },
     {
+      "_id": "empty",
       "name": "c",
       "email": "c@bu.edu",
       "username": "c",
       "password": "cccc"
     },
     {
+      "_id": "empty",
       "name": "d",
       "email": "d@bu.edu",
       "username": "d",

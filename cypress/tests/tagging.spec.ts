@@ -16,15 +16,20 @@ describe('Tagging', () => {
         .firstTimeSetup()
         .login(users.existingUser)
         .makeStudy(studies.noTraining)
+        .log(`Study: ${studies.noTraining.study._id}`);
+        /*
+        .grantTaggingAccess(studies.noTraining.study._id, users.existingUser._id)
         .visit('/tag')
         .get(`[data-cy="${studies.noTraining.study.name}-button"]`)
-        .click();
+        .click(); */
     });
+
 
     it('should allow a user to tag an entry', () => {
 
     });
 
+    /*
     it('should not allow a user to submit a tag without required fields', () => {
 
     });
@@ -40,5 +45,6 @@ describe('Tagging', () => {
     it('should handle when no entries are left to tag', () => {
 
     });
+    */
   });
 });

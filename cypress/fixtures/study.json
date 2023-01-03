@@ -1,6 +1,7 @@
 {
   "noTraining": {
     "study": {
+      "_id": "empty",
       "name": "Default",
       "description": "Test Study",
       "instructions": "Complete the study",

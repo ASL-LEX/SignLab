@@ -1,7 +1,7 @@
 import entryMetadata from '../fixtures/entry_metadata.json';
 import user from '../fixtures/users.json';
 import datasets from '../fixtures/datasets.json';
-import { UserSignup } from '../../shared/dtos/user.dto';
+import { User } from '../../shared/dtos/user.dto';
 
 Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'dynamicschemas' });
@@ -55,24 +55,29 @@ Cypress.Commands.add('firstTimeSetup', () => {
   // Add in a starting dataset
 });
 
-Cypress.Commands.add('signup', (user: UserSignup) => {
-  cy
+Cypress.Commands.add('signup', (user: User) => {
+  return cy
     .request({
       method: 'POST',
       url: 'api/auth/signup',
       body: user
     })
+    .then(response => {
+      user._id = response.body._id;
+      cy.log('User ID: ' + response.body._id);
+    });
 });
 
 Cypress.Commands.add('makeStudy', (studyCreation: any) => {
   const authorization = `Bearer ${Cypress.env('token')}`;
-  cy.request({
+  delete studyCreation.study._id;
+  return cy.request({
     method: 'POST',
     url: 'api/study/create',
     body: studyCreation,
     headers: { authorization }
   }).then(response => {
-    console.log(response);
+    studyCreation.study._id = response.body._id;
   });
 });
 
@@ -94,7 +99,7 @@ Cypress.Commands.add('grantTaggingAccess', (studyID: string, userID: string) => 
 
   cy.request({
     method: 'PUT',
-    url: '/study/user/enable',
+    url: 'api/study/user/enable',
     body: { studyID: studyID, userID: userID, hasAccess: true },
     headers: { authorization }
   });
