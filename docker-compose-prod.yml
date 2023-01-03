@@ -6,7 +6,7 @@ services:
     volumes:
       - signlab:/data/db
   signlab:
-    image: hicsail/signlab:unstable
+    image: hicsail/signlab:latest
     restart: always
     depends_on:
       - mongo
