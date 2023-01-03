@@ -10,14 +10,32 @@
   <mat-drawer-container style="height: 100%">
 
     <mat-drawer mode="side" class="navbar" opened>
+
+
       <mat-nav-list>
-        <a mat-list-item routerLink="/tag" routerLinkActive="active-link">Tagging</a>
-        <a mat-list-item *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
-           routerLink="/admin" routerLinkActive="active-link">Admin</a>
-        <a mat-list-item *ngIf="authService.isAuthenticated() && authService.user.roles.owner"
-           routerLink="/owner" routerLinkActive="active-link">Owner</a>
-        <a mat-list-item routerLink="/auth" routerLinkActive="active-link" *ngIf="!authService.isAuthenticated()">Login</a>
-        <a mat-list-item *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</a>
+        <a mat-list-item
+           routerLink="/tag"
+           routerLinkActive="active-link"
+           class="nav-link">Tagging</a>
+        <a mat-list-item
+           *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
+           routerLink="/admin"
+           routerLinkActive="active-link"
+           class="nav-link">Admin</a>
+        <a mat-list-item
+           *ngIf="authService.isAuthenticated() && authService.user.roles.owner"
+           routerLink="/owner"
+           routerLinkActive="active-link"
+           class="nav-link">Owner</a>
+        <a mat-list-item
+           routerLink="/auth"
+           routerLinkActive="active-link"
+           *ngIf="!authService.isAuthenticated()"
+           class="nav-link">Login</a>
+        <a mat-list-item
+           *ngIf="authService.isAuthenticated()"
+           (click)="logout()"
+           class="nav-link">Logout</a>
       </mat-nav-list>
     </mat-drawer>
 
