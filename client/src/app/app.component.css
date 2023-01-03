@@ -16,3 +16,11 @@
 .active-link {
     background-color: #42597d;
 }
+
+.navbar {
+  height: 100%;
+}
+
+.main-content {
+  height: 100%;
+}
