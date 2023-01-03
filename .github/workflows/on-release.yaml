@@ -26,3 +26,10 @@ jobs:
         with:
           push: true
           tags: hicsail/signlab:${{github.ref_name}},hicsail/signlab:latest
+
+      - name: Push to Prod
+        uses: fjogeleit/http-request-action@v1
+        with:
+          method: 'POST'
+          url: ${{ secrets.PORTAINER_WEBHOOK_PROD }}
+          preventFailureOnNoResponse: true
