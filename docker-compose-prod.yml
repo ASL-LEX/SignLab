@@ -2,7 +2,7 @@ version: '2'
 services:
   mongo:
     image: mongo
-    ports: ["27018:27017"]
+    ports: ["27019:27017"]
     volumes:
       - signlab:/data/db
   signlab:
