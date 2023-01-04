@@ -14,10 +14,7 @@
   background-color: #42597d;
 }
 
-.submenu {
-  padding-left: 2rem;
-}
-
+/* Override padding controls to keep the navbar text at the same indent level */
 .mat-expansion-panel-header {
   padding: 0rem 1rem 0rem 0rem;
 }
