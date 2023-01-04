@@ -1,26 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-.navbar {
-  background-color: #4e6180;
-}
-
-.nav-link {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin: 1rem;
-  font-size: 50px;
-  font-size: 16px;
-  border-radius: 5px;
-  color: #fafafa;
-}
-
-.active-link {
-  background-color: #42597d;
-}
-
-.navbar {
-  height: 100%;
-}
-
 .main-content {
   height: 100%;
 }
