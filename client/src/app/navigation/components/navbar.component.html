@@ -7,109 +7,22 @@
   </div>
 
   <mat-nav-list>
-    <!-- Organization Controls -->
-    <mat-expansion-panel class="navbar">
+    <mat-expansion-panel class="navbar" *ngFor="let navItem of navItems">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <a mat-list-item
-             routerLink="/organization"
+             routerLink="{{navItem.url}}"
              routerLinkActive="active-link"
-             class="nav-link">Users</a>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <a mat-list-item
-         routerLink="/organization"
-         routerLinkActive="active-link"
-         class="nav-link">Organization</a>
-      <a mat-list-item
-         routerLink="/organization/organization-list"
-         routerLinkActive="active-link"
-         class="nav-link">User Permissions</a>
-    </mat-expansion-panel>
-
-    <!-- Project Controls -->
-    <mat-expansion-panel class="navbar">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <a mat-list-item
-             routerLink="/admin"
-             routerLinkActive="active-link"
-             class="nav-link">Projects</a>
+             class="nav-link">{{navItem.name}}</a>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <mat-nav-list>
         <a mat-list-item
-           routerLink="/project"
+           *ngFor="let sublink of navItem.sublinks"
+           routerLink="{{sublink.url}}"
            routerLinkActive="active-link"
-           class="nav-link">User Permissions</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Dataset Access</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Create new Project</a>
-      </mat-nav-list>
-    </mat-expansion-panel>
-
-    <!-- Studies Control -->
-    <mat-expansion-panel class="navbar">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <a mat-list-item
-             routerLink="/admin"
-             routerLinkActive="active-link"
-             class="nav-link">Studies</a>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-nav-list>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">User Permissions</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Tags</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Entry Controls</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Contribute</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Create New Study</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Contribute</a>
-      </mat-nav-list>
-    </mat-expansion-panel>
-
-    <!-- Dataset Control -->
-    <mat-expansion-panel class="navbar">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <a mat-list-item
-             routerLink="/admin"
-             routerLinkActive="active-link"
-             class="nav-link">Datasets</a>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-nav-list>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Upload Entries</a>
-        <a mat-list-item
-           routerLink="/project"
-           routerLinkActive="active-link"
-           class="nav-link">Create New Dataset</a>
+           class="nav-link"
+           >{{sublink.name}}</a>
       </mat-nav-list>
     </mat-expansion-panel>
 
