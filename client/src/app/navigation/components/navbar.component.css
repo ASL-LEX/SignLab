@@ -3,9 +3,7 @@
 }
 
 .nav-link {
-  padding-left: 1rem;
   padding-right: 1rem;
-  margin: 1rem;
   font-size: 50px;
   font-size: 16px;
   border-radius: 5px;
@@ -14,4 +12,12 @@
 
 .active-link {
   background-color: #42597d;
+}
+
+.submenu {
+  padding-left: 2rem;
+}
+
+.mat-expansion-panel-header {
+  padding: 0rem 1rem 0rem 0rem;
 }
