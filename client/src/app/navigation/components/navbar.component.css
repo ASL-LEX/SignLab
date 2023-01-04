@@ -5,10 +5,15 @@
 
 .navbar {
   background-color: #4e6180;
+  padding: 1rem;
+  height: 100%;
+}
+
+.navbar-element {
+  background-color: #627aa1;
 }
 
 .nav-link {
-  padding-right: 1rem;
   font-size: 50px;
   font-size: 16px;
   border-radius: 5px;
@@ -22,9 +27,4 @@
 /* Override padding controls to keep the navbar text at the same indent level */
 .mat-expansion-panel-header {
   padding: 0rem 1rem 0rem 0rem;
-}
-
-.navbar-top {
-  padding: 1rem;
-  height: 100%;
 }

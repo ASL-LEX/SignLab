@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="start" class="navbar navbar-top">
+<div fxLayout="column" fxLayoutAlign="start" class="navbar">
   <h1 class="software-title">ASL-LEX SignLab</h1>
 
   <!-- Project / Study Control -->
@@ -7,7 +7,7 @@
   </div>
 
   <mat-nav-list>
-    <mat-expansion-panel class="navbar" *ngFor="let navItem of navItems">
+    <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <a mat-list-item
@@ -31,9 +31,9 @@
        routerLink="/auth"
        routerLinkActive="active-link"
        *ngIf="!authService.isAuthenticated()"
-       class="nav-link">Login</a>
+       class="nav-link navbar-element">Login</a>
     <a mat-list-item
        *ngIf="authService.isAuthenticated()"
-       class="nav-link">Logout</a>
+       class="nav-link navbar-element">Logout</a>
   </mat-nav-list>
 </div>
