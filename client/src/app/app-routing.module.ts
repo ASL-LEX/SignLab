@@ -43,6 +43,12 @@ const routes: Routes = [
         (m) => m.OwnerDashboardModule
       ),
   },
+  {
+    path: 'studies',
+    canActivate: [AuthenticatedGuard],
+    loadChildren: () =>
+      import('./studies/studies.module').then((m) => m.StudiesModule),
+  },
 ];
 
 @NgModule({
