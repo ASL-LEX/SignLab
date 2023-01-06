@@ -79,6 +79,16 @@ export class NavbarComponent {
         }
       ],
     },
+    {
+      name: 'Contribute',
+      url: '/contribute',
+      sublinks: [
+        {
+          name: 'Contribute to a Study',
+          url: '/contribute/contribute-to-a-study'
+        },
+      ],
+    }
   ];
 
 

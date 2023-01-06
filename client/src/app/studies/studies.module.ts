@@ -6,8 +6,6 @@ import { CoreModule } from '../core/core.module';
 // Components
 import { UserPermissionsComponent } from './components/user-permissions.component';
 import { EntryControlsComponent } from './components/entry-controls.component';
-import { ContributeComponent } from './components/contribute.component';
-import { StudySelectComponent } from './components/study-select.component';
 import { UserTableModule } from '../user-table/user-table.module';
 import { NewStudyComponent } from './components/new-study/new-study.component';
 import { SharedModule } from '../shared/shared.module';
@@ -21,9 +19,7 @@ import { TagFieldGeneratorService } from './services/tag-field-generator.service
   declarations: [
     UserPermissionsComponent,
     EntryControlsComponent,
-    ContributeComponent,
     NewStudyComponent,
-    StudySelectComponent,
     RequiredInfoComponent,
     TagFormPreviewDialog,
     TagFieldComponent
