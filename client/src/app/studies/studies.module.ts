@@ -7,9 +7,15 @@ import { CoreModule } from '../core/core.module';
 import { UserPermissionsComponent } from './components/user-permissions.component';
 import { EntryControlsComponent } from './components/entry-controls.component';
 import { ContributeComponent } from './components/contribute.component';
-import { NewStudyComponent } from './components/new-study.component';
 import { StudySelectComponent } from './components/study-select.component';
 import { UserTableModule } from '../user-table/user-table.module';
+import { NewStudyComponent } from './components/new-study/new-study.component';
+import { SharedModule } from '../shared/shared.module';
+import { RequiredInfoComponent } from './components/new-study/required-info.component';
+import { TagFormPreviewDialog } from './components/new-study/tag-form-preview.component';
+import { TagFieldComponent } from './components/new-study/tag-field.component';
+import { TagFieldGeneratorService } from './services/tag-field-generator.service';
+
 
 @NgModule({
   declarations: [
@@ -18,7 +24,11 @@ import { UserTableModule } from '../user-table/user-table.module';
     ContributeComponent,
     NewStudyComponent,
     StudySelectComponent,
+    RequiredInfoComponent,
+    TagFormPreviewDialog,
+    TagFieldComponent
   ],
-  imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, UserTableModule],
+  imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, UserTableModule, SharedModule],
+  providers: [TagFieldGeneratorService],
 })
 export class StudiesModule {}
