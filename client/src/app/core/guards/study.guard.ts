@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   CanActivate,
-  Router,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -16,14 +15,12 @@ import { Observable, of, map } from 'rxjs';
  */
 @Injectable()
 export class StudyGuard implements CanActivate {
-  constructor(private studyService: StudyService, private router: Router, private dialog: MatDialog) {}
+  constructor(private studyService: StudyService, private dialog: MatDialog) {}
 
   canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
     if (this.studyService.getActiveStudy()) {
       return of(true);
     }
-
-    console.log(_route.queryParams['returnUrl']);
 
     return this.openDialog();
   }
