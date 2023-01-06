@@ -85,7 +85,7 @@ export class NavbarComponent {
       sublinks: [
         {
           name: 'Contribute to a Study',
-          url: '/contribute/contribute-to-a-study'
+          url: '/tag'
         },
       ],
     }
