@@ -4,7 +4,7 @@ import { StudyService } from '../../core/services/study.service';
 @Component({
   selector: 'entry-controls',
   template: `
-    <dataset-study-table [study]="activeStudy"></dataset-study-table>
+    <dataset-study-table [study]="studyService.getActiveStudy()"></dataset-study-table>
   `,
 })
 export class EntryControlsComponent {

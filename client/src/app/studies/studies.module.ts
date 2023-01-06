@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { StudiesRoutingModule } from './studies-routing.module';
+import { DatasetTableModule } from '../dataset-table/dataset-table.module';
 
 // Components
 import { UserPermissionsComponent } from './components/user-permissions.component';
@@ -14,6 +15,6 @@ import { NewStudyComponent } from './components/new-study.component';
     ContributeComponent,
     NewStudyComponent,
   ],
-  imports: [StudiesRoutingModule],
+  imports: [StudiesRoutingModule,DatasetTableModule],
 })
 export class StudiesModule {}
