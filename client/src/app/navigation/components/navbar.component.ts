@@ -70,13 +70,9 @@ export class NavbarComponent {
       url: '/datasets',
       sublinks: [
         {
-          name: 'Upload Entries',
-          url: '/datasets/upload-entries'
+          name: 'Dataset Controls',
+          url: '/datasets/dataset-control'
         },
-        {
-          name: 'Create New Dataset',
-          url: '/datasets/create-new-dataset'
-        }
       ],
     },
     {
