@@ -22,6 +22,7 @@ export class StudyService {
 
   /** Get the currently selected study */
   getActiveStudy(): Study | null {
+    // TODO: Add ability to check local storage for the active study
     return this.activeStudy;
   }
 

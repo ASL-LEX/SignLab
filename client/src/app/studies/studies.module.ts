@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { StudiesRoutingModule } from './studies-routing.module';
 import { DatasetTableModule } from '../dataset-table/dataset-table.module';
+import { CoreModule } from '../core/core.module';
 
 // Components
 import { UserPermissionsComponent } from './components/user-permissions.component';
 import { EntryControlsComponent } from './components/entry-controls.component';
 import { ContributeComponent } from './components/contribute.component';
 import { NewStudyComponent } from './components/new-study.component';
+import { StudySelectComponent } from './components/study-select.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,8 @@ import { NewStudyComponent } from './components/new-study.component';
     EntryControlsComponent,
     ContributeComponent,
     NewStudyComponent,
+    StudySelectComponent,
   ],
-  imports: [StudiesRoutingModule,DatasetTableModule],
+  imports: [StudiesRoutingModule, DatasetTableModule, CoreModule],
 })
 export class StudiesModule {}

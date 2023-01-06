@@ -12,6 +12,7 @@ import {
   AuthenticatedGuard,
   OwnerAuthGuard,
 } from './guards/auth.guard';
+import { StudyGuard } from './guards/study.guard';
 import { TokenService } from './services/token.service';
 import { TagService } from './services/tag.service';
 import { DatasetService } from './services/dataset.service';
@@ -34,6 +35,7 @@ export class CoreModule {
         AuthenticatedGuard,
         AdminAuthGuard,
         OwnerAuthGuard,
+        StudyGuard,
         TokenService,
         TagService,
         DatasetService,
