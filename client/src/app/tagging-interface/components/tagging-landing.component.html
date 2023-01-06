@@ -54,14 +54,14 @@
       </div>
 
       <div *ngIf="activeView == 'tagging'">
-        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-stroked (click)="setView('info')">Exit Tagging</button>
         <tagging-interface
           [study]="activeStudy!"
         ></tagging-interface>
       </div>
 
       <div *ngIf="activeView == 'training'">
-        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-stroked (click)="setView('info')">Exit Training</button>
 
         <tagging-interface
           [study]="activeStudy!"
