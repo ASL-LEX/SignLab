@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { StudyService } from '../services/study.service';
 import { StudySelectDialog } from '../../admin-dashboard/components/studies-control/study-select-dialog.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, map } from 'rxjs';
 
 /**
  * Check to see if an active study is selected, if not, redirect to the study
@@ -23,6 +23,8 @@ export class StudyGuard implements CanActivate {
       return of(true);
     }
 
+    console.log(_route.queryParams['returnUrl']);
+
     return this.openDialog();
   }
 
@@ -32,11 +34,8 @@ export class StudyGuard implements CanActivate {
       data: {},
     });
 
-    return dialogRef.afterClosed().pipe((selectedStudy: any) => {
-      if (selectedStudy) {
-        return of(true);
-      }
-      return of(false);
-    });
+    return dialogRef.afterClosed().pipe(map((selectedStudy: any) => {
+      return !!selectedStudy;
+    }));
   }
 }
