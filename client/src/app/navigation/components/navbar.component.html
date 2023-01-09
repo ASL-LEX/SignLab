@@ -6,34 +6,42 @@
     <study-select></study-select>
   </div>
 
-  <mat-nav-list>
-    <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <a mat-list-item
-             routerLink="{{navItem.url}}"
-             routerLinkActive="active-link"
-             class="nav-link">{{navItem.name}}</a>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-nav-list>
-        <a mat-list-item
-           *ngFor="let sublink of navItem.sublinks"
-           routerLink="{{sublink.url}}"
-           routerLinkActive="active-link"
-           class="nav-link"
-           >{{sublink.name}}</a>
-      </mat-nav-list>
-    </mat-expansion-panel>
+  <mat-card class="navigation-body">
+    <mat-card-header>
+      <mat-card-title>Navigation</mat-card-title>
+    </mat-card-header>
 
-    <!-- Login/Logout -->
-    <a mat-list-item
-       routerLink="/auth"
-       routerLinkActive="active-link"
-       *ngIf="!authService.isAuthenticated()"
-       class="nav-link navbar-element">Login</a>
-    <a mat-list-item
-       *ngIf="authService.isAuthenticated()"
-       class="nav-link navbar-element">Logout</a>
-  </mat-nav-list>
+    <mat-card-content>
+      <mat-nav-list>
+        <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <a mat-list-item
+                 routerLink="{{navItem.url}}"
+                 routerLinkActive="active-link"
+                 class="nav-link">{{navItem.name}}</a>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item
+               *ngFor="let sublink of navItem.sublinks"
+               routerLink="{{sublink.url}}"
+               routerLinkActive="active-link"
+               class="nav-link"
+               >{{sublink.name}}</a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+
+        <!-- Login/Logout -->
+        <a mat-list-item
+           routerLink="/auth"
+           routerLinkActive="active-link"
+           *ngIf="!authService.isAuthenticated()"
+           class="nav-link navbar-element">Login</a>
+        <a mat-list-item
+           *ngIf="authService.isAuthenticated()"
+           class="nav-link navbar-element">Logout</a>
+      </mat-nav-list>
+    </mat-card-content>
+  </mat-card>
 </div>

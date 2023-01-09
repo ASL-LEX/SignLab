@@ -3,6 +3,12 @@
   color: #fafafa;
 }
 
+.navigation-body {
+  background-color: #627aa1;
+  color: white;
+  margin-top: 2em;
+}
+
 .navbar {
   background-color: #4e6180;
   padding: 1rem;
@@ -27,4 +33,9 @@
 /* Override padding controls to keep the navbar text at the same indent level */
 .mat-expansion-panel-header {
   padding: 0rem 1rem 0rem 0rem;
+}
+
+/* Override card title for better view */
+::ng-deep .mat-card-header-text {
+  margin: 0px 0px !important;
 }

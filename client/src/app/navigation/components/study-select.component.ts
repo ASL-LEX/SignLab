@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
   selector: 'study-select',
   template: `
     <mat-card class="study-select-card">
+      <mat-card-header>
+        <mat-card-title>Environment</mat-card-title>
+      </mat-card-header>
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>

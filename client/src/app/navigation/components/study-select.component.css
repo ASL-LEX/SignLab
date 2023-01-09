@@ -17,4 +17,9 @@
 
 .study-select-card {
   background-color: #627aa1;
+  color: white;
+}
+
+::ng-deep .mat-card-header-text {
+  margin: 0px 0px !important;
 }
