@@ -7,6 +7,12 @@
 
 <!-- Normal view during SignLab usage -->
 <ng-template #routerView style="height: 100%">
+
+  <!--
+    WARNING: The autoresize directive is known to cause some performance
+    hits from Angular Material's documentation. However it is needed to handle
+    when study/project names are long enough to warrent expanding the navbar.
+  -->
   <mat-drawer-container style="height: 100%" autosize="true">
 
     <mat-drawer #drawer mode="side" style="height: 100%" opened>
