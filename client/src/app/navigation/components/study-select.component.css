@@ -1,0 +1,16 @@
+.study-select {
+  color: white;
+  font-size: 1.2em;
+}
+
+.mat-select-value-text {
+  color: white;
+}
+
+::ng-deep .mat-select-value {
+  color: white;
+}
+
+.select-field {
+  padding-left: 0.5em;
+}
