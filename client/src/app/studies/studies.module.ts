@@ -22,7 +22,7 @@ import { TagFieldGeneratorService } from './services/tag-field-generator.service
     NewStudyComponent,
     RequiredInfoComponent,
     TagFormPreviewDialog,
-    TagFieldComponent
+    TagFieldComponent,
   ],
   imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, UserTableModule, SharedModule],
   providers: [TagFieldGeneratorService],

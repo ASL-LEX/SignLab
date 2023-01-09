@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { StudyService } from '../services/study.service';
-import { StudySelectDialog } from '../../admin-dashboard/components/studies-control/study-select-dialog.component';
+import { StudySelectDialog } from '../../shared/components/study-select-dialog.component';
 import { Observable, of, map } from 'rxjs';
 
 /**

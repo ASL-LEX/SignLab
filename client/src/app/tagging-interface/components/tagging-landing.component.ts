@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { StudyService } from '../../core/services/study.service';
 import { Study } from 'shared/dtos/study.dto';
-import { StudySelectDialog } from '../../admin-dashboard/components/studies-control/study-select-dialog.component';
+import { StudySelectDialog } from '../../shared/components/study-select-dialog.component';
 import { AuthService } from '../../core/services/auth.service';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 

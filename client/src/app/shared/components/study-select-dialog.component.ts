@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Study } from 'shared/dtos/study.dto';
-import { StudyService } from '../../../core/services/study.service';
+import { StudyService } from '../../core/services/study.service';
 
 /**
  * Dialog which provides an interface for selecting the study to view.
