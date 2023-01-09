@@ -180,6 +180,7 @@ export class NewStudyComponent implements AfterViewInit {
       disabledEntries: Array.from(this.markedDisabled),
     });
     this.studyCreated = true;
+    this.studyService.updateStudies();
   }
 
   /** Display the tag form preview in a popup dialog */
@@ -196,7 +197,7 @@ export class NewStudyComponent implements AfterViewInit {
   }
 
   redirectToAdmin() {
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/studies/user-permissions']);
   }
 
   stepPrevious() {

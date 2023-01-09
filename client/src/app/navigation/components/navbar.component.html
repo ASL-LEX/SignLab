@@ -14,10 +14,7 @@
         <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <a mat-list-item
-                 routerLink="{{navItem.url}}"
-                 routerLinkActive="active-link"
-                 class="nav-link">{{navItem.name}}</a>
+              <p class="nav-link navbar-element">{{navItem.name}}</p>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>

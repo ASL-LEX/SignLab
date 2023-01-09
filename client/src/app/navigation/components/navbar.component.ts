@@ -17,7 +17,7 @@ export class NavbarComponent {
   navItems: NavItem[] = [
     {
       name: 'Organization',
-      url: '/organization',
+      url: '',
       sublinks: [
         {
           name: 'User Permissions',
@@ -27,7 +27,7 @@ export class NavbarComponent {
     },
     {
       name: 'Project',
-      url: '/project',
+      url: '',
       sublinks: [
         {
           name: 'User Permissions',
@@ -45,7 +45,7 @@ export class NavbarComponent {
     },
     {
       name: 'Studies',
-      url: '/studies',
+      url: '',
       sublinks: [
         {
           name: 'User Permissions',
@@ -56,10 +56,6 @@ export class NavbarComponent {
           url: '/studies/entry-controls'
         },
         {
-          name: 'Contribute',
-          url: '/studies/contribute'
-        },
-        {
           name: 'Create New Study',
           url: '/studies/create-new-study'
         }
@@ -67,7 +63,7 @@ export class NavbarComponent {
     },
     {
       name: 'Datasets',
-      url: '/datasets',
+      url: '',
       sublinks: [
         {
           name: 'Dataset Controls',
@@ -77,7 +73,7 @@ export class NavbarComponent {
     },
     {
       name: 'Contribute',
-      url: '/contribute',
+      url: '',
       sublinks: [
         {
           name: 'Contribute to a Study',

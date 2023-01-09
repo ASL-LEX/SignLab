@@ -12,23 +12,48 @@ export class StudyService {
    * Keeps track of the currently active study the user selected. This allows
    * for the active study to be accessed from any component.
    */
-  _activeStudyObservable: BehaviorSubject<Study | null> = new BehaviorSubject<Study | null>(null);
-  _activeStudy: Study | null = null;
+  private activeStudyObservable: BehaviorSubject<Study | null> = new BehaviorSubject<Study | null>(null);
+  private currentActiveStudy: Study | null = null;
+  /**
+   * Keep track of possible studies
+   */
+  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<Study[]>([]);
+  private currentStudies: Study[] = [];
 
-  constructor(private signLab: SignLabHttpClient) {}
+  constructor(private signLab: SignLabHttpClient) {
+    this.updateStudies();
+  }
 
   /** Set the currently selected study */
-  setActiveStudy(study: Study | null) {
-    this._activeStudyObservable.next(study);
-    this._activeStudy = study;
+  setActiveStudy(study: Study | null | string) {
+
+    /** If the type is a string, then look up based on ID */
+    if (typeof study === 'string') {
+      const foundStudy = this.currentStudies.find((s) => s._id === study);
+      if (!foundStudy) {
+        throw new Error('Study not found');
+      }
+      study = foundStudy;
+    }
+    this.activeStudyObservable.next(study);
+    this.currentActiveStudy = study;
   }
 
   get activeStudy(): Observable<Study | null> {
-    return this._activeStudyObservable;
+    return this.activeStudyObservable;
+  }
+
+  get studies(): Observable<Study[]> {
+    return this.studiesObservable;
+  }
+
+  async updateStudies() {
+    this.currentStudies = await this.getStudies();
+    this.studiesObservable.next(this.currentStudies);
   }
 
   hasActiveStudy(): boolean {
-    return !!this._activeStudy;
+    return !!this.currentActiveStudy;
   }
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {

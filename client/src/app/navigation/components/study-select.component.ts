@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {MatSelectChange} from '@angular/material/select';
-import {Study} from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({
@@ -14,39 +13,30 @@ import { StudyService } from '../../core/services/study.service';
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>
           <mat-select class="select-field"
-                      *ngIf="(studyService.activeStudy | async) as activeStudy"
                       placeholder="No Study Selected"
+                      *ngIf="(studyService.studies | async) as studies; else noStudies"
                       (selectionChange)="studySelect($event)"
-                      [value]="activeStudy._id">
+                      [value]="(studyService.activeStudy | async)?._id || ''">
             <mat-option *ngFor="let study of studies" [value]="study._id">
               {{ study.name }}
             </mat-option>
           </mat-select>
+
+          <!-- Displayed when no studies are available to select from -->
+          <ng-template #noStudies>
+            <p>No Studies Available</p>
+          </ng-template>
         </div>
       </mat-card-content>
     </mat-card>
   `,
   styleUrls: ['./study-select.component.css']
 })
-export class StudySelect implements OnInit {
-  studies: Study[] = [];
-
+export class StudySelect {
   constructor(public studyService: StudyService) {}
-
-  /** Load the studies from the study service */
-  ngOnInit(): void {
-    this.studyService.getStudies().then(studies => {
-      this.studies = studies;
-    });
-  }
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {
-    const study = this.studies.find(study => study._id === event.value);
-    if (study === null) {
-      console.error('Study not found in study list');
-      return;
-    }
-    this.studyService.setActiveStudy(study!);
+    this.studyService.setActiveStudy(event.value);
   }
 }
