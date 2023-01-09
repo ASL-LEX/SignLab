@@ -9,6 +9,7 @@ import { StudyService } from '../../core/services/study.service';
 import { TaggingLanding } from './tagging-landing.component';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from 'shared/dtos/user.dto';
+import { of } from 'rxjs';
 
 describe('TaggingLanding', () => {
   const testUser: User = {
@@ -57,11 +58,10 @@ describe('TaggingLanding', () => {
     studySpy = jasmine.createSpyObj('StudyService', [
       'getUserStudy',
       'getStudies',
-      'getActiveStudy',
-    ]);
+      'activeStudy',
+    ], { activeStudy: of(testStudy) });
     studySpy.getUserStudy.and.returnValue(Promise.resolve(testUserStudy));
     studySpy.getStudies.and.returnValue(Promise.resolve([testStudy]));
-    studySpy.getActiveStudy.and.returnValue(testStudy);
 
     TestBed.configureTestingModule({
       imports: [SharedModule],
@@ -90,7 +90,8 @@ describe('TaggingLanding', () => {
     );
 
     // The button to access the tagging interface should be disabled
-    const button = compiled.querySelectorAll('mat-card-content div button')[1];
+
+    const button = compiled.querySelectorAll('mat-card-content div button')[0];
     expect(button.getAttribute('disabled')).toEqual('true');
   });
 
@@ -105,7 +106,7 @@ describe('TaggingLanding', () => {
     const compiled = taggingLanding.nativeElement;
 
     // Should be able to select the enter tagging button
-    const button = compiled.querySelectorAll('mat-card-content div button')[1];
+    const button = compiled.querySelectorAll('mat-card-content div button')[0];
     console.log(button);
     expect(button.getAttribute('disabled')).toBeNull();
   });
@@ -136,8 +137,7 @@ describe('TaggingLanding', () => {
     const compiled = taggingLanding.nativeElement;
 
     // Should be able to select the enter training button
-    const button = compiled.querySelectorAll('mat-card-content div button')[1];
-    console.log(button);
+    const button = compiled.querySelectorAll('mat-card-content div button')[0];
     expect(button.getAttribute('disabled')).toBeNull();
   });
 });
