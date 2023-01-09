@@ -11,6 +11,8 @@ import { Component } from '@angular/core';
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>
           <mat-select class="select-field">
+            <mat-select-trigger><mat-icon>not_interested</mat-icon>No Study Selected</mat-select-trigger>
+            <mat-option value="" selected><mat-icon>not_interested</mat-icon>No Study Selected</mat-option>
             <mat-option value="1">Study 1</mat-option>
             <mat-option value="2">Study 2</mat-option>
             <mat-option value="3">Study 3</mat-option>
