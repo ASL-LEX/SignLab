@@ -9,15 +9,22 @@ import { NewStudyComponent } from './components/new-study/new-study.component';
 import { TagViewComponent } from './components/tag-view.component';
 
 const routes: Routes = [
-  { path: 'user-permissions', component: UserPermissionsComponent, canActivate: [StudyGuard] },
-  { path: 'entry-controls', component: EntryControlsComponent, canActivate: [StudyGuard] },
+  {
+    path: 'user-permissions',
+    component: UserPermissionsComponent,
+    canActivate: [StudyGuard],
+  },
+  {
+    path: 'entry-controls',
+    component: EntryControlsComponent,
+    canActivate: [StudyGuard],
+  },
   { path: 'create-new-study', component: NewStudyComponent },
   { path: 'tag-download', component: TagViewComponent },
 ];
 
-
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class StudiesRoutingModule {}

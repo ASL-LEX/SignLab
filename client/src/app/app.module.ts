@@ -28,7 +28,7 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     FirstTimeSetupModule,
     CoreModule.forRoot(),
-    NavigationModule
+    NavigationModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

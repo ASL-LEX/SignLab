@@ -17,7 +17,10 @@ import { Observable, of, map } from 'rxjs';
 export class StudyGuard implements CanActivate {
   constructor(private studyService: StudyService, private dialog: MatDialog) {}
 
-  canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
+  canActivate(
+    _route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
+  ): Observable<boolean> {
     if (this.studyService.hasActiveStudy()) {
       return of(true);
     }
@@ -31,8 +34,10 @@ export class StudyGuard implements CanActivate {
       data: {},
     });
 
-    return dialogRef.afterClosed().pipe(map((selectedStudy: any) => {
-      return !!selectedStudy;
-    }));
+    return dialogRef.afterClosed().pipe(
+      map((selectedStudy: any) => {
+        return !!selectedStudy;
+      })
+    );
   }
 }

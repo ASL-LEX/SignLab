@@ -7,6 +7,6 @@ import { StudySelect } from './components/study-select.component';
 @NgModule({
   declarations: [NavbarComponent, StudySelect],
   imports: [SharedModule, RouterModule],
-  exports: [NavbarComponent]
+  exports: [NavbarComponent],
 })
-export class NavigationModule { }
+export class NavigationModule {}

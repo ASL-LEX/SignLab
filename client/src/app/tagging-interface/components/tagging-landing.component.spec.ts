@@ -55,11 +55,11 @@ describe('TaggingLanding', () => {
   let taggingLanding: ComponentFixture<TaggingLanding>;
 
   beforeEach(fakeAsync(() => {
-    studySpy = jasmine.createSpyObj('StudyService', [
-      'getUserStudy',
-      'getStudies',
-      'activeStudy',
-    ], { activeStudy: of(testStudy) });
+    studySpy = jasmine.createSpyObj(
+      'StudyService',
+      ['getUserStudy', 'getStudies', 'activeStudy'],
+      { activeStudy: of(testStudy) }
+    );
     studySpy.getUserStudy.and.returnValue(Promise.resolve(testUserStudy));
     studySpy.getStudies.and.returnValue(Promise.resolve([testStudy]));
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {MatSelectChange} from '@angular/material/select';
+import { MatSelectChange } from '@angular/material/select';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({
@@ -11,12 +11,14 @@ import { StudyService } from '../../core/services/study.service';
       </mat-card-header>
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
-          <p>Study: </p>
-          <mat-select class="select-field"
-                      placeholder="No Study Selected"
-                      *ngIf="(studyService.studies | async) as studies; else noStudies"
-                      (selectionChange)="studySelect($event)"
-                      [value]="(studyService.activeStudy | async)?._id || ''">
+          <p>Study:</p>
+          <mat-select
+            class="select-field"
+            placeholder="No Study Selected"
+            *ngIf="studyService.studies | async as studies; else noStudies"
+            (selectionChange)="studySelect($event)"
+            [value]="(studyService.activeStudy | async)?._id || ''"
+          >
             <mat-option *ngFor="let study of studies" [value]="study._id">
               {{ study.name }}
             </mat-option>
@@ -30,7 +32,7 @@ import { StudyService } from '../../core/services/study.service';
       </mat-card-content>
     </mat-card>
   `,
-  styleUrls: ['./study-select.component.css']
+  styleUrls: ['./study-select.component.css'],
 })
 export class StudySelect {
   constructor(public studyService: StudyService) {}

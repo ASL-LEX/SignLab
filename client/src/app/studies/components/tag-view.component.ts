@@ -6,17 +6,17 @@ import { StudyService } from '../../core/services/study.service';
 
 @Component({
   selector: 'tag-view',
-  template:
-    `<button mat-stroked-button (click)="exportTags()">Download Tag CSV</button>`
+  template: `<button mat-stroked-button (click)="exportTags()">
+    Download Tag CSV
+  </button>`,
 })
 export class TagViewComponent {
   constructor(private studyService: StudyService) {}
 
   exportTags() {
-    this.studyService
-      .activeStudy
+    this.studyService.activeStudy
       .pipe(take(1))
-      .subscribe(study => this.export(study));
+      .subscribe((study) => this.export(study));
   }
 
   private async export(activeStudy: Study | null) {

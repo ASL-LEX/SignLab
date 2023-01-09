@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
-
 interface NavItem {
   name: string;
   url: string;
@@ -12,7 +11,7 @@ interface NavItem {
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
   navItems: NavItem[] = [
@@ -22,20 +21,20 @@ export class NavbarComponent {
       sublinks: [
         {
           name: 'User Permissions',
-          url: '/studies/user-permissions'
+          url: '/studies/user-permissions',
         },
         {
           name: 'Entry Controls',
-          url: '/studies/entry-controls'
+          url: '/studies/entry-controls',
         },
         {
           name: 'Download Tags',
-          url: '/studies/tag-download'
+          url: '/studies/tag-download',
         },
         {
           name: 'Create New Study',
-          url: '/studies/create-new-study'
-        }
+          url: '/studies/create-new-study',
+        },
       ],
     },
     {
@@ -44,7 +43,7 @@ export class NavbarComponent {
       sublinks: [
         {
           name: 'Dataset Controls',
-          url: '/datasets/dataset-control'
+          url: '/datasets/dataset-control',
         },
       ],
     },
@@ -54,12 +53,11 @@ export class NavbarComponent {
       sublinks: [
         {
           name: 'Contribute to a Study',
-          url: '/tag'
+          url: '/tag',
         },
       ],
-    }
+    },
   ];
-
 
   constructor(public authService: AuthService, private router: Router) {}
 

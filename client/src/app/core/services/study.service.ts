@@ -12,12 +12,15 @@ export class StudyService {
    * Keeps track of the currently active study the user selected. This allows
    * for the active study to be accessed from any component.
    */
-  private activeStudyObservable: BehaviorSubject<Study | null> = new BehaviorSubject<Study | null>(null);
+  private activeStudyObservable: BehaviorSubject<Study | null> =
+    new BehaviorSubject<Study | null>(null);
   private currentActiveStudy: Study | null = null;
   /**
    * Keep track of possible studies
    */
-  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<Study[]>([]);
+  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<
+    Study[]
+  >([]);
   private currentStudies: Study[] = [];
 
   constructor(private signLab: SignLabHttpClient) {
@@ -26,7 +29,6 @@ export class StudyService {
 
   /** Set the currently selected study */
   setActiveStudy(study: Study | null | string) {
-
     /** If the type is a string, then look up based on ID */
     if (typeof study === 'string') {
       const foundStudy = this.currentStudies.find((s) => s._id === study);

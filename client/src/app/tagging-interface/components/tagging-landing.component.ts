@@ -21,13 +21,15 @@ export class TaggingLanding implements OnInit {
 
   ngOnInit(): void {
     this.studyService.activeStudy.subscribe(async (study: Study | null) => {
-      if(study) {
+      if (study) {
         this.userStudy = await this.studyService.getUserStudy(
           this.authService.user,
           study
         );
 
-        if (!this.userStudy.hasAccessToStudy) { this.activeView = 'info'; }
+        if (!this.userStudy.hasAccessToStudy) {
+          this.activeView = 'info';
+        }
       }
     });
   }

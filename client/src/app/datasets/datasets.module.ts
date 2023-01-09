@@ -14,6 +14,11 @@ import { DatasetsRoutingModule } from './datasets-routing.module';
     EntryUploadDialog,
     DatasetUploadDialog,
   ],
-  imports: [SharedModule, CoreModule, DatasetTableModule, DatasetsRoutingModule],
+  imports: [
+    SharedModule,
+    CoreModule,
+    DatasetTableModule,
+    DatasetsRoutingModule,
+  ],
 })
 export class DatasetsModule {}
