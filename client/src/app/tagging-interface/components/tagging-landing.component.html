@@ -3,9 +3,6 @@
     <mat-card-title>Study: {{activeStudy!.name}}</mat-card-title>
     <mat-card-content>
       <div *ngIf="activeView == 'info'">
-        <!-- Study Selection -->
-        <button mat-stroked-button (click)="openStudySelectDialog()">Change Study</button>
-
         <div fxLayout="row" fxLayoutAlign="space-around center">
           <!-- Enter Training View, shown when the user doesn't have access -->
           <div *ngIf="!userStudy!.hasAccessToStudy">
