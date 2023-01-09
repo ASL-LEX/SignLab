@@ -16,34 +16,6 @@ interface NavItem {
 export class NavbarComponent {
   navItems: NavItem[] = [
     {
-      name: 'Organization',
-      url: '',
-      sublinks: [
-        {
-          name: 'User Permissions',
-          url: '/organization/user-permissions'
-        },
-      ],
-    },
-    {
-      name: 'Project',
-      url: '',
-      sublinks: [
-        {
-          name: 'User Permissions',
-          url: '/project/user-permissions'
-        },
-        {
-          name: 'Dataset Access',
-          url: '/project/dataset-access'
-        },
-        {
-          name: 'Create New Project',
-          url: '/project/create-new-project'
-        }
-      ],
-    },
-    {
       name: 'Studies',
       url: '',
       sublinks: [
