@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { JsonSchema } from '@jsonforms/core';
-import { TagService } from '../../../../core/services/tag.service';
+import { TagService } from '../../../core/services/tag.service';
 
 type TagPreviewInformation = {
   previewDataSchema: JsonSchema;

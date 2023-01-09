@@ -6,27 +6,25 @@
 </ng-template>
 
 <!-- Normal view during SignLab usage -->
-<ng-template #routerView>
-  <mat-toolbar class="navbar">
-    <div style="color: #fafafa">ASL-LEX SignLab</div>
-    <!-- Tagging interface for users -->
-    <a class="nav-button" mat-button routerLink='/tag' routerLinkActive="active-link">Tagging</a>
+<ng-template #routerView style="height: 100%">
 
-    <!-- Admin based operations -->
-    <a class="nav-button" *ngIf="authService.isAuthenticated() && (authService.user.roles.admin || authService.user.roles.owner)"
-       mat-button routerLink='/admin' routerLinkActive="active-link">Admin</a>
+  <!--
+    WARNING: The autoresize directive is known to cause some performance
+    hits from Angular Material's documentation. However it is needed to handle
+    when study/project names are long enough to warrent expanding the navbar.
+  -->
+  <mat-drawer-container style="height: 100%" autosize="true">
 
-    <!-- Owner based operations -->
-    <a class="nav-button" *ngIf="authService.isAuthenticated() && authService.user.roles.owner"
-       mat-button routerLink="/owner" routerLinkActive="active-link">Owner</a>
+    <mat-drawer #drawer mode="side" style="height: 100%" opened>
+      <navbar></navbar>
+    </mat-drawer>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>{{ drawer.opened ? "arrow_back_ios" : "arrow_forward_ios" }}</mat-icon>
+    </button>
 
-
-    <!-- Login vs Logout Button -->
-    <a class="nav-button" mat-button routerLink='/auth' routerLinkActive="active-link" *ngIf="!authService.isAuthenticated()">Login</a>
-    <button class="nav-button" mat-button *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</button>
-
-  </mat-toolbar>
-
-  <!-- The routed views render in the <router-outlet>-->
-  <router-outlet></router-outlet>
+    <div class="main-content">
+      <!-- Main View -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-container>
 </ng-template>

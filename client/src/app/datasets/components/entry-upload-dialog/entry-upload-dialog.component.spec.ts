@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EntryService } from '../../../../core/services/entry.service';
+import { EntryService } from '../../../core/services/entry.service';
 import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { EntryUploadDialog } from './entry-upload-dialog.component';
-import { DatasetService } from '../../../../core/services/dataset.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { DatasetService } from '../../../core/services/dataset.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 describe('EntryUploadDialog', () => {
   const exampleError: SaveAttempt = {

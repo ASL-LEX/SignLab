@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { AuthService } from '../../../../core/services/auth.service';
-import { DatasetService } from '../../../../core/services/dataset.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { DatasetService } from '../../../core/services/dataset.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
 /**

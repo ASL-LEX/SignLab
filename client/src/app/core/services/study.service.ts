@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Study, StudyCreation } from 'shared/dtos/study.dto';
 import { Tag } from 'shared/dtos/tag.dto';
 import { User } from 'shared/dtos/user.dto';
@@ -11,18 +12,50 @@ export class StudyService {
    * Keeps track of the currently active study the user selected. This allows
    * for the active study to be accessed from any component.
    */
-  activeStudy: Study | null = null;
+  private activeStudyObservable: BehaviorSubject<Study | null> =
+    new BehaviorSubject<Study | null>(null);
+  private currentActiveStudy: Study | null = null;
+  /**
+   * Keep track of possible studies
+   */
+  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<
+    Study[]
+  >([]);
+  private currentStudies: Study[] = [];
 
-  constructor(private signLab: SignLabHttpClient) {}
-
-  /** Set the currently selected study */
-  setActiveStudy(study: Study | null) {
-    this.activeStudy = study;
+  constructor(private signLab: SignLabHttpClient) {
+    this.updateStudies();
   }
 
-  /** Get the currently selected study */
-  getActiveStudy(): Study | null {
-    return this.activeStudy;
+  /** Set the currently selected study */
+  setActiveStudy(study: Study | null | string) {
+    /** If the type is a string, then look up based on ID */
+    if (typeof study === 'string') {
+      const foundStudy = this.currentStudies.find((s) => s._id === study);
+      if (!foundStudy) {
+        throw new Error('Study not found');
+      }
+      study = foundStudy;
+    }
+    this.activeStudyObservable.next(study);
+    this.currentActiveStudy = study;
+  }
+
+  get activeStudy(): Observable<Study | null> {
+    return this.activeStudyObservable;
+  }
+
+  get studies(): Observable<Study[]> {
+    return this.studiesObservable;
+  }
+
+  async updateStudies() {
+    this.currentStudies = await this.getStudies();
+    this.studiesObservable.next(this.currentStudies);
+  }
+
+  hasActiveStudy(): boolean {
+    return !!this.currentActiveStudy;
   }
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {

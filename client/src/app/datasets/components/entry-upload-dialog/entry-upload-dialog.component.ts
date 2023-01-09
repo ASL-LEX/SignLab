@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { EntryService } from '../../../../core/services/entry.service';
+import { EntryService } from '../../../core/services/entry.service';
 import { LocationInfo } from 'shared/dtos/entry.dto';
-import { ManualControl } from '../../../../shared/helpers/manual-control';
+import { ManualControl } from '../../../shared/helpers/manual-control';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { MatSelectChange } from '@angular/material/select';
-import { DatasetService } from '../../../../core/services/dataset.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { DatasetService } from '../../../core/services/dataset.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.

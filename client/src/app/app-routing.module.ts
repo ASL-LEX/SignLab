@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  AdminAuthGuard,
-  AuthenticatedGuard,
-  OwnerAuthGuard,
-} from './core/guards/auth.guard';
+import { AuthenticatedGuard, OwnerAuthGuard } from './core/guards/auth.guard';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [
@@ -17,14 +13,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./authenticate/authenticate.module').then(
         (m) => m.AuthenticateModule
-      ),
-  },
-  {
-    path: 'admin',
-    canActivate: [AdminAuthGuard],
-    loadChildren: () =>
-      import('./admin-dashboard/admin-dashboard.module').then(
-        (m) => m.AdminDashboardModule
       ),
   },
   {
@@ -42,6 +30,18 @@ const routes: Routes = [
       import('./owner-dashboard/owner-dashboard.module').then(
         (m) => m.OwnerDashboardModule
       ),
+  },
+  {
+    path: 'studies',
+    canActivate: [AuthenticatedGuard],
+    loadChildren: () =>
+      import('./studies/studies.module').then((m) => m.StudiesModule),
+  },
+  {
+    path: 'datasets',
+    canActivate: [AuthenticatedGuard],
+    loadChildren: () =>
+      import('./datasets/datasets.module').then((m) => m.DatasetsModule),
   },
 ];
 

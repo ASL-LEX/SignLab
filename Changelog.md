@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+### Changes
+
+* Modified navigation method to use sidenav view
+
 ## 0.4.0
 
 ### Added

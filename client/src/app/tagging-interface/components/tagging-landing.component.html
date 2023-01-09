@@ -1,23 +1,8 @@
-<div *ngIf="activeStudy == null; then noStudies else studyView"></div>
-
-<ng-template #noStudies>
-  <mat-card>
-    <mat-card-title>No Studies</mat-card-title>
-    <mat-card-content>
-      No studies currently available, check back later
-      <button mat-stroked-button (click)="openStudySelectDialog()">Select Study</button>
-    </mat-card-content>
-  </mat-card>
-</ng-template>
-
-<ng-template #studyView>
+<div *ngIf="(studyService.activeStudy | async) as activeStudy; else loading">
   <mat-card *ngIf="userStudy">
     <mat-card-title>Study: {{activeStudy!.name}}</mat-card-title>
     <mat-card-content>
       <div *ngIf="activeView == 'info'">
-        <!-- Study Selection -->
-        <button mat-stroked-button (click)="openStudySelectDialog()">Change Study</button>
-
         <div fxLayout="row" fxLayoutAlign="space-around center">
           <!-- Enter Training View, shown when the user doesn't have access -->
           <div *ngIf="!userStudy!.hasAccessToStudy">
@@ -54,14 +39,14 @@
       </div>
 
       <div *ngIf="activeView == 'tagging'">
-        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-stroked (click)="setView('info')">Exit Tagging</button>
         <tagging-interface
           [study]="activeStudy!"
         ></tagging-interface>
       </div>
 
       <div *ngIf="activeView == 'training'">
-        <button mat-stroked (click)="setView('info')"><mat-icon>keyboard_arrow_left</mat-icon></button>
+        <button mat-stroked (click)="setView('info')">Exit Training</button>
 
         <tagging-interface
           [study]="activeStudy!"
@@ -70,5 +55,5 @@
 
     </mat-card-content>
   </mat-card>
-</ng-template>
-
+</div>
+<ng-template #loading>Loading...</ng-template>

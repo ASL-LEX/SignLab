@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { StudyService } from '../../../../core/services/study.service';
-import { TagField, TagFieldType } from '../../../../models/tag-field';
-import { NewStudyMeta } from '../../../models/new-study';
+import { StudyService } from '../../../core/services/study.service';
+import { TagField, TagFieldType } from '../../../models/tag-field';
+import { NewStudyMeta } from '../../models/new-study';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
 import {
   aslLexSignBankControlRendererTester,
   AslLexSignBankField,
-} from '../../../../shared/components/custom-fields/asl-lex-field.component';
+} from '../../../shared/components/custom-fields/asl-lex-field.component';
 import {
   fileListControlRendererTester,
   FileListField,
-} from '../../../../shared/components/custom-fields/file-list.component';
+} from '../../../shared/components/custom-fields/file-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
 import { JsonSchema } from '@jsonforms/core';
@@ -20,20 +20,20 @@ import { MatStepper } from '@angular/material/stepper';
 import {
   VideoOptionUpload,
   videoOptionUploadRendererTester,
-} from '../../../../shared/components/custom-fields/video-option-upload.component';
+} from '../../../shared/components/custom-fields/video-option-upload.component';
 import {
   userVideoOptionRendererTester,
   UserVideoOption,
-} from '../../../../shared/components/custom-fields/user-video-option-field.component';
+} from '../../../shared/components/custom-fields/user-video-option-field.component';
 import {
   VideoFieldComponent,
   videoFieldTester,
-} from '../../../../video-recording/components/video-field.component';
-import { TagFieldGeneratorService } from '../../../services/tag-field-generator.service';
+} from '../../../video-recording/components/video-field.component';
+import { TagFieldGeneratorService } from '../../services/tag-field-generator.service';
 import {
   OneOfField,
   oneOfFieldTester,
-} from '../../../../shared/components/custom-fields/one-of.component';
+} from '../../../shared/components/custom-fields/one-of.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
@@ -180,6 +180,7 @@ export class NewStudyComponent implements AfterViewInit {
       disabledEntries: Array.from(this.markedDisabled),
     });
     this.studyCreated = true;
+    this.studyService.updateStudies();
   }
 
   /** Display the tag form preview in a popup dialog */
@@ -196,7 +197,7 @@ export class NewStudyComponent implements AfterViewInit {
   }
 
   redirectToAdmin() {
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/studies/user-permissions']);
   }
 
   stepPrevious() {

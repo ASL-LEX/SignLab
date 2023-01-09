@@ -4,16 +4,16 @@ import { UISchemaElement, createAjv } from '@jsonforms/core';
 import {
   fileListControlRendererTester,
   FileListField,
-} from '../../../../shared/components/custom-fields/file-list.component';
-import { TagField } from '../../../../models/tag-field';
+} from '../../../shared/components/custom-fields/file-list.component';
+import { TagField } from '../../../models/tag-field';
 import {
   VideoOptionUpload,
   videoOptionUploadRendererTester,
-} from '../../../../shared/components/custom-fields/video-option-upload.component';
+} from '../../../shared/components/custom-fields/video-option-upload.component';
 import {
   OneOfField,
   oneOfFieldTester,
-} from '../../../../shared/components/custom-fields/one-of.component';
+} from '../../../shared/components/custom-fields/one-of.component';
 
 @Component({
   selector: 'tag-field',

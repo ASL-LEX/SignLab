@@ -16,11 +16,7 @@ describe('Upload CSV', () => {
       .login(users.existingUser)
       .makeDefaultDataset()
       // Navigate to the entry interface and select the upload option
-      .visit('/admin')
-      .get('div[class="mat-tab-label-content"]')
-      .contains('Datasets')
-      .click()
-      .wait(100)
+      .visit('/datasets/dataset-control')
       .get(uploadEntriesButton)
       .click()
   });
@@ -109,11 +105,7 @@ describe('Upload Entry ZIP', () => {
     cy
       .login(users.existingUser)
       .makeDefaultDataset()
-      .visit('/admin')
-      .get('div[class="mat-tab-label-content"]')
-      .contains('Datasets')
-      .click()
-      .wait(100)
+      .visit('/datasets/dataset-control')
       .get(uploadEntriesButton)
       .click()
       // Select the first dataset

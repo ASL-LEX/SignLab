@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { createAjv } from '@jsonforms/core';
-import { NewStudyMeta } from '../../../models/new-study';
+import { NewStudyMeta } from '../../models/new-study';
 
 /**
  * Represents the form which handles the metadata what is needed to be
