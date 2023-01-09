@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
+import { Observable } from 'rxjs';
 
 /**
  * Dialog which provides an interface for selecting the study to view.
@@ -66,7 +67,7 @@ import { StudyService } from '../../core/services/study.service';
 })
 export class StudySelectDialog {
   studies: Study[];
-  activeStudy: Study | null = null;
+  activeStudy: Study | null;
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
@@ -81,7 +82,9 @@ export class StudySelectDialog {
     this.studyService.getStudies().then((studies) => {
       this.studies = studies;
     });
-    this.activeStudy = this.studyService.getActiveStudy();
+    this.studyService.activeStudy.subscribe((study) => {
+      this.activeStudy = study;
+    });
   }
 
   /** Handle redirecting to page for making a new study */

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Study, StudyCreation } from 'shared/dtos/study.dto';
 import { Tag } from 'shared/dtos/tag.dto';
 import { User } from 'shared/dtos/user.dto';
@@ -11,19 +12,23 @@ export class StudyService {
    * Keeps track of the currently active study the user selected. This allows
    * for the active study to be accessed from any component.
    */
-  activeStudy: Study | null = null;
+  _activeStudyObservable: BehaviorSubject<Study | null> = new BehaviorSubject<Study | null>(null);
+  _activeStudy: Study | null = null;
 
   constructor(private signLab: SignLabHttpClient) {}
 
   /** Set the currently selected study */
   setActiveStudy(study: Study | null) {
-    this.activeStudy = study;
+    this._activeStudyObservable.next(study);
+    this._activeStudy = study;
   }
 
-  /** Get the currently selected study */
-  getActiveStudy(): Study | null {
-    // TODO: Add ability to check local storage for the active study
-    return this.activeStudy;
+  get activeStudy(): Observable<Study | null> {
+    return this._activeStudyObservable;
+  }
+
+  hasActiveStudy(): boolean {
+    return !!this._activeStudy;
   }
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {

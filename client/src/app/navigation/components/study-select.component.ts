@@ -13,7 +13,10 @@ import { StudyService } from '../../core/services/study.service';
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>
-          <mat-select class="select-field" placeholder="No Study Selected" (selectionChange)="studySelect($event)" [value]="studyService.getActiveStudy()">
+          <mat-select class="select-field"
+                      placeholder="No Study Selected"
+                      (selectionChange)="studySelect($event)"
+                      [value]="studyService.activeStudy">
             <mat-option *ngFor="let study of studies" [value]="study">
               {{ study.name }}
             </mat-option>
@@ -29,14 +32,15 @@ export class StudySelect implements OnInit {
 
   constructor(public studyService: StudyService) {}
 
+  /** Load the studies from the study service */
   ngOnInit(): void {
     this.studyService.getStudies().then(studies => {
       this.studies = studies;
     });
   }
 
+  /** Update the study that is active */
   studySelect(event: MatSelectChange): void {
     this.studyService.setActiveStudy(event.value);
   }
-
 }
