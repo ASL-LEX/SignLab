@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {MatSelectChange} from '@angular/material/select';
+import {Study} from 'shared/dtos/study.dto';
+import { StudyService } from '../../core/services/study.service';
 
 @Component({
   selector: 'study-select',
@@ -10,12 +13,10 @@ import { Component } from '@angular/core';
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>
-          <mat-select class="select-field">
-            <mat-select-trigger><mat-icon>not_interested</mat-icon>No Study Selected</mat-select-trigger>
-            <mat-option value="" selected><mat-icon>not_interested</mat-icon>No Study Selected</mat-option>
-            <mat-option value="1">Study 1</mat-option>
-            <mat-option value="2">Study 2</mat-option>
-            <mat-option value="3">Study 3</mat-option>
+          <mat-select class="select-field" placeholder="No Study Selected" (selectionChange)="studySelect($event)" [value]="studyService.getActiveStudy()">
+            <mat-option *ngFor="let study of studies" [value]="study">
+              {{ study.name }}
+            </mat-option>
           </mat-select>
         </div>
       </mat-card-content>
@@ -23,4 +24,19 @@ import { Component } from '@angular/core';
   `,
   styleUrls: ['./study-select.component.css']
 })
-export class StudySelect {}
+export class StudySelect implements OnInit {
+  studies: Study[] = [];
+
+  constructor(public studyService: StudyService) {}
+
+  ngOnInit(): void {
+    this.studyService.getStudies().then(studies => {
+      this.studies = studies;
+    });
+  }
+
+  studySelect(event: MatSelectChange): void {
+    this.studyService.setActiveStudy(event.value);
+  }
+
+}
