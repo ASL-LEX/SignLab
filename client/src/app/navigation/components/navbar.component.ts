@@ -56,6 +56,10 @@ export class NavbarComponent {
           url: '/studies/entry-controls'
         },
         {
+          name: 'Download Tags',
+          url: '/studies/tag-download'
+        },
+        {
           name: 'Create New Study',
           url: '/studies/create-new-study'
         }
