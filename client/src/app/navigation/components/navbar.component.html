@@ -35,7 +35,7 @@
            class="nav-link navbar-element">Login</a>
         <a mat-list-item
            *ngIf="authService.isAuthenticated()"
-           class="nav-link navbar-element">Logout</a>
+           class="nav-link navbar-element" (click)="logout()">Logout</a>
       </mat-nav-list>
     </mat-card-content>
   </mat-card>
