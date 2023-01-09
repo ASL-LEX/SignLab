@@ -22,6 +22,7 @@ import { StudyModule } from './study/study.module';
 import { EntryStudyModule } from './entrystudy/entrystudy.module';
 import { UserStudyModule } from './userstudy/userstudy.module';
 import { BucketModule } from './bucket/bucket.module';
+import { ProjectModule } from './project/project.module';
 
 // By default just use OS provided environment variables
 let configModule = ConfigModule.forRoot({
@@ -58,6 +59,7 @@ if (process.env.NODE_ENV) {
     EntryStudyModule,
     UserStudyModule,
     BucketModule,
+    ProjectModule,
   ],
   controllers: [AppController],
 })
