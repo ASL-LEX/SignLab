@@ -26,6 +26,8 @@ export class TaggingLanding implements OnInit {
           this.authService.user,
           study
         );
+
+        if (!this.userStudy.hasAccessToStudy) { this.activeView = 'info'; }
       }
     });
   }
