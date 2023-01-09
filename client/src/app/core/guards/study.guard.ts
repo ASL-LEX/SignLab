@@ -18,6 +18,9 @@ export class StudyGuard implements CanActivate {
   constructor(private studyService: StudyService, private dialog: MatDialog) {}
 
   canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
+    if (this.studyService.hasActiveStudy()) {
+      return of(true);
+    }
 
     return this.openDialog();
   }

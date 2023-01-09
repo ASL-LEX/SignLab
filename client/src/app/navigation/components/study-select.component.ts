@@ -14,10 +14,11 @@ import { StudyService } from '../../core/services/study.service';
         <div fxLayout="row" fxLayoutAlign="center" class="study-select">
           <p>Study: </p>
           <mat-select class="select-field"
+                      *ngIf="(studyService.activeStudy | async) as activeStudy"
                       placeholder="No Study Selected"
                       (selectionChange)="studySelect($event)"
-                      [value]="studyService.activeStudy">
-            <mat-option *ngFor="let study of studies" [value]="study">
+                      [value]="activeStudy._id">
+            <mat-option *ngFor="let study of studies" [value]="study._id">
               {{ study.name }}
             </mat-option>
           </mat-select>
@@ -41,6 +42,11 @@ export class StudySelect implements OnInit {
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {
-    this.studyService.setActiveStudy(event.value);
+    const study = this.studies.find(study => study._id === event.value);
+    if (study === null) {
+      console.error('Study not found in study list');
+      return;
+    }
+    this.studyService.setActiveStudy(study!);
   }
 }
