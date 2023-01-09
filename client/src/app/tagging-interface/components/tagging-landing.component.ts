@@ -27,6 +27,7 @@ export class TaggingLanding implements OnInit {
   }
 
   ngOnInit(): void {
+    this.activeStudy = this.studyService.getActiveStudy();
     if (!this.activeStudy) {
       this.selectActiveStudy();
     }

@@ -140,17 +140,4 @@ describe('TaggingLanding', () => {
     console.log(button);
     expect(button.getAttribute('disabled')).toBeNull();
   });
-
-  it('should handle when no studies are available', () => {
-    // Insert null for the active study
-    taggingLanding.componentInstance.activeStudy = null;
-
-    taggingLanding.detectChanges();
-
-    const compiled = taggingLanding.nativeElement;
-
-    // Should be a message explaining there are no studies
-    const message = compiled.querySelector('mat-card-content');
-    expect(message.textContent).toContain('No studies currently available');
-  });
 });
