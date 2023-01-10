@@ -3,14 +3,24 @@ import { MatSelectChange } from '@angular/material/select';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({
-  selector: 'study-select',
+  selector: 'environment-select',
   template: `
     <mat-card class="study-select-card">
       <mat-card-header>
         <mat-card-title>Environment</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="center" class="study-select">
+        <!-- Project Select -->
+        <div fxlayout="row" fxLayoutAlign="center" class="environment-select">
+          <p>Project: </p>
+          <mat-select class="select-field" placeholder="No Project Selected">
+            <mat-option [value]="1">Project A</mat-option>
+            <mat-option [value]="2">Project B</mat-option>
+          </mat-select>
+        </div>
+
+        <!-- Study Select -->
+        <div fxLayout="row" fxLayoutAlign="center" class="environment-select">
           <p>Study:</p>
           <mat-select
             class="select-field"
@@ -32,9 +42,9 @@ import { StudyService } from '../../core/services/study.service';
       </mat-card-content>
     </mat-card>
   `,
-  styleUrls: ['./study-select.component.css'],
+  styleUrls: ['./environment-select.component.css'],
 })
-export class StudySelect {
+export class EnvironmentSelect {
   constructor(public studyService: StudyService) {}
 
   /** Update the study that is active */
