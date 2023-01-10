@@ -43,6 +43,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./datasets/datasets.module').then((m) => m.DatasetsModule),
   },
+  {
+    path: 'projects',
+    canActivate: [AuthenticatedGuard],
+    loadChildren: () =>
+      import('./projects/projects.module').then((m) => m.ProjectsModule),
+  },
 ];
 
 @NgModule({
