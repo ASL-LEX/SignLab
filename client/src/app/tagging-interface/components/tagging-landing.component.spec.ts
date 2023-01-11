@@ -35,6 +35,7 @@ describe('TaggingLanding', () => {
       dataSchema: {},
       uiSchema: {},
     },
+    project: '1',
   };
 
   const testUserStudy = {

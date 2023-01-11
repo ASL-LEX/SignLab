@@ -76,6 +76,7 @@ describe('TaggingInterface', () => {
           ],
         },
       },
+      project: '1',
     },
     user: {
       _id: 'some user',
@@ -133,6 +134,7 @@ describe('TaggingInterface', () => {
           ],
         },
       },
+      project: '1',
     },
     user: {
       _id: 'some user',

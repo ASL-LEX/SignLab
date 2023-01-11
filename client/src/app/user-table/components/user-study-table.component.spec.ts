@@ -21,6 +21,7 @@ describe('UserStudyComponent', () => {
       dataSchema: {},
       uiSchema: {},
     },
+    project: '1',
   };
 
   const testUserStudyData: UserStudy[] = [

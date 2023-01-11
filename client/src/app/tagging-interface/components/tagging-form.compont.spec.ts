@@ -69,6 +69,7 @@ describe('TaggingForm', () => {
           ],
         },
       },
+      project: '1',
     },
     user: {
       _id: 'some user',
