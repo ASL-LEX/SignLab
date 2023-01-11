@@ -38,6 +38,10 @@ export class ProjectService {
     return this.activeProjectObs;
   }
 
+  public hasActiveProject() {
+    return this.activeProjectObs.value != null;
+  }
+
   public async createProject(project: ProjectCreate): Promise<Project> {
     return await this.signLab.post('/api/projects', project, {
       withCredentials: true,
