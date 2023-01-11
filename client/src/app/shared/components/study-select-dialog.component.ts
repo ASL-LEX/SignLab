@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Dialog which provides an interface for selecting the study to view.
@@ -32,13 +33,13 @@ export class StudySelectDialog {
     private dialogRef: MatDialogRef<StudySelectDialog>,
     private studyService: StudyService
   ) {
-    // Update the list of options when the studies change
+    // Generate the study list
     this.studyService.getStudiesForActiveProject().then((studies) => {
       this.updateStudyOptions(studies);
     });
 
-    // Update the active ID when the active study changes
-    this.studyService.activeStudy.subscribe((study) => {
+    // Determine the current active study
+    firstValueFrom(this.studyService.activeStudy).then((study) => {
       this.activeStudyID = study ? study._id! : '';
     });
   }
