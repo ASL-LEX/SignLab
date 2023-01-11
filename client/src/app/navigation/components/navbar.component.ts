@@ -22,8 +22,8 @@ export class NavbarComponent {
         {
           name: 'New Project',
           url: '/projects/new-project',
-        }
-      ]
+        },
+      ],
     },
     {
       name: 'Studies',

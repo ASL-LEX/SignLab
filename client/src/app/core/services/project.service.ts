@@ -9,7 +9,8 @@ export class ProjectService {
   projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
 
   /** The actively selected project */
-  activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
+  activeProjectObs: BehaviorSubject<Project | null> =
+    new BehaviorSubject<Project | null>(null);
 
   constructor(private readonly signLab: SignLabHttpClient) {
     this.updateProjects();
@@ -21,9 +22,11 @@ export class ProjectService {
 
   setActiveProject(project: Project | null | string) {
     if (typeof project === 'string') {
-      const foundProject = this.projectsObs.getValue().find((s) => s._id === project);
+      const foundProject = this.projectsObs
+        .getValue()
+        .find((s) => s._id === project);
       if (!foundProject) {
-       throw new Error('Project not found');
+        throw new Error('Project not found');
       }
       project = foundProject;
     }
@@ -36,14 +39,20 @@ export class ProjectService {
   }
 
   public async createProject(project: ProjectCreate): Promise<Project> {
-    return await this.signLab.post('/api/projects', project, { withCredentials: true });
+    return await this.signLab.post('/api/projects', project, {
+      withCredentials: true,
+    });
   }
 
   public async projectExists(name: string): Promise<boolean> {
-    return this.signLab.get(`/api/projects/exists/${name}`, { withCredentials: true });
+    return this.signLab.get(`/api/projects/exists/${name}`, {
+      withCredentials: true,
+    });
   }
 
   public async updateProjects(): Promise<void> {
-    this.projectsObs.next(await this.signLab.get('/api/projects', { withCredentials: true }));
+    this.projectsObs.next(
+      await this.signLab.get('/api/projects', { withCredentials: true })
+    );
   }
 }

@@ -6,11 +6,11 @@ const routes: Routes = [
   {
     path: 'new-project',
     component: NewProjectComponent,
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ProjectRoutingModule {}

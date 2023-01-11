@@ -6,7 +6,9 @@ import { Project, ProjectDocument } from './project.schema';
 
 @Injectable()
 export class ProjectService {
-  constructor(@InjectModel(Project.name) private projectModel: Model<ProjectDocument>) {}
+  constructor(
+    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
+  ) {}
 
   async create(project: ProjectCreate): Promise<Project> {
     const newProject: ProjectCreate & { created: Date } = {

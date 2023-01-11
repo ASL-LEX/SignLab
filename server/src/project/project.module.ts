@@ -8,7 +8,7 @@ import { ProjectService } from './project.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
-    AuthModule
+    AuthModule,
   ],
   controllers: [ProjectController],
   providers: [ProjectService],

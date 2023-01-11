@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {Router} from '@angular/router';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Router } from '@angular/router';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { ProjectService } from '../../core/services/project.service';
 
@@ -19,10 +19,16 @@ import { ProjectService } from '../../core/services/project.service';
           (errors)="errorHandler($event)"
         ></jsonforms>
 
-        <button mat-stroked-button (click)="projectSubmit()" [disabled]="!formValid">Submit</button>
+        <button
+          mat-stroked-button
+          (click)="projectSubmit()"
+          [disabled]="!formValid"
+        >
+          Submit
+        </button>
       </mat-card-content>
     </mat-card>
-  `
+  `,
 })
 export class NewProjectComponent {
   NEW_PROJECT_SCHEMA = {
@@ -48,7 +54,7 @@ export class NewProjectComponent {
       {
         type: 'Control',
         scope: '#/properties/description',
-      }
+      },
     ],
   };
 
@@ -59,7 +65,10 @@ export class NewProjectComponent {
 
   additionalErrors: any[] = [];
 
-  constructor(private readonly projectService: ProjectService, private readonly router: Router) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly router: Router
+  ) {}
 
   fieldChange(data: any) {
     this.formData = data;
@@ -70,14 +79,16 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      if(await this.projectService.projectExists(this.formData.name)) {
-        this.additionalErrors = [{
-          instancePath: '/name',
-          message: 'Project name already exists',
-          schemaPath: '',
-          keyword: '',
-          params: {},
-        }];
+      if (await this.projectService.projectExists(this.formData.name)) {
+        this.additionalErrors = [
+          {
+            instancePath: '/name',
+            message: 'Project name already exists',
+            schemaPath: '',
+            keyword: '',
+            params: {},
+          },
+        ];
         this.formValid = false;
       } else {
         this.additionalErrors = [];
@@ -90,11 +101,12 @@ export class NewProjectComponent {
       await this.projectService.createProject(this.formData);
       alert('Project created successfully');
       this.router.navigate(['/']);
-    } catch(error: any) {
+    } catch (error: any) {
       console.warn('Failed to make a new project');
-      alert('Cannot make a new project at this time, ensure you have proper permissions. If this problem persists, please contact support.');
+      alert(
+        'Cannot make a new project at this time, ensure you have proper permissions. If this problem persists, please contact support.'
+      );
       this.formData = {};
     }
   }
-
 }

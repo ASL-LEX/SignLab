@@ -2,7 +2,6 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as dto from 'shared/dtos/project.dto';
 
-
 /**
  * Represents a single project which is part of an organization.
  */

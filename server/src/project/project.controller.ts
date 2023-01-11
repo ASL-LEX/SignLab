@@ -5,7 +5,6 @@ import { Project } from './project.schema';
 
 @Controller('/api/projects')
 export class ProjectController {
-
   constructor(private readonly projectService: ProjectService) {}
 
   @Get('/')
@@ -20,6 +19,6 @@ export class ProjectController {
 
   @Get('/exists/:name')
   async projectExists(@Param('name') name: string): Promise<boolean> {
-    return await this.projectService.findByName(name) != null;
+    return (await this.projectService.findByName(name)) != null;
   }
 }

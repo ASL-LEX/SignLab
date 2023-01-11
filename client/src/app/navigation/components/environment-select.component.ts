@@ -13,11 +13,11 @@ import { StudyService } from '../../core/services/study.service';
       <mat-card-content>
         <!-- Project Select -->
         <div fxlayout="row" fxLayoutAlign="center" class="environment-select">
-          <p>Project: </p>
+          <p>Project:</p>
           <mat-select
             class="select-field"
             placeholder="No Project Selected"
-            *ngIf="(projectService.projects | async) as projects; else noProjects"
+            *ngIf="projectService.projects | async as projects; else noProjects"
             (selectionChange)="projectSelect($event)"
             [value]="(projectService.activeProject | async)?._id || ''"
           >
@@ -26,10 +26,10 @@ import { StudyService } from '../../core/services/study.service';
             </mat-option>
           </mat-select>
 
-            <!-- Displayed when no projects are available -->
-            <ng-template #noProjects>
-              <p>No Projects Available</p>
-            </ng-template>
+          <!-- Displayed when no projects are available -->
+          <ng-template #noProjects>
+            <p>No Projects Available</p>
+          </ng-template>
         </div>
 
         <!-- Study Select -->
@@ -58,7 +58,10 @@ import { StudyService } from '../../core/services/study.service';
   styleUrls: ['./environment-select.component.css'],
 })
 export class EnvironmentSelect {
-  constructor(public studyService: StudyService, public projectService: ProjectService) {}
+  constructor(
+    public studyService: StudyService,
+    public projectService: ProjectService
+  ) {}
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {
