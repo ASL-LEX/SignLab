@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
 import * as dto from 'shared/dtos/project.dto';
-import { User } from '../user/user.schema';
 
 
 /**
@@ -20,9 +19,6 @@ export class Project implements dto.Project {
 
   @Prop({ required: true })
   created: Date;
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name, required: true })
-  creator: User;
 }
 
 export type ProjectDocument = Project & Document;

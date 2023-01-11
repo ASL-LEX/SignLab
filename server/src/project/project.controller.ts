@@ -10,7 +10,6 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post('/')
-  @Auth('admin')
   async createProject(@Body() project: ProjectCreate): Promise<Project> {
     return await this.projectService.create(project);
   }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {Router} from '@angular/router';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { ProjectService } from '../../core/services/project.service';
 
@@ -58,7 +59,7 @@ export class NewProjectComponent {
 
   additionalErrors: any[] = [];
 
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(private readonly projectService: ProjectService, private readonly router: Router) {}
 
   fieldChange(data: any) {
     this.formData = data;
@@ -78,13 +79,22 @@ export class NewProjectComponent {
           params: {},
         }];
         this.formValid = false;
+      } else {
+        this.additionalErrors = [];
       }
     }
   }
 
-  projectSubmit() {
-
-    alert('Project created successfully');
+  async projectSubmit(): Promise<void> {
+    try {
+      await this.projectService.createProject(this.formData);
+      alert('Project created successfully');
+      this.router.navigate(['/']);
+    } catch(error: any) {
+      console.warn('Failed to make a new project');
+      alert('Cannot make a new project at this time, ensure you have proper permissions. If this problem persists, please contact support.');
+      this.formData = {};
+    }
   }
 
 }
