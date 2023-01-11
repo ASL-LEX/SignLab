@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { ProjectService } from 'src/app/core/services/project.service';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({
@@ -13,10 +14,22 @@ import { StudyService } from '../../core/services/study.service';
         <!-- Project Select -->
         <div fxlayout="row" fxLayoutAlign="center" class="environment-select">
           <p>Project: </p>
-          <mat-select class="select-field" placeholder="No Project Selected">
-            <mat-option [value]="1">Project A</mat-option>
-            <mat-option [value]="2">Project B</mat-option>
+          <mat-select
+            class="select-field"
+            placeholder="No Project Selected"
+            *ngIf="(projectService.projects | async) as projects; else noProjects"
+            (selectionChange)="projectSelect($event)"
+            [value]="(projectService.activeProject | async)?._id || ''"
+          >
+            <mat-option *ngFor="let project of projects" [value]="project._id">
+              {{ project.name }}
+            </mat-option>
           </mat-select>
+
+            <!-- Displayed when no projects are available -->
+            <ng-template #noProjects>
+              <p>No Projects Available</p>
+            </ng-template>
         </div>
 
         <!-- Study Select -->
@@ -45,10 +58,15 @@ import { StudyService } from '../../core/services/study.service';
   styleUrls: ['./environment-select.component.css'],
 })
 export class EnvironmentSelect {
-  constructor(public studyService: StudyService) {}
+  constructor(public studyService: StudyService, public projectService: ProjectService) {}
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {
     this.studyService.setActiveStudy(event.value);
+  }
+
+  /** Update the project that is active */
+  projectSelect(event: MatSelectChange): void {
+    this.projectService.setActiveProject(event.value);
   }
 }
