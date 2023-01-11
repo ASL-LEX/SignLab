@@ -6,12 +6,19 @@ import { StudyService } from '../../core/services/study.service';
 
 @Component({
   selector: 'tag-view',
-  template: `<button mat-stroked-button (click)="exportTags()">
-    Download Tag CSV
-  </button>`,
+  template: `
+    <button
+      mat-stroked-button
+      (click)="exportTags()"
+      *ngIf="studyService.activeStudy | async as activeStudy; else loading"
+    >
+      Download Tag CSV
+    </button>
+    <ng-template #loading>No Study Selected</ng-template>
+  `,
 })
 export class TagViewComponent {
-  constructor(private studyService: StudyService) {}
+  constructor(public studyService: StudyService) {}
 
   exportTags() {
     this.studyService.activeStudy

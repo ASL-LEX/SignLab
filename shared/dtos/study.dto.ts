@@ -1,3 +1,5 @@
+import { Project } from './project.dto';
+
 /**
  * A study is a collection of tags related to a certain goal definined by
  * the project owner
@@ -11,6 +13,8 @@ export interface Study {
   description: string;
   /** Instructions presented to taggers in the system */
   instructions: string;
+  /** The project the study is a part of */
+  project: Project | string;
   /**
    * Defines the format of the tag as well as how to display the tag.
    */
@@ -28,7 +32,9 @@ export interface Study {
  * set
  */
 export interface StudyCreation {
-  study: Study;
+  study: Omit<Study, 'project'>;
+  /** The project the study will belong to */
+  projectID: string;
   /** List of Response IDs which will be used for the training set */
   trainingEntries: string[];
   /** List of Response IDs which will be disabled for this study */

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Project, ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { StudyService } from './study.service';
 
 @Injectable()
 export class ProjectService {
@@ -36,6 +37,10 @@ export class ProjectService {
 
   get activeProject(): Observable<Project | null> {
     return this.activeProjectObs;
+  }
+
+  public hasActiveProject() {
+    return this.activeProjectObs.value != null;
   }
 
   public async createProject(project: ProjectCreate): Promise<Project> {

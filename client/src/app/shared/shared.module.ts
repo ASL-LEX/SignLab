@@ -6,6 +6,8 @@ import { UserVideoOption } from './components/custom-fields/user-video-option-fi
 import { VideoOptionUpload } from './components/custom-fields/video-option-upload.component';
 import { OneOfField } from './components/custom-fields/one-of.component';
 import { StudySelectDialog } from './components/study-select-dialog.component';
+import { SelectorDialog } from './components/selector-dialog.component';
+import { ProjectSelectDialog } from './components/project-select-dialog.component';
 
 // Modules
 import { NgModule } from '@angular/core';
@@ -29,6 +31,8 @@ import { SafePipe } from './pipes/safe.pipe';
     VideoOptionUpload,
     OneOfField,
     StudySelectDialog,
+    SelectorDialog,
+    ProjectSelectDialog,
   ],
   imports: [
     FormsModule,

@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import * as dto from 'shared/dtos/study.dto';
+import { Project } from '../project/project.schema';
 
 /**
  * Defined the two aspects of the tag schema which is the properties and
@@ -51,6 +52,12 @@ export class Study implements dto.Study {
    */
   @Prop({ type: TagSchemaSchema })
   tagSchema: TagSchema;
+
+  /**
+   * The project the study is a part of
+   */
+  @Prop({ type: mongoose.SchemaTypes.ObjectId, ref: Project.name })
+  project: Project | string;
 }
 
 export type StudyDocument = Study & Document;

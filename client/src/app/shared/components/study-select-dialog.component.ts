@@ -1,100 +1,70 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Dialog which provides an interface for selecting the study to view.
  * This will update the study in the study service.
  */
+import { SelectDialogOptions } from './selector-dialog.component';
+
 @Component({
   selector: 'study-select-dialog',
   template: `
-    <mat-list>
-      <!-- Header and new study -->
-      <div fxLayout="row" fxLayoutAlign="space-between">
-        <h2>Select a Study</h2>
-        <button
-          mat-stroked-button
-          (click)="newStudyNav()"
-          [mat-dialog-close]="true"
-          *ngIf="data.newStudyOption"
-        >
-          New Study
-        </button>
-      </div>
-
-      <!-- List of studies -->
-      <div *ngFor="let study of studies">
-        <mat-list-item>
-          <div fxLayout fxFlex>
-            <!-- Indicator of selected study -->
-            <div
-              *ngIf="
-                activeStudy && study._id == activeStudy._id;
-                then selectIcon;
-                else placeHolder
-              "
-            ></div>
-            <ng-template #selectIcon>
-              <mat-icon
-                *ngIf="activeStudy && study._id == activeStudy._id"
-                fxFlex="10"
-                >check</mat-icon
-              >
-            </ng-template>
-            <ng-template #placeHolder>
-              <span fxFlex="10"></span>
-            </ng-template>
-
-            <!-- Option to select button -->
-            <button
-              mat-stroked-button
-              fxFlex="90"
-              (click)="changeStudy(study)"
-              [attr.data-cy]="study.name + '-button'"
-            >
-              {{ study.name }}
-            </button>
-          </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-      </div>
-    </mat-list>
+    <selector-dialog
+      [header]="'Select Study'"
+      [options]="studyOptions"
+      [(selected)]="activeStudyID"
+      (selectedChange)="changeStudy($event)"
+    ></selector-dialog>
   `,
 })
 export class StudySelectDialog {
+  /** The options the user can select from */
+  studyOptions: SelectDialogOptions[];
+  /** The studies themselves, searched through via ID */
   studies: Study[];
-  activeStudy: Study | null;
+  /** The active study ID, for rendering to the user the current selection */
+  activeStudyID = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      activeStudy?: Study;
-      newStudyOption: boolean;
-    },
-    private router: Router,
     private dialogRef: MatDialogRef<StudySelectDialog>,
     private studyService: StudyService
   ) {
-    this.studyService.getStudies().then((studies) => {
-      this.studies = studies;
+    // Generate the study list
+    this.studyService.getStudiesForActiveProject().then((studies) => {
+      this.updateStudyOptions(studies);
     });
-    this.studyService.activeStudy.subscribe((study) => {
-      this.activeStudy = study;
-    });
-  }
 
-  /** Handle redirecting to page for making a new study */
-  newStudyNav() {
-    this.router.navigateByUrl('/new_study');
+    // Determine the current active study
+    firstValueFrom(this.studyService.activeStudy).then((study) => {
+      this.activeStudyID = study ? study._id! : '';
+    });
   }
 
   /** Handles selecting a study */
-  changeStudy(study: Study) {
+  changeStudy(studyOption: SelectDialogOptions) {
+    const study = this.studies.find(
+      (study) => study._id! === studyOption.value
+    );
+    if (!study) {
+      throw new Error('Study not found');
+    }
+
     this.studyService.setActiveStudy(study);
     this.dialogRef.close({ data: study });
+  }
+
+  /** Update the list of options based on the new studies */
+  private updateStudyOptions(studies: Study[]) {
+    this.studies = studies;
+    this.studyOptions = studies.map((study) => {
+      return {
+        name: study.name,
+        value: study._id!,
+      };
+    });
   }
 }

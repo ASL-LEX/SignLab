@@ -254,7 +254,7 @@ export class TagController {
           },
         });
 
-        const studies = await this.studyService.getStudies();
+        const studies = await this.studyService.getAllStudies();
         const entries = [entry];
         Promise.all(
           studies.map(async (study) => {
