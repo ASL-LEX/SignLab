@@ -101,11 +101,10 @@ export class AuthService {
       email: userSignup.email,
       name: userSignup.name,
       roles: {
-        admin: isOwner,
-        tagging: false,
-        recording: false,
-        accessing: false,
         owner: isOwner,
+        projectAdmin: {},
+        studyAdmin: {},
+        studyContributor: {},
       },
     };
 

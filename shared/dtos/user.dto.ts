@@ -42,10 +42,15 @@ export interface User {
   email: string;
   username: string;
   roles: {
-    admin: boolean;
-    tagging: boolean;
-    recording: boolean;
-    accessing: boolean;
     owner: boolean;
+    projectAdmin: {
+      [projectID: string]: boolean;
+    };
+    studyAdmin: {
+      [studyID: string]: boolean;
+    };
+    studyContributor: {
+      [studyID: string]: boolean;
+    };
   }
 }
