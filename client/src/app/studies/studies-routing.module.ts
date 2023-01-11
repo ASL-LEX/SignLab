@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { StudyGuard } from '../core/guards/study.guard';
-import { ProjectGuard } from '../core/guards/project.guard';
 
 // Components
 import { UserPermissionsComponent } from './components/user-permissions.component';
@@ -13,7 +12,7 @@ const routes: Routes = [
   {
     path: 'user-permissions',
     component: UserPermissionsComponent,
-    canActivate: [ProjectGuard, StudyGuard],
+    canActivate: [StudyGuard],
   },
   {
     path: 'entry-controls',
@@ -21,7 +20,7 @@ const routes: Routes = [
     canActivate: [StudyGuard],
   },
   { path: 'create-new-study', component: NewStudyComponent },
-  { path: 'tag-download', component: TagViewComponent },
+  { path: 'tag-download', component: TagViewComponent, canActivate: [StudyGuard] },
 ];
 
 @NgModule({

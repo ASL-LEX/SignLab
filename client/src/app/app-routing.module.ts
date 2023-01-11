@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticatedGuard, OwnerAuthGuard } from './core/guards/auth.guard';
 import { HomeComponent } from './home.component';
+import { ProjectGuard } from './core/guards/project.guard';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'tag',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [AuthenticatedGuard, ProjectGuard],
     loadChildren: () =>
       import('./tagging-interface/tagging-interface.module').then(
         (m) => m.TaggingInterfaceModule
@@ -33,7 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'studies',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [AuthenticatedGuard, ProjectGuard],
     loadChildren: () =>
       import('./studies/studies.module').then((m) => m.StudiesModule),
   },
