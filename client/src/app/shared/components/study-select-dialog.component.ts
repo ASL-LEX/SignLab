@@ -1,6 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 
@@ -22,45 +21,30 @@ import { SelectDialogOptions } from './selector-dialog.component';
   `,
 })
 export class StudySelectDialog {
+  /** The options the user can select from */
   studyOptions: SelectDialogOptions[];
+  /** The studies themselves, searched through via ID */
   studies: Study[];
+  /** The active study ID, for rendering to the user the current selection */
   activeStudyID = '';
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      activeStudy?: Study;
-      newStudyOption: boolean;
-    },
-    private router: Router,
     private dialogRef: MatDialogRef<StudySelectDialog>,
     private studyService: StudyService
   ) {
+    // Update the list of options when the studies change
     this.studyService.getStudiesForActiveProject().then((studies) => {
-      this.studies = studies;
-      this.studyOptions = studies.map(study => {
-        return {
-          name: study.name,
-          value: study._id!,
-        };
-      });
+      this.updateStudyOptions(studies);
     });
-    this.studyService.activeStudy.subscribe((study) => {
-      if (study === null) {
-        throw new Error('No active study');
-      }
-      this.activeStudyID = study._id!;
-    });
-  }
 
-  /** Handle redirecting to page for making a new study */
-  newStudyNav() {
-    this.router.navigateByUrl('/new_study');
+    // Update the active ID when the active study changes
+    this.studyService.activeStudy.subscribe((study) => {
+      this.activeStudyID = study ? study._id! : '';
+    });
   }
 
   /** Handles selecting a study */
   changeStudy(studyOption: SelectDialogOptions) {
-    console.log(studyOption);
     const study = this.studies.find((study) => study._id! === studyOption.value);
     if (!study) {
       throw new Error('Study not found');
@@ -68,5 +52,16 @@ export class StudySelectDialog {
 
     this.studyService.setActiveStudy(study);
     this.dialogRef.close({ data: study });
+  }
+
+  /** Update the list of options based on the new studies */
+  private updateStudyOptions(studies: Study[]) {
+    this.studies = studies;
+    this.studyOptions = studies.map((study) => {
+      return {
+        name: study.name,
+        value: study._id!,
+      };
+    });
   }
 }
