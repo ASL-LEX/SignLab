@@ -79,7 +79,12 @@ export class StudyService {
   }
 
   async studyExists(studyName: string): Promise<boolean> {
-    const query = { params: { studyName: studyName }, provideToken: true };
+    const project = await firstValueFrom(this.projectService.activeProject);
+    if (project === null) {
+      throw new Error('No active project');
+    }
+
+    const query = { params: { studyName: studyName, projectID: project._id! }, provideToken: true };
     return this.signLab.get<boolean>('api/study/exists', query);
   }
 
@@ -104,7 +109,8 @@ export class StudyService {
    * Get all studies for a given project
    */
   async getStudies(project: Project): Promise<Study[]> {
-    return this.signLab.get<Study[]>(`api/study/${project._id!}`, { provideToken: true });
+    const query = { params: { projectID: project._id! }, provideToken: true };
+    return this.signLab.get<Study[]>('api/study', query);
   }
 
   /**

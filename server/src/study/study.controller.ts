@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Post,
   Query,
-  Param,
   Put,
 } from '@nestjs/common';
 import { EntryService } from '../entry/entry.service';
@@ -34,8 +33,8 @@ export class StudyController {
   /**
    * Get all of the studies
    */
-  @Get('/:projectID')
-  async getStudies(@Param('projectID') projectID: string): Promise<Study[]> {
+  @Get('/')
+  async getStudies(@Query('projectID') projectID: string): Promise<Study[]> {
     return this.studyService.getStudies(projectID);
   }
 
