@@ -24,10 +24,11 @@ export class StudyService {
       .exec();
   }
 
-  async exists(studyName: string) {
+  async exists(studyName: string, projectID: string) {
     const result = await this.studyModel
       .findOne({
         name: studyName,
+        project: projectID
       })
       .exec();
 
@@ -35,10 +36,18 @@ export class StudyService {
   }
 
   /**
-   * Get all of the active studies that SignLab is maintaining
+   * Get all of the studies regardless of project
    */
-  async getStudies(): Promise<Study[]> {
+  async getAllStudies(): Promise<Study[]> {
     return this.studyModel.find({}).exec();
+  }
+
+  /**
+   * Get all of the active studies that SignLab is maintaining for a
+   * specific project
+   */
+  async getStudies(projectID: string): Promise<Study[]> {
+    return this.studyModel.find({ project: projectID }).exec();
   }
 
   /**

@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Query,
+  Param,
   Put,
 } from '@nestjs/common';
 import { EntryService } from '../entry/entry.service';
@@ -33,9 +34,9 @@ export class StudyController {
   /**
    * Get all of the studies
    */
-  @Get('/')
-  async getStudies(): Promise<Study[]> {
-    return this.studyService.getStudies();
+  @Get('/:projectID')
+  async getStudies(@Param('projectID') projectID: string): Promise<Study[]> {
+    return this.studyService.getStudies(projectID);
   }
 
   /**
@@ -43,8 +44,8 @@ export class StudyController {
    */
   @Get('/exists')
   @Auth('admin')
-  async studyExists(@Query('studyName') studyName: string): Promise<boolean> {
-    return this.studyService.exists(studyName);
+  async studyExists(@Query('studyName') studyName: string, @Query('projectID') projectID: string): Promise<boolean> {
+    return this.studyService.exists(studyName, projectID);
   }
 
   /**
@@ -116,7 +117,7 @@ export class StudyController {
   @Auth('admin')
   async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
     // Make sure the study name is unique
-    const exists = await this.studyService.exists(studyCreation.study.name);
+    const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {
       throw new HttpException(
         `Study with name '${studyCreation.study.name}' already exists`,
@@ -124,7 +125,7 @@ export class StudyController {
       );
     }
 
-    const newStudy = await this.studyService.createStudy(studyCreation.study);
+    const newStudy = await this.studyService.createStudy({ ...studyCreation.study, project: studyCreation.projectID });
 
     // Now add a EntryStudy for each entry
     const entries = await this.entryService.getAllEntries();

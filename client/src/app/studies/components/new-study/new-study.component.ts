@@ -35,6 +35,8 @@ import {
   oneOfFieldTester,
 } from '../../../shared/components/custom-fields/one-of.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { ProjectService } from '../../../core/services/project.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'new-study',
@@ -112,7 +114,8 @@ export class NewStudyComponent implements AfterViewInit {
     private studyService: StudyService,
     private dialog: MatDialog,
     private router: Router,
-    private tagFieldService: TagFieldGeneratorService
+    private tagFieldService: TagFieldGeneratorService,
+    private projectService: ProjectService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -167,6 +170,12 @@ export class NewStudyComponent implements AfterViewInit {
       names.add(tagField.getFieldName());
     }
 
+    // Get the project ID
+    const project = await firstValueFrom(this.projectService.activeProject);
+    if (project == null) {
+      throw new Error('No active project selected');
+    }
+
     // Save the new study
     const schema = this.produceJSONForm();
     this.studyService.saveStudy({
@@ -176,6 +185,7 @@ export class NewStudyComponent implements AfterViewInit {
         instructions: this.studyMetadata.instructions,
         tagSchema: schema,
       },
+      projectID: project._id!,
       trainingEntries: Array.from(this.markedTraining),
       disabledEntries: Array.from(this.markedDisabled),
     });

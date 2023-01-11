@@ -189,7 +189,7 @@ export class EntryController {
 
     // Now create a EntryStudy for each entry for each study
     if (result.entries) {
-      const studies = await this.studyService.getStudies();
+      const studies = await this.studyService.getAllStudies();
       await Promise.all(
         studies.map(async (study) => {
           this.entryStudyService.createEntryStudies(
