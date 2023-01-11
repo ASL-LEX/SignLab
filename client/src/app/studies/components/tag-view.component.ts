@@ -7,7 +7,11 @@ import { StudyService } from '../../core/services/study.service';
 @Component({
   selector: 'tag-view',
   template: `
-    <button mat-stroked-button (click)="exportTags()" *ngIf="(studyService.activeStudy | async) as activeStudy; else loading">
+    <button
+      mat-stroked-button
+      (click)="exportTags()"
+      *ngIf="studyService.activeStudy | async as activeStudy; else loading"
+    >
       Download Tag CSV
     </button>
     <ng-template #loading>No Study Selected</ng-template>

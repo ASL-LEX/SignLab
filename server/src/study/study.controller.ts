@@ -43,7 +43,10 @@ export class StudyController {
    */
   @Get('/exists')
   @Auth('admin')
-  async studyExists(@Query('studyName') studyName: string, @Query('projectID') projectID: string): Promise<boolean> {
+  async studyExists(
+    @Query('studyName') studyName: string,
+    @Query('projectID') projectID: string,
+  ): Promise<boolean> {
     return this.studyService.exists(studyName, projectID);
   }
 
@@ -116,7 +119,10 @@ export class StudyController {
   @Auth('admin')
   async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
     // Make sure the study name is unique
-    const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
+    const exists = await this.studyService.exists(
+      studyCreation.study.name,
+      studyCreation.projectID,
+    );
     if (exists) {
       throw new HttpException(
         `Study with name '${studyCreation.study.name}' already exists`,
@@ -124,7 +130,10 @@ export class StudyController {
       );
     }
 
-    const newStudy = await this.studyService.createStudy({ ...studyCreation.study, project: studyCreation.projectID });
+    const newStudy = await this.studyService.createStudy({
+      ...studyCreation.study,
+      project: studyCreation.projectID,
+    });
 
     // Now add a EntryStudy for each entry
     const entries = await this.entryService.getAllEntries();

@@ -46,7 +46,9 @@ export class StudySelectDialog {
 
   /** Handles selecting a study */
   changeStudy(studyOption: SelectDialogOptions) {
-    const study = this.studies.find((study) => study._id! === studyOption.value);
+    const study = this.studies.find(
+      (study) => study._id! === studyOption.value
+    );
     if (!study) {
       throw new Error('Study not found');
     }

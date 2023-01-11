@@ -28,7 +28,7 @@ export class StudyService {
     const result = await this.studyModel
       .findOne({
         name: studyName,
-        project: projectID
+        project: projectID,
       })
       .exec();
 

@@ -20,7 +20,11 @@ const routes: Routes = [
     canActivate: [StudyGuard],
   },
   { path: 'create-new-study', component: NewStudyComponent },
-  { path: 'tag-download', component: TagViewComponent, canActivate: [StudyGuard] },
+  {
+    path: 'tag-download',
+    component: TagViewComponent,
+    canActivate: [StudyGuard],
+  },
 ];
 
 @NgModule({

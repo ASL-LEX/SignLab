@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export interface SelectDialogOptions {
   name: string;
   value: any;
-};
+}
 
 /**
  * Provides a common interface for listing out options that can be selected.
@@ -16,7 +16,7 @@ export interface SelectDialogOptions {
 })
 export class SelectorDialog {
   /** Header displayed at the top of the option list */
-  @Input() header: string = '';
+  @Input() header = '';
   /** List of options the user can select from */
   @Input() options: SelectDialogOptions[] = [];
   /** The selected option */

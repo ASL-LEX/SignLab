@@ -115,7 +115,7 @@ export class NewStudyComponent implements AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private tagFieldService: TagFieldGeneratorService,
-    private projectService: ProjectService,
+    private projectService: ProjectService
   ) {}
 
   ngAfterViewInit(): void {

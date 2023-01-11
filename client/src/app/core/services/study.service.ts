@@ -25,10 +25,15 @@ export class StudyService {
   >([]);
   private currentStudies: Study[] = [];
 
-  constructor(private signLab: SignLabHttpClient, private projectService: ProjectService) {
-    this.projectService.activeProject.subscribe(async (_project: Project | null) => {
-      this.updateStudies();
-    });
+  constructor(
+    private signLab: SignLabHttpClient,
+    private projectService: ProjectService
+  ) {
+    this.projectService.activeProject.subscribe(
+      async (_project: Project | null) => {
+        this.updateStudies();
+      }
+    );
   }
 
   /** Set the currently selected study */
@@ -84,7 +89,10 @@ export class StudyService {
       throw new Error('No active project');
     }
 
-    const query = { params: { studyName: studyName, projectID: project._id! }, provideToken: true };
+    const query = {
+      params: { studyName: studyName, projectID: project._id! },
+      provideToken: true,
+    };
     return this.signLab.get<boolean>('api/study/exists', query);
   }
 
@@ -127,7 +135,9 @@ export class StudyService {
 
   async hasStudies(): Promise<boolean> {
     const project = await firstValueFrom(this.projectService.activeProject);
-    if (project === null) { return false; }
+    if (project === null) {
+      return false;
+    }
 
     const studies = await this.getStudies(project);
     return studies.length > 0;

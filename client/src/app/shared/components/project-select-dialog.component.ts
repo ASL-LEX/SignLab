@@ -40,7 +40,9 @@ export class ProjectSelectDialog {
   }
 
   changeProject(projectOption: SelectDialogOptions) {
-    const project = this.projects.find((project) => project._id! === projectOption.value);
+    const project = this.projects.find(
+      (project) => project._id! === projectOption.value
+    );
     if (!project) {
       throw new Error('Project not found');
     }
@@ -55,7 +57,7 @@ export class ProjectSelectDialog {
       return {
         name: project.name,
         value: project._id!,
-      }
+      };
     });
   }
 }

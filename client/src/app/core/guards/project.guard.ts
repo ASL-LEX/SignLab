@@ -9,11 +9,14 @@ import { map } from 'rxjs/operators';
 
 @Injectable()
 export class ProjectGuard implements CanActivate {
-  constructor(private projectService: ProjectService, private dialog : MatDialog) {}
+  constructor(
+    private projectService: ProjectService,
+    private dialog: MatDialog
+  ) {}
 
   canActivate(
     _route: ActivatedRouteSnapshot,
-    _state: RouterStateSnapshot,
+    _state: RouterStateSnapshot
   ): Observable<boolean> {
     if (this.projectService.hasActiveProject()) {
       return of(true);
