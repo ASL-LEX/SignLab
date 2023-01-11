@@ -9,4 +9,8 @@ export class ProjectService {
   public async createProject(project: ProjectCreate): Promise<Project> {
     return await this.signLab.post('/api/projects', project, { withCredentials: true });
   }
+
+  public async projectExists(_name: string): Promise<boolean> {
+    return false;
+  }
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
+import { ProjectService } from '../../core/services/project.service';
 
 @Component({
   selector: 'new-project',
@@ -11,6 +13,7 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
           [schema]="NEW_PROJECT_SCHEMA"
           [uischema]="NEW_PROJECT_UI_SCHEMA"
           [renderers]="renderers"
+          [additionalErrors]="additionalErrors"
           (dataChange)="fieldChange($event)"
           (errors)="errorHandler($event)"
         ></jsonforms>
@@ -53,16 +56,36 @@ export class NewProjectComponent {
   formValid = false;
   formData: any = {};
 
+  additionalErrors: any[] = [];
+
+  constructor(private readonly projectService: ProjectService) {}
+
   fieldChange(data: any) {
     this.formData = data;
   }
 
-  errorHandler(errors: any[]) {
+  async errorHandler(errors: any[]) {
     this.formValid = errors.length === 0;
+
+    // If no errors from the form, then check if the project is unique
+    if (this.formValid) {
+      console.log(this.formData);
+      if(await this.projectService.projectExists(this.formData.name)) {
+        this.additionalErrors = [{
+          instancePath: '/name',
+          message: 'Project name already exists',
+          schemaPath: '',
+          keyword: '',
+          params: {},
+        }];
+        this.formValid = false;
+      }
+    }
   }
 
   projectSubmit() {
 
+    alert('Project created successfully');
   }
 
 }
