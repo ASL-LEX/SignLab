@@ -10,7 +10,7 @@ export class ProjectService {
     return await this.signLab.post('/api/projects', project, { withCredentials: true });
   }
 
-  public async projectExists(_name: string): Promise<boolean> {
-    return false;
+  public async projectExists(name: string): Promise<boolean> {
+    return this.signLab.get(`/api/projects/exists/${name}`, { withCredentials: true });
   }
 }

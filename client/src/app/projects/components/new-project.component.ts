@@ -69,7 +69,6 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      console.log(this.formData);
       if(await this.projectService.projectExists(this.formData.name)) {
         this.additionalErrors = [{
           instancePath: '/name',
