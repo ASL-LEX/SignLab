@@ -5,10 +5,10 @@ import { StudyService } from '../../core/services/study.service';
   selector: 'entry-controls',
   template: `
     <dataset-study-table
-      *ngIf="studyService.activeStudy | async as activeStudy; else loading"
+      *ngIf="(studyService.activeStudy | async) as activeStudy; else loading"
       [study]="activeStudy"
     ></dataset-study-table>
-    <ng-template #loading>Loading...</ng-template>
+    <ng-template #loading>No Study Selected</ng-template>
   `,
 })
 export class EntryControlsComponent {

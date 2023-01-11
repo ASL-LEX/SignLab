@@ -56,7 +56,6 @@ export class StudyService {
    * Update the observable list of studies based on the active project
    */
   async updateStudies() {
-
     const project = await firstValueFrom(this.projectService.activeProject);
     if (project === null) {
       this.activeStudyObservable.next(null);
@@ -64,6 +63,7 @@ export class StudyService {
       return;
     }
 
+    this.activeStudyObservable.next(null);
     this.currentStudies = await this.getStudies(project);
     this.studiesObservable.next(this.currentStudies);
   }
