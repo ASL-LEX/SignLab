@@ -79,7 +79,7 @@ export class StudySelectDialog {
     private dialogRef: MatDialogRef<StudySelectDialog>,
     private studyService: StudyService
   ) {
-    this.studyService.getStudies().then((studies) => {
+    this.studyService.getStudiesForActiveProject().then((studies) => {
       this.studies = studies;
     });
     this.studyService.activeStudy.subscribe((study) => {

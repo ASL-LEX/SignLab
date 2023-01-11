@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Project } from 'shared/dtos/project.dto';
 import { Study, StudyCreation } from 'shared/dtos/study.dto';
 import { Tag } from 'shared/dtos/tag.dto';
 import { User } from 'shared/dtos/user.dto';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { SignLabHttpClient } from './http.service';
+import { ProjectService } from './project.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class StudyService {
@@ -14,7 +17,6 @@ export class StudyService {
    */
   private activeStudyObservable: BehaviorSubject<Study | null> =
     new BehaviorSubject<Study | null>(null);
-  private currentActiveStudy: Study | null = null;
   /**
    * Keep track of possible studies
    */
@@ -23,8 +25,10 @@ export class StudyService {
   >([]);
   private currentStudies: Study[] = [];
 
-  constructor(private signLab: SignLabHttpClient) {
-    this.updateStudies();
+  constructor(private signLab: SignLabHttpClient, private projectService: ProjectService) {
+    this.projectService.activeProject.subscribe(async (_project: Project | null) => {
+      this.updateStudies();
+    });
   }
 
   /** Set the currently selected study */
@@ -38,7 +42,6 @@ export class StudyService {
       study = foundStudy;
     }
     this.activeStudyObservable.next(study);
-    this.currentActiveStudy = study;
   }
 
   get activeStudy(): Observable<Study | null> {
@@ -49,13 +52,24 @@ export class StudyService {
     return this.studiesObservable;
   }
 
+  /**
+   * Update the observable list of studies based on the active project
+   */
   async updateStudies() {
-    this.currentStudies = await this.getStudies();
+
+    const project = await firstValueFrom(this.projectService.activeProject);
+    if (project === null) {
+      this.activeStudyObservable.next(null);
+      this.studiesObservable.next([]);
+      return;
+    }
+
+    this.currentStudies = await this.getStudies(project);
     this.studiesObservable.next(this.currentStudies);
   }
 
   hasActiveStudy(): boolean {
-    return !!this.currentActiveStudy;
+    return !!this.activeStudyObservable.value;
   }
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {
@@ -86,12 +100,30 @@ export class StudyService {
     return this.signLab.get<UserStudy>('api/study/user', query);
   }
 
-  async getStudies(): Promise<Study[]> {
-    return this.signLab.get<Study[]>('api/study', { provideToken: true });
+  /**
+   * Get all studies for a given project
+   */
+  async getStudies(project: Project): Promise<Study[]> {
+    return this.signLab.get<Study[]>(`api/study/${project._id!}`, { provideToken: true });
+  }
+
+  /**
+   * Get all studies for the currently active project
+   */
+  async getStudiesForActiveProject(): Promise<Study[]> {
+    const project = await firstValueFrom(this.projectService.activeProject);
+    if (project === null) {
+      console.error('No active project, cannot get list of studies');
+      throw new Error('No active project');
+    }
+    return this.getStudies(project);
   }
 
   async hasStudies(): Promise<boolean> {
-    const studies = await this.getStudies();
+    const project = await firstValueFrom(this.projectService.activeProject);
+    if (project === null) { return false; }
+
+    const studies = await this.getStudies(project);
     return studies.length > 0;
   }
 
