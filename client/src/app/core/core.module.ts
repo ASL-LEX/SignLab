@@ -18,6 +18,7 @@ import { TagService } from './services/tag.service';
 import { DatasetService } from './services/dataset.service';
 import { VideoTagUploadService } from './services/video-tag-upload.service';
 import { MaterialModule } from '../material.module';
+import { ProjectService } from './services/project.service';
 
 @NgModule({
   declarations: [],
@@ -41,6 +42,7 @@ export class CoreModule {
         TagService,
         DatasetService,
         VideoTagUploadService,
+        ProjectService,
         {
           provide: SignLabHttpClient,
           useFactory: (http: HttpClient, tokenService: TokenService) => {

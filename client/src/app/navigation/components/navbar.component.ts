@@ -16,6 +16,16 @@ interface NavItem {
 export class NavbarComponent {
   navItems: NavItem[] = [
     {
+      name: 'Projects',
+      url: '',
+      sublinks: [
+        {
+          name: 'New Project',
+          url: '/projects/new-project',
+        },
+      ],
+    },
+    {
       name: 'Studies',
       url: '',
       sublinks: [
