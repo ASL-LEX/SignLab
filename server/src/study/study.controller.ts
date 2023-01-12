@@ -94,11 +94,11 @@ export class StudyController {
   }
 
   /**
-   * Change if the given user will have tagging access on the given study.
+   * Change if a user can contribute to the study
    */
-  @Put('/user/enable')
+  @Put('/contributor/enable')
   @Auth('admin')
-  async changeUserAccess(
+  async controlContributeAccess(
     @Body()
     changeRequest: {
       studyID: string;
@@ -121,11 +121,8 @@ export class StudyController {
       );
     }
 
-    this.userStudyService.changeUserAccess(
-      study,
-      user,
-      changeRequest.hasAccess,
-    );
+    this.userService.markAsContributor(user, study, changeRequest.hasAccess);
+
   }
 
   /**

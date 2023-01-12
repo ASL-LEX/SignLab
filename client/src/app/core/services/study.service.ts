@@ -170,6 +170,14 @@ export class StudyService {
     }, { provideToken: true });
   }
 
+  async changeContributorStatus(user: User, contributorStatus: boolean): Promise<void> {
+    await this.signLab.put('api/study/contributor/enable', {
+      userID: user._id,
+      studyID: this.activeStudyObservable.value!._id!,
+      hasAccess: contributorStatus,
+    }, { provideToken: true });
+  }
+
   /**
    * Change if a user has accces to the study for tagging.
    *

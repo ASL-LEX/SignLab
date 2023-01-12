@@ -97,6 +97,16 @@ export class UserService {
   }
 
   /**
+   * Set if the user can contribute to the study or not
+   */
+  async markAsContributor(user: User, study: Study, canContribute: boolean): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { [`roles.studyContributor.${study._id!}`]: canContribute } }
+    ).exec();
+  }
+
+  /**
    * Set the state of the role as having the role (true) or not having
    * the role (false).
    *
