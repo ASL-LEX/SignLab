@@ -6,6 +6,7 @@ import { UserService } from '../../core/services/user.service';
 @Component({
   selector: 'project-user-permissions',
   templateUrl: './user-permissions.component.html',
+  styleUrls: ['./user-permissions.component.css'],
 })
 export class UserPermissionsComponent {
   /**
@@ -16,10 +17,18 @@ export class UserPermissionsComponent {
   /** The list of all users */
   users: User[] = [];
 
+  displayedColumns = [
+    'name', 'username', 'email', 'projectAdmin'
+  ];
+
   constructor(public readonly projectService: ProjectService, public readonly userService: UserService) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe(project => {
       this.activeProjectID = project ? project._id! : null;
+    });
+
+    userService.getUsers().then(users => {
+      this.users = users;
     });
   }
 
