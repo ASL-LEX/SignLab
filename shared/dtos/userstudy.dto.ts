@@ -15,6 +15,4 @@ export interface UserStudy {
   study: Study;
   /** The training entrys the user has yet to complete */
   trainingEntryStudies: EntryStudy[];
-  /** If the user has access to the given study */
-  hasAccessToStudy: boolean;
 }
