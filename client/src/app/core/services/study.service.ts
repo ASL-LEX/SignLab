@@ -177,31 +177,4 @@ export class StudyService {
       hasAccess: contributorStatus,
     }, { provideToken: true });
   }
-
-  /**
-   * Change if a user has accces to the study for tagging.
-   *
-   * On success returns true, otherwise returns false
-   */
-  async changeAccessToStudy(
-    userStudy: UserStudy,
-    hasAcccess: boolean
-  ): Promise<boolean> {
-    const targetURL = 'api/study/user/enable';
-    const requestBody = {
-      studyID: userStudy.study._id!,
-      userID: userStudy.user._id,
-      hasAccess: hasAcccess,
-    };
-
-    try {
-      await this.signLab.put<any>(targetURL, requestBody, {
-        provideToken: true,
-      });
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }
 }
