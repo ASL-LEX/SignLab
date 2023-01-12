@@ -22,10 +22,10 @@
     <ng-container matColumnDef="projectAdmin">
       <th mat-header-cell *matHeaderCellDef>Project Admin</th>
       <td mat-cell *matCellDef="let user">
-        <mat-checkbox
+        <mat-slide-toggle
           (change)="toggleProjectAdmin({user: user, change: $event})"
           [checked]="user.roles.projectAdmin && user.roles.projectAdmin[activeProjectID]"
-        ></mat-checkbox>
+        ></mat-slide-toggle>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

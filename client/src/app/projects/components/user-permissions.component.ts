@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {MatCheckboxChange} from '@angular/material/checkbox';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { User } from 'shared/dtos/user.dto';
 import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
@@ -33,7 +33,7 @@ export class UserPermissionsComponent {
     });
   }
 
-  toggleProjectAdmin(toggleChange: { user: User, change: MatCheckboxChange }) {
+  toggleProjectAdmin(toggleChange: { user: User, change: MatSlideToggleChange}) {
     try {
       this.projectService.changeAdminStatus(toggleChange.user, toggleChange.change.checked);
       toggleChange.user.roles.projectAdmin[this.activeProjectID!] = toggleChange.change.checked;
