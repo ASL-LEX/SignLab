@@ -25,4 +25,8 @@ export class ProjectService {
   async findByName(name: string): Promise<Project | null> {
     return this.projectModel.findOne({ name: name }).exec();
   }
+
+  async findById(id: string): Promise<Project | null> {
+    return this.projectModel.findById(id);
+  }
 }

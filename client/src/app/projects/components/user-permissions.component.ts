@@ -33,16 +33,17 @@ export class UserPermissionsComponent {
     });
   }
 
-  toggleProjectAdmin(toggleChange: { user: User, checked: MatCheckboxChange }) {
+  toggleProjectAdmin(toggleChange: { user: User, change: MatCheckboxChange }) {
     try {
-      this.projectService.changeAdminStatus(toggleChange.user, toggleChange.checked.checked);
+      this.projectService.changeAdminStatus(toggleChange.user, toggleChange.change.checked);
+      toggleChange.user.roles.projectAdmin[this.activeProjectID!] = toggleChange.change.checked;
     } catch(error: any) {
       // Log the error and revert the toggle
       console.error('Failed to change admin status', error);
-      toggleChange.user.roles.projectAdmin[this.activeProjectID!] = !toggleChange.checked;
+      toggleChange.user.roles.projectAdmin[this.activeProjectID!] = !toggleChange.change;
     }
 
     // Make sure the checkbox matches the state
-    toggleChange.checked.source.checked = toggleChange.user.roles.projectAdmin && toggleChange.user.roles.projectAdmin[this.activeProjectID!];
+    toggleChange.change.source.checked = toggleChange.user.roles.projectAdmin && toggleChange.user.roles.projectAdmin[this.activeProjectID!];
   }
 }

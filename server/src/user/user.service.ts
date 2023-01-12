@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
+import { Project } from 'shared/dtos/project.dto';
 import { User, UserDocument } from './user.schema';
 
 /**
@@ -72,6 +73,16 @@ export class UserService {
    */
   async removeRole(role: string, id: string): Promise<boolean> {
     return this.setHasRole(role, id, false);
+  }
+
+  /**
+   * Set if the user is an admin for a given project or not
+   */
+  async markAsProjectAdmin(user: User, project: Project, isAdmin: boolean): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { [`roles.projectAdmin.${project._id!}`]: isAdmin } },
+    ).exec();
   }
 
   /**
