@@ -23,7 +23,13 @@ export class UserPermissionsComponent {
     });
   }
 
-  toggleProjectAdmin(_toggleChange: { user: User, checked: boolean }) {
-
+  toggleProjectAdmin(toggleChange: { user: User, checked: boolean }) {
+    try {
+      this.projectService.changeAdminStatus(toggleChange.user, toggleChange.checked);
+    } catch(error: any) {
+      // Log the error and revert the toggle
+      console.error('Failed to change admin status', error);
+      toggleChange.user.roles.projectAdmin[this.activeProjectID!] = !toggleChange.checked;
+    }
   }
 }

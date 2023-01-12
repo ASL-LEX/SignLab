@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Project, ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { StudyService } from './study.service';
+import { User } from 'shared/dtos/user.dto';
 
 @Injectable()
 export class ProjectService {
@@ -59,5 +59,9 @@ export class ProjectService {
     this.projectsObs.next(
       await this.signLab.get('/api/projects', { withCredentials: true })
     );
+  }
+
+  public async changeAdminStatus(_user: User, _isAdmin: boolean) {
+
   }
 }
