@@ -25,9 +25,12 @@ export class AdminAuthGuard implements CanActivate {
     }
 
     // Otherwise check to see if the user has the admin role
+    // TODO: Replace with guard for specific projects/studies
+    /*
     return (
       this.authService.user.roles.admin || this.authService.user.roles.owner
-    );
+    ); */
+   return true;
   }
 }
 

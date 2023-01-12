@@ -20,6 +20,10 @@ export class NavbarComponent {
       url: '',
       sublinks: [
         {
+          name: 'Project User Permissions',
+          url: '/projects/user-permissions',
+        },
+        {
           name: 'New Project',
           url: '/projects/new-project',
         },
