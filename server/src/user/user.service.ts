@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Project } from 'shared/dtos/project.dto';
+import {Study} from 'shared/dtos/study.dto';
 import { User, UserDocument } from './user.schema';
 
 /**
@@ -82,6 +83,16 @@ export class UserService {
     await this.userModel.findOneAndUpdate(
       { _id: user._id },
       { $set: { [`roles.projectAdmin.${project._id!}`]: isAdmin } },
+    ).exec();
+  }
+
+  /**
+   * Set if the user is an admin for a given study or not
+   */
+  async markAsStudyAdmin(user: User, study: Study, isAdmin: boolean): Promise<void> {
+    await this.userModel.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { [`roles.studyAdmin.${study._id!}`]: isAdmin } }
     ).exec();
   }
 

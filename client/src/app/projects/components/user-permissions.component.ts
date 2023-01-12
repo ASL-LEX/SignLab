@@ -33,9 +33,9 @@ export class UserPermissionsComponent {
     });
   }
 
-  toggleProjectAdmin(toggleChange: { user: User, change: MatSlideToggleChange}) {
+  async toggleProjectAdmin(toggleChange: { user: User, change: MatSlideToggleChange}) {
     try {
-      this.projectService.changeAdminStatus(toggleChange.user, toggleChange.change.checked);
+      await this.projectService.changeAdminStatus(toggleChange.user, toggleChange.change.checked);
       toggleChange.user.roles.projectAdmin[this.activeProjectID!] = toggleChange.change.checked;
     } catch(error: any) {
       // Log the error and revert the toggle
@@ -44,6 +44,6 @@ export class UserPermissionsComponent {
     }
 
     // Make sure the checkbox matches the state
-    toggleChange.change.source.checked = toggleChange.user.roles.projectAdmin && toggleChange.user.roles.projectAdmin[this.activeProjectID!];
+    toggleChange.change.source.checked = toggleChange.user.roles.projectAdmin[this.activeProjectID!];
   }
 }

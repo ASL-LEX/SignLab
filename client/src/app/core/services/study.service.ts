@@ -162,6 +162,14 @@ export class StudyService {
     return this.signLab.get<Tag[]>('api/tag/training', query);
   }
 
+  async changeAdminStatus(user: User, adminStatus: boolean): Promise<void> {
+    await this.signLab.put('api/study/admin/enable', {
+      userID: user._id,
+      studyID: this.activeStudyObservable.value!._id!,
+      hasAdminAccess: adminStatus,
+    }, { provideToken: true });
+  }
+
   /**
    * Change if a user has accces to the study for tagging.
    *
