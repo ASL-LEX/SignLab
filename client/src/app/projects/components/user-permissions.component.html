@@ -24,7 +24,7 @@
       <td mat-cell *matCellDef="let user">
         <mat-checkbox
           (change)="toggleProjectAdmin({user: user, change: $event})"
-          [checked]="user.projectAdmin && user.projectAdmin[activeProjectID]"
+          [checked]="user.roles.projectAdmin && user.roles.projectAdmin[activeProjectID]"
         ></mat-checkbox>
     </ng-container>
 
