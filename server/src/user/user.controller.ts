@@ -8,11 +8,15 @@ import {
   Delete,
   Post,
   Body,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { User } from './user.schema';
 import { UserService } from './user.service';
 import { Auth } from '../auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
+import {JwtAuthGuard} from 'src/auth/jwt.guard';
+import { Request } from 'express';
 
 @Controller('/api/users')
 export class UserController {
@@ -28,6 +32,15 @@ export class UserController {
   @Auth('admin')
   async getAllUsers(): Promise<User[]> {
     return this.userService.findAll({});
+  }
+
+  /**
+   * Get information on the logged in user
+   */
+  @Get('/me')
+  @UseGuards(JwtAuthGuard)
+  async getUserInfo(@Req() request: Request): Promise<User | null> {
+    return this.userService.findOne({ _id: (request.user as User)._id! });
   }
 
   /**

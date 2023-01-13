@@ -35,11 +35,10 @@ describe('EntryUploadDialog', () => {
     username: 'test',
     email: '',
     roles: {
-      admin: true,
-      tagging: false,
-      accessing: false,
       owner: false,
-      recording: false,
+      studyContributor: {},
+      projectAdmin: {},
+      studyAdmin: {},
     },
   };
 

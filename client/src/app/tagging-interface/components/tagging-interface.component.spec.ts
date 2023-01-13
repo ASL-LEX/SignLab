@@ -23,11 +23,10 @@ describe('TaggingInterface', () => {
     username: 'test',
     email: '',
     roles: {
-      admin: true,
-      tagging: false,
-      accessing: false,
+      studyAdmin: {},
+      projectAdmin: {},
+      studyContributor: {},
       owner: false,
-      recording: false,
     },
   };
 
@@ -84,10 +83,9 @@ describe('TaggingInterface', () => {
       email: 'bob@bu.edu',
       username: 'bobby',
       roles: {
-        admin: false,
-        tagging: true,
-        recording: false,
-        accessing: false,
+        studyContributor: {},
+        studyAdmin: {},
+        projectAdmin: {},
         owner: false,
       },
     },
@@ -142,10 +140,9 @@ describe('TaggingInterface', () => {
       email: 'bob@bu.edu',
       username: 'bobby',
       roles: {
-        admin: false,
-        tagging: true,
-        recording: false,
-        accessing: false,
+        studyContributor: {},
+        studyAdmin: {},
+        projectAdmin: {},
         owner: false,
       },
     },

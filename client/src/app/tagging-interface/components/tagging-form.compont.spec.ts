@@ -16,11 +16,10 @@ describe('TaggingForm', () => {
     username: 'test',
     email: '',
     roles: {
-      admin: true,
-      tagging: false,
-      accessing: false,
       owner: false,
-      recording: false,
+      studyContributor: {},
+      projectAdmin: {},
+      studyAdmin: {},
     },
   };
 
@@ -77,11 +76,10 @@ describe('TaggingForm', () => {
       email: 'bob@bu.edu',
       username: 'bobby',
       roles: {
-        admin: false,
-        tagging: true,
-        recording: false,
-        accessing: false,
         owner: false,
+        studyContributor: {},
+        projectAdmin: {},
+        studyAdmin: {},
       },
     },
     complete: false,
