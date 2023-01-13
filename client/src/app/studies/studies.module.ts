@@ -24,12 +24,7 @@ import { TagViewComponent } from './components/tag-view.component';
     TagFieldComponent,
     TagViewComponent,
   ],
-  imports: [
-    StudiesRoutingModule,
-    DatasetTableModule,
-    CoreModule,
-    SharedModule,
-  ],
+  imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, SharedModule],
   providers: [TagFieldGeneratorService],
 })
 export class StudiesModule {}

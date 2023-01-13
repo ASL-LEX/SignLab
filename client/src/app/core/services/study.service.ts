@@ -163,18 +163,29 @@ export class StudyService {
   }
 
   async changeAdminStatus(user: User, adminStatus: boolean): Promise<void> {
-    await this.signLab.put('api/study/admin/enable', {
-      userID: user._id,
-      studyID: this.activeStudyObservable.value!._id!,
-      hasAdminAccess: adminStatus,
-    }, { provideToken: true });
+    await this.signLab.put(
+      'api/study/admin/enable',
+      {
+        userID: user._id,
+        studyID: this.activeStudyObservable.value!._id!,
+        hasAdminAccess: adminStatus,
+      },
+      { provideToken: true }
+    );
   }
 
-  async changeContributorStatus(user: User, contributorStatus: boolean): Promise<void> {
-    await this.signLab.put('api/study/contributor/enable', {
-      userID: user._id,
-      studyID: this.activeStudyObservable.value!._id!,
-      hasAccess: contributorStatus,
-    }, { provideToken: true });
+  async changeContributorStatus(
+    user: User,
+    contributorStatus: boolean
+  ): Promise<void> {
+    await this.signLab.put(
+      'api/study/contributor/enable',
+      {
+        userID: user._id,
+        studyID: this.activeStudyObservable.value!._id!,
+        hasAccess: contributorStatus,
+      },
+      { provideToken: true }
+    );
   }
 }

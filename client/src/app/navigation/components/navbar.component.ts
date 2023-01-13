@@ -3,16 +3,20 @@ import { Router } from '@angular/router';
 import { ProjectService } from '../../core/services/project.service';
 import { StudyService } from '../../core/services/study.service';
 import { AuthService } from '../../core/services/auth.service';
-import {Project} from 'shared/dtos/project.dto';
-import {Study} from 'shared/dtos/study.dto';
-import {User} from 'shared/dtos/user.dto';
+import { Project } from 'shared/dtos/project.dto';
+import { Study } from 'shared/dtos/study.dto';
+import { User } from 'shared/dtos/user.dto';
 
 interface NavElement {
   name: string;
   url: string;
   visible: boolean;
   sublinks?: NavElement[];
-  visibleCondition: (project: Project | null, study: Study | null, user: User | null) => boolean;
+  visibleCondition: (
+    project: Project | null,
+    study: Study | null,
+    user: User | null
+  ) => boolean;
 }
 
 @Component({
@@ -61,7 +65,7 @@ export class NavbarComponent {
               return user.roles.projectAdmin[project._id!];
             }
             return false;
-          }
+          },
         },
         {
           name: 'New Project',
@@ -69,7 +73,7 @@ export class NavbarComponent {
           visible: true,
           visibleCondition: (_project, _study, user) => {
             return user !== null && user.roles.owner;
-          }
+          },
         },
       ],
     },
@@ -125,7 +129,7 @@ export class NavbarComponent {
 
             // Otherwise the user cannot see the study
             return false;
-          }
+          },
         },
         {
           name: 'Entry Controls',
@@ -168,7 +172,6 @@ export class NavbarComponent {
               return false;
             }
 
-
             // Owner can access studies
             if (user && user.roles.owner) {
               return true;
@@ -205,7 +208,7 @@ export class NavbarComponent {
 
             // Other users cannot make a new study
             return false;
-          }
+          },
         },
       ],
     },
@@ -289,7 +292,7 @@ export class NavbarComponent {
               return true;
             }
             return false;
-          }
+          },
         },
       ],
     },
@@ -298,10 +301,12 @@ export class NavbarComponent {
   activeProject: Project | null = null;
   activeStudy: Study | null = null;
 
-
-  constructor(public authService: AuthService, private router: Router,
-              projectService: ProjectService, studyService: StudyService) {
-
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    projectService: ProjectService,
+    studyService: StudyService
+  ) {
     projectService.activeProject.subscribe((project) => {
       this.activeProject = project;
       this.updateNavItems();
@@ -322,16 +327,26 @@ export class NavbarComponent {
    * Updates the router links based on the current user's permissions
    */
   updateNavItems() {
-    const user = this.authService.isAuthenticated() ? this.authService.user : null;
+    const user = this.authService.isAuthenticated()
+      ? this.authService.user
+      : null;
 
     // Update the visibility of each top-level nav item
-    for(const navItem of this.navItems) {
-      navItem.visible = navItem.visibleCondition(this.activeProject, this.activeStudy, user);
+    for (const navItem of this.navItems) {
+      navItem.visible = navItem.visibleCondition(
+        this.activeProject,
+        this.activeStudy,
+        user
+      );
 
-      if(navItem.sublinks) {
+      if (navItem.sublinks) {
         // Update the visibility of each sublink
-        for(const sublink of navItem.sublinks) {
-          sublink.visible = sublink.visibleCondition(this.activeProject, this.activeStudy, user);
+        for (const sublink of navItem.sublinks) {
+          sublink.visible = sublink.visibleCondition(
+            this.activeProject,
+            this.activeStudy,
+            user
+          );
         }
       }
     }

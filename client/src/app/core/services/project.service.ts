@@ -64,13 +64,19 @@ export class ProjectService {
   public async changeAdminStatus(user: User, isAdmin: boolean) {
     const activeProject = this.activeProjectObs.getValue();
     if (!activeProject) {
-      throw new Error('Attempted to change project admin status without an active project');
+      throw new Error(
+        'Attempted to change project admin status without an active project'
+      );
     }
 
-    await this.signLab.put('/api/projects/user/enable', {
-      projectID: activeProject._id,
-      userID: user._id,
-      hasAdminAccess: isAdmin,
-    }, { withCredentials: true });
+    await this.signLab.put(
+      '/api/projects/user/enable',
+      {
+        projectID: activeProject._id,
+        userID: user._id,
+        hasAdminAccess: isAdmin,
+      },
+      { withCredentials: true }
+    );
   }
 }

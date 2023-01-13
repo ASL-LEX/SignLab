@@ -79,7 +79,14 @@ export class StudyController {
    * Change if the user is an admin for the study
    */
   @Put('/admin/enable')
-  async controlAdminAccess(@Body() changeRequest: { studyID: string; userID: string; hasAdminAccess: boolean }): Promise<void> {
+  async controlAdminAccess(
+    @Body()
+    changeRequest: {
+      studyID: string;
+      userID: string;
+      hasAdminAccess: boolean;
+    },
+  ): Promise<void> {
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
       throw new HttpException('Study not found', HttpStatus.BAD_REQUEST);
@@ -90,7 +97,11 @@ export class StudyController {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
 
-    return this.userService.markAsStudyAdmin(user, study, changeRequest.hasAdminAccess);
+    return this.userService.markAsStudyAdmin(
+      user,
+      study,
+      changeRequest.hasAdminAccess,
+    );
   }
 
   /**
@@ -122,7 +133,6 @@ export class StudyController {
     }
 
     this.userService.markAsContributor(user, study, changeRequest.hasAccess);
-
   }
 
   /**

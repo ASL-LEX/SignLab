@@ -27,7 +27,9 @@ export class TaggingLanding implements OnInit {
           study
         );
 
-        if (!this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]) {
+        if (
+          !this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]
+        ) {
           this.activeView = 'info';
         }
       }
