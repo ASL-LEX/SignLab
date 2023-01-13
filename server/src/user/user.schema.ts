@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import * as dto from 'shared/dtos/user.dto';
 
 @Schema()
@@ -7,17 +7,23 @@ export class Roles {
   @Prop()
   owner: boolean;
 
-  @Prop()
-  admin: boolean;
+  /** Mapping between Project ID and if the user is an admin for that project */
+  @Prop({ type: mongoose.SchemaTypes.Map })
+  projectAdmin: {
+    [projectID: string]: boolean;
+  };
 
-  @Prop()
-  tagging: boolean;
+  /** Mapping between Study ID and if the user is an admin for that study */
+  @Prop({ type: mongoose.SchemaTypes.Map })
+  studyAdmin: {
+    [studyID: string]: boolean;
+  };
 
-  @Prop()
-  recording: boolean;
-
-  @Prop()
-  accessing: boolean;
+  /** Mapping between Study ID and if the user can contribute to that study */
+  @Prop({ type: mongoose.SchemaTypes.Map })
+  studyContributor: {
+    [studyID: string]: boolean;
+  };
 }
 
 const RolesSchema = SchemaFactory.createForClass(Roles);

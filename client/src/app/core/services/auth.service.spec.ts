@@ -19,10 +19,11 @@ describe('AuthService', () => {
   beforeEach(() => {
     // Make spy for the authentication service, this one will always not
     // authenticate
-    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post', 'get']);
     spy.post.and.callFake(() => {
       throw new Error();
     });
+    spy.get.and.returnValue(Promise.resolve({}));
 
     tokenSpy = jasmine.createSpyObj(
       'TokenService',
@@ -63,17 +64,16 @@ describe('AuthService', () => {
   // Valid username and password combo should work
   it('should authorize valid credentials', async () => {
     // Make a spy that will authenticate
-    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
+    const spy = jasmine.createSpyObj('SignLabHttpClient', ['post', 'get']);
     const data: AuthResponse = {
       user: {
         email: 'bob@bu.edu',
         name: 'bob',
         roles: {
-          admin: false,
-          tagging: false,
-          recording: false,
-          accessing: false,
           owner: false,
+          projectAdmin: {},
+          studyAdmin: {},
+          studyContributor: {},
         },
         username: 'bob',
         _id: 'sadlkfj',
@@ -81,6 +81,7 @@ describe('AuthService', () => {
       token: 'some-fake-token',
     };
     spy.post.and.returnValue(data);
+    spy.get.and.returnValue(Promise.resolve(data.user));
 
     tokenSpy.storeAuthInformation.and.callFake((param) => {
       return param;
@@ -132,11 +133,10 @@ describe('AuthService', () => {
         email: 'bob@bu.edu',
         name: 'bob',
         roles: {
-          admin: false,
-          tagging: false,
-          recording: false,
-          accessing: false,
           owner: false,
+          projectAdmin: {},
+          studyAdmin: {},
+          studyContributor: {},
         },
         username: 'bob',
         _id: '1',

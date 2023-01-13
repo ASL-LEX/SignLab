@@ -10,11 +10,10 @@ const testUsers: User[] = [
     email: 'bob@bu.edu',
     username: 'bob',
     roles: {
-      admin: true,
-      tagging: false,
-      recording: false,
-      accessing: false,
       owner: false,
+      studyAdmin: {},
+      projectAdmin: {},
+      studyContributor: {},
     },
   },
   {
@@ -23,11 +22,10 @@ const testUsers: User[] = [
     email: 'sam@bu.edu',
     username: 'sam',
     roles: {
-      admin: true,
-      tagging: true,
-      recording: true,
-      accessing: true,
       owner: false,
+      studyAdmin: {},
+      projectAdmin: {},
+      studyContributor: {},
     },
   },
 ];

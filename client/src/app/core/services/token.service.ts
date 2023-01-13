@@ -46,6 +46,13 @@ export class TokenService {
     this.authInformation = null;
   }
 
+  updateUser(user: User): void {
+    if (this.authInformation) {
+      this.authInformation.user = user;
+      this.storeCredentials(this.authInformation);
+    }
+  }
+
   /**
    * Try to load the credentials from storage, if nothing is present, returns
    * null.
@@ -67,6 +74,7 @@ export class TokenService {
     ) {
       return null;
     }
+
     return authInformation;
   }
 

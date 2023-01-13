@@ -15,11 +15,10 @@ const testUser: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   roles: {
-    admin: true,
-    tagging: true,
-    recording: true,
-    accessing: true,
     owner: false,
+    studyAdmin: {},
+    projectAdmin: {},
+    studyContributor: {},
   },
 };
 
@@ -198,11 +197,10 @@ describe('AuthService', () => {
         name: 'sam',
         password: 'sammy',
         roles: {
-          admin: false,
-          tagging: false,
-          recording: false,
-          accessing: false,
           owner: false,
+          studyAdmin: {},
+          projectAdmin: {},
+          studyContributor: {},
         },
       };
       const result: any = await authService.signup(newUser);
@@ -210,26 +208,6 @@ describe('AuthService', () => {
       // Password not present on user model
       delete newUser.password;
       expect(result).toEqual({ token: 'signed', user: newUser });
-    });
-  });
-
-  describe('isAuthorized()', () => {
-    it('should not authorize if a role is not present', async () => {
-      const result = await authService.isAuthorized(testUser, [
-        'tagging, responding',
-      ]);
-
-      expect(result).toBeFalsy();
-    });
-
-    it('should authorize if a role is present', async () => {
-      const result = await authService.isAuthorized(testUser, [
-        'tagging',
-        'responding',
-        'admin',
-      ]);
-
-      expect(result).toBeTruthy();
     });
   });
 });

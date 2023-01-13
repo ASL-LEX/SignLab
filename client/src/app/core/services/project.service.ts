@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Project, ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { StudyService } from './study.service';
+import { User } from 'shared/dtos/user.dto';
 
 @Injectable()
 export class ProjectService {
@@ -58,6 +58,25 @@ export class ProjectService {
   public async updateProjects(): Promise<void> {
     this.projectsObs.next(
       await this.signLab.get('/api/projects', { withCredentials: true })
+    );
+  }
+
+  public async changeAdminStatus(user: User, isAdmin: boolean) {
+    const activeProject = this.activeProjectObs.getValue();
+    if (!activeProject) {
+      throw new Error(
+        'Attempted to change project admin status without an active project'
+      );
+    }
+
+    await this.signLab.put(
+      '/api/projects/user/enable',
+      {
+        projectID: activeProject._id,
+        userID: user._id,
+        hasAdminAccess: isAdmin,
+      },
+      { withCredentials: true }
     );
   }
 }

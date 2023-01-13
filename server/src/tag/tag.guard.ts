@@ -6,7 +6,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { StudyService } from '../study/study.service';
-import { UserStudyService } from '../userstudy/userstudy.service';
 import { UserService } from '../user/user.service';
 
 /**
@@ -17,7 +16,6 @@ export class TagGuard implements CanActivate {
   constructor(
     private userService: UserService,
     private studyService: StudyService,
-    private userStudyService: UserStudyService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -65,8 +63,7 @@ export class TagGuard implements CanActivate {
       );
     }
 
-    // Get the user study
-    const userStudy = await this.userStudyService.getUserStudy(user, study);
-    return userStudy.hasAccessToStudy;
+    // Check against the user roles
+    return user.roles.studyContributor[studyID];
   }
 }

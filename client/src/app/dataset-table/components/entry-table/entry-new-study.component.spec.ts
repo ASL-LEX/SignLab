@@ -12,7 +12,6 @@ import { EntryTableCoreComponent } from './entry-table-core.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { User } from 'shared/dtos/user.dto';
 import { Dataset } from 'shared/dtos/dataset.dto';
-import { ChangeDetectorRef } from '@angular/core';
 
 describe('EntryNewStudyTable', () => {
   const creator: User = {
@@ -21,11 +20,10 @@ describe('EntryNewStudyTable', () => {
     username: 'test',
     email: '',
     roles: {
-      admin: true,
-      tagging: false,
-      accessing: false,
       owner: false,
-      recording: false,
+      studyContributor: {},
+      projectAdmin: {},
+      studyAdmin: {},
     },
   };
 

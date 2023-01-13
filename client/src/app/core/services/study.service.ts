@@ -162,30 +162,30 @@ export class StudyService {
     return this.signLab.get<Tag[]>('api/tag/training', query);
   }
 
-  /**
-   * Change if a user has accces to the study for tagging.
-   *
-   * On success returns true, otherwise returns false
-   */
-  async changeAccessToStudy(
-    userStudy: UserStudy,
-    hasAcccess: boolean
-  ): Promise<boolean> {
-    const targetURL = 'api/study/user/enable';
-    const requestBody = {
-      studyID: userStudy.study._id!,
-      userID: userStudy.user._id,
-      hasAccess: hasAcccess,
-    };
+  async changeAdminStatus(user: User, adminStatus: boolean): Promise<void> {
+    await this.signLab.put(
+      'api/study/admin/enable',
+      {
+        userID: user._id,
+        studyID: this.activeStudyObservable.value!._id!,
+        hasAdminAccess: adminStatus,
+      },
+      { provideToken: true }
+    );
+  }
 
-    try {
-      await this.signLab.put<any>(targetURL, requestBody, {
-        provideToken: true,
-      });
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
+  async changeContributorStatus(
+    user: User,
+    contributorStatus: boolean
+  ): Promise<void> {
+    await this.signLab.put(
+      'api/study/contributor/enable',
+      {
+        userID: user._id,
+        studyID: this.activeStudyObservable.value!._id!,
+        hasAccess: contributorStatus,
+      },
+      { provideToken: true }
+    );
   }
 }

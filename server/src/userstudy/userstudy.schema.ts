@@ -41,12 +41,6 @@ export class UserStudy implements dto.UserStudy {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: EntryStudy.name }],
   })
   trainingEntryStudies: EntryStudy[];
-
-  /**
-   * Flag that represents if the user has access to the given study
-   */
-  @Prop({ required: true })
-  hasAccessToStudy: boolean;
 }
 
 export type UserStudyDocument = UserStudy & Document;

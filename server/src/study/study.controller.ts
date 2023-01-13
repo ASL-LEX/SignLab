@@ -76,11 +76,40 @@ export class StudyController {
   }
 
   /**
-   * Change if the given user will have tagging access on the given study.
+   * Change if the user is an admin for the study
    */
-  @Put('/user/enable')
+  @Put('/admin/enable')
+  async controlAdminAccess(
+    @Body()
+    changeRequest: {
+      studyID: string;
+      userID: string;
+      hasAdminAccess: boolean;
+    },
+  ): Promise<void> {
+    const study = await this.studyService.find(changeRequest.studyID);
+    if (!study) {
+      throw new HttpException('Study not found', HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.userService.findOne({ _id: changeRequest.userID });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+
+    return this.userService.markAsStudyAdmin(
+      user,
+      study,
+      changeRequest.hasAdminAccess,
+    );
+  }
+
+  /**
+   * Change if a user can contribute to the study
+   */
+  @Put('/contributor/enable')
   @Auth('admin')
-  async changeUserAccess(
+  async controlContributeAccess(
     @Body()
     changeRequest: {
       studyID: string;
@@ -103,11 +132,7 @@ export class StudyController {
       );
     }
 
-    this.userStudyService.changeUserAccess(
-      study,
-      user,
-      changeRequest.hasAccess,
-    );
+    this.userService.markAsContributor(user, study, changeRequest.hasAccess);
   }
 
   /**

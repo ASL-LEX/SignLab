@@ -6,7 +6,6 @@ import { CoreModule } from '../core/core.module';
 // Components
 import { UserPermissionsComponent } from './components/user-permissions.component';
 import { EntryControlsComponent } from './components/entry-controls.component';
-import { UserTableModule } from '../user-table/user-table.module';
 import { NewStudyComponent } from './components/new-study/new-study.component';
 import { SharedModule } from '../shared/shared.module';
 import { RequiredInfoComponent } from './components/new-study/required-info.component';
@@ -25,13 +24,7 @@ import { TagViewComponent } from './components/tag-view.component';
     TagFieldComponent,
     TagViewComponent,
   ],
-  imports: [
-    StudiesRoutingModule,
-    DatasetTableModule,
-    CoreModule,
-    UserTableModule,
-    SharedModule,
-  ],
+  imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, SharedModule],
   providers: [TagFieldGeneratorService],
 })
 export class StudiesModule {}

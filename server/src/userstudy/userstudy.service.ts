@@ -28,7 +28,6 @@ export class UserStudyService {
       user: user,
       study: study,
       trainingEntryStudies: trainingEntryStudies,
-      hasAccessToStudy: false,
     };
 
     await this.userStudyModel.create(newUserStudy);

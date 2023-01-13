@@ -29,11 +29,10 @@ const testUser: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   roles: {
-    admin: true,
-    tagging: false,
-    recording: false,
-    accessing: false,
     owner: false,
+    studyAdmin: {},
+    projectAdmin: {},
+    studyContributor: {},
   },
 };
 
