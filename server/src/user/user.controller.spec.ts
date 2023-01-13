@@ -11,11 +11,10 @@ const testUser1: User = {
   email: 'bob@bu.edu',
   username: 'bob',
   roles: {
-    admin: true,
-    tagging: false,
-    recording: false,
-    accessing: false,
     owner: false,
+    studyAdmin: {},
+    projectAdmin: {},
+    studyContributor: {},
   },
 };
 
@@ -25,11 +24,10 @@ const testUser2: User = {
   email: 'sam@bu.edu',
   username: 'sam',
   roles: {
-    admin: false,
-    tagging: true,
-    recording: false,
-    accessing: false,
     owner: false,
+    studyAdmin: {},
+    projectAdmin: {},
+    studyContributor: {},
   },
 };
 

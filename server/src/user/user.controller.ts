@@ -15,7 +15,7 @@ import { User } from './user.schema';
 import { UserService } from './user.service';
 import { Auth } from '../auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
-import {JwtAuthGuard} from 'src/auth/jwt.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 import { Request } from 'express';
 
 @Controller('/api/users')
