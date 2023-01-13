@@ -100,9 +100,9 @@ describe('TaggingLanding', () => {
 
   it('should handle when a user has access to the study', () => {
     // Insert test data that has access to the study
-    const withAccess = JSON.parse(JSON.stringify(testUser));
-    withAccess.roles.studyContributor['1'] = true;
-    taggingLanding.componentInstance.userStudy!.user = withAccess;
+    const withAccess = JSON.parse(JSON.stringify(testUserStudy));
+    withAccess.user.roles.studyContributor['1'] = true;
+    taggingLanding.componentInstance.userStudy = withAccess;
 
     taggingLanding.detectChanges();
 

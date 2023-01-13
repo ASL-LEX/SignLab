@@ -261,8 +261,6 @@ export class NavbarComponent {
         }
 
         // A user who is marked as a contributor can contribute to a study
-        console.log(user);
-        console.log(study);
         if (user && study && user.roles.studyContributor[study._id!]) {
           return true;
         }
