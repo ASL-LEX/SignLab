@@ -47,6 +47,12 @@ export class NavbarComponent {
           url: '/projects/user-permissions',
           visible: true,
           visibleCondition: (project, _study, user) => {
+            // If there is no active project, no user permissions are
+            // visible
+            if (!project) {
+              return false;
+            }
+
             if (user && user.roles.owner) {
               return true;
             }
@@ -96,6 +102,12 @@ export class NavbarComponent {
           url: '/studies/user-permissions',
           visible: true,
           visibleCondition(project, study, user) {
+            // If there is no project or no active study,
+            // no user permissions are visible
+            if (!project || !study) {
+              return false;
+            }
+
             // Owner can access studies
             if (user && user.roles.owner) {
               return true;
@@ -120,6 +132,12 @@ export class NavbarComponent {
           url: '/studies/entry-controls',
           visible: true,
           visibleCondition(project, study, user) {
+            // If there is no project or no active study,
+            // no entry controls are visible
+            if (!project || !study) {
+              return false;
+            }
+
             // Owner can access studies
             if (user && user.roles.owner) {
               return true;
@@ -144,6 +162,13 @@ export class NavbarComponent {
           url: '/studies/tag-download',
           visible: true,
           visibleCondition(project, study, user) {
+            // If there is no project or no active study,
+            // no tags are possible to be downloaded
+            if (!project || !study) {
+              return false;
+            }
+
+
             // Owner can access studies
             if (user && user.roles.owner) {
               return true;
@@ -211,6 +236,12 @@ export class NavbarComponent {
       url: '',
       visible: true,
       visibleCondition: (project, study, user) => {
+        // If there is no project or no active study,
+        // nothing to contribute to
+        if (!project || !study) {
+          return false;
+        }
+
         // Owner can contribute to any study
         if (user && user.roles.owner) {
           return true;
