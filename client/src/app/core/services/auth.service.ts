@@ -18,12 +18,13 @@ export class AuthService {
     private signLab: SignLabHttpClient,
     private tokenService: TokenService
   ) {
-
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
-      this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
-        this.tokenService.updateUser(user);
-      });
+      this.signLab
+        .get('api/users/me', { provideToken: true })
+        .then((user: any) => {
+          this.tokenService.updateUser(user);
+        });
     }
   }
 
