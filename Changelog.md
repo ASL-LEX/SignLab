@@ -5,6 +5,7 @@
 ### Changes
 
 * Modified navigation method to use sidenav view
+* Have visibility of navigation links be based on user permissions
 
 ## 0.4.0
 
