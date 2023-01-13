@@ -11,19 +11,21 @@
 
     <mat-card-content>
       <mat-nav-list>
-        <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems">
+        <mat-expansion-panel class="navbar-element" *ngFor="let navItem of navItems | keyvalue">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              <p class="nav-link navbar-element">{{navItem.name}}</p>
+              <p class="nav-link navbar-element">{{navItem.value.name}}</p>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item
-               *ngFor="let sublink of navItem.sublinks"
-               routerLink="{{sublink.url}}"
-               routerLinkActive="active-link"
-               class="nav-link"
-               >{{sublink.name}}</a>
+            <div *ngFor="let sublink of navItem.value.sublinks">
+              <a mat-list-item
+                 *ngIf="sublink.visible"
+                 routerLink="{{sublink.url}}"
+                 routerLinkActive="active-link"
+                 class="nav-link"
+                 >{{sublink.name}}</a>
+            </div>
           </mat-nav-list>
         </mat-expansion-panel>
 

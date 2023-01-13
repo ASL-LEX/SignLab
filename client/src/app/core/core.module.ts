@@ -8,9 +8,7 @@ import { StudyService } from './services/study.service';
 import { UserService } from './services/user.service';
 import { SignLabHttpClient } from './services/http.service';
 import {
-  AdminAuthGuard,
   AuthenticatedGuard,
-  OwnerAuthGuard,
 } from './guards/auth.guard';
 import { StudyGuard } from './guards/study.guard';
 import { TokenService } from './services/token.service';
@@ -36,8 +34,6 @@ export class CoreModule {
         StudyService,
         UserService,
         AuthenticatedGuard,
-        AdminAuthGuard,
-        OwnerAuthGuard,
         StudyGuard,
         TokenService,
         TagService,
