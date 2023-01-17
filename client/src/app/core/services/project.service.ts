@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
-import { Project, ProjectCreate } from 'shared/dtos/project.dto';
+import { ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from 'shared/dtos/user.dto';
+import { Project } from 'graphql/generated';
 
 @Injectable()
 export class ProjectService {

@@ -4,6 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular'
+import { InMemoryCache } from '@apollo/client/core'
+import { HttpLink } from 'apollo-angular/http'
 
 import { FirstTimeSetupModule } from './first-time-setup/first-time-setup.module';
 import { AppRoutingModule } from './app-routing.module';
@@ -29,8 +32,21 @@ import { RouterModule } from '@angular/router';
     FirstTimeSetupModule,
     CoreModule.forRoot(),
     NavigationModule,
+    ApolloModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: 'http://localhost:3000/graphql',
+          }),
+        };
+      },
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
