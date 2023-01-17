@@ -9,7 +9,4 @@ export interface Project {
   created: Date;
 }
 
-export interface ProjectCreate extends Omit<Project, '_id' | 'created' | 'creator'> {
-  /** ID of the user who created the project */
-  creator: string;
-}
+export interface ProjectCreate extends Omit<Project, '_id' | 'created'> {}
