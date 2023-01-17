@@ -7,11 +7,15 @@ import {
   Put,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectCreate } from 'shared/dtos/project.dto';
 import { ProjectService } from './project.service';
 import { Project } from './project.schema';
 import { UserService } from '../user/user.service';
+import { OwnerGuard } from '../auth/owner.guard';
+import { ProjectGuard } from '../auth/project.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('/api/projects')
 export class ProjectController {
@@ -26,6 +30,7 @@ export class ProjectController {
   }
 
   @Post('/')
+  @UseGuards(OwnerGuard)
   async createProject(@Body() project: ProjectCreate): Promise<Project> {
     return await this.projectService.create(project);
   }
@@ -39,6 +44,7 @@ export class ProjectController {
    * TODO: Add guard for project admin
    */
   @Put('/user/enable')
+  @UseGuards(JwtAuthGuard, ProjectGuard)
   async controlAdminAccess(
     @Body()
     changeRequest: {
