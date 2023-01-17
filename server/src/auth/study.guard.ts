@@ -15,7 +15,6 @@ export class StudyGuard implements CanActivate {
   constructor(private readonly studyService: StudyService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
     const body = context.switchToHttp().getRequest().body;
 
     // If the study is not attached, cannot activate
@@ -38,6 +37,10 @@ export class StudyGuard implements CanActivate {
       return false;
     }
 
-    return user.roles.owner || user.roles.projectAdmin[projectID] || user.roles.studyAdmin[body.studyID];
+    return (
+      user.roles.owner ||
+      user.roles.projectAdmin[projectID] ||
+      user.roles.studyAdmin[body.studyID]
+    );
   }
 }

@@ -21,7 +21,7 @@ export class UserPermissionsComponent {
   constructor(
     public studyService: StudyService,
     private userService: UserService,
-    private projectService: ProjectService,
+    private projectService: ProjectService
   ) {
     this.userService.getUsers().then((users) => {
       this.users = users;

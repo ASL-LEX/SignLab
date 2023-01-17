@@ -39,7 +39,14 @@ import { StudyModule } from '../study/study.module';
     forwardRef(() => StudyModule),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RolesGuard,
+    OwnerGuard,
+    ProjectGuard,
+    StudyGuard,
+  ],
   exports: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
