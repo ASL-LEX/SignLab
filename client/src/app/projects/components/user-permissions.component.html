@@ -24,7 +24,8 @@
       <td mat-cell *matCellDef="let user">
         <mat-slide-toggle
           (change)="toggleProjectAdmin({user: user, change: $event})"
-          [checked]="user.roles.projectAdmin && user.roles.projectAdmin[activeProjectID]"
+          [checked]="user.roles.projectAdmin && (user.roles.projectAdmin[activeProjectID] || user.roles.owner)"
+          [disabled]="user.roles.owner"
         ></mat-slide-toggle>
     </ng-container>
 

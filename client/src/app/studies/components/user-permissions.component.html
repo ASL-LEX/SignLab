@@ -1,5 +1,5 @@
 <div class="user-grid">
-  <table mat-table [dataSource]="users" class="mat-elevate-z8" *ngIf="activeStudyID">
+  <table mat-table [dataSource]="users" class="mat-elevate-z8" *ngIf="activeStudyID && activeProjectID">
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -24,7 +24,8 @@
       <td mat-cell *matCellDef="let user">
         <mat-slide-toggle
           (change)="toggleStudyAdmin({user: user, change: $event})"
-          [checked]="user.roles.studyAdmin[activeStudyID]"
+          [checked]="user.roles.studyAdmin[activeStudyID] || user.roles.projectAdmin[activeProjectID] || user.roles.owner"
+          [disabled]="user.roles.projectAdmin[activeProjectID] || user.roles.owner"
         ></mat-slide-toggle>
       </td>
     </ng-container>
@@ -35,7 +36,11 @@
       <td mat-cell *matCellDef="let user">
         <mat-slide-toggle
           (change)="toggleContribute({user: user, change: $event})"
-          [checked]="user.roles.studyContributor[activeStudyID]"
+          [checked]="user.roles.studyContributor[activeStudyID] ||
+                     user.roles.studyAdmin[activeStudyID] ||
+                     user.roles.projectAdmin[activeProjectID] ||
+                     user.roles.owner"
+          [disabled]="user.roles.projectAdmin[activeProjectID] || user.roles.owner"
         ></mat-slide-toggle>
       </td>
     </ng-container>

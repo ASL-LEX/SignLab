@@ -45,19 +45,19 @@ export class ProjectService {
 
   public async createProject(project: ProjectCreate): Promise<Project> {
     return await this.signLab.post('/api/projects', project, {
-      withCredentials: true,
+      provideToken: true,
     });
   }
 
   public async projectExists(name: string): Promise<boolean> {
     return this.signLab.get(`/api/projects/exists/${name}`, {
-      withCredentials: true,
+      provideToken: true,
     });
   }
 
   public async updateProjects(): Promise<void> {
     this.projectsObs.next(
-      await this.signLab.get('/api/projects', { withCredentials: true })
+      await this.signLab.get('/api/projects', { provideToken: true })
     );
   }
 
@@ -76,7 +76,7 @@ export class ProjectService {
         userID: user._id,
         hasAdminAccess: isAdmin,
       },
-      { withCredentials: true }
+      { provideToken: true }
     );
   }
 }

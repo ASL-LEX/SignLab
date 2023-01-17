@@ -3,6 +3,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { User } from 'shared/dtos/user.dto';
 import { UserService } from '../../core/services/user.service';
 import { StudyService } from '../../core/services/study.service';
+import { ProjectService } from '../../core/services/project.service';
 
 @Component({
   templateUrl: './user-permissions.component.html',
@@ -13,11 +14,14 @@ export class UserPermissionsComponent {
   users: User[] = [];
   /** The currently selected study ID */
   activeStudyID: string | null = null;
+  /** The currently selected project ID */
+  activeProjectID: string | null = null;
   displayedColumns = ['name', 'username', 'email', 'studyAdmin', 'contribute'];
 
   constructor(
     public studyService: StudyService,
-    private userService: UserService
+    private userService: UserService,
+    private projectService: ProjectService
   ) {
     this.userService.getUsers().then((users) => {
       this.users = users;
@@ -25,6 +29,10 @@ export class UserPermissionsComponent {
 
     this.studyService.activeStudy.subscribe((study) => {
       this.activeStudyID = study ? study._id! : null;
+    });
+
+    this.projectService.activeProject.subscribe((project) => {
+      this.activeProjectID = project ? project._id! : null;
     });
   }
 

@@ -14,6 +14,10 @@ import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { RolesGuard } from './role.guard';
 import { UserStudyModule } from '../userstudy/userstudy.module';
+import { OwnerGuard } from './owner.guard';
+import { ProjectGuard } from './project.guard';
+import { StudyGuard } from './study.guard';
+import { StudyModule } from '../study/study.module';
 
 @Module({
   imports: [
@@ -32,9 +36,17 @@ import { UserStudyModule } from '../userstudy/userstudy.module';
     ConfigModule,
     forwardRef(() => UserModule),
     forwardRef(() => UserStudyModule),
+    forwardRef(() => StudyModule),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RolesGuard,
+    OwnerGuard,
+    ProjectGuard,
+    StudyGuard,
+  ],
   exports: [AuthService, JwtStrategy],
 })
 export class AuthModule {}
