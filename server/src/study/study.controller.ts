@@ -7,6 +7,7 @@ import {
   Post,
   Query,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { EntryService } from '../entry/entry.service';
 import { Study } from '../study/study.schema';
@@ -16,10 +17,12 @@ import { StudyCreation } from 'shared/dtos/study.dto';
 import { UserStudy } from '../userstudy/userstudy.schema';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { UserService } from '../user/user.service';
-import { Auth } from '../auth/auth.guard';
 import { StudyPipe } from '../shared/pipes/study.pipe';
 import { UserPipe } from '../shared/pipes/user.pipe';
 import { User } from 'shared/dtos/user.dto';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { StudyGuard } from '../auth/study.guard';
+import { ProjectGuard } from '../auth/project.guard';
 
 @Controller('/api/study')
 export class StudyController {
@@ -42,7 +45,6 @@ export class StudyController {
    * Deterine if a study with the given name exists
    */
   @Get('/exists')
-  @Auth('admin')
   async studyExists(
     @Query('studyName') studyName: string,
     @Query('projectID') projectID: string,
@@ -55,7 +57,7 @@ export class StudyController {
    * study.
    */
   @Get('/users')
-  @Auth('admin')
+  @UseGuards(JwtAuthGuard, StudyGuard)
   async getUserStudies(
     @Query('studyID', StudyPipe) study: Study,
   ): Promise<UserStudy[]> {
@@ -79,6 +81,7 @@ export class StudyController {
    * Change if the user is an admin for the study
    */
   @Put('/admin/enable')
+  @UseGuards(JwtAuthGuard, StudyGuard)
   async controlAdminAccess(
     @Body()
     changeRequest: {
@@ -108,7 +111,7 @@ export class StudyController {
    * Change if a user can contribute to the study
    */
   @Put('/contributor/enable')
-  @Auth('admin')
+  @UseGuards(JwtAuthGuard, StudyGuard)
   async controlContributeAccess(
     @Body()
     changeRequest: {
@@ -141,7 +144,7 @@ export class StudyController {
    * newly created study.
    */
   @Post('/create')
-  @Auth('admin')
+  @UseGuards(JwtAuthGuard, ProjectGuard)
   async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(
