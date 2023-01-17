@@ -30,7 +30,7 @@ export class ProjectController {
   }
 
   @Post('/')
-  @UseGuards(OwnerGuard)
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   async createProject(@Body() project: ProjectCreate): Promise<Project> {
     return await this.projectService.create(project);
   }
