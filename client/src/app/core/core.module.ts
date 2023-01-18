@@ -16,10 +16,11 @@ import { VideoTagUploadService } from './services/video-tag-upload.service';
 import { MaterialModule } from '../material.module';
 import { ProjectService } from './services/project.service';
 import { ProjectGuard } from './guards/project.guard';
+import { ApolloModule } from 'apollo-angular';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, HttpClientModule, MaterialModule],
+  imports: [CommonModule, HttpClientModule, MaterialModule, ApolloModule],
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {

@@ -1,12 +1,12 @@
 overwrite: true
 schema: ../server/dist/schema.gql
-documents: src/graphql/**/*.graphql
+documents: src/app/graphql/**/*.graphql
 generates:
-  src/graphql/graphql.ts:
+  src/app/graphql/graphql.ts:
     plugins:
       - typescript
-  src/graphql/:
-    documents: src/graphql/**/*.graphql
+  src/app/graphql/:
+    documents: src/app/graphql/**/*.graphql
     preset: near-operation-file
     presetConfig:
       baseTypesPath: graphql.ts

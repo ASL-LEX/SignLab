@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { StudyService } from '../../core/services/study.service';
+import { ProjectsGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'environment-select',
@@ -60,8 +61,10 @@ import { StudyService } from '../../core/services/study.service';
 export class EnvironmentSelect {
   constructor(
     public studyService: StudyService,
-    public projectService: ProjectService
-  ) {}
+    public projectService: ProjectService,
+  ) {
+
+  }
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {

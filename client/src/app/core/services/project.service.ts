@@ -3,8 +3,8 @@ import { SignLabHttpClient } from './http.service';
 import { ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject, map } from 'rxjs';
 import { User } from 'shared/dtos/user.dto';
-import { Project } from '../../../graphql/graphql';
-import { ProjectsGQL } from '../../../graphql/projects/projects.generated';
+import { Project } from 'shared/dtos/project.dto';
+import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
 
 @Injectable()
 export class ProjectService {
@@ -15,8 +15,7 @@ export class ProjectService {
   activeProjectObs: BehaviorSubject<Project | null> =
     new BehaviorSubject<Project | null>(null);
 
-  constructor(private readonly signLab: SignLabHttpClient,
-              private readonly projectsGQL: ProjectsGQL) {
+  constructor(private readonly signLab: SignLabHttpClient) { // public readonly apollo: Apollo) {
     this.updateProjects();
 
     /*projectsGQL.watch().valueChanges.pipe(map(results => {

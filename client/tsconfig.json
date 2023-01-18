@@ -5,7 +5,7 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "lib": [
-      "es2018",
+      "es2020",
       "dom"
     ]
   },
