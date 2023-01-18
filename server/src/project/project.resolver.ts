@@ -11,6 +11,7 @@ export class ProjectResolver {
 
   @Query(() => [Project])
   getProjects(): Promise<Project[]> {
+    console.log('called');
     return this.projectService.findAll();
   }
 

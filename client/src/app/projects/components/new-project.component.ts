@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { ProjectService } from '../../core/services/project.service';
+import { ProjectsGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'new-project',
@@ -67,7 +67,8 @@ export class NewProjectComponent {
 
   constructor(
     private readonly projectService: ProjectService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly projectsGQL: ProjectsGQL,
   ) {}
 
   fieldChange(data: any) {
@@ -100,6 +101,9 @@ export class NewProjectComponent {
     try {
       await this.projectService.createProject(this.formData);
       alert('Project created successfully');
+      // Update the projects list
+      this.projectsGQL.watch().refetch();
+
       this.router.navigate(['/']);
     } catch (error: any) {
       console.warn('Failed to make a new project');

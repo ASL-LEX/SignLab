@@ -62,8 +62,15 @@ export class EnvironmentSelect {
   constructor(
     public studyService: StudyService,
     public projectService: ProjectService,
+    projectGQL: ProjectsGQL
   ) {
+    projectGQL.watch().valueChanges.subscribe((result) => {
+      console.log(result);
+    });
 
+    projectGQL.watch().valueChanges.subscribe((result) => {
+      console.log(result.data);
+    });
   }
 
   /** Update the study that is active */
