@@ -1,6 +1,6 @@
 export interface Project {
   /** The generated project ID */
-  _id?: string;
+  _id: string;
   /** Name of the project, unique for an organization */
   name: string;
   /** Human readable description of the project */

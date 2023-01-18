@@ -11,7 +11,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 export class Project implements dto.Project {
   /** MongoDB assigned ID */
   @Field(() => ID, { description: 'unique identifier for the project' })
-  _id?: string;
+  _id: string;
 
   @Prop({ required: true })
   @Field({ description: 'name of the project, unique in an organization' })

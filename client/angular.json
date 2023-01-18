@@ -109,5 +109,8 @@
       }
     }
   },
-  "defaultProject": "signlab"
+  "defaultProject": "signlab",
+  "cli": {
+    "analytics": false
+  }
 }

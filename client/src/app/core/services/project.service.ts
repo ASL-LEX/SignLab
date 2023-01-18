@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { ProjectCreate } from 'shared/dtos/project.dto';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, map } from 'rxjs';
 import { User } from 'shared/dtos/user.dto';
-import { Project } from 'graphql/generated';
+import { Project } from '../../../graphql/graphql';
+import { ProjectsGQL } from '../../../graphql/projects/projects.generated';
 
 @Injectable()
 export class ProjectService {
@@ -14,8 +15,13 @@ export class ProjectService {
   activeProjectObs: BehaviorSubject<Project | null> =
     new BehaviorSubject<Project | null>(null);
 
-  constructor(private readonly signLab: SignLabHttpClient) {
+  constructor(private readonly signLab: SignLabHttpClient,
+              private readonly projectsGQL: ProjectsGQL) {
     this.updateProjects();
+
+    /*projectsGQL.watch().valueChanges.pipe(map(results => {
+      console.log(results);
+    })); */
   }
 
   get projects(): Observable<Project[]> {
