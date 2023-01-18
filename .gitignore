@@ -60,4 +60,4 @@ Thumbs.db
 /.env.sandbox
 
 # Generated graphql code
-/src/client/app/graphql/**/*.ts
+/client/src/app/graphql/**/*.ts
