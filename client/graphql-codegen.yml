@@ -1,0 +1,15 @@
+overwrite: true
+schema: ../server/dist/schema.gql
+documents: src/graphql/**/*.graphql
+generates:
+  src/graphql/graphql.ts:
+    plugins:
+      - typescript
+  src/graphql/:
+    documents: src/graphql/**/*.graphql
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: graphql.ts
+    plugins:
+      - typescript-operations
+      - typescript-apollo-angular
