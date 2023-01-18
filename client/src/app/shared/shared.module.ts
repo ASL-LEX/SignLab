@@ -17,6 +17,7 @@ import { FlexModule } from '@angular/flex-layout/flex';
 import { MaterialModule } from '../material.module';
 import { FormsModule } from '@angular/forms';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { ApolloModule } from 'apollo-angular';
 
 // Pipes
 import { SafePipe } from './pipes/safe.pipe';
@@ -41,6 +42,7 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsAngularMaterialModule,
     FlexModule,
     NgxCsvParserModule,
+    ApolloModule,
   ],
   exports: [
     AslLexSignBankField,
@@ -52,6 +54,7 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsAngularMaterialModule,
     FlexModule,
     StudySelectDialog,
+    ApolloModule,
   ],
 })
 export class SharedModule {}

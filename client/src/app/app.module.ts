@@ -45,6 +45,7 @@ import { RouterModule } from '@angular/router';
           }),
         };
       },
+      deps: [HttpLink],
     }
   ],
   bootstrap: [AppComponent],

@@ -24,7 +24,7 @@ export const ProjectsDocument = gql`
   })
   export class ProjectsGQL extends Apollo.Query<ProjectsQuery, ProjectsQueryVariables> {
     document = ProjectsDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
