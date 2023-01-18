@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Apollo } from 'apollo-angular';
 import { User } from 'shared/dtos/user.dto';
 import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
+import { ProjectsGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'project-user-permissions',
@@ -22,7 +24,7 @@ export class UserPermissionsComponent {
 
   constructor(
     public readonly projectService: ProjectService,
-    public readonly userService: UserService
+    public readonly userService: UserService,
   ) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe((project) => {

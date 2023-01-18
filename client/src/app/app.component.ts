@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     private ngZone: NgZone,
     private backend: BackendService,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.setupComplete = this.setupComplete.bind(this);
   }

@@ -5,9 +5,13 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "lib": [
-      "es2020",
-      "dom"
-    ]
+      "ES2022",
+      "dom",
+      "esnext.asynciterable"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",
+    "module": "ES2022"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
