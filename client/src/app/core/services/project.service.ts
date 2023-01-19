@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { ProjectCreate } from 'shared/dtos/project.dto';
-import { Observable, BehaviorSubject, map } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from 'shared/dtos/user.dto';
-import { Project } from 'shared/dtos/project.dto';
-import { Apollo, APOLLO_OPTIONS } from 'apollo-angular';
+import { Project } from '../../graphql/graphql';
+import { ProjectsGQL } from '../../graphql/projects/projects.generated';
 
 @Injectable()
 export class ProjectService {

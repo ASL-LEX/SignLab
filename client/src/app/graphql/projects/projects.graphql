@@ -1,5 +1,14 @@
 query Projects {
-    getProjects {
+  getProjects {
+    _id,
+    name,
+    description,
+    created
+  }
+}
+
+mutation createProject($projectCreate: ProjectCreate!) {
+  createProject(projectCreate: $projectCreate) {
     _id,
     name,
     description,

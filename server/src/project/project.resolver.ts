@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { ProjectCreate } from './project.dto';
 import { Project } from './project.schema';
@@ -16,8 +16,8 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  async createProjects(createProject: ProjectCreate): Promise<Project> {
-    return this.projectService.create(createProject);
+  async createProject(@Args('projectCreate') projectCreate: ProjectCreate): Promise<Project> {
+    return this.projectService.create(projectCreate);
   }
 
   @Query(() => Boolean)
