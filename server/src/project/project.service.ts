@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ProjectCreate } from 'shared/dtos/project.dto';
 import { Project, ProjectDocument } from './project.schema';
+import { ProjectCreate } from './project.dto';
 
 @Injectable()
 export class ProjectService {

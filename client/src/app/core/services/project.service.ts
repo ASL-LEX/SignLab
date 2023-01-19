@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ProjectCreate } from 'shared/dtos/project.dto';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Project } from '../../graphql/graphql';
+import { Project, ProjectCreate } from '../../graphql/graphql';
 import { GetProjectsGQL, GetProjectsQuery, GetProjectsQueryVariables, CreateProjectGQL, CreateProjectMutation } from '../../graphql/projects/projects.generated';
 import { MutationResult, QueryRef } from 'apollo-angular';
 

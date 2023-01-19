@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as dto from 'shared/dtos/project.dto';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 /**
@@ -8,7 +7,7 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
  */
 @Schema()
 @ObjectType({ description: 'Projects that are part of an organization' })
-export class Project implements dto.Project {
+export class Project {
   /** MongoDB assigned ID */
   @Field(() => ID, { description: 'unique identifier for the project' })
   _id: string;
