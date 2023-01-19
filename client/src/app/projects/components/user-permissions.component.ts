@@ -40,24 +40,27 @@ export class UserPermissionsComponent {
     user: User;
     change: MatSlideToggleChange;
   }) {
-    this.projectAdminChangeGQL.mutate({
-      projectAdminChange: {
-        userID: toggleChange.user._id!,
-        projectID: this.activeProjectID!,
-        hasAdminAccess: toggleChange.change.checked,
-      }
-    }).subscribe((result) => {
-      if (result.errors) {
-        // Log the error
-        console.error('Failed to change admin status');
-        console.error(result.errors);
+    this.projectAdminChangeGQL
+      .mutate({
+        projectAdminChange: {
+          userID: toggleChange.user._id!,
+          projectID: this.activeProjectID!,
+          hasAdminAccess: toggleChange.change.checked,
+        },
+      })
+      .subscribe((result) => {
+        if (result.errors) {
+          // Log the error
+          console.error('Failed to change admin status');
+          console.error(result.errors);
 
-        // Revert the toggle
-        toggleChange.change.source.checked = !toggleChange.change.checked;
-      } else {
-        // Update the user object to reflect the toggle
-        toggleChange.user.roles.projectAdmin[this.activeProjectID!] = toggleChange.change.checked;
-      }
-    });
+          // Revert the toggle
+          toggleChange.change.source.checked = !toggleChange.change.checked;
+        } else {
+          // Update the user object to reflect the toggle
+          toggleChange.user.roles.projectAdmin[this.activeProjectID!] =
+            toggleChange.change.checked;
+        }
+      });
   }
 }

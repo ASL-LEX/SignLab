@@ -60,7 +60,7 @@ import { StudyService } from '../../core/services/study.service';
 export class EnvironmentSelect {
   constructor(
     public studyService: StudyService,
-    public projectService: ProjectService,
+    public projectService: ProjectService
   ) {}
 
   /** Update the study that is active */

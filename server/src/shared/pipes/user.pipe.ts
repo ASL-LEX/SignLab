@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  PipeTransform,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { User } from 'shared/dtos/user.dto';
 import { UserService } from '../../user/user.service';
 
@@ -16,7 +12,7 @@ export class UserPipe implements PipeTransform<string, Promise<User>> {
       if (user) {
         return user;
       }
-    } catch(e: any) {}
+    } catch (e: any) {}
 
     throw new BadRequestException(`User with id ${value} not found`);
   }

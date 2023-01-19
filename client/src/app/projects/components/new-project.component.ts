@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import {firstValueFrom} from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { ProjectService } from '../../core/services/project.service';
 import { ProjectExistsGQL } from '../../graphql/projects/projects.generated';
 
@@ -81,7 +81,9 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      const projectExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.formData.name }));
+      const projectExists = await firstValueFrom(
+        this.projectExistsGQL.fetch({ name: this.formData.name })
+      );
       if (projectExists.data.projectExists) {
         this.addProjectExistsError();
       } else {
@@ -112,7 +114,9 @@ export class NewProjectComponent {
     this.projectService.createProject(this.formData).subscribe((result) => {
       if (result.errors) {
         console.debug(result.errors);
-        alert('Cannot make a new project at this time, ensure you have proper permissions. If this issue persists, please contact support.');
+        alert(
+          'Cannot make a new project at this time, ensure you have proper permissions. If this issue persists, please contact support.'
+        );
       } else {
         alert('Project created successfully');
         this.formData = {};

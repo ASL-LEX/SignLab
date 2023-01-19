@@ -83,7 +83,12 @@ export class UserService {
     await this.userModel
       .findOneAndUpdate(
         { _id: adminChange.user._id },
-        { $set: { [`roles.projectAdmin.${adminChange.project._id!}`]: adminChange.hasAdminAccess } },
+        {
+          $set: {
+            [`roles.projectAdmin.${adminChange.project._id!}`]:
+              adminChange.hasAdminAccess,
+          },
+        },
       )
       .exec();
   }

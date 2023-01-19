@@ -12,7 +12,7 @@ export class ProjectPipe implements PipeTransform<string, Promise<Project>> {
       if (project) {
         return project;
       }
-    } catch(e: any) {}
+    } catch (e: any) {}
 
     throw new BadRequestException(`Could not find project with id ${value}`);
   }

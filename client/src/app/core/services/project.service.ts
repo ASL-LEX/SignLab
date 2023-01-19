@@ -1,21 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Project, ProjectCreate } from '../../graphql/graphql';
-import { GetProjectsGQL, GetProjectsQuery, GetProjectsQueryVariables, CreateProjectGQL, CreateProjectMutation } from '../../graphql/projects/projects.generated';
+import {
+  GetProjectsGQL,
+  GetProjectsQuery,
+  GetProjectsQueryVariables,
+  CreateProjectGQL,
+  CreateProjectMutation,
+} from '../../graphql/projects/projects.generated';
 import { MutationResult, QueryRef } from 'apollo-angular';
 
 @Injectable()
 export class ProjectService {
   /** The available projects */
-  private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
+  private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<
+    Project[]
+  >([]);
   /** The query to get the project list, used for refetching */
-  private readonly projectQuery: QueryRef<GetProjectsQuery, GetProjectsQueryVariables>;
+  private readonly projectQuery: QueryRef<
+    GetProjectsQuery,
+    GetProjectsQueryVariables
+  >;
 
   /** The actively selected project */
   activeProjectObs: BehaviorSubject<Project | null> =
     new BehaviorSubject<Project | null>(null);
 
-  constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL) {
+  constructor(
+    projectsGQL: GetProjectsGQL,
+    private readonly createProjectGQL: CreateProjectGQL
+  ) {
     // Subscribe to the project query
     this.projectQuery = projectsGQL.watch();
     this.projectQuery.valueChanges.subscribe((result) => {
@@ -49,7 +63,9 @@ export class ProjectService {
     return this.activeProjectObs.value != null;
   }
 
-  public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
+  public createProject(
+    project: ProjectCreate
+  ): Observable<MutationResult<CreateProjectMutation>> {
     const result = this.createProjectGQL.mutate({ projectCreate: project });
 
     // Update the project list
