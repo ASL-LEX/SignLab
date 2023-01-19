@@ -1,4 +1,4 @@
-query Projects {
+query getProjects {
   getProjects {
     _id,
     name,
@@ -14,4 +14,12 @@ mutation createProject($projectCreate: ProjectCreate!) {
     description,
     created
   }
+}
+
+query projectExists($name: String!) {
+  projectExists(name: $name)
+}
+
+mutation projectAdminChange($projectAdminChange: ProjectAdminChange!) {
+  projectAdminChange(projectAdminChange: $projectAdminChange)
 }

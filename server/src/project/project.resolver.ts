@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
-import { ProjectCreate } from './project.dto';
+import { ProjectAdminChange, ProjectCreate } from './project.dto';
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
 
@@ -21,24 +21,24 @@ export class ProjectResolver {
   }
 
   @Query(() => Boolean)
-  async projectExists(name: string): Promise<boolean> {
+  async projectExists(@Args('name') name: string): Promise<boolean> {
     return (await this.projectService.findByName(name)) !== null;
   }
 
-  @Query(() => Boolean)
-  async projectAdminControl(projectID: string, userID: string, hasAdminAccess: boolean): Promise<boolean> {
-    const project = await this.projectService.findById(projectID);
+  @Mutation(() => Boolean)
+  async projectAdminChange(@Args('projectAdminChange') projectAdminChange: ProjectAdminChange): Promise<boolean> {
+    const project = await this.projectService.findById(projectAdminChange.projectID);
     if (!project) {
       throw new Error('Project does not exist');
     }
 
-    const user = await this.userService.findOne({ _id: userID });
+    const user = await this.userService.findOne({ _id: projectAdminChange.userID });
     if (!user) {
       throw new Error('User does not exist');
     }
 
     try {
-      await this.userService.markAsProjectAdmin(user, project, hasAdminAccess);
+      await this.userService.markAsProjectAdmin(user, project, projectAdminChange.hasAdminAccess);
       return true;
     } catch (e: any) {
       throw new Error(e);

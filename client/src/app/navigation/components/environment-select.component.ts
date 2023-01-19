@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { StudyService } from '../../core/services/study.service';
-import { ProjectsGQL } from '../../graphql/projects/projects.generated';
+import { GetProjectsGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'environment-select',
@@ -62,7 +62,7 @@ export class EnvironmentSelect {
   constructor(
     public studyService: StudyService,
     public projectService: ProjectService,
-    projectGQL: ProjectsGQL
+    projectGQL: GetProjectsGQL
   ) {
     projectGQL.watch().valueChanges.subscribe((result) => {
       console.log(result);
