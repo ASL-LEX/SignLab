@@ -5,6 +5,8 @@ generates:
   src/app/graphql/graphql.ts:
     plugins:
       - typescript
+      - add:
+          content: '/* eslint-disable */'
   src/app/graphql/:
     documents: src/app/graphql/**/*.graphql
     preset: near-operation-file
@@ -13,3 +15,5 @@ generates:
     plugins:
       - typescript-operations
       - typescript-apollo-angular
+      - add:
+          content: '/* eslint-disable */'
