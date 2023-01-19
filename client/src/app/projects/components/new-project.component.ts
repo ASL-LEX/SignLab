@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
+import { firstValueFrom } from 'rxjs';
 import { ProjectService } from '../../core/services/project.service';
+import { ProjectExistsGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'new-project',
@@ -67,7 +68,8 @@ export class NewProjectComponent {
 
   constructor(
     private readonly projectService: ProjectService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly projectExistsGQL: ProjectExistsGQL
   ) {}
 
   fieldChange(data: any) {
@@ -79,34 +81,47 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      if (await this.projectService.projectExists(this.formData.name)) {
-        this.additionalErrors = [
-          {
-            instancePath: '/name',
-            message: 'Project name already exists',
-            schemaPath: '',
-            keyword: '',
-            params: {},
-          },
-        ];
-        this.formValid = false;
+      const projectExists = await firstValueFrom(
+        this.projectExistsGQL.fetch({ name: this.formData.name })
+      );
+      if (projectExists.data.projectExists) {
+        this.addProjectExistsError();
       } else {
-        this.additionalErrors = [];
+        this.removeErrors();
       }
     }
   }
 
-  async projectSubmit(): Promise<void> {
-    try {
-      await this.projectService.createProject(this.formData);
-      alert('Project created successfully');
-      this.router.navigate(['/']);
-    } catch (error: any) {
-      console.warn('Failed to make a new project');
-      alert(
-        'Cannot make a new project at this time, ensure you have proper permissions. If this problem persists, please contact support.'
-      );
-      this.formData = {};
-    }
+  private addProjectExistsError() {
+    this.additionalErrors = [
+      {
+        instancePath: '/name',
+        message: 'Project name already exists',
+        schemaPath: '',
+        keyword: '',
+        params: {},
+      },
+    ];
+    this.formValid = false;
+  }
+
+  private removeErrors() {
+    this.additionalErrors = [];
+  }
+
+  projectSubmit(): void {
+    // Attempt to make the new project
+    this.projectService.createProject(this.formData).subscribe((result) => {
+      if (result.errors) {
+        console.debug(result.errors);
+        alert(
+          'Cannot make a new project at this time, ensure you have proper permissions. If this issue persists, please contact support.'
+        );
+      } else {
+        alert('Project created successfully');
+        this.formData = {};
+        this.router.navigate(['/projects']);
+      }
+    });
   }
 }

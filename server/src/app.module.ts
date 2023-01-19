@@ -23,6 +23,8 @@ import { EntryStudyModule } from './entrystudy/entrystudy.module';
 import { UserStudyModule } from './userstudy/userstudy.module';
 import { BucketModule } from './bucket/bucket.module';
 import { ProjectModule } from './project/project.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 // By default just use OS provided environment variables
 let configModule = ConfigModule.forRoot({
@@ -43,6 +45,7 @@ if (process.env.NODE_ENV) {
     configModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../dist/'),
+      exclude: ['/api*', '/graphql'],
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -50,6 +53,12 @@ if (process.env.NODE_ENV) {
         uri: configService.getOrThrow<string>('database.host'),
       }),
       inject: [ConfigService],
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'dist/schema.gql'),
+
+      playground: true,
     }),
     AuthModule,
     UserModule,

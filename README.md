@@ -90,10 +90,11 @@ GCP is not yet offically supported, but the functionality is stubbed out.
 The following steps will get you setup so you can test SignLab locally and
 test out changes in real time.
 
-1. (One time) Install dependancies
+1. (One time) Install dependancies and Generate GraphQL
 
 ```bash
 npm i
+npm run generate-graphql
 ```
 
 2. Setup Object Storage

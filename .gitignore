@@ -58,3 +58,6 @@ Thumbs.db
 # Secret
 /deployment.env
 /.env.sandbox
+
+# Generated graphql code
+/client/src/app/graphql/**/*.ts

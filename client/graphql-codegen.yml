@@ -1,0 +1,19 @@
+overwrite: true
+schema: ../server/dist/schema.gql
+documents: src/app/graphql/**/*.graphql
+generates:
+  src/app/graphql/graphql.ts:
+    plugins:
+      - typescript
+      - add:
+          content: '/* eslint-disable */'
+  src/app/graphql/:
+    documents: src/app/graphql/**/*.graphql
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: graphql.ts
+    plugins:
+      - typescript-operations
+      - typescript-apollo-angular
+      - add:
+          content: '/* eslint-disable */'

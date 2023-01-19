@@ -1,0 +1,25 @@
+query getProjects {
+  getProjects {
+    _id,
+    name,
+    description,
+    created
+  }
+}
+
+mutation createProject($projectCreate: ProjectCreate!) {
+  createProject(projectCreate: $projectCreate) {
+    _id,
+    name,
+    description,
+    created
+  }
+}
+
+query projectExists($name: String!) {
+  projectExists(name: $name)
+}
+
+mutation projectAdminChange($projectAdminChange: ProjectAdminChange!) {
+  projectAdminChange(projectAdminChange: $projectAdminChange)
+}

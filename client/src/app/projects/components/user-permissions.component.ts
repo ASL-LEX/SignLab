@@ -3,6 +3,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { User } from 'shared/dtos/user.dto';
 import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
+import { ProjectAdminChangeGQL } from '../../graphql/projects/projects.generated';
 
 @Component({
   selector: 'project-user-permissions',
@@ -22,7 +23,8 @@ export class UserPermissionsComponent {
 
   constructor(
     public readonly projectService: ProjectService,
-    public readonly userService: UserService
+    public readonly userService: UserService,
+    private readonly projectAdminChangeGQL: ProjectAdminChangeGQL
   ) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe((project) => {
@@ -38,22 +40,27 @@ export class UserPermissionsComponent {
     user: User;
     change: MatSlideToggleChange;
   }) {
-    try {
-      await this.projectService.changeAdminStatus(
-        toggleChange.user,
-        toggleChange.change.checked
-      );
-      toggleChange.user.roles.projectAdmin[this.activeProjectID!] =
-        toggleChange.change.checked;
-    } catch (error: any) {
-      // Log the error and revert the toggle
-      console.error('Failed to change admin status', error);
-      toggleChange.user.roles.projectAdmin[this.activeProjectID!] =
-        !toggleChange.change;
-    }
+    this.projectAdminChangeGQL
+      .mutate({
+        projectAdminChange: {
+          userID: toggleChange.user._id!,
+          projectID: this.activeProjectID!,
+          hasAdminAccess: toggleChange.change.checked,
+        },
+      })
+      .subscribe((result) => {
+        if (result.errors) {
+          // Log the error
+          console.error('Failed to change admin status');
+          console.error(result.errors);
 
-    // Make sure the checkbox matches the state
-    toggleChange.change.source.checked =
-      toggleChange.user.roles.projectAdmin[this.activeProjectID!];
+          // Revert the toggle
+          toggleChange.change.source.checked = !toggleChange.change.checked;
+        } else {
+          // Update the user object to reflect the toggle
+          toggleChange.user.roles.projectAdmin[this.activeProjectID!] =
+            toggleChange.change.checked;
+        }
+      });
   }
 }

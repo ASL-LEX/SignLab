@@ -16,6 +16,7 @@ import { HomeComponent } from './home.component';
 
 // Routing
 import { RouterModule } from '@angular/router';
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent],
@@ -29,6 +30,7 @@ import { RouterModule } from '@angular/router';
     FirstTimeSetupModule,
     CoreModule.forRoot(),
     NavigationModule,
+    GraphQLModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
