@@ -24,7 +24,7 @@ jobs:
         shell: bash
 
       - name: Build GraphQL Code
-        run: npm run generate-graphql
+        run: npm run introspection
 
       - name: Check for Linting Issues
         run: npm run lint
@@ -48,7 +48,7 @@ jobs:
         shell: bash
 
       - name: Build GraphQL Code
-        run: npm run generate-graphql
+        run: npm run introspection
 
       - name: Run unit tests for the client
         run: npm run test --workspace=client
@@ -72,7 +72,7 @@ jobs:
         shell: bash
 
       - name: Build GraphQL Code
-        run: npm run generate-graphql
+        run: npm run introspection
 
 
       - name: Run unit tests for the server
@@ -97,7 +97,7 @@ jobs:
         shell: bash
 
       - name: Build GraphQL Code
-        run: npm run generate-graphql
+        run: npm run introspection
 
       - name: Build Code
         run: |

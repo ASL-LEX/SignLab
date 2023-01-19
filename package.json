@@ -5,12 +5,12 @@
     "start:dev": "npm run build:dev --workspace=client && npm run start:dev --workspace=server",
     "start:watch": "NODE_ENV=local concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client'",
     "start:test": "NODE_ENV=test concurrently 'npm run start:watch --workspace=server' 'npm run start:watch --workspace=client' 'cypress open'",
-    "build:prod": "npm run generate-graphql && npm run build:prod --workspaces --if-present",
+    "build:prod": "npm run introspection && npm run build:prod --workspaces --if-present",
     "start:prod": "npm run start:prod --workspace=server",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "start:ci": "NODE_ENV=test npm run start:prod --workspace=server",
-    "generate-graphql": "npm run generate-graphql --workspace=server && npm run generate-graphql --workspace=client"
+    "introspection": "npm run introspection --workspace=server && npm run introspection --workspace=client"
  },
   "workspaces": [
     "server",
