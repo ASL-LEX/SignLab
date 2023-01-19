@@ -1,5 +1,4 @@
 import {
-  ArgumentMetadata,
   BadRequestException,
   Injectable,
   PipeTransform,
@@ -11,11 +10,14 @@ import { UserService } from '../../user/user.service';
 export class UserPipe implements PipeTransform<string, Promise<User>> {
   constructor(private readonly userService: UserService) {}
 
-  async transform(value: string, _metatype: ArgumentMetadata): Promise<User> {
-    const user = await this.userService.findOne({ _id: value });
-    if (!user) {
-      throw new BadRequestException(`User with id ${value} not found`);
-    }
-    return user;
+  async transform(value: string): Promise<User> {
+    try {
+      const user = await this.userService.findOne({ _id: value });
+      if (user) {
+        return user;
+      }
+    } catch(e: any) {}
+
+    throw new BadRequestException(`User with id ${value} not found`);
   }
 }

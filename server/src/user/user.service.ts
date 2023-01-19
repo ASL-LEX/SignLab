@@ -4,6 +4,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { Project } from 'shared/dtos/project.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { User, UserDocument } from './user.schema';
+import { ProjectAdminChangeFull } from '../project/project.dto';
 
 /**
  * The user service handles interactions with users that is not directly
@@ -79,15 +80,11 @@ export class UserService {
   /**
    * Set if the user is an admin for a given project or not
    */
-  async markAsProjectAdmin(
-    user: User,
-    project: Project,
-    isAdmin: boolean,
-  ): Promise<void> {
+  async markAsProjectAdmin(adminChange: ProjectAdminChangeFull): Promise<void> {
     await this.userModel
       .findOneAndUpdate(
-        { _id: user._id },
-        { $set: { [`roles.projectAdmin.${project._id!}`]: isAdmin } },
+        { _id: adminChange.user._id },
+        { $set: { [`roles.projectAdmin.${adminChange.project._id!}`]: adminChange.hasAdminAccess } },
       )
       .exec();
   }

@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
-import { ProjectAdminChange, ProjectCreate } from './project.dto';
+import { ProjectAdminChange, ProjectChangePipe, ProjectCreate, ProjectAdminChangeFull } from './project.dto';
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
 
@@ -15,6 +15,7 @@ export class ProjectResolver {
     return this.projectService.findAll();
   }
 
+  // TODO: Add owner role guard once GraphQL role guards are supported
   @Mutation(() => Project)
   async createProject(@Args('projectCreate') projectCreate: ProjectCreate): Promise<Project> {
     return this.projectService.create(projectCreate);
@@ -25,20 +26,11 @@ export class ProjectResolver {
     return (await this.projectService.findByName(name)) !== null;
   }
 
+  // TODO: Add project admin guard once GraphQL role guards are supported
   @Mutation(() => Boolean)
-  async projectAdminChange(@Args('projectAdminChange') projectAdminChange: ProjectAdminChange): Promise<boolean> {
-    const project = await this.projectService.findById(projectAdminChange.projectID);
-    if (!project) {
-      throw new Error('Project does not exist');
-    }
-
-    const user = await this.userService.findOne({ _id: projectAdminChange.userID });
-    if (!user) {
-      throw new Error('User does not exist');
-    }
-
+  async projectAdminChange(@Args('projectAdminChange', { type: () => ProjectAdminChange }, ProjectChangePipe) projectAdminChange: ProjectAdminChangeFull): Promise<boolean> {
     try {
-      await this.userService.markAsProjectAdmin(user, project, projectAdminChange.hasAdminAccess);
+      await this.userService.markAsProjectAdmin(projectAdminChange);
       return true;
     } catch (e: any) {
       throw new Error(e);
