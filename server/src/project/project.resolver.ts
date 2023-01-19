@@ -11,7 +11,6 @@ export class ProjectResolver {
 
   @Query(() => [Project])
   getProjects(): Promise<Project[]> {
-    console.log('called');
     return this.projectService.findAll();
   }
 
@@ -29,11 +28,7 @@ export class ProjectResolver {
   // TODO: Add project admin guard once GraphQL role guards are supported
   @Mutation(() => Boolean)
   async projectAdminChange(@Args('projectAdminChange', { type: () => ProjectAdminChange }, ProjectChangePipe) projectAdminChange: ProjectAdminChangeFull): Promise<boolean> {
-    try {
-      await this.userService.markAsProjectAdmin(projectAdminChange);
-      return true;
-    } catch (e: any) {
-      throw new Error(e);
-    }
+    await this.userService.markAsProjectAdmin(projectAdminChange);
+    return true;
   }
 }
