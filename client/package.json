@@ -10,7 +10,7 @@
     "lint:fix": "ng lint --fix",
     "lint": "ng lint",
     "setup": "node setup.js",
-    "generate": "graphql-codegen --config graphql-codegen.yml"
+    "generate-graphql": "graphql-codegen --config graphql-codegen.yml"
   },
   "private": true,
   "dependencies": {
