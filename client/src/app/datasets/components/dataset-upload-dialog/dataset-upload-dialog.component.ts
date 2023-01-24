@@ -19,7 +19,7 @@ export class DatasetUploadDialog {
     private datasetService: DatasetService,
     private authService: AuthService,
     private dialogRef: MatDialogRef<DatasetUploadDialog>,
-    private readonly datasetExistsGQL: DatasetExistsGQL,
+    private readonly datasetExistsGQL: DatasetExistsGQL
   ) {}
 
   createForm = new FormGroup({
@@ -40,7 +40,9 @@ export class DatasetUploadDialog {
       return; // Nothing to submit, should not reach here with proper Validators
     }
 
-    const datasetExists = await firstValueFrom(this.datasetExistsGQL.fetch({ name: this.name.value }));
+    const datasetExists = await firstValueFrom(
+      this.datasetExistsGQL.fetch({ name: this.name.value })
+    );
     if (datasetExists.data.datasetExists) {
       alert('Dataset with that name aleady exists');
       return;

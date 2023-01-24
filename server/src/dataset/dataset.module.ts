@@ -1,8 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import {SharedModule} from 'src/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { AuthModule } from '../auth/auth.module';
-import {DatasetResolver} from './dataset.resolver';
+import { DatasetResolver } from './dataset.resolver';
 import { Dataset, DatasetSchema } from './dataset.schema';
 import { DatasetService } from './dataset.service';
 

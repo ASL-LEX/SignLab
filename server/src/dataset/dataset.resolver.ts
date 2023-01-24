@@ -1,14 +1,21 @@
 import { Resolver, Query, Mutation, Args, ResolveField } from '@nestjs/graphql';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
-import {DatasetCreate, DatasetCreateFull, DatasetCreatePipe} from './dataset.dto';
+import {
+  DatasetCreate,
+  DatasetCreateFull,
+  DatasetCreatePipe,
+} from './dataset.dto';
 import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
 import { UserPipe } from '../shared/pipes/user.pipe';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(private readonly datasetService: DatasetService, private readonly userPipe: UserPipe) {}
+  constructor(
+    private readonly datasetService: DatasetService,
+    private readonly userPipe: UserPipe,
+  ) {}
 
   @Query(() => [Dataset])
   async getDatasets() {
@@ -16,7 +23,10 @@ export class DatasetResolver {
   }
 
   @Mutation(() => Dataset)
-  async createDataset(@Args('datasetCreate', { type: () => DatasetCreate }, DatasetCreatePipe) datasetCreate: DatasetCreateFull): Promise<Dataset> {
+  async createDataset(
+    @Args('datasetCreate', { type: () => DatasetCreate }, DatasetCreatePipe)
+    datasetCreate: DatasetCreateFull,
+  ): Promise<Dataset> {
     return this.datasetService.create(datasetCreate);
   }
 

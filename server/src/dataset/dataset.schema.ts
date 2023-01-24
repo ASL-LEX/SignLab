@@ -20,7 +20,10 @@ export class Dataset {
 
   /** Human readable discription to describe the purpose of the dataset */
   @Prop({ required: true })
-  @Field({ description: 'Human readable discription to describe the purpose of the dataset' })
+  @Field({
+    description:
+      'Human readable discription to describe the purpose of the dataset',
+  })
   description: string;
 
   /** The user who created the dataset */

@@ -58,18 +58,16 @@ export class DatasetControlComponent {
   constructor(private dialog: MatDialog) {}
 
   openDatasetCreateDialog() {
-    this.dialog
-      .open(DatasetUploadDialog, {
-        height: '300px',
-        width: '400px',
-      });
+    this.dialog.open(DatasetUploadDialog, {
+      height: '300px',
+      width: '400px',
+    });
   }
 
   openEntryUploadDialog() {
-    this.dialog
-      .open(EntryUploadDialog, {
-        height: '500px',
-        width: '500px',
-      });
+    this.dialog.open(EntryUploadDialog, {
+      height: '500px',
+      width: '500px',
+    });
   }
 }
