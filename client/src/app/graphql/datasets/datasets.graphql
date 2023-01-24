@@ -16,3 +16,18 @@ query getDatasets {
 query datasetExists($name: String!) {
   datasetExists(name: $name)
 }
+
+mutation createDataset($datasetCreate: DatasetCreate!) {
+  createDataset(datasetCreate: $datasetCreate) {
+    id,
+    name,
+    description,
+    creator {
+      id,
+      name,
+      email,
+      username,
+      roles
+    },
+  }
+}

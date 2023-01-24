@@ -5,13 +5,17 @@ import { GetDatasetsGQL, GetDatasetsQuery, GetDatasetsQueryVariables } from '../
 import { BehaviorSubject, Observable } from 'rxjs';
 import { QueryRef } from 'apollo-angular';
 import { DatasetCreate } from '../../graphql/graphql';
+import { CreateDatasetGQL } from '../../graphql/datasets/datasets.generated';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class DatasetService {
   private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
   private readonly datasetQuery: QueryRef<GetDatasetsQuery, GetDatasetsQueryVariables>;
 
-  constructor(private http: SignLabHttpClient, private readonly getDatasetsGQL: GetDatasetsGQL) {
+  constructor(private http: SignLabHttpClient,
+              private readonly getDatasetsGQL: GetDatasetsGQL,
+              private readonly createDatasetGQL: CreateDatasetGQL) {
     this.datasetQuery = this.getDatasetsGQL.watch();
     this.datasetQuery.valueChanges.subscribe((result) => {
       this.datasetObs.next(result.data.getDatasets);
@@ -43,6 +47,8 @@ export class DatasetService {
   async createDataset(
     dataset: DatasetCreate
   ): Promise<void> {
-    await this.http.post('/api/dataset', dataset, { provideToken: true });
+    await firstValueFrom(this.createDatasetGQL.mutate({ datasetCreate: dataset }));
+
+    this.datasetQuery.refetch();
   }
 }

@@ -6,7 +6,7 @@ import { Injectable, PipeTransform } from '@nestjs/common';
 
 /** DTO that the user provides when creating a new dataset */
 @InputType()
-export class DatasetCreate extends OmitType(Dataset, ['_id', 'creator'] as const) {
+export class DatasetCreate extends OmitType(Dataset, ['_id', 'creator'] as const, InputType) {
   @Field(() => ID, { description: 'The ID of the user who is creating the dataset' })
   creatorID: string;
 }
