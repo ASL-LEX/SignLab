@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../../graphql/graphql';
+import { GetDatasetsGQL, GetDatasetsQuery, GetDatasetsQueryVariables } from '../../graphql/datasets/datasets.generated';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { QueryRef } from 'apollo-angular';
+import { DatasetCreate } from '../../graphql/graphql';
 
 @Injectable()
 export class DatasetService {
-  constructor(private http: SignLabHttpClient) {}
+  private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
+  private readonly datasetQuery: QueryRef<GetDatasetsQuery, GetDatasetsQueryVariables>;
+
+  constructor(private http: SignLabHttpClient, private readonly getDatasetsGQL: GetDatasetsGQL) {
+    this.datasetQuery = this.getDatasetsGQL.watch();
+    this.datasetQuery.valueChanges.subscribe((result) => {
+      this.datasetObs.next(result.data.getDatasets);
+    });
+  }
 
   /**
    * Get all the datasets
    */
-  async getDatasets(): Promise<Dataset[]> {
-    return this.http.get<Dataset[]>('/api/dataset', { provideToken: true });
+  get datasets(): Observable<Dataset[]> {
+    return this.datasetObs.asObservable();
   }
 
   /**
@@ -29,7 +41,7 @@ export class DatasetService {
    * Create a new dataset
    */
   async createDataset(
-    dataset: Pick<Dataset, Exclude<keyof Dataset, '_id'>>
+    dataset: DatasetCreate
   ): Promise<void> {
     await this.http.post('/api/dataset', dataset, { provideToken: true });
   }

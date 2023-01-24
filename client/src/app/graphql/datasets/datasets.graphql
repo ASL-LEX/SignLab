@@ -1,0 +1,14 @@
+query getDatasets {
+  getDatasets {
+    id,
+    name,
+    description,
+    creator {
+      id,
+      name,
+      email,
+      username,
+      roles
+    },
+  }
+}

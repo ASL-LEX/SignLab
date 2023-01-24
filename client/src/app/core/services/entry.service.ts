@@ -3,9 +3,9 @@ import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
-import { Dataset } from 'shared/dtos/dataset.dto';
 import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
+import { Dataset } from '../../graphql/graphql';
 
 /**
  * Handle access and modifications make to entries.
@@ -38,7 +38,7 @@ export class EntryService {
    * Get all entries for the given dataset
    */
   async getEntriesForDataset(dataset: Dataset): Promise<Entry[]> {
-    return this.signLab.get<Entry[]>(`api/entry/dataset/${dataset._id}`, {
+    return this.signLab.get<Entry[]>(`api/entry/dataset/${dataset.id}`, {
       provideToken: true,
     });
   }
@@ -49,7 +49,7 @@ export class EntryService {
    */
   async getEntryStudies(study: Study, dataset: Dataset): Promise<EntryStudy[]> {
     return this.signLab.get<EntryStudy[]>('api/entry/entriestudies', {
-      params: { studyID: study._id!, datasetID: dataset._id },
+      params: { studyID: study._id!, datasetID: dataset.id },
       provideToken: true,
     });
   }
@@ -58,7 +58,7 @@ export class EntryService {
    * Set the dataset that the user is uploading entries for.
    */
   async setTargetDataset(dataset: Dataset) {
-    this.signLab.put(`api/entry/upload/dataset/${dataset._id}`, null, {
+    this.signLab.put(`api/entry/upload/dataset/${dataset.id}`, null, {
       provideToken: true,
     });
   }

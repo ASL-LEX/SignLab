@@ -62,11 +62,6 @@ export class DatasetControlComponent {
       .open(DatasetUploadDialog, {
         height: '300px',
         width: '400px',
-      })
-      .afterClosed()
-      .pipe()
-      .subscribe(() => {
-        this.datasetTable.loadDatasets();
       });
   }
 
@@ -75,11 +70,6 @@ export class DatasetControlComponent {
       .open(EntryUploadDialog, {
         height: '500px',
         width: '500px',
-      })
-      .afterClosed()
-      .pipe()
-      .subscribe(() => {
-        this.datasetTable.loadDatasets();
       });
   }
 }

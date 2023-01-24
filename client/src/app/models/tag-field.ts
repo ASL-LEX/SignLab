@@ -1,5 +1,6 @@
 import { JsonSchema, Layout } from '@jsonforms/core';
 import { DatasetService } from '../core/services/dataset.service';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * The different kind of tag fields that are supported
@@ -537,10 +538,10 @@ export class VideoRecordField extends TagField {
   async getFieldSpecificProperties(): Promise<{
     [property: string]: JsonSchema;
   }> {
-    const datasets = await this.datasetService.getDatasets();
+    const datasets = await firstValueFrom(this.datasetService.datasets);
     const options = datasets.map((dataset) => {
       return {
-        const: dataset._id,
+        const: dataset.id,
         title: dataset.name,
       };
     });

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EntryService } from '../../../core/services/entry.service';
 import { LocationInfo } from 'shared/dtos/entry.dto';
 import { ManualControl } from '../../../shared/helpers/manual-control';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../../../graphql/graphql';
 import { MatSelectChange } from '@angular/material/select';
 import { DatasetService } from '../../../core/services/dataset.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -45,21 +45,16 @@ export class EntryUploadDialog {
    * The dataset that was selected
    */
   dataset: Dataset | null = null;
-  /** The available dataset options */
-  datasetOptions: Dataset[] = [];
 
   constructor(
     private entryService: EntryService,
-    datasetService: DatasetService,
+    public datasetService: DatasetService,
     private authService: AuthService
   ) {
     this.csvUploadComplete = false;
     this.uploadStatusMessage = '';
     this.errorLocations = [];
     this.datasetSelectControl.markAsInvalid();
-    datasetService.getDatasets().then((datasets) => {
-      this.datasetOptions = datasets;
-    });
   }
 
   async datasetSelection(dataset: MatSelectChange) {

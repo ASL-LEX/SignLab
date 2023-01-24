@@ -11,7 +11,7 @@ import {
 } from '../../models/entry-table-element';
 import { EntryService } from '../../../core/services/entry.service';
 import { Study } from 'shared/dtos/study.dto';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../../../graphql/graphql';
 
 /**
  * The EntryStudyTable provides the view for editing entry information
