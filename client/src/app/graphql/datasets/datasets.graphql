@@ -12,3 +12,7 @@ query getDatasets {
     },
   }
 }
+
+query projectExists($name: String!) {
+  projectExists(name: $name)
+}

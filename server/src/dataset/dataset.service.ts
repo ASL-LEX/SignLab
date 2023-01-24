@@ -31,11 +31,4 @@ export class DatasetService {
   ): Promise<Dataset> {
     return this.datasetModel.create(dataset);
   }
-
-  /**
-   * Check to see if a dataset exists
-   */
-  async exists(name: string): Promise<boolean> {
-    return (await this.datasetModel.findOne({ name }).exec()) !== null;
-  }
 }
