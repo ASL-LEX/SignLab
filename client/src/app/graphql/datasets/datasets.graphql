@@ -13,6 +13,6 @@ query getDatasets {
   }
 }
 
-query projectExists($name: String!) {
-  projectExists(name: $name)
+query datasetExists($name: String!) {
+  datasetExists(name: $name)
 }

@@ -3,8 +3,8 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { DatasetService } from '../../../core/services/dataset.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ProjectExistsGQL } from '../../../graphql/projects/projects.generated';
 import { firstValueFrom } from 'rxjs';
+import { DatasetExistsGQL } from '../../../graphql/datasets/datasets.generated';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -19,7 +19,7 @@ export class DatasetUploadDialog {
     private datasetService: DatasetService,
     private authService: AuthService,
     private dialogRef: MatDialogRef<DatasetUploadDialog>,
-    private readonly projectExistsGQL: ProjectExistsGQL
+    private readonly datasetExistsGQL: DatasetExistsGQL,
   ) {}
 
   createForm = new FormGroup({
@@ -40,8 +40,9 @@ export class DatasetUploadDialog {
       return; // Nothing to submit, should not reach here with proper Validators
     }
 
-    const datasetExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.name.value }));
-    if (datasetExists) {
+    const datasetExists = await firstValueFrom(this.datasetExistsGQL.fetch({ name: this.name.value }));
+    console.log(datasetExists.data.datasetExists);
+    if (datasetExists.data.datasetExists) {
       alert('Dataset with that name aleady exists');
       return;
     }
