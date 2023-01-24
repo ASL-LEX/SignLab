@@ -42,6 +42,7 @@
     "csv-parser": "^3.0.0",
     "express-session": "^1.17.3",
     "graphql": "^16.6.0",
+    "graphql-type-json": "^0.3.2",
     "joi-password-complexity": "^5.1.0",
     "jsonschema": "^1.4.1",
     "mongoose": "^6.4.3",
