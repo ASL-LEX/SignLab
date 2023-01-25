@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { DatasetService } from '../../core/services/dataset.service';
-import { Dataset } from '../../graphql/graphql';
 
 /**
  * Component for controlling which entries will be part of a study
