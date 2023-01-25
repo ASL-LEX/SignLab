@@ -34,6 +34,12 @@ export class Dataset {
   })
   @Field(() => User, { description: 'The user who created the dataset' })
   creator: User;
+
+  /** Mapping of the different projects that have access to the dataset */
+  @Prop({ type: mongoose.SchemaTypes.Map })
+  projectAccess: {
+    [key: string]: boolean;
+  };
 }
 
 export type DatasetDocument = Dataset & Document;
