@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Dataset, Project } from '../../graphql/graphql';
 import { DatasetService } from '../../core/services/dataset.service';
 import { ProjectService } from '../../core/services/project.service';
-import {MatSlideToggleChange} from '@angular/material/slide-toggle';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generated';
 
 /**
  * View which determins which projects have the ability to access the
@@ -57,7 +58,25 @@ import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 export class ProjectAccess {
   displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
 
-  constructor(public readonly datasetService: DatasetService, public readonly projectService: ProjectService) {}
+  constructor(public readonly datasetService: DatasetService,
+              public readonly projectService: ProjectService,
+              private readonly changeProcessAccessGQL: ChangeProjectAccessGQL) {}
 
-  toggleProjectAccess(_dataset: Dataset, _project: Project, _change: MatSlideToggleChange) {}
+  toggleProjectAccess(dataset: Dataset, project: Project, change: MatSlideToggleChange) {
+    this.changeProcessAccessGQL.mutate({
+      projectAccessChange: {
+        datasetID: dataset.id,
+        projectID: project._id,
+        hasAccess: change.checked,
+      }
+    }).subscribe((result) => {
+      if (result.errors) {
+        console.error('Failed to change process access status');
+        console.error(result.errors);
+
+        // Revert the toggle
+        change.source.checked = !change.checked;
+      }
+    });
+  }
 }

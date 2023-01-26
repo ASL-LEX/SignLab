@@ -1,10 +1,9 @@
 import {
-  ArgumentMetadata,
   BadRequestException,
   PipeTransform,
   Injectable,
 } from '@nestjs/common';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../../dataset/dataset.schema';
 import { DatasetService } from '../../dataset/dataset.service';
 
 @Injectable()
@@ -13,7 +12,6 @@ export class DatasetPipe implements PipeTransform<string, Promise<Dataset>> {
 
   async transform(
     value: string,
-    _metadata: ArgumentMetadata,
   ): Promise<Dataset> {
     const dataset = await this.datasetService.findOne({ _id: value });
     if (!dataset) {

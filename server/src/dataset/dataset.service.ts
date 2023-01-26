@@ -2,6 +2,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Dataset } from './dataset.schema';
 import { Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
+import { ProjectAccessChangeFull } from './dataset.dto';
 
 @Injectable()
 export class DatasetService {
@@ -37,5 +38,12 @@ export class DatasetService {
    */
   async exists(name: string): Promise<boolean> {
     return (await this.datasetModel.findOne({ name }).exec()) !== null;
+  }
+
+  async changeProjectAccess(projectAccessChange: ProjectAccessChangeFull): Promise<void> {
+    await this.datasetModel.updateOne(
+      { _id: projectAccessChange.dataset._id },
+      { $set: { [`projectAccess.${projectAccessChange.project._id}`]: projectAccessChange.hasAccess } }
+    ).exec();
   }
 }

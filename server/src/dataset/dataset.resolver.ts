@@ -5,6 +5,9 @@ import {
   DatasetCreate,
   DatasetCreateFull,
   DatasetCreatePipe,
+  ProjectAccessChange,
+  ProjectAccessChangeFull,
+  ProjectAccessChangePipe,
 } from './dataset.dto';
 import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
@@ -33,6 +36,13 @@ export class DatasetResolver {
   @Query(() => Boolean)
   async datasetExists(@Args('name') name: string): Promise<boolean> {
     return this.datasetService.exists(name);
+  }
+
+  @Mutation(() => Boolean)
+  async changeProjectAccess(@Args('projectAccessChange', { type: () => ProjectAccessChange }, ProjectAccessChangePipe)
+                            projectAccessChange: ProjectAccessChangeFull): Promise<boolean> {
+    await this.datasetService.changeProjectAccess(projectAccessChange);
+    return true;
   }
 
   @ResolveField()
