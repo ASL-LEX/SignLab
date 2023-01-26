@@ -19,14 +19,26 @@ import { ProjectService } from '../../core/services/project.service';
         <!-- Project View Table -->
         <div *ngIf="projectService.projects | async as projects" class="project-grid">
           <table mat-table [dataSource]="projects" class="mat-elevation-z8">
+
+            <!-- Project Name Column -->
             <ng-container matColumnDef="projectName">
               <th mat-header-cell *matHeaderCellDef> Project Name </th>
               <td mat-cell *matCellDef="let project"> {{ project.name }} </td>
             </ng-container>
 
+            <!-- Project Description Column -->
             <ng-container matColumnDef="projectDescription">
               <th mat-header-cell *matHeaderCellDef> Project Description </th>
               <td mat-cell *matCellDef="let project"> {{ project.description }} </td>
+            </ng-container>
+
+            <!-- Project Access Column -->
+            <ng-container matColumnDef="projectAccess">
+              <th mat-header-cell *matHeaderCellDef> Project Access </th>
+              <td mat-cell *matCellDef="let project">
+                <mat-slide-toggle>
+
+                </mat-slide-toggle>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -40,7 +52,7 @@ import { ProjectService } from '../../core/services/project.service';
   styleUrls: ['./project-access.component.css'],
 })
 export class ProjectAccess {
-  displayedColumns: string[] = ['projectName', 'projectDescription'];
+  displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
 
   constructor(public readonly datasetService: DatasetService, public readonly projectService: ProjectService) {}
 }
