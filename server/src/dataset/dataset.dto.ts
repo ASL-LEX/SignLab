@@ -38,13 +38,17 @@ export class DatasetCreatePipe
 /** DTO to request change of project access */
 @InputType()
 export class ProjectAccessChange {
-  @Field(() => ID, { description: 'The ID of the dataset to change project access to' })
+  @Field(() => ID, {
+    description: 'The ID of the dataset to change project access to',
+  })
   datasetID: string;
 
   @Field(() => ID, { description: 'The ID of the project to change access to' })
   projectID: string;
 
-  @Field(() => Boolean, { description: 'If the project should have access to the dataset' } )
+  @Field(() => Boolean, {
+    description: 'If the project should have access to the dataset',
+  })
   hasAccess: boolean;
 }
 
@@ -56,10 +60,18 @@ export interface ProjectAccessChangeFull {
 }
 
 @Injectable()
-export class ProjectAccessChangePipe implements PipeTransform<ProjectAccessChange, Promise<ProjectAccessChangeFull>> {
-  constructor(private readonly datasetPipe: DatasetPipe, private readonly projectPipe: ProjectPipe) {}
+export class ProjectAccessChangePipe
+  implements
+    PipeTransform<ProjectAccessChange, Promise<ProjectAccessChangeFull>>
+{
+  constructor(
+    private readonly datasetPipe: DatasetPipe,
+    private readonly projectPipe: ProjectPipe,
+  ) {}
 
-  async transform(value: ProjectAccessChange): Promise<ProjectAccessChangeFull> {
+  async transform(
+    value: ProjectAccessChange,
+  ): Promise<ProjectAccessChangeFull> {
     const dataset = await this.datasetPipe.transform(value.datasetID);
     const project = await this.projectPipe.transform(value.projectID);
     return { dataset, project, hasAccess: value.hasAccess };

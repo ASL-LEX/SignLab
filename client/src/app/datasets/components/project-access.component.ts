@@ -16,67 +16,87 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
       <mat-expansion-panel *ngFor="let dataset of datasets">
         <mat-expansion-panel-header>
           <mat-panel-title> {{ dataset.name }} </mat-panel-title>
-          <mat-panel-description> {{ dataset.description }} </mat-panel-description>
+          <mat-panel-description>
+            {{ dataset.description }}
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <!-- Project View Table -->
-        <div *ngIf="projectService.projects | async as projects" class="project-grid">
+        <div
+          *ngIf="projectService.projects | async as projects"
+          class="project-grid"
+        >
           <table mat-table [dataSource]="projects" class="mat-elevation-z8">
-
             <!-- Project Name Column -->
             <ng-container matColumnDef="projectName">
-              <th mat-header-cell *matHeaderCellDef> Project Name </th>
-              <td mat-cell *matCellDef="let project"> {{ project.name }} </td>
+              <th mat-header-cell *matHeaderCellDef>Project Name</th>
+              <td mat-cell *matCellDef="let project">{{ project.name }}</td>
             </ng-container>
 
             <!-- Project Description Column -->
             <ng-container matColumnDef="projectDescription">
-              <th mat-header-cell *matHeaderCellDef> Project Description </th>
-              <td mat-cell *matCellDef="let project"> {{ project.description }} </td>
+              <th mat-header-cell *matHeaderCellDef>Project Description</th>
+              <td mat-cell *matCellDef="let project">
+                {{ project.description }}
+              </td>
             </ng-container>
 
             <!-- Project Access Column -->
             <ng-container matColumnDef="projectAccess">
-              <th mat-header-cell *matHeaderCellDef> Project Access to Dataset </th>
+              <th mat-header-cell *matHeaderCellDef>
+                Project Access to Dataset
+              </th>
               <td mat-cell *matCellDef="let project">
                 <mat-slide-toggle
                   (change)="toggleProjectAccess(dataset, project, $event)"
-                  [checked]="dataset.projectAccess[project.id]">
-                </mat-slide-toggle>
-            </ng-container>
+                  [checked]="dataset.projectAccess[project.id]"
+                >
+                </mat-slide-toggle></td
+            ></ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
-
       </mat-expansion-panel>
     </div>
   `,
   styleUrls: ['./project-access.component.css'],
 })
 export class ProjectAccess {
-  displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
+  displayedColumns: string[] = [
+    'projectName',
+    'projectDescription',
+    'projectAccess',
+  ];
 
-  constructor(public readonly datasetService: DatasetService,
-              public readonly projectService: ProjectService,
-              private readonly changeProcessAccessGQL: ChangeProjectAccessGQL) {}
+  constructor(
+    public readonly datasetService: DatasetService,
+    public readonly projectService: ProjectService,
+    private readonly changeProcessAccessGQL: ChangeProjectAccessGQL
+  ) {}
 
-  toggleProjectAccess(dataset: Dataset, project: Project, change: MatSlideToggleChange) {
-    this.changeProcessAccessGQL.mutate({
-      projectAccessChange: {
-        datasetID: dataset.id,
-        projectID: project._id,
-        hasAccess: change.checked,
-      }
-    }).subscribe((result) => {
-      if (result.errors) {
-        console.error('Failed to change process access status');
-        console.error(result.errors);
+  toggleProjectAccess(
+    dataset: Dataset,
+    project: Project,
+    change: MatSlideToggleChange
+  ) {
+    this.changeProcessAccessGQL
+      .mutate({
+        projectAccessChange: {
+          datasetID: dataset.id,
+          projectID: project._id,
+          hasAccess: change.checked,
+        },
+      })
+      .subscribe((result) => {
+        if (result.errors) {
+          console.error('Failed to change process access status');
+          console.error(result.errors);
 
-        // Revert the toggle
-        change.source.checked = !change.checked;
-      }
-    });
+          // Revert the toggle
+          change.source.checked = !change.checked;
+        }
+      });
   }
 }

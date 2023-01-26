@@ -238,7 +238,7 @@ export class NavbarComponent {
           visible: true,
           visibleCondition(_project, _study, user) {
             return user !== null && user.roles.owner;
-          }
+          },
         },
       ],
     },

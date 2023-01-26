@@ -40,10 +40,19 @@ export class DatasetService {
     return (await this.datasetModel.findOne({ name }).exec()) !== null;
   }
 
-  async changeProjectAccess(projectAccessChange: ProjectAccessChangeFull): Promise<void> {
-    await this.datasetModel.updateOne(
-      { _id: projectAccessChange.dataset._id },
-      { $set: { [`projectAccess.${projectAccessChange.project._id}`]: projectAccessChange.hasAccess } }
-    ).exec();
+  async changeProjectAccess(
+    projectAccessChange: ProjectAccessChangeFull,
+  ): Promise<void> {
+    await this.datasetModel
+      .updateOne(
+        { _id: projectAccessChange.dataset._id },
+        {
+          $set: {
+            [`projectAccess.${projectAccessChange.project._id}`]:
+              projectAccessChange.hasAccess,
+          },
+        },
+      )
+      .exec();
   }
 }

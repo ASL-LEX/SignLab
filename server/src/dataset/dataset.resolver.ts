@@ -39,8 +39,14 @@ export class DatasetResolver {
   }
 
   @Mutation(() => Boolean)
-  async changeProjectAccess(@Args('projectAccessChange', { type: () => ProjectAccessChange }, ProjectAccessChangePipe)
-                            projectAccessChange: ProjectAccessChangeFull): Promise<boolean> {
+  async changeProjectAccess(
+    @Args(
+      'projectAccessChange',
+      { type: () => ProjectAccessChange },
+      ProjectAccessChangePipe,
+    )
+    projectAccessChange: ProjectAccessChangeFull,
+  ): Promise<boolean> {
     await this.datasetService.changeProjectAccess(projectAccessChange);
     return true;
   }
