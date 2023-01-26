@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Dataset, Project } from '../../graphql/graphql';
 import { DatasetService } from '../../core/services/dataset.service';
 import { ProjectService } from '../../core/services/project.service';
+import {MatSlideToggleChange} from '@angular/material/slide-toggle';
 
 /**
  * View which determins which projects have the ability to access the
@@ -34,10 +36,11 @@ import { ProjectService } from '../../core/services/project.service';
 
             <!-- Project Access Column -->
             <ng-container matColumnDef="projectAccess">
-              <th mat-header-cell *matHeaderCellDef> Project Access </th>
+              <th mat-header-cell *matHeaderCellDef> Project Access to Dataset </th>
               <td mat-cell *matCellDef="let project">
-                <mat-slide-toggle>
-
+                <mat-slide-toggle
+                  (change)="toggleProjectAccess(dataset, project, $event)"
+                  [checked]="dataset.projectAccess[project.id]">
                 </mat-slide-toggle>
             </ng-container>
 
@@ -55,4 +58,6 @@ export class ProjectAccess {
   displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
 
   constructor(public readonly datasetService: DatasetService, public readonly projectService: ProjectService) {}
+
+  toggleProjectAccess(_dataset: Dataset, _project: Project, _change: MatSlideToggleChange) {}
 }

@@ -7,7 +7,7 @@ import { Injectable, PipeTransform } from '@nestjs/common';
 @InputType()
 export class DatasetCreate extends OmitType(
   Dataset,
-  ['_id', 'creator'] as const,
+  ['_id', 'creator', 'projectAccess'] as const,
   InputType,
 ) {
   @Field(() => ID, {
@@ -28,6 +28,6 @@ export class DatasetCreatePipe
 
   async transform(value: DatasetCreate): Promise<DatasetCreateFull> {
     const creator = await this.userPipe.transform(value.creatorID);
-    return { ...value, creator };
+    return { ...value, creator, projectAccess: {} };
   }
 }

@@ -10,6 +10,7 @@ query getDatasets {
       username,
       roles
     },
+    projectAccess
   }
 }
 

@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import JSON from 'graphql-type-json';
 
 /**
  * Schema for the dataset collection
@@ -37,6 +38,7 @@ export class Dataset {
 
   /** Mapping of the different projects that have access to the dataset */
   @Prop({ type: mongoose.SchemaTypes.Map })
+  @Field(() => JSON)
   projectAccess: {
     [key: string]: boolean;
   };
