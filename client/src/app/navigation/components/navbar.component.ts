@@ -232,6 +232,14 @@ export class NavbarComponent {
             return user !== null && user.roles.owner;
           },
         },
+        {
+          name: 'Project Access',
+          url: '/datasets/project-access',
+          visible: true,
+          visibleCondition(_project, _study, user) {
+            return user !== null && user.roles.owner;
+          }
+        },
       ],
     },
     {
