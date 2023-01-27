@@ -75,14 +75,25 @@ Cypress.Commands.add('makeStudy', (studyCreation: any) => {
 });
 
 Cypress.Commands.add('makeDefaultDataset', () => {
-  const authorization = `Bearer ${Cypress.env('token')}`;
   const dataset = datasets.existingDataset;
   dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user;
 
   cy.request({
     method: 'POST',
-    url: 'api/dataset',
-    body: { ...dataset, user: localStorage.getItem('SIGNLAB_AUTH_INFO') },
-    headers: { authorization }
+    url: 'graphql',
+    body: {
+      query: `mutation createDataset($datasetCreate: DatasetCreate!) {
+        createDataset(datasetCreate: $datasetCreate) {
+          id
+        }
+      }`,
+      variables: {
+        datasetCreate: {
+          name: dataset.name,
+          description: dataset.description,
+          creatorID: (dataset.creator as any)._id,
+        }
+      }
+    },
   });
 });
