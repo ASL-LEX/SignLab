@@ -7,12 +7,14 @@ import { DatasetControlComponent } from './components/dataset-control.component'
 import { EntryUploadDialog } from './components/entry-upload-dialog/entry-upload-dialog.component';
 import { DatasetUploadDialog } from './components/dataset-upload-dialog/dataset-upload-dialog.component';
 import { DatasetsRoutingModule } from './datasets-routing.module';
+import { ProjectAccess } from './components/project-access.component';
 
 @NgModule({
   declarations: [
     DatasetControlComponent,
     EntryUploadDialog,
     DatasetUploadDialog,
+    ProjectAccess,
   ],
   imports: [
     SharedModule,

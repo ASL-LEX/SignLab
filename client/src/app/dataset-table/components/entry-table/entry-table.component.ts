@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Dataset } from 'shared/dtos/dataset.dto';
 import { EntryService } from '../../../core/services/entry.service';
 import { EntryTableElement } from '../../models/entry-table-element';
+import { Dataset } from '../../../graphql/graphql';
 
 /**
  * Provides a view of just the entries with no study context

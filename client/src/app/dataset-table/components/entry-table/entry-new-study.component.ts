@@ -4,7 +4,7 @@ import {
   EntryTableElement,
   EntryTableToggleChange,
 } from '../../models/entry-table-element';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../../../graphql/graphql';
 
 /**
  * The EntryNewStudyTable provides the entry study table view for the

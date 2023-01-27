@@ -6,6 +6,7 @@
 
 * Modified navigation method to use sidenav view
 * Have visibility of navigation links be based on user permissions
+* Only certain projects can access datasets (based on project permissions)
 
 ## 0.4.0
 

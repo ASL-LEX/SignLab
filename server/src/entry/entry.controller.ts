@@ -29,9 +29,9 @@ import { BucketStorage } from '../bucket/bucket.service';
 import { StudyPipe } from '../shared/pipes/study.pipe';
 import { Study } from 'shared/dtos/study.dto';
 import { EntryPipe } from '../shared/pipes/entry.pipe';
-import { Entry } from 'shared/dtos/entry.dto';
+import { Entry } from './entry.schema';
 import { DatasetPipe } from '../shared/pipes/dataset.pipe';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../dataset/dataset.schema';
 import { UserPipe } from '../shared/pipes/user.pipe';
 import { User } from 'shared/dtos/user.dto';
 

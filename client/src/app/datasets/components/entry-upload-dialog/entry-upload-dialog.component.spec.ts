@@ -4,6 +4,7 @@ import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { EntryUploadDialog } from './entry-upload-dialog.component';
 import { DatasetService } from '../../../core/services/dataset.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { BehaviorSubject } from 'rxjs';
 
 describe('EntryUploadDialog', () => {
   const exampleError: SaveAttempt = {
@@ -31,6 +32,7 @@ describe('EntryUploadDialog', () => {
 
   const testUser = {
     _id: '1',
+    id: '1',
     name: 'test',
     username: 'test',
     email: '',
@@ -49,17 +51,18 @@ describe('EntryUploadDialog', () => {
       'setTargetUser',
       'setTargetDataset',
     ]);
-    datasetService = jasmine.createSpyObj('DatasetService', ['getDatasets']);
-    datasetService.getDatasets.and.returnValue(
-      Promise.resolve([
+    datasetService = jasmine.createSpyObj('DatasetService', [], {
+      datasets: new BehaviorSubject([
         {
+          id: '1',
           _id: '1',
           name: 'test',
           description: 'test',
           creator: testUser,
+          projectAccess: {},
         },
-      ])
-    );
+      ]),
+    });
     const authSpy = jasmine.createSpyObj('AuthService', [], {
       users: testUser,
     });

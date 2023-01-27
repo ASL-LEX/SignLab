@@ -11,7 +11,7 @@ import { join } from 'path';
 import { Entry } from './entry.schema';
 import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../dataset/dataset.schema';
 import { User } from 'shared/dtos/user.dto';
 
 const csv = require('csv-parser');
