@@ -92,10 +92,7 @@ class CSVParser {
    * @param validate Function which takes in a row and produces validator
    *                 results
    */
-  constructor(
-    private readonly stream: Readable,
-    private readonly validate: (input: any) => ValidatorResult,
-  ) {}
+  constructor(private readonly stream: Readable, private readonly validate: (input: any) => ValidatorResult) {}
 
   /**
    * Parse the CSV and produce an array of entries on success, otherwise
@@ -116,7 +113,7 @@ class CSVParser {
           const err = transformResult.unwrapErr();
           return Err({
             ...err,
-            place: `line ${lineNumber}`,
+            place: `line ${lineNumber}`
           });
         }
 
@@ -127,7 +124,7 @@ class CSVParser {
     } catch (error: any) {
       return Err({
         type: 'error',
-        message: `Failed to parse CSV: ${error.message}`,
+        message: `Failed to parse CSV: ${error.message}`
       });
     }
 
@@ -141,7 +138,7 @@ class CSVParser {
       entryID: row.entryID,
       responderID: row.responderID,
       filename: row.filename,
-      meta: {},
+      meta: {}
     };
 
     delete row.entryID;
@@ -154,7 +151,7 @@ class CSVParser {
     if (!validationResults.valid) {
       return Err({
         type: 'error',
-        message: `Invalid CSV: ${validationResults.errors}`,
+        message: `Invalid CSV: ${validationResults.errors}`
       });
     }
 

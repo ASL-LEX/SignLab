@@ -7,36 +7,27 @@ import { LocalStorage } from './local.service';
 export class BucketFactory {
   static getS3(bucketName: string, configService: ConfigService): S3Storage {
     const accessKeyId = configService.getOrThrow<string>('bucket.s3.accessKey');
-    const secretAccessKey = configService.getOrThrow<string>(
-      'bucket.s3.secretKey',
-    );
+    const secretAccessKey = configService.getOrThrow<string>('bucket.s3.secretKey');
     const baseUrl = configService.getOrThrow<string>('bucket.s3.baseUrl');
-    const endpoint: string | undefined =
-      configService.get<string>('bucket.s3.endpoint');
+    const endpoint: string | undefined = configService.get<string>('bucket.s3.endpoint');
 
     const config = {
       credentials: {
         accessKeyId: accessKeyId,
-        secretAccessKey: secretAccessKey,
+        secretAccessKey: secretAccessKey
       },
       baseURL: baseUrl,
-      endpoint: endpoint,
+      endpoint: endpoint
     };
 
     return new S3Storage(bucketName, config);
   }
 
-  static getGCP(
-    _bucketName: string,
-    _configService: ConfigService,
-  ): GCPBucketStorage {
+  static getGCP(_bucketName: string, _configService: ConfigService): GCPBucketStorage {
     throw new Error('GCP Bucket Storage not yet supported');
   }
 
-  static getLocal(
-    bucketName: string,
-    configService: ConfigService,
-  ): LocalStorage {
+  static getLocal(bucketName: string, configService: ConfigService): LocalStorage {
     const folder = configService.getOrThrow<string>('bucket.local.folder');
 
     return new LocalStorage(bucketName, folder);
@@ -73,9 +64,7 @@ export class BucketFactory {
       case 'LOCAL':
         return BucketFactory.getLocal(bucketName, configService);
       default:
-        throw new Error(
-          `${bucketType} is not supported, supported bucket interfaces are { S3, LOCAL }`,
-        );
+        throw new Error(`${bucketType} is not supported, supported bucket interfaces are { S3, LOCAL }`);
     }
   }
 }

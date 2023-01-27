@@ -24,12 +24,7 @@ import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.com
       <label>Add New Dataset</label>
 
       <!-- Upload entries -->
-      <button
-        mat-mini-fab
-        aria-label="Upload Entries"
-        (click)="openEntryUploadDialog()"
-        data-cy="uploadEntriesButton"
-      >
+      <button mat-mini-fab aria-label="Upload Entries" (click)="openEntryUploadDialog()" data-cy="uploadEntriesButton">
         <mat-icon>add_circle</mat-icon>
       </button>
       <label>Upload Entries</label>
@@ -49,8 +44,8 @@ import { EntryUploadDialog } from './entry-upload-dialog/entry-upload-dialog.com
         margin-left: auto;
         margin-right: auto;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class DatasetControlComponent {
   @ViewChild(DatasetTable) datasetTable: DatasetTable;
@@ -60,14 +55,14 @@ export class DatasetControlComponent {
   openDatasetCreateDialog() {
     this.dialog.open(DatasetUploadDialog, {
       height: '300px',
-      width: '400px',
+      width: '400px'
     });
   }
 
   openEntryUploadDialog() {
     this.dialog.open(EntryUploadDialog, {
       height: '500px',
-      width: '500px',
+      width: '500px'
     });
   }
 }

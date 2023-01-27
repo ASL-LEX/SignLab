@@ -18,17 +18,10 @@ import { DatasetNewStudy } from './components/dataset-new-study.component';
     EntryPreview,
     DatasetTable,
     DatasetStudyTable,
-    DatasetNewStudy,
+    DatasetNewStudy
   ],
   imports: [SharedModule],
-  exports: [
-    EntryNewStudyTable,
-    EntryStudyTable,
-    EntryTable,
-    DatasetTable,
-    DatasetStudyTable,
-    DatasetNewStudy,
-  ],
-  providers: [],
+  exports: [EntryNewStudyTable, EntryStudyTable, EntryTable, DatasetTable, DatasetStudyTable, DatasetNewStudy],
+  providers: []
 })
 export class DatasetTableModule {}

@@ -73,12 +73,12 @@ describe('AuthService', () => {
           owner: false,
           projectAdmin: {},
           studyAdmin: {},
-          studyContributor: {},
+          studyContributor: {}
         },
         username: 'bob',
-        _id: 'sadlkfj',
+        _id: 'sadlkfj'
       },
-      token: 'some-fake-token',
+      token: 'some-fake-token'
     };
     spy.post.and.returnValue(data);
     spy.get.and.returnValue(Promise.resolve(data.user));
@@ -87,11 +87,7 @@ describe('AuthService', () => {
       return param;
     });
     tokenSpy.hasAuthInfo.and.returnValue(true);
-    (
-      Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<
-        () => User
-      >
-    ).and.returnValue(data.user);
+    (Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<() => User>).and.returnValue(data.user);
 
     service = new AuthService(spy, tokenSpy);
 
@@ -136,12 +132,12 @@ describe('AuthService', () => {
           owner: false,
           projectAdmin: {},
           studyAdmin: {},
-          studyContributor: {},
+          studyContributor: {}
         },
         username: 'bob',
-        _id: '1',
+        _id: '1'
       },
-      token: 'some-fake-token',
+      token: 'some-fake-token'
     };
 
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);

@@ -15,25 +15,17 @@ export class StudyService {
    * Keeps track of the currently active study the user selected. This allows
    * for the active study to be accessed from any component.
    */
-  private activeStudyObservable: BehaviorSubject<Study | null> =
-    new BehaviorSubject<Study | null>(null);
+  private activeStudyObservable: BehaviorSubject<Study | null> = new BehaviorSubject<Study | null>(null);
   /**
    * Keep track of possible studies
    */
-  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<
-    Study[]
-  >([]);
+  private studiesObservable: BehaviorSubject<Study[]> = new BehaviorSubject<Study[]>([]);
   private currentStudies: Study[] = [];
 
-  constructor(
-    private signLab: SignLabHttpClient,
-    private projectService: ProjectService
-  ) {
-    this.projectService.activeProject.subscribe(
-      async (_project: Project | null) => {
-        this.updateStudies();
-      }
-    );
+  constructor(private signLab: SignLabHttpClient, private projectService: ProjectService) {
+    this.projectService.activeProject.subscribe(async (_project: Project | null) => {
+      this.updateStudies();
+    });
   }
 
   /** Set the currently selected study */
@@ -79,7 +71,7 @@ export class StudyService {
 
   async saveStudy(studyCreation: StudyCreation): Promise<void> {
     return this.signLab.post<any>('api/study/create', studyCreation, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -91,7 +83,7 @@ export class StudyService {
 
     const query = {
       params: { studyName: studyName, projectID: project._id! },
-      provideToken: true,
+      provideToken: true
     };
     return this.signLab.get<boolean>('api/study/exists', query);
   }
@@ -108,7 +100,7 @@ export class StudyService {
   async getUserStudy(user: User, study: Study): Promise<UserStudy> {
     const query = {
       params: { userID: user._id, studyID: study._id! },
-      provideToken: true,
+      provideToken: true
     };
     return this.signLab.get<UserStudy>('api/study/user', query);
   }
@@ -157,7 +149,7 @@ export class StudyService {
   async getTrainingTags(userStudy: UserStudy): Promise<Tag[]> {
     const query = {
       params: { studyID: userStudy.study._id!, userID: userStudy.user._id },
-      provideToken: true,
+      provideToken: true
     };
     return this.signLab.get<Tag[]>('api/tag/training', query);
   }
@@ -168,22 +160,19 @@ export class StudyService {
       {
         userID: user._id,
         studyID: this.activeStudyObservable.value!._id!,
-        hasAdminAccess: adminStatus,
+        hasAdminAccess: adminStatus
       },
       { provideToken: true }
     );
   }
 
-  async changeContributorStatus(
-    user: User,
-    contributorStatus: boolean
-  ): Promise<void> {
+  async changeContributorStatus(user: User, contributorStatus: boolean): Promise<void> {
     await this.signLab.put(
       'api/study/contributor/enable',
       {
         userID: user._id,
         studyID: this.activeStudyObservable.value!._id!,
-        hasAccess: contributorStatus,
+        hasAccess: contributorStatus
       },
       { provideToken: true }
     );

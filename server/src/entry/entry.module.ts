@@ -22,7 +22,7 @@ import { UserModule } from '../user/user.module';
     MongooseModule.forFeature([
       { name: Entry.name, schema: EntrySchema },
       { name: EntryUpload.name, schema: EntryUploadSchema },
-      { name: DynamicSchema.name, schema: DynamicSchemaSchema },
+      { name: DynamicSchema.name, schema: DynamicSchemaSchema }
     ]),
     BucketModule,
     ConfigModule,
@@ -32,10 +32,10 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => TagModule),
     forwardRef(() => UserStudyModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => UserModule),
+    forwardRef(() => UserModule)
   ],
   controllers: [EntryController],
   providers: [EntryService, EntryUploadService, SchemaService],
-  exports: [EntryService, SchemaService],
+  exports: [EntryService, SchemaService]
 })
 export class EntryModule {}

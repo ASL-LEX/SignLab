@@ -7,9 +7,7 @@ import { Project } from '../project/project.schema';
 
 @Injectable()
 export class DatasetService {
-  constructor(
-    @InjectModel(Dataset.name) private datasetModel: Model<Dataset>,
-  ) {}
+  constructor(@InjectModel(Dataset.name) private datasetModel: Model<Dataset>) {}
 
   /**
    * Get all datasets
@@ -28,9 +26,7 @@ export class DatasetService {
   /**
    * Make a new dataset in the system where the ID is not provided.
    */
-  async create(
-    dataset: Pick<Dataset, Exclude<keyof Dataset, '_id'>>,
-  ): Promise<Dataset> {
+  async create(dataset: Pick<Dataset, Exclude<keyof Dataset, '_id'>>): Promise<Dataset> {
     return this.datasetModel.create(dataset);
   }
 
@@ -42,23 +38,18 @@ export class DatasetService {
   }
 
   async getByProject(project: Project): Promise<Dataset[]> {
-    return this.datasetModel
-      .find({ [`projectAccess.${project._id}`]: true })
-      .exec();
+    return this.datasetModel.find({ [`projectAccess.${project._id}`]: true }).exec();
   }
 
-  async changeProjectAccess(
-    projectAccessChange: ProjectAccessChangeFull,
-  ): Promise<void> {
+  async changeProjectAccess(projectAccessChange: ProjectAccessChangeFull): Promise<void> {
     await this.datasetModel
       .updateOne(
         { _id: projectAccessChange.dataset._id },
         {
           $set: {
-            [`projectAccess.${projectAccessChange.project._id}`]:
-              projectAccessChange.hasAccess,
-          },
-        },
+            [`projectAccess.${projectAccessChange.project._id}`]: projectAccessChange.hasAccess
+          }
+        }
       )
       .exec();
   }

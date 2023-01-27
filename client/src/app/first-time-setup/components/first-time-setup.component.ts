@@ -4,12 +4,12 @@ import { User } from 'shared/dtos/user.dto';
 
 @Component({
   selector: 'first-time-setup',
-  templateUrl: './first-time-setup.component.html',
+  templateUrl: './first-time-setup.component.html'
 })
 export class FirstTimeSetupComponent {
   /** Form thaat contains the activation code */
   activationFormGroup = this.formBuilder.group({
-    code: ['', Validators.required],
+    code: ['', Validators.required]
   });
   /** Callback for when the first time setup has completed */
   @Input() onSetupComplete: () => void;
@@ -19,7 +19,7 @@ export class FirstTimeSetupComponent {
    * form and grap its form directly
    */
   ownerCreateGhostForm = this.formBuilder.group({
-    empty: ['', Validators.required],
+    empty: ['', Validators.required]
   });
   /**
    * Flag that controls the user either seeing a success message or the

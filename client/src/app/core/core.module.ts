@@ -20,7 +20,7 @@ import { ApolloModule } from 'apollo-angular';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, HttpClientModule, MaterialModule, ApolloModule],
+  imports: [CommonModule, HttpClientModule, MaterialModule, ApolloModule]
 })
 export class CoreModule {
   static forRoot(): ModuleWithProviders<CoreModule> {
@@ -45,9 +45,9 @@ export class CoreModule {
           useFactory: (http: HttpClient, tokenService: TokenService) => {
             return new SignLabHttpClient(http, tokenService);
           },
-          deps: [HttpClient, TokenService],
-        },
-      ],
+          deps: [HttpClient, TokenService]
+        }
+      ]
     };
   }
 }

@@ -22,8 +22,7 @@ export class Dataset {
   /** Human readable discription to describe the purpose of the dataset */
   @Prop({ required: true })
   @Field({
-    description:
-      'Human readable discription to describe the purpose of the dataset',
+    description: 'Human readable discription to describe the purpose of the dataset'
   })
   description: string;
 
@@ -31,7 +30,7 @@ export class Dataset {
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: User.name,
+    ref: User.name
   })
   @Field(() => User, { description: 'The user who created the dataset' })
   creator: User;

@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpContext,
-  HttpParams,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpContext, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { TokenService } from './token.service';
@@ -24,11 +19,7 @@ interface HttpClientOptions {
   params?:
     | HttpParams
     | {
-        [param: string]:
-          | string
-          | number
-          | boolean
-          | ReadonlyArray<string | number | boolean>;
+        [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
       };
   reportProgress?: boolean;
   responseType?: 'json';
@@ -61,47 +52,20 @@ export class SignLabHttpClient {
     }
   }
 
-  async post<T>(
-    urlStub: string,
-    body: any | null,
-    options?: HttpClientOptions
-  ): Promise<T> {
-    return firstValueFrom(
-      this.http.post<T>(
-        this.fromStub(urlStub),
-        body,
-        this.handleBearerToken(options)
-      )
-    );
+  async post<T>(urlStub: string, body: any | null, options?: HttpClientOptions): Promise<T> {
+    return firstValueFrom(this.http.post<T>(this.fromStub(urlStub), body, this.handleBearerToken(options)));
   }
 
   async get<T>(urlStub: string, options?: HttpClientOptions): Promise<T> {
-    return firstValueFrom(
-      this.http.get<T>(this.fromStub(urlStub), this.handleBearerToken(options))
-    );
+    return firstValueFrom(this.http.get<T>(this.fromStub(urlStub), this.handleBearerToken(options)));
   }
 
-  async put<T>(
-    urlStub: string,
-    body: any | null,
-    options?: HttpClientOptions
-  ): Promise<T> {
-    return firstValueFrom(
-      this.http.put<T>(
-        this.fromStub(urlStub),
-        body,
-        this.handleBearerToken(options)
-      )
-    );
+  async put<T>(urlStub: string, body: any | null, options?: HttpClientOptions): Promise<T> {
+    return firstValueFrom(this.http.put<T>(this.fromStub(urlStub), body, this.handleBearerToken(options)));
   }
 
   async delete<T>(urlStub: string, options?: HttpClientOptions): Promise<T> {
-    return firstValueFrom(
-      this.http.delete<T>(
-        this.fromStub(urlStub),
-        this.handleBearerToken(options)
-      )
-    );
+    return firstValueFrom(this.http.delete<T>(this.fromStub(urlStub), this.handleBearerToken(options)));
   }
 
   /**
@@ -121,9 +85,7 @@ export class SignLabHttpClient {
    * If the bearer token option is added, insert the cooresponding header
    * to the options
    */
-  private handleBearerToken(
-    options?: HttpClientOptions
-  ): HttpClientOptions | undefined {
+  private handleBearerToken(options?: HttpClientOptions): HttpClientOptions | undefined {
     // If options are undefined, do nothing
     if (options === undefined) {
       return undefined;
@@ -148,19 +110,14 @@ export class SignLabHttpClient {
     // If no existing headers exist, then make new headers with just the
     // token
     if (options.headers === undefined) {
-      newOptions.headers = new HttpHeaders({
-        Authorization: `Bearer ${this.tokenService.token}`,
-      });
+      newOptions.headers = new HttpHeaders({ Authorization: `Bearer ${this.tokenService.token}` });
       return newOptions;
     }
 
     // Otherwise, add the token to the existing headers. Since headers can
     // be represented in two ways, have to handle adding to either type
     if (options.headers instanceof HttpHeaders) {
-      newOptions.headers = options.headers.append(
-        'Authorization',
-        `Bearer ${this.tokenService.token}`
-      );
+      newOptions.headers = options.headers.append('Authorization', `Bearer ${this.tokenService.token}`);
     } else {
       newOptions.headers = new HttpHeaders(options.headers).append(
         'Authorization',

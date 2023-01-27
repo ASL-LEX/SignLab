@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import {
-  Actions,
-  RankedTester,
-  rankWith,
-  composeWithUi,
-  ControlElement,
-} from '@jsonforms/core';
+import { Actions, RankedTester, rankWith, composeWithUi, ControlElement } from '@jsonforms/core';
 
 /**
  * This component allows users to provide a series of values in the form of
@@ -26,12 +20,7 @@ import {
   selector: 'file-list',
   template: `
     <div>
-      <input
-        type="file"
-        style="display: none"
-        (change)="fileSelect($event)"
-        #fileUpload
-      />
+      <input type="file" style="display: none" (change)="fileSelect($event)" #fileUpload />
       <button
         mat-raised-button
         matTooltip="Upload options with each option on its own line"
@@ -39,16 +28,12 @@ import {
       >
         Upload Options
       </button>
-      <button
-        mat-icon-button
-        matTooltip="Download an example option list"
-        (click)="downloadExample()"
-      >
+      <button mat-icon-button matTooltip="Download an example option list" (click)="downloadExample()">
         <mat-icon>play_for_work</mat-icon>
       </button>
       <mat-error>{{ error }}</mat-error>
     </div>
-  `,
+  `
 })
 export class FileListField extends JsonFormsControl {
   /**
@@ -112,13 +97,10 @@ export class FileListField extends JsonFormsControl {
  * Will return true if the UI schema has an option field for "customType"
  * with a value of "file-list"
  */
-export const fileListControlRendererTester: RankedTester = rankWith(
-  10,
-  (uischema, _schema, _rootSchema) => {
-    return (
-      uischema.options != undefined &&
-      uischema.options.customType != undefined &&
-      uischema.options.customType == 'file-list'
-    );
-  }
-);
+export const fileListControlRendererTester: RankedTester = rankWith(10, (uischema, _schema, _rootSchema) => {
+  return (
+    uischema.options != undefined &&
+    uischema.options.customType != undefined &&
+    uischema.options.customType == 'file-list'
+  );
+});

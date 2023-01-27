@@ -6,14 +6,12 @@ import { ProjectCreate } from './project.dto';
 
 @Injectable()
 export class ProjectService {
-  constructor(
-    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-  ) {}
+  constructor(@InjectModel(Project.name) private projectModel: Model<ProjectDocument>) {}
 
   async create(project: ProjectCreate): Promise<Project> {
     const newProject: ProjectCreate & { created: Date } = {
       ...project,
-      created: new Date(),
+      created: new Date()
     };
     return await this.projectModel.create(newProject);
   }

@@ -9,7 +9,7 @@ import {
   Post,
   Body,
   UseGuards,
-  Req,
+  Req
 } from '@nestjs/common';
 import { User } from './user.schema';
 import { UserService } from './user.service';
@@ -20,10 +20,7 @@ import { Request } from 'express';
 
 @Controller('/api/users')
 export class UserController {
-  constructor(
-    private userService: UserService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private userService: UserService, private configService: ConfigService) {}
 
   /**
    * Get all user information for all users.
@@ -54,10 +51,7 @@ export class UserController {
   async addRoleToUser(@Param('role') role: string, @Param('id') id: string) {
     // This endpoint is not intended for changing ownership
     if (role == 'owner') {
-      throw new HttpException(
-        'The endpoint does not support changing owernship',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('The endpoint does not support changing owernship', HttpStatus.BAD_REQUEST);
     }
 
     const result = await this.userService.addRole(role, id);
@@ -65,10 +59,7 @@ export class UserController {
     if (result) {
       return;
     } else {
-      throw new HttpException(
-        `Could not add role to user ID ${id}`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Could not add role to user ID ${id}`, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,33 +71,21 @@ export class UserController {
    */
   @Delete('/:role/:id')
   @Auth('admin')
-  async removeRoleFromUser(
-    @Param('role') role: string,
-    @Param('id') id: string,
-  ) {
+  async removeRoleFromUser(@Param('role') role: string, @Param('id') id: string) {
     // This endpoint is not intended for changing ownership
     if (role == 'owner') {
-      throw new HttpException(
-        'The endpoint does not support changing owernship',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('The endpoint does not support changing owernship', HttpStatus.BAD_REQUEST);
     }
 
     // Get the user and ensure the user exists
     const user = await this.userService.findOne({ _id: id });
     if (!user) {
-      throw new HttpException(
-        `User with ID: ${id} not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`User with ID: ${id} not found`, HttpStatus.BAD_REQUEST);
     }
 
     // Cannot remove admin from an owner
     if (role === 'admin' && user.roles.owner) {
-      throw new HttpException(
-        `Cannot remove the admin role from an owner`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Cannot remove the admin role from an owner`, HttpStatus.BAD_REQUEST);
     }
 
     const result = await this.userService.removeRole(role, id);
@@ -114,10 +93,7 @@ export class UserController {
     if (result) {
       return;
     } else {
-      throw new HttpException(
-        `Could not remove role from user ID ${id}`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Could not remove role from user ID ${id}`, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -135,20 +111,15 @@ export class UserController {
     const owners = await this.userService.getByRole('owner');
     if (owners.length >= this.configService.get('auth.maxOwnerAccounts')) {
       throw new HttpException(
-        `Maximum number of owner accounts reached: ${this.configService.get(
-          'auth.maxOwnerAccounts',
-        )}`,
-        HttpStatus.BAD_REQUEST,
+        `Maximum number of owner accounts reached: ${this.configService.get('auth.maxOwnerAccounts')}`,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     // Get the user and ensure the user exists
     const user = await this.userService.findOne({ _id: id });
     if (!user) {
-      throw new HttpException(
-        `User with ID: ${id} not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`User with ID: ${id} not found`, HttpStatus.BAD_REQUEST);
     }
     this.userService.addRole('owner', id);
   }
@@ -159,27 +130,19 @@ export class UserController {
    */
   @Post('/owner/transfer')
   @Auth('owner')
-  async transferOwnership(
-    @Body() transferRequest: { originalID: string; newOwnerID: string },
-  ) {
+  async transferOwnership(@Body() transferRequest: { originalID: string; newOwnerID: string }) {
     // Verify that both users exist
     const originalOwner = await this.userService.findOne({
-      _id: transferRequest.originalID,
+      _id: transferRequest.originalID
     });
     if (!originalOwner) {
-      throw new HttpException(
-        `User with ID: ${transferRequest.originalID} not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`User with ID: ${transferRequest.originalID} not found`, HttpStatus.BAD_REQUEST);
     }
     const newOwner = await this.userService.findOne({
-      _id: transferRequest.newOwnerID,
+      _id: transferRequest.newOwnerID
     });
     if (!newOwner) {
-      throw new HttpException(
-        `User with ID: ${transferRequest.originalID} not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`User with ID: ${transferRequest.originalID} not found`, HttpStatus.BAD_REQUEST);
     }
 
     // If the users are the same, do nothing
@@ -209,7 +172,7 @@ export class UserController {
 
     return {
       numberOfOwners: owners.length,
-      maxOwnerAccounts: this.configService.getOrThrow('auth.maxOwnerAccounts'),
+      maxOwnerAccounts: this.configService.getOrThrow('auth.maxOwnerAccounts')
     };
   }
 }

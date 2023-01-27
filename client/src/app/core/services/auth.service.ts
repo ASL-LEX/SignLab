@@ -14,17 +14,12 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(
-    private signLab: SignLabHttpClient,
-    private tokenService: TokenService
-  ) {
+  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
-      this.signLab
-        .get('api/users/me', { provideToken: true })
-        .then((user: any) => {
-          this.tokenService.updateUser(user);
-        });
+      this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
+        this.tokenService.updateUser(user);
+      });
     }
   }
 
@@ -59,18 +54,11 @@ export class AuthService {
    * @param password The password to authenticate the user with
    * @return The user ID on success, null otherwise
    */
-  public async authenticate(
-    username: string,
-    password: string
-  ): Promise<User | null> {
+  public async authenticate(username: string, password: string): Promise<User | null> {
     const credentials = { username: username, password: password };
 
     try {
-      const response = await this.signLab.post<AuthResponse>(
-        'api/auth/login',
-        credentials,
-        {}
-      );
+      const response = await this.signLab.post<AuthResponse>('api/auth/login', credentials, {});
 
       this.tokenService.storeAuthInformation(response);
       return this.user;
@@ -104,10 +92,7 @@ export class AuthService {
    * @param email The email to check the availability of
    * @return Availability info
    */
-  public async isUserAvailable(
-    username: string,
-    email: string
-  ): Promise<UserAvailability> {
+  public async isUserAvailable(username: string, email: string): Promise<UserAvailability> {
     const options = { params: { username: username, email: email } };
     return this.signLab.get<UserAvailability>('api/auth/availability', options);
   }
@@ -125,22 +110,14 @@ export class AuthService {
    * @param password The password the user will use
    * @return The newly created user
    */
-  public async signup(
-    name: string,
-    email: string,
-    username: string,
-    password: string
-  ): Promise<User> {
+  public async signup(name: string, email: string, username: string, password: string): Promise<User> {
     const request = {
       name: name,
       email: email,
       username: username,
-      password: password,
+      password: password
     };
-    const result = await this.signLab.post<AuthResponse>(
-      'api/auth/signup',
-      request
-    );
+    const result = await this.signLab.post<AuthResponse>('api/auth/signup', request);
     this.tokenService.storeAuthInformation(result);
 
     return result.user;

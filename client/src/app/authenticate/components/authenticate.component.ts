@@ -11,6 +11,6 @@ import { Component } from '@angular/core';
         <app-signup></app-signup>
       </mat-tab>
     </mat-tab-group>
-  `,
+  `
 })
 export class AuthenticateComponent {}

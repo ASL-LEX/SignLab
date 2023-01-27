@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EntryService } from '../../../core/services/entry.service';
 import { EntryStudyTable } from './entry-study-table.component';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
@@ -22,8 +17,8 @@ describe('EntryStudyTable', () => {
       owner: false,
       studyContributor: {},
       projectAdmin: {},
-      studyAdmin: {},
-    },
+      studyAdmin: {}
+    }
   };
 
   const dataset = {
@@ -32,7 +27,7 @@ describe('EntryStudyTable', () => {
     name: 'test',
     description: 'test',
     creator: creator,
-    projectAccess: {},
+    projectAccess: {}
   };
   const exampleEntryData: EntryStudy[] = [
     {
@@ -48,7 +43,7 @@ describe('EntryStudyTable', () => {
         meta: {},
         dateCreated: new Date(),
         creator: creator,
-        dataset: dataset,
+        dataset: dataset
       },
       study: {
         _id: '1',
@@ -57,13 +52,13 @@ describe('EntryStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {},
+          uiSchema: {}
         },
-        project: '1',
+        project: '1'
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false,
+      hasTag: false
     },
     {
       _id: '2',
@@ -78,7 +73,7 @@ describe('EntryStudyTable', () => {
         meta: {},
         dateCreated: new Date(),
         creator: creator,
-        dataset: dataset,
+        dataset: dataset
       },
       study: {
         _id: '1',
@@ -87,13 +82,13 @@ describe('EntryStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {},
+          uiSchema: {}
         },
-        project: '1',
+        project: '1'
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false,
+      hasTag: false
     },
     {
       _id: '3',
@@ -108,7 +103,7 @@ describe('EntryStudyTable', () => {
         meta: {},
         dateCreated: new Date(),
         creator: creator,
-        dataset: dataset,
+        dataset: dataset
       },
       study: {
         _id: '1',
@@ -117,14 +112,14 @@ describe('EntryStudyTable', () => {
         instructions: 'Fill it out',
         tagSchema: {
           dataSchema: {},
-          uiSchema: {},
+          uiSchema: {}
         },
-        project: '1',
+        project: '1'
       },
       isPartOfStudy: true,
       isUsedForTraining: false,
-      hasTag: false,
-    },
+      hasTag: false
+    }
   ];
 
   // Entry service spy to serve fake data
@@ -133,19 +128,14 @@ describe('EntryStudyTable', () => {
   let entryTable: ComponentFixture<EntryStudyTable>;
 
   beforeEach(fakeAsync(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', [
-      'getEntryStudies',
-      'setUsedInStudy',
-    ]);
-    entrySpy.getEntryStudies.and.returnValue(
-      Promise.resolve(JSON.parse(JSON.stringify(exampleEntryData)))
-    );
+    entrySpy = jasmine.createSpyObj('EntryService', ['getEntryStudies', 'setUsedInStudy']);
+    entrySpy.getEntryStudies.and.returnValue(Promise.resolve(JSON.parse(JSON.stringify(exampleEntryData))));
     entrySpy.setUsedInStudy.and.returnValue(Promise.resolve(true));
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],
       declarations: [EntryStudyTable, EntryTableCoreComponent],
-      providers: [{ provide: EntryService, useValue: entrySpy }],
+      providers: [{ provide: EntryService, useValue: entrySpy }]
     });
 
     entryTable = TestBed.createComponent(EntryStudyTable);
@@ -180,9 +170,7 @@ describe('EntryStudyTable', () => {
     const compiled = entryTable.nativeElement;
 
     // Get the toggle associated with an enabled entry
-    const enabledToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[2];
+    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[2];
     enabledToggle.click();
 
     entryTable.detectChanges();
@@ -196,9 +184,7 @@ describe('EntryStudyTable', () => {
     const compiled = entryTable.nativeElement;
 
     // Get the toggle associated with an enabled entry
-    const enabledToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[0];
+    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
     enabledToggle.click();
 
     entryTable.detectChanges();
@@ -215,9 +201,7 @@ describe('EntryStudyTable', () => {
     entryTable.componentInstance.entryData[0].entry._id = undefined;
 
     // Get the toggle associated with an enabled entry
-    const enabledToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[0];
+    const enabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
     enabledToggle.click();
 
     entryTable.detectChanges();

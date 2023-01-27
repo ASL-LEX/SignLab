@@ -13,9 +13,9 @@ import { ProjectModule } from '../project/project.module';
     forwardRef(() => UserModule),
     forwardRef(() => StudyModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => ProjectModule),
+    forwardRef(() => ProjectModule)
   ],
   providers: [UserPipe, StudyPipe, DatasetPipe, ProjectPipe],
-  exports: [UserPipe, StudyPipe, DatasetPipe, ProjectPipe],
+  exports: [UserPipe, StudyPipe, DatasetPipe, ProjectPipe]
 })
 export class SharedModule {}

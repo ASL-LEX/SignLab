@@ -13,8 +13,8 @@ const testUsers: User[] = [
       owner: false,
       studyAdmin: {},
       projectAdmin: {},
-      studyContributor: {},
-    },
+      studyContributor: {}
+    }
   },
   {
     _id: '2',
@@ -25,9 +25,9 @@ const testUsers: User[] = [
       owner: false,
       studyAdmin: {},
       projectAdmin: {},
-      studyContributor: {},
-    },
-  },
+      studyContributor: {}
+    }
+  }
 ];
 
 const userModel = {
@@ -35,7 +35,7 @@ const userModel = {
     return {
       exec() {
         return testUsers;
-      },
+      }
     };
   }),
 
@@ -49,9 +49,9 @@ const userModel = {
           return testUsers[1];
         }
         return null;
-      },
+      }
     };
-  }),
+  })
 };
 
 describe('UserService', () => {
@@ -64,9 +64,9 @@ describe('UserService', () => {
         UserService,
         {
           provide: getModelToken(User.name),
-          useValue: userModel,
-        },
-      ],
+          useValue: userModel
+        }
+      ]
     }).compile();
 
     userService = await module.resolve(UserService);

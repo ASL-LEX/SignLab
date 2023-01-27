@@ -15,15 +15,13 @@ import { StudyService } from '../../core/services/study.service';
       Download Tag CSV
     </button>
     <ng-template #loading>No Study Selected</ng-template>
-  `,
+  `
 })
 export class TagViewComponent {
   constructor(public studyService: StudyService) {}
 
   exportTags() {
-    this.studyService.activeStudy
-      .pipe(take(1))
-      .subscribe((study) => this.export(study));
+    this.studyService.activeStudy.pipe(take(1)).subscribe((study) => this.export(study));
   }
 
   private async export(activeStudy: Study | null) {
@@ -44,7 +42,7 @@ export class TagViewComponent {
         study: tag.study.name,
         user: tag.user.username,
         ...tag.entry.meta,
-        ...tag.info,
+        ...tag.info
       };
     });
 
@@ -58,7 +56,7 @@ export class TagViewComponent {
       'mediaURL',
       'study',
       'user',
-      ...Object.keys(tags[0].study.tagSchema.dataSchema.properties),
+      ...Object.keys(tags[0].study.tagSchema.dataSchema.properties)
     ];
 
     this.downloadFile(headerElements, flattenedData, activeStudy);
@@ -77,9 +75,7 @@ export class TagViewComponent {
     };
 
     const csv = data.map((row) =>
-      headerElements
-        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-        .join(',')
+      headerElements.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(',')
     );
     csv.unshift(headerElements.join(','));
     const csvArray = csv.join('\r\n');

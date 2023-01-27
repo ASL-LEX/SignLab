@@ -2,13 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
 import { VideoOption } from './video-option-field.component';
-import {
-  ControlElement,
-  Actions,
-  composeWithUi,
-  RankedTester,
-  rankWith,
-} from '@jsonforms/core';
+import { ControlElement, Actions, composeWithUi, RankedTester, rankWith } from '@jsonforms/core';
 
 interface CsvDataFormat {
   'Video URL': string;
@@ -33,25 +27,14 @@ interface CsvDataFormat {
   selector: 'video-file-options',
   template: `
     <div>
-      <input
-        type="file"
-        style="display: none"
-        (change)="fileSelect($event)"
-        #fileUpload
-      />
-      <button mat-raised-button (click)="fileUpload.click()">
-        Upload Video Options
-      </button>
-      <button
-        mat-icon-button
-        matTooltip="Download an example option list"
-        (click)="downloadExample()"
-      >
+      <input type="file" style="display: none" (change)="fileSelect($event)" #fileUpload />
+      <button mat-raised-button (click)="fileUpload.click()">Upload Video Options</button>
+      <button mat-icon-button matTooltip="Download an example option list" (click)="downloadExample()">
         <mat-icon>play_for_work</mat-icon>
       </button>
       <mat-error>{{ error }}</mat-error>
     </div>
-  `,
+  `
 })
 export class VideoOptionUpload extends JsonFormsControl {
   constructor(
@@ -89,7 +72,7 @@ export class VideoOptionUpload extends JsonFormsControl {
           console.warn(error);
 
           // TODO: Pass along error to the user
-        },
+        }
       });
   }
 
@@ -136,7 +119,7 @@ export class VideoOptionUpload extends JsonFormsControl {
       results.push({
         videoURL: csvLine['Video URL'],
         code: csvLine['Code'],
-        searchTerm: csvLine['Search Term'],
+        searchTerm: csvLine['Search Term']
       });
     }
 
@@ -167,13 +150,10 @@ export class VideoOptionUpload extends JsonFormsControl {
  * Tester which is used to determine if the VideoOptionUpload should be the
  * field to use in the form
  */
-export const videoOptionUploadRendererTester: RankedTester = rankWith(
-  10,
-  (uischema, _schema, _rootSchema) => {
-    return (
-      uischema.options != undefined &&
-      uischema.options.customType != undefined &&
-      uischema.options.customType == 'video-option-upload'
-    );
-  }
-);
+export const videoOptionUploadRendererTester: RankedTester = rankWith(10, (uischema, _schema, _rootSchema) => {
+  return (
+    uischema.options != undefined &&
+    uischema.options.customType != undefined &&
+    uischema.options.customType == 'video-option-upload'
+  );
+});

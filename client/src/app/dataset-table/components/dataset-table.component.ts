@@ -12,15 +12,13 @@ import { DatasetService } from '../../core/services/dataset.service';
       <mat-expansion-panel *ngFor="let dataset of datasets">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ dataset.name }}</mat-panel-title>
-          <mat-panel-description>{{
-            dataset.description
-          }}</mat-panel-description>
+          <mat-panel-description>{{ dataset.description }}</mat-panel-description>
         </mat-expansion-panel-header>
 
         <entry-table [dataset]="dataset"></entry-table>
       </mat-expansion-panel>
     </div>
-  `,
+  `
 })
 export class DatasetTable {
   constructor(public datasetService: DatasetService) {}

@@ -32,7 +32,7 @@ export class TagService {
       study: study,
       user: user,
       complete: false,
-      isTraining: false,
+      isTraining: false
     });
   }
 
@@ -40,18 +40,14 @@ export class TagService {
    * Make a new training tag. When this tag is created it is considered
    * incomplete.
    */
-  async createTrainingTag(
-    user: User,
-    entry: Entry,
-    study: Study,
-  ): Promise<Tag> {
+  async createTrainingTag(user: User, entry: Entry, study: Study): Promise<Tag> {
     const result = await (
       await this.tagModel.create({
         entry: entry,
         study: study,
         user: user,
         complete: false,
-        isTraining: true,
+        isTraining: true
       })
     ).populate('entry');
 
@@ -68,7 +64,7 @@ export class TagService {
       .find({
         study: study._id!,
         complete: true,
-        isTraining: false,
+        isTraining: false
       })
       .populate('user')
       .populate('study')
@@ -85,7 +81,7 @@ export class TagService {
         study: study._id!,
         complete: true,
         isTraining: true,
-        user: user._id,
+        user: user._id
       })
       .populate('user')
       .populate('study')
@@ -109,10 +105,7 @@ export class TagService {
    * Find a entry and tag for the given user that was incomplete as part
    * of the training for a specific study.
    */
-  async getIncompleteTrainingTag(
-    user: User,
-    study: Study,
-  ): Promise<Tag | null> {
+  async getIncompleteTrainingTag(user: User, study: Study): Promise<Tag | null> {
     return this.getIncompleteTagGeneric(user, study, true);
   }
 
@@ -120,17 +113,13 @@ export class TagService {
    * Find a entry and tag that the user has yet to complete either
    * from the normal data set or the training data set.
    */
-  private async getIncompleteTagGeneric(
-    user: User,
-    study: Study,
-    fromTrainingSet: boolean,
-  ): Promise<Tag | null> {
+  private async getIncompleteTagGeneric(user: User, study: Study, fromTrainingSet: boolean): Promise<Tag | null> {
     const incompleteTag = await this.tagModel
       .findOne({
         user: user._id,
         study: study._id,
         complete: false,
-        isTraining: fromTrainingSet,
+        isTraining: fromTrainingSet
       })
       .populate('user')
       .populate('entry')
@@ -155,7 +144,7 @@ export class TagService {
   async deleteEntry(entry: Entry) {
     this.tagModel
       .deleteMany({
-        entry: entry._id,
+        entry: entry._id
       })
       .exec();
   }

@@ -53,22 +53,15 @@ export class TagService {
    * value is an incompleted tag if there is another entry to tag for this
    * study, otherwise null is returned.
    */
-  async getNextUntaggedEntry(
-    user: User,
-    study: Study,
-    isTraining: boolean
-  ): Promise<Tag | null> {
+  async getNextUntaggedEntry(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
     const query = {
       params: { userID: user._id, studyID: study._id! },
-      provideToken: true,
+      provideToken: true
     };
 
     let nextTag: Tag | null = null;
     if (isTraining) {
-      nextTag = await this.signLab.get<Tag | null>(
-        'api/tag/nextTraining',
-        query
-      );
+      nextTag = await this.signLab.get<Tag | null>('api/tag/nextTraining', query);
     } else {
       nextTag = await this.signLab.get<Tag | null>('api/tag/assign', query);
     }
@@ -83,13 +76,9 @@ export class TagService {
    */
   async saveTag(tag: Tag, isTraining: boolean): Promise<void> {
     if (isTraining) {
-      await this.signLab.post<any>('api/tag/completeTraining', tag, {
-        provideToken: true,
-      });
+      await this.signLab.post<any>('api/tag/completeTraining', tag, { provideToken: true });
     } else {
-      await this.signLab.post<any>('api/tag/complete', tag, {
-        provideToken: true,
-      });
+      await this.signLab.post<any>('api/tag/complete', tag, { provideToken: true });
     }
   }
 }

@@ -8,11 +8,11 @@ export default () => ({
     /** Used for generating the JWT tokens */
     jwtSecret: process.env.JWT_SECRET,
     /** The maximum number of owner accounts supported */
-    maxOwnerAccounts: 3,
+    maxOwnerAccounts: 3
   },
   database: {
     /** The hostname of the database to connect to */
-    host: process.env.MONGO_URI,
+    host: process.env.MONGO_URI
   },
   /** Bucket related settings for storing file objects */
   bucket: {
@@ -22,22 +22,22 @@ export default () => ({
     name: process.env.BUCKET_NAME,
     /** Using a local folder as a bucket */
     local: {
-      folder: process.env.BUCKET_LOCAL_FOLDER,
+      folder: process.env.BUCKET_LOCAL_FOLDER
     },
     /** Using S3 complient object storage */
     s3: {
       accessKey: process.env.S3_ACCESS_ID,
       secretKey: process.env.S3_SECRET_ACCESS_KEY,
       baseUrl: process.env.S3_BASE_URL,
-      endpoint: process.env.S3_ENDPOINT,
+      endpoint: process.env.S3_ENDPOINT
     },
     /** Gooogle cloud buckets */
-    gcp: {},
+    gcp: {}
   },
   mediaSettings: {
     /** Specifies the supported video types for SignLab */
     supportedVideoTypes: ['webm', 'mp4', 'ogg'],
     /** Specified the supported image types for SignLab */
-    supportedImageTypes: ['png', 'jpg', 'jpeg', 'gif'],
-  },
+    supportedImageTypes: ['png', 'jpg', 'jpeg', 'gif']
+  }
 });

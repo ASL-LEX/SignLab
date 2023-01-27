@@ -34,15 +34,9 @@ export class ManualControl extends AbstractControl {
   }
 
   // Placeholder for the abstract methods that need to be implemented.
-  patchValue(
-    _value: any,
-    _options?: { onlySelf?: boolean; emitEvent?: boolean }
-  ) {}
+  patchValue(_value: any, _options?: { onlySelf?: boolean; emitEvent?: boolean }) {}
 
-  setValue(
-    _value: any,
-    _options?: { onlySelf?: boolean; emitEvent?: boolean }
-  ) {}
+  setValue(_value: any, _options?: { onlySelf?: boolean; emitEvent?: boolean }) {}
 
   reset(_value?: any, _options?: { onlySelf?: boolean; emitEvent?: boolean }) {}
 }

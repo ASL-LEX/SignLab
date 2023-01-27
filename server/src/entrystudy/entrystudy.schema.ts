@@ -24,7 +24,7 @@ export class EntryStudy implements dto.EntryStudy {
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: Entry.name,
+    ref: Entry.name
   })
   entry: Entry;
 
@@ -32,7 +32,7 @@ export class EntryStudy implements dto.EntryStudy {
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: Study.name,
+    ref: Study.name
   })
   study: Study;
 

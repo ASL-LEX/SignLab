@@ -14,20 +14,18 @@ export class UserStudyService {
     @InjectModel(UserStudy.name)
     private userStudyModel: Model<UserStudyDocument>,
     private entryStudyService: EntryStudyService,
-    private studyService: StudyService,
+    private studyService: StudyService
   ) {}
 
   /**
    * Make a user study for the given user and study
    */
   async create(user: User, study: Study): Promise<UserStudy> {
-    const trainingEntryStudies = await this.entryStudyService.getTrainingSet(
-      study,
-    );
+    const trainingEntryStudies = await this.entryStudyService.getTrainingSet(study);
     const newUserStudy: UserStudy = {
       user: user,
       study: study,
-      trainingEntryStudies: trainingEntryStudies,
+      trainingEntryStudies: trainingEntryStudies
     };
 
     await this.userStudyModel.create(newUserStudy);
@@ -39,9 +37,7 @@ export class UserStudyService {
    */
   async makeForUser(user: User): Promise<UserStudy[]> {
     const studies = await this.studyService.getAllStudies();
-    const userStudies = await Promise.all(
-      studies.map((study) => this.create(user, study)),
-    );
+    const userStudies = await Promise.all(studies.map((study) => this.create(user, study)));
     return userStudies;
   }
 
@@ -56,7 +52,7 @@ export class UserStudyService {
     const userStudy = await this.userStudyModel
       .findOne({
         user: user._id,
-        study: study._id!,
+        study: study._id!
       })
       .populate('user')
       .populate('study')
@@ -75,14 +71,9 @@ export class UserStudyService {
    * next entry the user needs to tag as part of their training. If no
    * more training entrys are present, null is returned.
    */
-  async getNextTrainingEntryStudy(
-    user: User,
-    study: Study,
-  ): Promise<EntryStudy | null> {
+  async getNextTrainingEntryStudy(user: User, study: Study): Promise<EntryStudy | null> {
     const userStudy = await this.getUserStudy(user, study);
-    return userStudy.trainingEntryStudies.length == 0
-      ? null
-      : userStudy.trainingEntryStudies[0];
+    return userStudy.trainingEntryStudies.length == 0 ? null : userStudy.trainingEntryStudies[0];
   }
 
   /**
@@ -91,7 +82,7 @@ export class UserStudyService {
   async getUserStudies(study: Study): Promise<UserStudy[]> {
     return this.userStudyModel
       .find({
-        study: study._id!,
+        study: study._id!
       })
       .populate('trainingEntryStudies')
       .populate('user')
@@ -107,11 +98,11 @@ export class UserStudyService {
       .updateOne(
         {
           study: study._id!,
-          user: user._id,
+          user: user._id
         },
         {
-          hasAccessToStudy: hasAccess,
-        },
+          hasAccessToStudy: hasAccess
+        }
       )
       .exec();
   }
@@ -128,11 +119,11 @@ export class UserStudyService {
       .updateOne(
         {
           user: user._id,
-          study: study._id!,
+          study: study._id!
         },
         {
-          $pop: { trainingEntryStudies: -1 },
-        },
+          $pop: { trainingEntryStudies: -1 }
+        }
       )
       .exec();
   }
@@ -146,11 +137,11 @@ export class UserStudyService {
     this.userStudyModel
       .updateMany(
         {
-          study: entryStudy.study._id,
+          study: entryStudy.study._id
         },
         {
-          $pull: { trainingEntryStudies: entryStudy._id },
-        },
+          $pull: { trainingEntryStudies: entryStudy._id }
+        }
       )
       .exec();
   }

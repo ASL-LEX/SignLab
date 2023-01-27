@@ -6,11 +6,11 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 
 import {
   aslLexSignBankControlRendererTester,
-  AslLexSignBankField,
+  AslLexSignBankField
 } from '../../../shared/components/custom-fields/asl-lex-field.component';
 import {
   fileListControlRendererTester,
-  FileListField,
+  FileListField
 } from '../../../shared/components/custom-fields/file-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TagFormPreviewDialog } from './tag-form-preview.component';
@@ -19,21 +19,15 @@ import { Router } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import {
   VideoOptionUpload,
-  videoOptionUploadRendererTester,
+  videoOptionUploadRendererTester
 } from '../../../shared/components/custom-fields/video-option-upload.component';
 import {
   userVideoOptionRendererTester,
-  UserVideoOption,
+  UserVideoOption
 } from '../../../shared/components/custom-fields/user-video-option-field.component';
-import {
-  VideoFieldComponent,
-  videoFieldTester,
-} from '../../../video-recording/components/video-field.component';
+import { VideoFieldComponent, videoFieldTester } from '../../../video-recording/components/video-field.component';
 import { TagFieldGeneratorService } from '../../services/tag-field-generator.service';
-import {
-  OneOfField,
-  oneOfFieldTester,
-} from '../../../shared/components/custom-fields/one-of.component';
+import { OneOfField, oneOfFieldTester } from '../../../shared/components/custom-fields/one-of.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ProjectService } from '../../../core/services/project.service';
 import { firstValueFrom } from 'rxjs';
@@ -41,7 +35,7 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'new-study',
   templateUrl: './new-study.component.html',
-  styleUrls: ['./new-study.component.css'],
+  styleUrls: ['./new-study.component.css']
 })
 export class NewStudyComponent implements AfterViewInit {
   /** Used for the control of the step logic */
@@ -78,13 +72,13 @@ export class NewStudyComponent implements AfterViewInit {
     ...angularMaterialRenderers,
     {
       tester: aslLexSignBankControlRendererTester,
-      renderer: AslLexSignBankField,
+      renderer: AslLexSignBankField
     },
     { tester: fileListControlRendererTester, renderer: FileListField },
     { tester: videoOptionUploadRendererTester, renderer: VideoOptionUpload },
     { tester: userVideoOptionRendererTester, renderer: UserVideoOption },
     { tester: videoFieldTester, renderer: VideoFieldComponent },
-    { tester: oneOfFieldTester, renderer: OneOfField },
+    { tester: oneOfFieldTester, renderer: OneOfField }
   ];
   /** Possible tag options */
   tagFieldOptions = [
@@ -92,22 +86,22 @@ export class NewStudyComponent implements AfterViewInit {
     {
       type: TagFieldType.Autocomplete,
       name: 'Categorical',
-      icon: 'text_format',
+      icon: 'text_format'
     },
     {
       type: TagFieldType.BooleanOption,
       name: 'True/False Option',
-      icon: 'flag',
+      icon: 'flag'
     },
     {
       type: TagFieldType.EmbeddedVideoOption,
       name: 'Video Option',
-      icon: 'video_library',
+      icon: 'video_library'
     },
     { type: TagFieldType.FreeText, name: 'Free Text', icon: 'text_fields' },
     { type: TagFieldType.Numeric, name: 'Numeric', icon: 'bar_chart' },
     { type: TagFieldType.Slider, name: 'Slider', icon: 'tune' },
-    { type: TagFieldType.VideoRecord, name: 'Record Video', icon: 'videocam' },
+    { type: TagFieldType.VideoRecord, name: 'Record Video', icon: 'videocam' }
   ];
 
   constructor(
@@ -183,11 +177,11 @@ export class NewStudyComponent implements AfterViewInit {
         name: this.studyMetadata.name,
         description: this.studyMetadata.description,
         instructions: this.studyMetadata.instructions,
-        tagSchema: schema,
+        tagSchema: schema
       },
       projectID: project._id!,
       trainingEntries: Array.from(this.markedTraining),
-      disabledEntries: Array.from(this.markedDisabled),
+      disabledEntries: Array.from(this.markedDisabled)
     });
     this.studyCreated = true;
     this.studyService.updateStudies();
@@ -201,8 +195,8 @@ export class NewStudyComponent implements AfterViewInit {
       data: {
         previewDataSchema: jsonForms.dataSchema,
         previewUiSchema: jsonForms.uiSchema,
-        renderers: this.renderers,
-      },
+        renderers: this.renderers
+      }
     });
   }
 
@@ -236,17 +230,17 @@ export class NewStudyComponent implements AfterViewInit {
     const dataSchema: { type: string; properties: any; required: string[] } = {
       type: 'object',
       properties: {},
-      required: [],
+      required: []
     };
     const uiSchema: { type: string; elements: any[] } = {
       type: 'VerticalLayout',
-      elements: [],
+      elements: []
     };
 
     for (const tagField of this.tagFields) {
       dataSchema.properties = {
         ...dataSchema.properties,
-        ...tagField.asDataProperty(),
+        ...tagField.asDataProperty()
       };
       if (tagField.isRequired()) {
         dataSchema.required.push(tagField.getFieldName());

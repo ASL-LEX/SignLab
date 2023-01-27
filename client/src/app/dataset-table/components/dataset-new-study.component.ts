@@ -11,9 +11,7 @@ import { DatasetService } from '../../core/services/dataset.service';
       <mat-expansion-panel *ngFor="let dataset of datasets">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ dataset.name }}</mat-panel-title>
-          <mat-panel-description>{{
-            dataset.description
-          }}</mat-panel-description>
+          <mat-panel-description>{{ dataset.description }}</mat-panel-description>
         </mat-expansion-panel-header>
 
         <entry-new-study
@@ -23,7 +21,7 @@ import { DatasetService } from '../../core/services/dataset.service';
         ></entry-new-study>
       </mat-expansion-panel>
     </div>
-  `,
+  `
 })
 export class DatasetNewStudy {
   /** Aggregated set of all entries that will not be part of the tagging */

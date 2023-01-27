@@ -5,7 +5,7 @@ import {
   GetDatasetsGQL,
   GetDatasetsQuery,
   GetDatasetsQueryVariables,
-  GetDatasetsByProjectGQL,
+  GetDatasetsByProjectGQL
 } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { QueryRef } from 'apollo-angular';
@@ -18,18 +18,11 @@ import { ProjectService } from './project.service';
 export class DatasetService {
   /** All datasets that are in SignLab */
   // TODO: Handle if the user doesn't have access to all dataset
-  private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<
-    Dataset[]
-  >([]);
+  private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
   /** Query which was used to get the datasets, used to refetch */
-  private readonly datasetQuery: QueryRef<
-    GetDatasetsQuery,
-    GetDatasetsQueryVariables
-  >;
+  private readonly datasetQuery: QueryRef<GetDatasetsQuery, GetDatasetsQueryVariables>;
   /** All the datasets which are visible to the active project */
-  private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<
-    Dataset[]
-  >([]);
+  private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
 
   constructor(
     private http: SignLabHttpClient,
@@ -51,11 +44,9 @@ export class DatasetService {
         return;
       }
 
-      this.getDatasetsByProjectGQL
-        .fetch({ project: project._id })
-        .subscribe((result) => {
-          this.visibleDatasetObs.next(result.data.getDatasetsByProject);
-        });
+      this.getDatasetsByProjectGQL.fetch({ project: project._id }).subscribe((result) => {
+        this.visibleDatasetObs.next(result.data.getDatasetsByProject);
+      });
     });
   }
 
@@ -75,14 +66,12 @@ export class DatasetService {
       return false;
     }
     return this.http.get<boolean>(`/api/dataset/exists/${datasetName}`, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
   async createDataset(dataset: DatasetCreate): Promise<void> {
-    await firstValueFrom(
-      this.createDatasetGQL.mutate({ datasetCreate: dataset })
-    );
+    await firstValueFrom(this.createDatasetGQL.mutate({ datasetCreate: dataset }));
 
     this.datasetQuery.refetch();
   }

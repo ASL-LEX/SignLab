@@ -6,7 +6,7 @@ import { BackendService } from './core/services/backend.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
   title = 'SignLab';
@@ -27,9 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.backend
-      .isInFirstTimeSetup()
-      .then((result) => (this.firstTimeSetup = result));
+    this.backend.isInFirstTimeSetup().then((result) => (this.firstTimeSetup = result));
   }
 
   /**

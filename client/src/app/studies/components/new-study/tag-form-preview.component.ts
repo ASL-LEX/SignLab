@@ -32,7 +32,7 @@ type TagPreviewInformation = {
         </mat-dialog-actions>
       </mat-dialog-content></mat-dialog-content
     >
-  `,
+  `
 })
 export class TagFormPreviewDialog {
   constructor(

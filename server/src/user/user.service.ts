@@ -34,7 +34,7 @@ export class UserService {
   async getByRole(role: string): Promise<User[]> {
     return this.userModel
       .find({
-        [`roles.${role}`]: true,
+        [`roles.${role}`]: true
       })
       .exec();
   }
@@ -85,10 +85,9 @@ export class UserService {
         { _id: adminChange.user._id },
         {
           $set: {
-            [`roles.projectAdmin.${adminChange.project._id!}`]:
-              adminChange.hasAdminAccess,
-          },
-        },
+            [`roles.projectAdmin.${adminChange.project._id!}`]: adminChange.hasAdminAccess
+          }
+        }
       )
       .exec();
   }
@@ -96,32 +95,18 @@ export class UserService {
   /**
    * Set if the user is an admin for a given study or not
    */
-  async markAsStudyAdmin(
-    user: User,
-    study: Study,
-    isAdmin: boolean,
-  ): Promise<void> {
+  async markAsStudyAdmin(user: User, study: Study, isAdmin: boolean): Promise<void> {
     await this.userModel
-      .findOneAndUpdate(
-        { _id: user._id },
-        { $set: { [`roles.studyAdmin.${study._id!}`]: isAdmin } },
-      )
+      .findOneAndUpdate({ _id: user._id }, { $set: { [`roles.studyAdmin.${study._id!}`]: isAdmin } })
       .exec();
   }
 
   /**
    * Set if the user can contribute to the study or not
    */
-  async markAsContributor(
-    user: User,
-    study: Study,
-    canContribute: boolean,
-  ): Promise<void> {
+  async markAsContributor(user: User, study: Study, canContribute: boolean): Promise<void> {
     await this.userModel
-      .findOneAndUpdate(
-        { _id: user._id },
-        { $set: { [`roles.studyContributor.${study._id!}`]: canContribute } },
-      )
+      .findOneAndUpdate({ _id: user._id }, { $set: { [`roles.studyContributor.${study._id!}`]: canContribute } })
       .exec();
   }
 
@@ -136,16 +121,10 @@ export class UserService {
    * @param hasRole If the user will have the role or not
    * @return True if the role was updated successfully
    */
-  private async setHasRole(
-    role: string,
-    id: string,
-    hasRole: boolean,
-  ): Promise<boolean> {
+  private async setHasRole(role: string, id: string, hasRole: boolean): Promise<boolean> {
     // Find the user and update
     try {
-      const user = await this.userModel
-        .findOneAndUpdate({ _id: id }, { $set: { [`roles.${role}`]: hasRole } })
-        .exec();
+      const user = await this.userModel.findOneAndUpdate({ _id: id }, { $set: { [`roles.${role}`]: hasRole } }).exec();
 
       if (!user) {
         return false;

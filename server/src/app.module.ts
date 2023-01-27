@@ -29,14 +29,14 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 // By default just use OS provided environment variables
 let configModule = ConfigModule.forRoot({
   ignoreEnvFile: true,
-  load: [configuration],
+  load: [configuration]
 });
 
 // If a specific environment is provided, load variables from there
 if (process.env.NODE_ENV) {
   configModule = ConfigModule.forRoot({
     envFilePath: `../.env.${process.env.NODE_ENV}`,
-    load: [configuration],
+    load: [configuration]
   });
 }
 
@@ -45,20 +45,20 @@ if (process.env.NODE_ENV) {
     configModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../dist/'),
-      exclude: ['/api*', '/graphql'],
+      exclude: ['/api*', '/graphql']
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.getOrThrow<string>('database.host'),
+        uri: configService.getOrThrow<string>('database.host')
       }),
-      inject: [ConfigService],
+      inject: [ConfigService]
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'dist/schema.gql'),
 
-      playground: true,
+      playground: true
     }),
     AuthModule,
     UserModule,
@@ -68,8 +68,8 @@ if (process.env.NODE_ENV) {
     EntryStudyModule,
     UserStudyModule,
     BucketModule,
-    ProjectModule,
+    ProjectModule
   ],
-  controllers: [AppController],
+  controllers: [AppController]
 })
 export class AppModule {}

@@ -12,17 +12,13 @@ interface NavElement {
   url: string;
   visible: boolean;
   sublinks?: NavElement[];
-  visibleCondition: (
-    project: Project | null,
-    study: Study | null,
-    user: User | null
-  ) => boolean;
+  visibleCondition: (project: Project | null, study: Study | null, user: User | null) => boolean;
 }
 
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
   navItems: NavElement[] = [
@@ -65,7 +61,7 @@ export class NavbarComponent {
               return user.roles.projectAdmin[project._id!];
             }
             return false;
-          },
+          }
         },
         {
           name: 'New Project',
@@ -73,9 +69,9 @@ export class NavbarComponent {
           visible: true,
           visibleCondition: (_project, _study, user) => {
             return user !== null && user.roles.owner;
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       name: 'Studies',
@@ -129,7 +125,7 @@ export class NavbarComponent {
 
             // Otherwise the user cannot see the study
             return false;
-          },
+          }
         },
         {
           name: 'Entry Controls',
@@ -159,7 +155,7 @@ export class NavbarComponent {
 
             // Otherwise the user cannot see the study
             return false;
-          },
+          }
         },
         {
           name: 'Download Tags',
@@ -189,7 +185,7 @@ export class NavbarComponent {
 
             // Otherwise the user cannot see the study
             return false;
-          },
+          }
         },
         {
           name: 'Create New Study',
@@ -208,9 +204,9 @@ export class NavbarComponent {
 
             // Other users cannot make a new study
             return false;
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       name: 'Datasets',
@@ -230,7 +226,7 @@ export class NavbarComponent {
             // Owner can access datasets only right now
             // TODO: Add project and study admins
             return user !== null && user.roles.owner;
-          },
+          }
         },
         {
           name: 'Project Access',
@@ -238,9 +234,9 @@ export class NavbarComponent {
           visible: true,
           visibleCondition(_project, _study, user) {
             return user !== null && user.roles.owner;
-          },
-        },
-      ],
+          }
+        }
+      ]
     },
     {
       name: 'Contribute',
@@ -300,10 +296,10 @@ export class NavbarComponent {
               return true;
             }
             return false;
-          },
-        },
-      ],
-    },
+          }
+        }
+      ]
+    }
   ];
 
   activeProject: Project | null = null;
@@ -335,26 +331,16 @@ export class NavbarComponent {
    * Updates the router links based on the current user's permissions
    */
   updateNavItems() {
-    const user = this.authService.isAuthenticated()
-      ? this.authService.user
-      : null;
+    const user = this.authService.isAuthenticated() ? this.authService.user : null;
 
     // Update the visibility of each top-level nav item
     for (const navItem of this.navItems) {
-      navItem.visible = navItem.visibleCondition(
-        this.activeProject,
-        this.activeStudy,
-        user
-      );
+      navItem.visible = navItem.visibleCondition(this.activeProject, this.activeStudy, user);
 
       if (navItem.sublinks) {
         // Update the visibility of each sublink
         for (const sublink of navItem.sublinks) {
-          sublink.visible = sublink.visibleCondition(
-            this.activeProject,
-            this.activeStudy,
-            user
-          );
+          sublink.visible = sublink.visibleCondition(this.activeProject, this.activeStudy, user);
         }
       }
     }

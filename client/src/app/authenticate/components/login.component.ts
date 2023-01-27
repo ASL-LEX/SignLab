@@ -10,8 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
     <div class="login-container">
       <mat-card class="login-card">
         <form class="login-form" (ngSubmit)="authenticateUser()">
-          <label for="username" class="label">Enter Participant Username</label
-          ><br />
+          <label for="username" class="label">Enter Participant Username</label><br />
           <input
             #usernameElement
             type="username"
@@ -31,19 +30,12 @@ import { AuthService } from '../../core/services/auth.service';
             [formControl]="pass"
             data-cy="passwordField"
           /><br />
-          <button
-            mat-stroked-button
-            class="button"
-            type="submit"
-            data-cy="loginSubmit"
-          >
-            Submit
-          </button>
+          <button mat-stroked-button class="button" type="submit" data-cy="loginSubmit">Submit</button>
         </form>
       </mat-card>
     </div>
   `,
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   /** Field for the users email */
@@ -65,10 +57,7 @@ export class LoginComponent {
     }
 
     // Attempt to login
-    const user = await this.authService.authenticate(
-      this.username.value,
-      this.pass.value
-    );
+    const user = await this.authService.authenticate(this.username.value, this.pass.value);
 
     if (user) {
       this.router.navigate(['/']);

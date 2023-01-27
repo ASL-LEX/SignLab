@@ -18,13 +18,13 @@ const testUser: User = {
     owner: false,
     studyAdmin: {},
     projectAdmin: {},
-    studyContributor: {},
-  },
+    studyContributor: {}
+  }
 };
 
 const testCredentials: UserCredentials = {
   username: 'bob',
-  password: 'bobby',
+  password: 'bobby'
 };
 
 // Test interface for user storage
@@ -50,7 +50,7 @@ const userService = {
 
   async create(params: UserSignup) {
     return params;
-  },
+  }
 };
 
 const credentialsModel = {
@@ -60,25 +60,25 @@ const credentialsModel = {
         if (params.username == testCredentials.username) {
           return {
             username: testCredentials.username,
-            password: hashSync(testCredentials.password, 10),
+            password: hashSync(testCredentials.password, 10)
           };
         } else {
           return null;
         }
-      },
+      }
     };
   },
 
   async create(params: any) {
     return params;
-  },
+  }
 };
 
 // Test JWTService
 const jwtService = {
   sign(_payload: any) {
     return 'signed';
-  },
+  }
 };
 
 /**
@@ -88,12 +88,12 @@ const jwtService = {
 jest.mock('../entry/entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 jest.mock('../entry/entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 
 describe('AuthService', () => {
@@ -106,17 +106,17 @@ describe('AuthService', () => {
         AuthService,
         {
           provide: UserService,
-          useValue: userService,
+          useValue: userService
         },
         {
           provide: JwtService,
-          useValue: jwtService,
+          useValue: jwtService
         },
         {
           provide: getModelToken(usercredentials.UserCredentials.name),
-          useValue: credentialsModel,
-        },
-      ],
+          useValue: credentialsModel
+        }
+      ]
     }).compile();
 
     authService = await module.resolve(AuthService);
@@ -126,7 +126,7 @@ describe('AuthService', () => {
     it('should not authenticate a user not found in the system', async () => {
       const result = await authService.authenticate({
         username: 'sam',
-        password: 'sammy',
+        password: 'sammy'
       });
 
       expect(result).toBeNull();
@@ -135,7 +135,7 @@ describe('AuthService', () => {
     it('should not authenticate a user with an invalid password', async () => {
       const result = await authService.authenticate({
         username: testUser.username,
-        password: 'sammy',
+        password: 'sammy'
       });
 
       expect(result).toBeNull();
@@ -144,7 +144,7 @@ describe('AuthService', () => {
     it('should authenticate a user with a valid username + password', async () => {
       const result: any = await authService.authenticate({
         username: testUser.username,
-        password: testCredentials.password,
+        password: testCredentials.password
       });
 
       expect(result).toEqual({ token: 'signed', user: testUser });
@@ -155,7 +155,7 @@ describe('AuthService', () => {
     it('should handle non-available username and non-available email', async () => {
       const result = await authService.availability({
         username: testUser.username,
-        email: testUser.email,
+        email: testUser.email
       });
 
       expect(result).toEqual({ username: false, email: false });
@@ -164,7 +164,7 @@ describe('AuthService', () => {
     it('should handle non-available username and available email', async () => {
       const result = await authService.availability({
         username: testUser.username,
-        email: 'sam@bu.edu',
+        email: 'sam@bu.edu'
       });
 
       expect(result).toEqual({ username: false, email: true });
@@ -173,7 +173,7 @@ describe('AuthService', () => {
     it('should handle available username and non-available email', async () => {
       const result = await authService.availability({
         username: 'sam',
-        email: testUser.email,
+        email: testUser.email
       });
 
       expect(result).toEqual({ username: true, email: false });
@@ -182,7 +182,7 @@ describe('AuthService', () => {
     it('should handle available username and available email', async () => {
       const result = await authService.availability({
         username: 'sam',
-        email: 'sam@bu.edu',
+        email: 'sam@bu.edu'
       });
 
       expect(result).toEqual({ username: true, email: true });
@@ -200,8 +200,8 @@ describe('AuthService', () => {
           owner: false,
           studyAdmin: {},
           projectAdmin: {},
-          studyContributor: {},
-        },
+          studyContributor: {}
+        }
       };
       const result: any = await authService.signup(newUser);
 

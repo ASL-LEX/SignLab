@@ -1,9 +1,4 @@
-import {
-  TestBed,
-  ComponentFixture,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { StudyService } from '../../core/services/study.service';
 import { TaggingLanding } from './tagging-landing.component';
@@ -20,11 +15,11 @@ describe('TaggingLanding', () => {
     roles: {
       owner: false,
       studyContributor: {
-        '1': false,
+        '1': false
       },
       projectAdmin: {},
-      studyAdmin: {},
-    },
+      studyAdmin: {}
+    }
   };
 
   const testStudy = {
@@ -34,9 +29,9 @@ describe('TaggingLanding', () => {
     instructions: 'You gotta',
     tagSchema: {
       dataSchema: {},
-      uiSchema: {},
+      uiSchema: {}
     },
-    project: '1',
+    project: '1'
   };
 
   const testUserStudy = {
@@ -44,24 +39,22 @@ describe('TaggingLanding', () => {
     user: testUser,
     study: testStudy,
     trainingEntryStudies: [],
-    hasAccessToStudy: false,
+    hasAccessToStudy: false
   };
 
   const authSpy = {
     get user() {
       return testUser;
-    },
+    }
   };
   let studySpy: jasmine.SpyObj<StudyService>;
   // Test component
   let taggingLanding: ComponentFixture<TaggingLanding>;
 
   beforeEach(fakeAsync(() => {
-    studySpy = jasmine.createSpyObj(
-      'StudyService',
-      ['getUserStudy', 'getStudies', 'activeStudy'],
-      { activeStudy: of(testStudy) }
-    );
+    studySpy = jasmine.createSpyObj('StudyService', ['getUserStudy', 'getStudies', 'activeStudy'], {
+      activeStudy: of(testStudy)
+    });
     studySpy.getUserStudy.and.returnValue(Promise.resolve(testUserStudy));
     studySpy.getStudies.and.returnValue(Promise.resolve([testStudy]));
 
@@ -70,8 +63,8 @@ describe('TaggingLanding', () => {
       declarations: [TaggingLanding],
       providers: [
         { provide: AuthService, useValue: authSpy },
-        { provide: StudyService, useValue: studySpy },
-      ],
+        { provide: StudyService, useValue: studySpy }
+      ]
     });
 
     taggingLanding = TestBed.createComponent(TaggingLanding);
@@ -126,12 +119,12 @@ describe('TaggingLanding', () => {
         duration: 3,
         recordedInSignLab: false,
         responderID: '1',
-        meta: {},
+        meta: {}
       },
       study: testStudy,
       isPartOfStudy: false,
       isUsedForTraining: true,
-      hasTag: false,
+      hasTag: false
     });
     taggingLanding.componentInstance.userStudy = withTrainingLeft;
 

@@ -1,11 +1,6 @@
 import { EntryService } from '../../../core/services/entry.service';
 import { Entry } from 'shared/dtos/entry.dto';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EntryNewStudyTable } from './entry-new-study.component';
 import { SharedModule } from '../../../shared/shared.module';
 import { EntryTableCoreComponent } from './entry-table-core.component';
@@ -23,15 +18,15 @@ describe('EntryNewStudyTable', () => {
       owner: false,
       studyContributor: {},
       projectAdmin: {},
-      studyAdmin: {},
-    },
+      studyAdmin: {}
+    }
   };
 
   const dataset: Dataset = {
     _id: '1',
     name: 'test',
     description: 'test',
-    creator: creator,
+    creator: creator
   };
 
   const exampleEntryData: Entry[] = [
@@ -46,7 +41,7 @@ describe('EntryNewStudyTable', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     {
       _id: '2',
@@ -59,7 +54,7 @@ describe('EntryNewStudyTable', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     {
       _id: '3',
@@ -72,7 +67,7 @@ describe('EntryNewStudyTable', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     {
       _id: '4',
@@ -85,8 +80,8 @@ describe('EntryNewStudyTable', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
-    },
+      dataset: dataset
+    }
   ];
 
   // Entry service spy to serve fake data
@@ -96,14 +91,12 @@ describe('EntryNewStudyTable', () => {
 
   beforeEach(fakeAsync(() => {
     entrySpy = jasmine.createSpyObj('EntryService', ['getEntriesForDataset']);
-    entrySpy.getEntriesForDataset.and.returnValue(
-      Promise.resolve(exampleEntryData)
-    );
+    entrySpy.getEntriesForDataset.and.returnValue(Promise.resolve(exampleEntryData));
 
     TestBed.configureTestingModule({
       imports: [SharedModule, BrowserAnimationsModule],
       declarations: [EntryNewStudyTable, EntryTableCoreComponent],
-      providers: [{ provide: EntryService, useValue: entrySpy }],
+      providers: [{ provide: EntryService, useValue: entrySpy }]
     });
 
     entryTable = TestBed.createComponent(EntryNewStudyTable);
@@ -122,9 +115,7 @@ describe('EntryNewStudyTable', () => {
     const compiled = entryTable.nativeElement;
     spyOn(entryTable.componentInstance.markedDisabledChange, 'emit');
 
-    const disabledToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[1];
+    const disabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[1];
 
     // NOTE: This is a hack to get the toggle to change. The toggle is not
     //       changing immediatly when clicked in the unit testing. This issue
@@ -134,34 +125,26 @@ describe('EntryNewStudyTable', () => {
 
     expect(entryTable.componentInstance.markedDisabled.size).toEqual(1);
     expect(entryTable.componentInstance.markedDisabled.has('1')).toBeTrue();
-    expect(
-      entryTable.componentInstance.markedDisabledChange.emit
-    ).toHaveBeenCalled();
+    expect(entryTable.componentInstance.markedDisabledChange.emit).toHaveBeenCalled();
   });
 
   it('should be able to mark a entry as being part of the training set', () => {
     const compiled = entryTable.nativeElement;
     spyOn(entryTable.componentInstance.markedTrainingChange, 'emit');
 
-    const trainingToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[0];
+    const trainingToggle = compiled.querySelectorAll('td mat-slide-toggle input')[0];
 
     trainingToggle.click();
 
     expect(entryTable.componentInstance.markedTraining.size).toEqual(1);
     expect(entryTable.componentInstance.markedTraining.has('1')).toBeTrue();
-    expect(
-      entryTable.componentInstance.markedTrainingChange.emit
-    ).toHaveBeenCalled();
+    expect(entryTable.componentInstance.markedTrainingChange.emit).toHaveBeenCalled();
   });
 
   it('should be able to swap back and forth marking a entry as disabled', () => {
     const compiled = entryTable.nativeElement;
 
-    const disabledToggle = compiled.querySelectorAll(
-      'td mat-slide-toggle input'
-    )[1];
+    const disabledToggle = compiled.querySelectorAll('td mat-slide-toggle input')[1];
 
     // First click, should be marked as disabled
     disabledToggle.click();

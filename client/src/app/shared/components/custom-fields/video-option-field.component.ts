@@ -47,7 +47,7 @@ export interface VideoSelection {
 @Component({
   selector: 'video-option-field',
   templateUrl: './video-option-field.component.html',
-  styleUrls: ['./video-option-field.component.css'],
+  styleUrls: ['./video-option-field.component.css']
 })
 export class VideoOptionField {
   /** The options that are to be actively displayed to the user */
@@ -74,12 +74,10 @@ export class VideoOptionField {
   constructor() {
     // Listen to changes made to the search term with debounce to reduce
     // number of calls to potential filtering
-    this.userSearchSubject
-      .pipe(debounceTime(this.debounceTime), distinctUntilChanged())
-      .subscribe((search: string) => {
-        // Emit changes to the parent
-        this.searchValue.emit(search);
-      });
+    this.userSearchSubject.pipe(debounceTime(this.debounceTime), distinctUntilChanged()).subscribe((search: string) => {
+      // Emit changes to the parent
+      this.searchValue.emit(search);
+    });
   }
 
   /**
@@ -103,7 +101,7 @@ export class VideoOptionField {
     this.selectedVideo = {
       videoURL: '',
       code: this.userSearchValue,
-      searchTerm: this.userSearchValue,
+      searchTerm: this.userSearchValue
     };
 
     // Emit the selection

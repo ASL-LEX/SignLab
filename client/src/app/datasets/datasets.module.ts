@@ -10,17 +10,7 @@ import { DatasetsRoutingModule } from './datasets-routing.module';
 import { ProjectAccess } from './components/project-access.component';
 
 @NgModule({
-  declarations: [
-    DatasetControlComponent,
-    EntryUploadDialog,
-    DatasetUploadDialog,
-    ProjectAccess,
-  ],
-  imports: [
-    SharedModule,
-    CoreModule,
-    DatasetTableModule,
-    DatasetsRoutingModule,
-  ],
+  declarations: [DatasetControlComponent, EntryUploadDialog, DatasetUploadDialog, ProjectAccess],
+  imports: [SharedModule, CoreModule, DatasetTableModule, DatasetsRoutingModule]
 })
 export class DatasetsModule {}

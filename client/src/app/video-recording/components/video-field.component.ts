@@ -1,12 +1,6 @@
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import {
-  composeWithUi,
-  RankedTester,
-  rankWith,
-  Actions,
-  updateErrors,
-} from '@jsonforms/core';
+import { composeWithUi, RankedTester, rankWith, Actions, updateErrors } from '@jsonforms/core';
 import { VideoTagUploadService } from '../../core/services/video-tag-upload.service';
 import { TagService } from '../../core/services/tag.service';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -25,13 +19,9 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
           {{ description }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <video-record
-        (videoBlob)="saveVideo($event)"
-        [minVideos]="minVideos"
-        [maxVideos]="maxVideos"
-      ></video-record>
+      <video-record (videoBlob)="saveVideo($event)" [minVideos]="minVideos" [maxVideos]="maxVideos"></video-record>
     </mat-expansion-panel>
-  `,
+  `
 })
 export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   /** The ID of the dataset that the video is being reocrded for */
@@ -62,10 +52,7 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
    * ie) For a tag on a study, there can be many fields, each field could
    * require some range of videos to be recorded
    */
-  async saveVideo(videoInfo: {
-    videoBlob: Blob;
-    videoNumber: number;
-  }): Promise<void> {
+  async saveVideo(videoInfo: { videoBlob: Blob; videoNumber: number }): Promise<void> {
     if (!this.tagService.hasCurrentTag()) {
       console.info('No tag selected, not saving video');
       return;
@@ -85,9 +72,7 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
 
     // Update the value of the form to be the URI of the video
     const path = composeWithUi(this.uischema, this.path);
-    this.jsonFormsService.updateCore(
-      Actions.update(path, () => this.videoURIs.filter((uri) => uri !== ''))
-    );
+    this.jsonFormsService.updateCore(Actions.update(path, () => this.videoURIs.filter((uri) => uri !== '')));
     this.triggerValidation();
   }
 
@@ -116,9 +101,7 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
     this.videoURIs = new Array(this.maxVideos).fill('');
 
     // Get the fieldname from the uischema
-    this.tagFieldName = this.uischema.scope.slice(
-      this.uischema.scope.lastIndexOf('/') + 1
-    );
+    this.tagFieldName = this.uischema.scope.slice(this.uischema.scope.lastIndexOf('/') + 1);
 
     // Set the values stored as empty initially
     this.jsonFormsService.updateCore(Actions.update(this.path, () => []));
@@ -126,11 +109,6 @@ export class VideoFieldComponent extends JsonFormsControl implements OnInit {
   }
 }
 
-export const videoFieldTester: RankedTester = rankWith(
-  10,
-  (uischema, _schema, _rootSchema) => {
-    return (
-      uischema.options != undefined && uischema.options.customType === 'video'
-    );
-  }
-);
+export const videoFieldTester: RankedTester = rankWith(10, (uischema, _schema, _rootSchema) => {
+  return uischema.options != undefined && uischema.options.customType === 'video';
+});

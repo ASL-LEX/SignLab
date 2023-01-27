@@ -6,23 +6,20 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import {
   aslLexSignBankControlRendererTester,
-  AslLexSignBankField,
+  AslLexSignBankField
 } from '../../shared/components/custom-fields/asl-lex-field.component';
 import { createAjv } from '@jsonforms/core';
 import { Tag } from 'shared/dtos/tag.dto';
 import {
   UserVideoOption,
-  userVideoOptionRendererTester,
+  userVideoOptionRendererTester
 } from '../../shared/components/custom-fields/user-video-option-field.component';
-import {
-  VideoFieldComponent,
-  videoFieldTester,
-} from '../../video-recording/components/video-field.component';
+import { VideoFieldComponent, videoFieldTester } from '../../video-recording/components/video-field.component';
 
 @Component({
   selector: 'tagging-form',
@@ -30,17 +27,8 @@ import {
     <div fxLayout="row" fxLayoutAlign="space-around">
       <!-- Entry Video View -->
       <div class="video-tag-child">
-        <video
-          *ngIf="tag.entry.mediaType === 'video'"
-          src="{{ tag.entry.mediaURL }}"
-          controls
-          autoplay
-          loop
-        ></video>
-        <img
-          *ngIf="tag.entry.mediaType === 'image'"
-          src="{{ tag.entry.mediaURL }}"
-        />
+        <video *ngIf="tag.entry.mediaType === 'video'" src="{{ tag.entry.mediaURL }}" controls autoplay loop></video>
+        <img *ngIf="tag.entry.mediaType === 'image'" src="{{ tag.entry.mediaURL }}" />
       </div>
 
       <!-- Form View -->
@@ -54,13 +42,7 @@ import {
           (dataChange)="formChange($event)"
           (errors)="formErrorHandler($event)"
         ></jsonforms>
-        <button
-          mat-stroked-button
-          (click)="formSubmit()"
-          [disabled]="!formValid"
-        >
-          Submit
-        </button>
+        <button mat-stroked-button (click)="formSubmit()" [disabled]="!formValid">Submit</button>
       </div>
     </div>
   `,
@@ -76,8 +58,8 @@ import {
         float: left;
         padding: 20px;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class TaggingForm implements OnChanges, OnInit {
   /** The tag to complete */
@@ -93,16 +75,16 @@ export class TaggingForm implements OnChanges, OnInit {
     ...angularMaterialRenderers,
     {
       tester: aslLexSignBankControlRendererTester,
-      renderer: AslLexSignBankField,
+      renderer: AslLexSignBankField
     },
     {
       tester: userVideoOptionRendererTester,
-      renderer: UserVideoOption,
+      renderer: UserVideoOption
     },
     {
       tester: videoFieldTester,
-      renderer: VideoFieldComponent,
-    },
+      renderer: VideoFieldComponent
+    }
   ];
   /** Configure how errors are presented */
   ajv = createAjv({ schemaId: 'id', allErrors: true });

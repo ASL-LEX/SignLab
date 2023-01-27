@@ -19,7 +19,7 @@ export class UserStudy implements dto.UserStudy {
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: User.name,
+    ref: User.name
   })
   user: User;
 
@@ -27,7 +27,7 @@ export class UserStudy implements dto.UserStudy {
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: Study.name,
+    ref: Study.name
   })
   study: Study;
 
@@ -38,7 +38,7 @@ export class UserStudy implements dto.UserStudy {
    */
   @Prop({
     required: true,
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: EntryStudy.name }],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: EntryStudy.name }]
   })
   trainingEntryStudies: EntryStudy[];
 }

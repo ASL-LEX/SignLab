@@ -13,7 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'entry-upload-dialog',
   templateUrl: './entry-upload-dialog.component.html',
-  styleUrls: ['./entry-upload-dialog.component.css'],
+  styleUrls: ['./entry-upload-dialog.component.css']
 })
 export class EntryUploadDialog {
   /**
@@ -98,8 +98,7 @@ export class EntryUploadDialog {
       // Clear input field to allow for another upload attempt
       event.target.value = '';
     } else {
-      this.uploadStatusMessage =
-        'Entry uploaded successfully, reload page to see new entries';
+      this.uploadStatusMessage = 'Entry uploaded successfully, reload page to see new entries';
       this.errorLocations = [];
     }
   }

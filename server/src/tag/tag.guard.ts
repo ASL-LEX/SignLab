@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { StudyService } from '../study/study.service';
 import { UserService } from '../user/user.service';
 
@@ -13,10 +7,7 @@ import { UserService } from '../user/user.service';
  */
 @Injectable()
 export class TagGuard implements CanActivate {
-  constructor(
-    private userService: UserService,
-    private studyService: StudyService,
-  ) {}
+  constructor(private userService: UserService, private studyService: StudyService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const query = context.switchToHttp().getRequest().query;
@@ -36,10 +27,7 @@ export class TagGuard implements CanActivate {
 
     // Ensure the correct parameters are provided
     if (userID == undefined || studyID == undefined) {
-      throw new HttpException(
-        'userID and studyID must be present',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('userID and studyID must be present', HttpStatus.BAD_REQUEST);
     }
 
     // TODO: This logic is repeated in the functions that make use of this
@@ -48,19 +36,13 @@ export class TagGuard implements CanActivate {
     // Ensure the user exists
     const user = await this.userService.findOne({ _id: userID });
     if (!user) {
-      throw new HttpException(
-        `User with ID '${query.userID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`User with ID '${query.userID}' not found`, HttpStatus.BAD_REQUEST);
     }
 
     // Ensure the study exists
     const study = await this.studyService.find(studyID);
     if (!study) {
-      throw new HttpException(
-        `Study with ID '${query.studyID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Study with ID '${query.studyID}' not found`, HttpStatus.BAD_REQUEST);
     }
 
     // Check against the user roles

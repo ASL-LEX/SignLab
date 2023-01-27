@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { Tag } from 'shared/dtos/tag.dto';
 import { TaggingInterface } from './tagging-interface.component';
@@ -26,15 +21,15 @@ describe('TaggingInterface', () => {
       studyAdmin: {},
       projectAdmin: {},
       studyContributor: {},
-      owner: false,
-    },
+      owner: false
+    }
   };
 
   const dataset = {
     _id: '1',
     name: 'test',
     description: 'test',
-    creator: creator,
+    creator: creator
   };
 
   const testTag1: Tag = {
@@ -48,7 +43,7 @@ describe('TaggingInterface', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     study: {
       _id: 'study1',
@@ -60,22 +55,22 @@ describe('TaggingInterface', () => {
           type: 'object',
           properties: {
             name: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
-          required: ['name'],
+          required: ['name']
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name',
-            },
-          ],
-        },
+              scope: '#/properties/name'
+            }
+          ]
+        }
       },
-      project: '1',
+      project: '1'
     },
     user: {
       _id: 'some user',
@@ -86,12 +81,12 @@ describe('TaggingInterface', () => {
         studyContributor: {},
         studyAdmin: {},
         projectAdmin: {},
-        owner: false,
-      },
+        owner: false
+      }
     },
     complete: false,
     isTraining: false,
-    info: {},
+    info: {}
   };
 
   const testTag2: Tag = {
@@ -105,7 +100,7 @@ describe('TaggingInterface', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     study: {
       _id: 'study1',
@@ -117,22 +112,22 @@ describe('TaggingInterface', () => {
           type: 'object',
           properties: {
             name: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
-          required: ['name'],
+          required: ['name']
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name',
-            },
-          ],
-        },
+              scope: '#/properties/name'
+            }
+          ]
+        }
       },
-      project: '1',
+      project: '1'
     },
     user: {
       _id: 'some user',
@@ -143,25 +138,22 @@ describe('TaggingInterface', () => {
         studyContributor: {},
         studyAdmin: {},
         projectAdmin: {},
-        owner: false,
-      },
+        owner: false
+      }
     },
     complete: false,
     isTraining: false,
-    info: {},
+    info: {}
   };
 
   const authSpy = {
     get user() {
       return testTag1.user;
-    },
+    }
   };
 
   beforeEach(() => {
-    tagSpy = jasmine.createSpyObj('TagService', [
-      'getNextUntaggedEntry',
-      'saveTag',
-    ]);
+    tagSpy = jasmine.createSpyObj('TagService', ['getNextUntaggedEntry', 'saveTag']);
     const studySpy = jasmine.createSpyObj('StudyService', ['getStudies']);
     studySpy.getStudies.and.returnValue(Promise.resolve([]));
 
@@ -171,8 +163,8 @@ describe('TaggingInterface', () => {
       providers: [
         { provide: TagService, useValue: tagSpy },
         { provide: StudyService, useValue: studySpy },
-        { provide: AuthService, useValue: authSpy },
-      ],
+        { provide: AuthService, useValue: authSpy }
+      ]
     });
 
     tagInterface = TestBed.createComponent(TaggingInterface);

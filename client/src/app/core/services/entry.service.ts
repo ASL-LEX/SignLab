@@ -19,7 +19,7 @@ export class EntryService {
    */
   async setMetadata(definitions: MetadataDefinition[]) {
     this.signLab.post<any>('api/entry/metadata', definitions, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -30,7 +30,7 @@ export class EntryService {
    */
   async getEntries(): Promise<Entry[]> {
     return this.signLab.get<Entry[]>('api/entry/', {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -39,7 +39,7 @@ export class EntryService {
    */
   async getEntriesForDataset(dataset: Dataset): Promise<Entry[]> {
     return this.signLab.get<Entry[]>(`api/entry/dataset/${dataset.id}`, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -50,7 +50,7 @@ export class EntryService {
   async getEntryStudies(study: Study, dataset: Dataset): Promise<EntryStudy[]> {
     return this.signLab.get<EntryStudy[]>('api/entry/entriestudies', {
       params: { studyID: study._id!, datasetID: dataset.id },
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -59,7 +59,7 @@ export class EntryService {
    */
   async setTargetDataset(dataset: Dataset) {
     this.signLab.put(`api/entry/upload/dataset/${dataset.id}`, null, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -68,7 +68,7 @@ export class EntryService {
    */
   async setTargetUser(user: User) {
     this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -83,7 +83,7 @@ export class EntryService {
     form.append('file', file);
 
     return this.signLab.post<SaveAttempt>('api/entry/upload/csv', form, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -95,7 +95,7 @@ export class EntryService {
     form.append('file', file);
 
     return this.signLab.post<SaveAttempt>('api/entry/upload/zip', form, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -108,21 +108,15 @@ export class EntryService {
    * @param studyID The ID of the study that this is being applied to
    * @return True if the change took place successfully
    */
-  async setUsedInStudy(
-    entryID: string,
-    usedInStudy: boolean,
-    studyID: string
-  ): Promise<boolean> {
+  async setUsedInStudy(entryID: string, usedInStudy: boolean, studyID: string): Promise<boolean> {
     const targetURL = 'api/entry/enable';
     const requestBody = {
       entryID: entryID,
       studyID: studyID,
-      isPartOfStudy: usedInStudy,
+      isPartOfStudy: usedInStudy
     };
     try {
-      await this.signLab.put<any>(targetURL, requestBody, {
-        provideToken: true,
-      });
+      await this.signLab.put<any>(targetURL, requestBody, { provideToken: true });
     } catch (error) {
       console.debug('Failed to update the user role');
       return false;
@@ -137,7 +131,7 @@ export class EntryService {
    */
   async delete(entry: Entry) {
     this.signLab.delete<any>(`api/entry/${entry._id}`, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -146,12 +140,7 @@ export class EntryService {
    * upload of entry data
    */
   async getCSVHeader(): Promise<string> {
-    const result = await this.signLab.get<{ header: string }>(
-      'api/entry/template',
-      {
-        provideToken: true,
-      }
-    );
+    const result = await this.signLab.get<{ header: string }>('api/entry/template', { provideToken: true });
 
     return result.header;
   }

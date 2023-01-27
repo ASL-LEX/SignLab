@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Response,
-  Param,
-  StreamableFile,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Response, Param, StreamableFile, HttpException, HttpStatus } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { SchemaService } from './entry/schema.service';
@@ -21,10 +13,7 @@ export class AppController {
   }
 
   @Get('/media/:filename')
-  videoURL(
-    @Response({ passthrough: true }) res: any,
-    @Param('filename') filename: string,
-  ) {
+  videoURL(@Response({ passthrough: true }) res: any, @Param('filename') filename: string) {
     try {
       // Param is automatically URI decoded, for this testing, should not
       // take place here so the input is re-encoded. Since this route is used
@@ -33,16 +22,13 @@ export class AppController {
       const file = createReadStream(join(process.cwd(), `bucket/${filename}`));
 
       res.set({
-        'Content-Type': 'video/webm',
+        'Content-Type': 'video/webm'
       });
       return new StreamableFile(file);
     } catch (error: any) {
       console.error(error);
 
-      throw new HttpException(
-        `Failed to access the requested file ${filename}`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Failed to access the requested file ${filename}`, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -56,7 +42,7 @@ export class AppController {
   @Get('/api/first')
   async isFirstTime() {
     return {
-      isFirstTimeSetup: !(await this.schemaService.hasSchema('Entry')),
+      isFirstTimeSetup: !(await this.schemaService.hasSchema('Entry'))
     };
   }
 }

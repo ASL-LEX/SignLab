@@ -13,12 +13,12 @@ describe('EntryUploadDialog', () => {
     where: [
       {
         place: 'Line 1',
-        message: 'Line 1 bad',
-      },
-    ],
+        message: 'Line 1 bad'
+      }
+    ]
   };
   const exampleSuccess: SaveAttempt = {
-    type: 'success',
+    type: 'success'
   };
 
   // Representation of the event with files for testing
@@ -40,17 +40,12 @@ describe('EntryUploadDialog', () => {
       owner: false,
       studyContributor: {},
       projectAdmin: {},
-      studyAdmin: {},
-    },
+      studyAdmin: {}
+    }
   };
 
   beforeEach(() => {
-    entrySpy = jasmine.createSpyObj('EntryService', [
-      'uploadCSV',
-      'uploadZIP',
-      'setTargetUser',
-      'setTargetDataset',
-    ]);
+    entrySpy = jasmine.createSpyObj('EntryService', ['uploadCSV', 'uploadZIP', 'setTargetUser', 'setTargetDataset']);
     datasetService = jasmine.createSpyObj('DatasetService', [], {
       datasets: new BehaviorSubject([
         {
@@ -59,12 +54,12 @@ describe('EntryUploadDialog', () => {
           name: 'test',
           description: 'test',
           creator: testUser,
-          projectAccess: {},
-        },
-      ]),
+          projectAccess: {}
+        }
+      ])
     });
     const authSpy = jasmine.createSpyObj('AuthService', [], {
-      users: testUser,
+      users: testUser
     });
 
     TestBed.configureTestingModule({
@@ -72,8 +67,8 @@ describe('EntryUploadDialog', () => {
       providers: [
         { provide: EntryService, useValue: entrySpy },
         { provide: DatasetService, useValue: datasetService },
-        { provide: AuthService, useValue: authSpy },
-      ],
+        { provide: AuthService, useValue: authSpy }
+      ]
     });
 
     entryDialog = TestBed.createComponent(EntryUploadDialog);
@@ -101,9 +96,7 @@ describe('EntryUploadDialog', () => {
     // Expected message and error location
     expect(errorMessage.textContent).toContain(exampleError.message);
     expect(compiled.querySelectorAll('ul li').length).toEqual(1);
-    expect(compiled.querySelectorAll('ul li')[0].textContent).toContain(
-      exampleError.where![0].message
-    );
+    expect(compiled.querySelectorAll('ul li')[0].textContent).toContain(exampleError.where![0].message);
   });
 
   it('should not allow ZIP uploads when the CSV has not been uploaded', async () => {
@@ -187,8 +180,6 @@ describe('EntryUploadDialog', () => {
     // Expected message and error location
     expect(errorMessage.textContent).toContain(exampleError.message);
     expect(compiled.querySelectorAll('ul li').length).toEqual(1);
-    expect(compiled.querySelectorAll('ul li')[0].textContent).toContain(
-      exampleError.where![0].message
-    );
+    expect(compiled.querySelectorAll('ul li')[0].textContent).toContain(exampleError.where![0].message);
   });
 });

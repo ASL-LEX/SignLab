@@ -1,14 +1,5 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import {
-  EntryTableElement,
-  EntryTableToggleChange,
-} from '../../models/entry-table-element';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { EntryService } from '../../../core/services/entry.service';
 import { Study } from 'shared/dtos/study.dto';
 import { Dataset } from '../../../graphql/graphql';
@@ -29,7 +20,7 @@ import { Dataset } from '../../../graphql/graphql';
     [displayStudyTrainingControls]="false"
     [entryData]="entryData"
     (partOfStudyChange)="updatePartOfStudy($event)"
-  ></entry-table-core>`,
+  ></entry-table-core>`
 })
 export class EntryStudyTable implements OnInit, OnChanges {
   /** The ID of the study that is being viewed */
@@ -56,10 +47,7 @@ export class EntryStudyTable implements OnInit, OnChanges {
 
   async loadEntries() {
     if (this.study && this.dataset) {
-      this.entryData = await this.entryService.getEntryStudies(
-        this.study,
-        this.dataset
-      );
+      this.entryData = await this.entryService.getEntryStudies(this.study, this.dataset);
     }
   }
 
@@ -67,13 +55,9 @@ export class EntryStudyTable implements OnInit, OnChanges {
    * Control if the given entry should be part of the study or not. This
    * will make the change against the backend
    */
-  async updatePartOfStudy(
-    resTableChange: EntryTableToggleChange
-  ): Promise<void> {
+  async updatePartOfStudy(resTableChange: EntryTableToggleChange): Promise<void> {
     if (resTableChange.entryElem.entry._id === undefined) {
-      console.error(
-        'No ID associated with entry, cannot update partOfStudy state'
-      );
+      console.error('No ID associated with entry, cannot update partOfStudy state');
       return;
     }
     if (this.study === null) {

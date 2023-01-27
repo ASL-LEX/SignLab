@@ -14,7 +14,7 @@ export class S3Storage extends BucketStorage {
       credentials: { accessKeyId: string; secretAccessKey: string };
       baseURL: string;
       endpoint?: string;
-    },
+    }
   ) {
     super(bucketName);
 
@@ -22,16 +22,13 @@ export class S3Storage extends BucketStorage {
       credentials: config.credentials,
       endpoint: config.endpoint,
       region: 'us-east-1',
-      forcePathStyle: true,
+      forcePathStyle: true
     });
 
     this.baseURL = config.baseURL;
   }
 
-  async objectUpload(
-    file: string | Buffer,
-    target: string,
-  ): Promise<BucketFile> {
+  async objectUpload(file: string | Buffer, target: string): Promise<BucketFile> {
     let body: Buffer;
     if (typeof file === 'string') {
       body = await readFile(file);
@@ -42,14 +39,12 @@ export class S3Storage extends BucketStorage {
     const params = {
       Bucket: this.bucketName,
       Key: target,
-      Body: body,
+      Body: body
     };
     const result = await this.s3.putObject(params);
 
     if (result.$metadata.httpStatusCode != 200) {
-      throw new Error(
-        `Failed to upload file to S3 with HTTP Code ${result.$metadata.httpStatusCode}`,
-      );
+      throw new Error(`Failed to upload file to S3 with HTTP Code ${result.$metadata.httpStatusCode}`);
     }
 
     return { name: target, uri: `${this.baseURL}/${target}` };

@@ -1,9 +1,6 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { EntryService } from '../../../core/services/entry.service';
-import {
-  EntryTableElement,
-  EntryTableToggleChange,
-} from '../../models/entry-table-element';
+import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { Dataset } from '../../../graphql/graphql';
 
 /**
@@ -25,7 +22,7 @@ import { Dataset } from '../../../graphql/graphql';
     [entryData]="entryData"
     (partOfStudyChange)="markEntryAsEnabled($event)"
     (partOfTrainingChange)="markEntryAsTraining($event)"
-  ></entry-table-core>`,
+  ></entry-table-core>`
 })
 export class EntryNewStudyTable implements OnInit {
   /** Set of entry IDs that should be marked as disabled for the study */
@@ -49,7 +46,7 @@ export class EntryNewStudyTable implements OnInit {
         return {
           entry: entry,
           isUsedForTraining: false,
-          isPartOfStudy: true,
+          isPartOfStudy: true
         };
       });
     });
@@ -63,11 +60,7 @@ export class EntryNewStudyTable implements OnInit {
    * disabled entries is maintained.
    */
   markEntryAsEnabled(resTableChange: EntryTableToggleChange): void {
-    this.modifySet(
-      this.markedDisabled,
-      resTableChange.entryElem,
-      !resTableChange.option
-    );
+    this.modifySet(this.markedDisabled, resTableChange.entryElem, !resTableChange.option);
     this.markedDisabledChange.emit(this.markedDisabled);
   }
 
@@ -76,11 +69,7 @@ export class EntryNewStudyTable implements OnInit {
    * this study.
    */
   markEntryAsTraining(resTableChange: EntryTableToggleChange): void {
-    this.modifySet(
-      this.markedTraining,
-      resTableChange.entryElem,
-      resTableChange.option
-    );
+    this.modifySet(this.markedTraining, resTableChange.entryElem, resTableChange.option);
     this.markedTrainingChange.emit(this.markedTraining);
   }
 
@@ -88,11 +77,7 @@ export class EntryNewStudyTable implements OnInit {
    * Helper function which ensures that the entry ID is present then
    * either adds for removes that ID to a set.
    */
-  private modifySet(
-    set: Set<string>,
-    entryElem: EntryTableElement,
-    shouldBeInSet: boolean
-  ): void {
+  private modifySet(set: Set<string>, entryElem: EntryTableElement, shouldBeInSet: boolean): void {
     if (!entryElem.entry._id) {
       console.error('Entry Table Element lacks ID');
       return;

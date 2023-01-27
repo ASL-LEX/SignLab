@@ -12,7 +12,7 @@ import { DatasetExistsGQL } from '../../../graphql/datasets/datasets.generated';
 @Component({
   selector: 'dataset-upload-dialog',
   templateUrl: './dataset-upload-dialog.component.html',
-  styleUrls: ['./dataset-upload-dialog.component.css'],
+  styleUrls: ['./dataset-upload-dialog.component.css']
 })
 export class DatasetUploadDialog {
   constructor(
@@ -24,7 +24,7 @@ export class DatasetUploadDialog {
 
   createForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required])
   });
 
   get name() {
@@ -40,9 +40,7 @@ export class DatasetUploadDialog {
       return; // Nothing to submit, should not reach here with proper Validators
     }
 
-    const datasetExists = await firstValueFrom(
-      this.datasetExistsGQL.fetch({ name: this.name.value })
-    );
+    const datasetExists = await firstValueFrom(this.datasetExistsGQL.fetch({ name: this.name.value }));
     if (datasetExists.data.datasetExists) {
       alert('Dataset with that name aleady exists');
       return;
@@ -51,7 +49,7 @@ export class DatasetUploadDialog {
     const dataset = {
       name: this.name!.value!,
       description: this.description!.value!,
-      creatorID: this.authService.user._id,
+      creatorID: this.authService.user._id
     };
 
     this.datasetService.createDataset(dataset);

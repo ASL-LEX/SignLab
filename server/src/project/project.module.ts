@@ -13,9 +13,9 @@ import { ProjectChangePipe } from './project.dto';
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
-    forwardRef(() => SharedModule),
+    forwardRef(() => SharedModule)
   ],
   providers: [ProjectService, ProjectResolver, ProjectChangePipe],
-  exports: [ProjectService],
+  exports: [ProjectService]
 })
 export class ProjectModule {}

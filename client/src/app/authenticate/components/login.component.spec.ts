@@ -16,32 +16,30 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     // Make spy for authentication service
     authSpy = jasmine.createSpyObj('AuthService', ['authenticate']);
-    authSpy.authenticate.and.callFake(
-      async (username: string, password: string) => {
-        if (username == validUsername && password == validPassword) {
-          return {
-            email: 'bob@bu.edu',
-            name: 'bob',
-            password: 'hi',
-            roles: {
-              owner: false,
-              studyContributor: {},
-              projectAdmin: {},
-              studyAdmin: {},
-            },
-            username: 'bob',
-            _id: 'sadlkfj',
-          };
-        }
-        return null;
+    authSpy.authenticate.and.callFake(async (username: string, password: string) => {
+      if (username == validUsername && password == validPassword) {
+        return {
+          email: 'bob@bu.edu',
+          name: 'bob',
+          password: 'hi',
+          roles: {
+            owner: false,
+            studyContributor: {},
+            projectAdmin: {},
+            studyAdmin: {}
+          },
+          username: 'bob',
+          _id: 'sadlkfj'
+        };
       }
-    );
+      return null;
+    });
 
     // Setup login component
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [LoginComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthService, useValue: authSpy }]
     });
 
     login = TestBed.createComponent(LoginComponent);
@@ -61,10 +59,7 @@ describe('LoginComponent', () => {
     login.componentInstance.authenticateUser();
 
     // Ensure that authentication has been called
-    expect(authSpy.authenticate).toHaveBeenCalledWith(
-      validUsername,
-      validPassword
-    );
+    expect(authSpy.authenticate).toHaveBeenCalledWith(validUsername, validPassword);
 
     // TODO: Test changes to page after authentication takes place
   });
