@@ -3,6 +3,7 @@ import { Dataset } from './dataset.schema';
 import { Injectable } from '@nestjs/common';
 import { FilterQuery, Model } from 'mongoose';
 import { ProjectAccessChangeFull } from './dataset.dto';
+import { Project } from '../project/project.schema';
 
 @Injectable()
 export class DatasetService {
@@ -38,6 +39,10 @@ export class DatasetService {
    */
   async exists(name: string): Promise<boolean> {
     return (await this.datasetModel.findOne({ name }).exec()) !== null;
+  }
+
+  async getByProject(project: Project): Promise<Dataset[]> {
+    return this.datasetModel.find({ [`projectAccess.${project._id}`]: true }).exec();
   }
 
   async changeProjectAccess(

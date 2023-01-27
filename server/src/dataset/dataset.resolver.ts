@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ResolveField } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, ID } from '@nestjs/graphql';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
 import {
@@ -12,6 +12,8 @@ import {
 import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
 import { UserPipe } from '../shared/pipes/user.pipe';
+import { ProjectPipe } from '../shared/pipes/project.pipe';
+import { Project } from '../project/project.schema';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
@@ -20,9 +22,16 @@ export class DatasetResolver {
     private readonly userPipe: UserPipe,
   ) {}
 
+  // TODO: Add owner only guard
   @Query(() => [Dataset])
   async getDatasets() {
     return this.datasetService.findAll();
+  }
+
+  // TODO: Add guard for project access
+  @Query(() => [Dataset])
+  async getDatasetByProject(@Args('project', { type: () => ID }, ProjectPipe) project: Project): Promise<Dataset[]> {
+    return this.datasetService.getByProject(project);
   }
 
   @Mutation(() => Dataset)
