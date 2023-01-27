@@ -6,9 +6,10 @@ import {
 import { writeFileSync } from 'fs';
 import { printSchema } from 'graphql';
 import { join } from 'path';
+import { DatasetResolver } from './dataset/dataset.resolver';
 import { ProjectResolver } from './project/project.resolver';
 
-const resolvers = [ProjectResolver];
+const resolvers = [ProjectResolver, DatasetResolver];
 
 const main = async () => {
   const app = await NestFactory.create(GraphQLSchemaBuilderModule);
