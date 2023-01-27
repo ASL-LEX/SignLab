@@ -49,7 +49,7 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
               <td mat-cell *matCellDef="let project">
                 <mat-slide-toggle
                   (change)="toggleProjectAccess(dataset, project, $event)"
-                  [checked]="dataset.projectAccess[project.id]"
+                  [checked]="dataset.projectAccess[project._id]"
                 >
                 </mat-slide-toggle></td
             ></ng-container>

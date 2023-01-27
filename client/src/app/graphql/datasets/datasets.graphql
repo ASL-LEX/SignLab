@@ -14,6 +14,22 @@ query getDatasets {
   }
 }
 
+query getDatasetsByProject($project: ID!) {
+  getDatasetsByProject(project: $project) {
+    id,
+    name,
+    description,
+    creator {
+      id,
+      name,
+      email,
+      username,
+      roles
+    },
+    projectAccess
+  }
+}
+
 query datasetExists($name: String!) {
   datasetExists(name: $name)
 }
