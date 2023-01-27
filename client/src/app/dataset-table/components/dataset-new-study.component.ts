@@ -7,7 +7,7 @@ import { DatasetService } from '../../core/services/dataset.service';
 @Component({
   selector: 'dataset-new-study-table',
   template: `
-    <div *ngIf="datasetService.datasets | async as datasets">
+    <div *ngIf="datasetService.visibleDatasets | async as datasets">
       <mat-expansion-panel *ngFor="let dataset of datasets">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ dataset.name }}</mat-panel-title>
