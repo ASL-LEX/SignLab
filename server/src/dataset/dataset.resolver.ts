@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, ResolveField, ID } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  ID,
+} from '@nestjs/graphql';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
 import {
@@ -30,7 +37,9 @@ export class DatasetResolver {
 
   // TODO: Add guard for project access
   @Query(() => [Dataset])
-  async getDatasetsByProject(@Args('project', { type: () => ID }, ProjectPipe) project: Project): Promise<Dataset[]> {
+  async getDatasetsByProject(
+    @Args('project', { type: () => ID }, ProjectPipe) project: Project,
+  ): Promise<Dataset[]> {
     return this.datasetService.getByProject(project);
   }
 

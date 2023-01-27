@@ -42,7 +42,9 @@ export class DatasetService {
   }
 
   async getByProject(project: Project): Promise<Dataset[]> {
-    return this.datasetModel.find({ [`projectAccess.${project._id}`]: true }).exec();
+    return this.datasetModel
+      .find({ [`projectAccess.${project._id}`]: true })
+      .exec();
   }
 
   async changeProjectAccess(

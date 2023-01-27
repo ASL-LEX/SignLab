@@ -36,7 +36,7 @@ export class DatasetService {
     private readonly getDatasetsGQL: GetDatasetsGQL,
     private readonly createDatasetGQL: CreateDatasetGQL,
     private readonly getDatasetsByProjectGQL: GetDatasetsByProjectGQL,
-    private readonly projectService: ProjectService,
+    private readonly projectService: ProjectService
   ) {
     // Logic for getting all datasets
     this.datasetQuery = this.getDatasetsGQL.watch();
