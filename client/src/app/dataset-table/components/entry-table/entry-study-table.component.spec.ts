@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 describe('EntryStudyTable', () => {
   const creator = {
     _id: '1',
+    id: '1',
     name: 'test',
     username: 'test',
     email: '',
@@ -26,10 +27,12 @@ describe('EntryStudyTable', () => {
   };
 
   const dataset = {
+    id: '1',
     _id: '1',
     name: 'test',
     description: 'test',
     creator: creator,
+    projectAccess: {},
   };
   const exampleEntryData: EntryStudy[] = [
     {
