@@ -35,6 +35,17 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "allowedCommonJsDependencies": ["lodash", "joi", "ajv", "ajv-formats"],
+              "aot": false,
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": false,
+              "extractLicenses": false,
+              "vendorChunk": false,
+              "buildOptimizer": false
+            },
             "production": {
               "fileReplacements": [
                 {
