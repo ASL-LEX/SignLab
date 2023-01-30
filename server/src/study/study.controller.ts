@@ -42,9 +42,10 @@ export class StudyController {
   /**
    * Get information on a per-user basis on how users can access the
    * study.
+   * TODO: Add guard for getters
    */
   @Get('/users')
-  @UseGuards(JwtAuthGuard, StudyGuard)
+  @UseGuards(JwtAuthGuard)
   async getUserStudies(@Query('studyID', StudyPipe) study: Study): Promise<UserStudy[]> {
     return this.userStudyService.getUserStudies(study);
   }

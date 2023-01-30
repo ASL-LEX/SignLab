@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { User } from 'shared/dtos/user.dto';
-import { UserService } from '../../core/services/user.service';
 import { StudyService } from '../../core/services/study.service';
 import { ProjectService } from '../../core/services/project.service';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
+import { Study } from 'shared/dtos/study.dto';
 
 @Component({
   templateUrl: './user-permissions.component.html',
@@ -11,7 +12,7 @@ import { ProjectService } from '../../core/services/project.service';
 })
 export class UserPermissionsComponent {
   /** Information on the available users */
-  users: User[] = [];
+  users: UserStudy[] = [];
   /** The currently selected study ID */
   activeStudyID: string | null = null;
   /** The currently selected project ID */
@@ -20,15 +21,11 @@ export class UserPermissionsComponent {
 
   constructor(
     public studyService: StudyService,
-    private userService: UserService,
     private projectService: ProjectService
   ) {
-    this.userService.getUsers().then((users) => {
-      this.users = users;
-    });
-
     this.studyService.activeStudy.subscribe((study) => {
       this.activeStudyID = study ? study._id! : null;
+      this.loadData(study);
     });
 
     this.projectService.activeProject.subscribe((project) => {
@@ -113,5 +110,14 @@ export class UserPermissionsComponent {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+  }
+
+  private async loadData(study: Study | null) {
+    if (study === null) {
+      this.users = [];
+      return;
+    }
+
+    this.users = await this.studyService.getUserStudies(study._id!);
   }
 }
