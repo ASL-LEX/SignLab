@@ -1,12 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Study } from '../study/study.schema';
 import { StudyService } from '../study/study.service';
-import {
-  UserAvailability,
-  UserCredentials,
-  UserIdentification,
-  UserSignup,
-} from 'shared/dtos/user.dto';
+import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
 import { User } from '../user/user.schema';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -15,11 +10,11 @@ import { UserStudyService } from '../userstudy/userstudy.service';
 // Test values which are used for testing authentication
 const validCredentials: UserCredentials = {
   username: 'bob',
-  password: 'bobby',
+  password: 'bobby'
 };
 const invalidCredentials: UserCredentials = {
   username: 'sam',
-  password: 'sammy',
+  password: 'sammy'
 };
 
 // Test user
@@ -32,8 +27,8 @@ const testUser: User = {
     owner: false,
     studyAdmin: {},
     projectAdmin: {},
-    studyContributor: {},
-  },
+    studyContributor: {}
+  }
 };
 
 const mockAuthService = {
@@ -63,18 +58,18 @@ const mockAuthService = {
   // Return the test user
   async signup(_userSignup: UserSignup): Promise<User> {
     return testUser;
-  },
+  }
 };
 
 const mockStudyService = {
   async getStudies(): Promise<Study[]> {
     return [];
-  },
+  }
 };
 
 const mockUserStudyService = {
   async create(_user: User, _study: Study) {},
-  async makeForUser(_user: User) {},
+  async makeForUser(_user: User) {}
 };
 
 /**
@@ -84,12 +79,12 @@ const mockUserStudyService = {
 jest.mock('../entry/entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 jest.mock('../entry/entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 
 describe('AuthController', () => {
@@ -102,17 +97,17 @@ describe('AuthController', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: mockAuthService,
+          useValue: mockAuthService
         },
         {
           provide: StudyService,
-          useValue: mockStudyService,
+          useValue: mockStudyService
         },
         {
           provide: UserStudyService,
-          useValue: mockUserStudyService,
-        },
-      ],
+          useValue: mockUserStudyService
+        }
+      ]
     }).compile();
 
     authController = await module.resolve(AuthController);
@@ -129,7 +124,7 @@ describe('AuthController', () => {
     it('should return null for invalid username + valid password', async () => {
       const result = await authController.login({
         username: invalidCredentials.username,
-        password: validCredentials.password,
+        password: validCredentials.password
       });
 
       // Expect the result to be null
@@ -139,7 +134,7 @@ describe('AuthController', () => {
     it('should return null for valid username + invalid password', async () => {
       const result = await authController.login({
         username: validCredentials.username,
-        password: invalidCredentials.password,
+        password: invalidCredentials.password
       });
 
       // Expect the result to be null
@@ -167,7 +162,7 @@ describe('AuthController', () => {
     it('should return handle non-available username and non-available email', async () => {
       const result = await authController.userAvailabiliy({
         username: 'bob',
-        email: 'bob@bu.edu',
+        email: 'bob@bu.edu'
       });
 
       expect(result).toEqual({ username: false, email: false });
@@ -176,7 +171,7 @@ describe('AuthController', () => {
     it('should return handle non-available username and available email', async () => {
       const result = await authController.userAvailabiliy({
         username: 'bob',
-        email: 'sammy@bu.edu',
+        email: 'sammy@bu.edu'
       });
 
       expect(result).toEqual({ username: false, email: true });
@@ -185,7 +180,7 @@ describe('AuthController', () => {
     it('should return handle available username and non-available email', async () => {
       const result = await authController.userAvailabiliy({
         username: 'sam',
-        email: 'bob@bu.edu',
+        email: 'bob@bu.edu'
       });
 
       expect(result).toEqual({ username: true, email: false });
@@ -194,7 +189,7 @@ describe('AuthController', () => {
     it('should return handle available username and available email', async () => {
       const result = await authController.userAvailabiliy({
         username: 'sam',
-        email: 'sammy@bu.edu',
+        email: 'sammy@bu.edu'
       });
 
       expect(result).toEqual({ username: true, email: true });
@@ -207,7 +202,7 @@ describe('AuthController', () => {
         username: 'bob',
         email: 'bob@bu.edu',
         name: 'bob',
-        password: 'bobby',
+        password: 'bobby'
       };
       await expect(authController.userSignup(userSignup)).rejects.toThrow();
     });
@@ -217,7 +212,7 @@ describe('AuthController', () => {
         username: 'bob',
         email: 'sammy@bu.edu',
         name: 'bob',
-        password: 'bobby',
+        password: 'bobby'
       };
       await expect(authController.userSignup(userSignup)).rejects.toThrow();
     });
@@ -227,7 +222,7 @@ describe('AuthController', () => {
         username: 'sam',
         email: 'bob@bu.edu',
         name: 'bob',
-        password: 'bobby',
+        password: 'bobby'
       };
       await expect(authController.userSignup(userSignup)).rejects.toThrow();
     });
@@ -237,7 +232,7 @@ describe('AuthController', () => {
         username: 'bob',
         email: 'bob@bu.edu',
         name: 'bob',
-        password: 'boo',
+        password: 'boo'
       };
       await expect(authController.userSignup(userSignup)).rejects.toThrow();
     });
@@ -247,7 +242,7 @@ describe('AuthController', () => {
         username: 'sam',
         email: 'sammy@bu.edu',
         name: 'sam',
-        password: 'sammy',
+        password: 'sammy'
       };
       const result = await authController.userSignup(userSignup);
 

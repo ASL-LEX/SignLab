@@ -25,7 +25,7 @@ import { NewStudyMeta } from '../../models/new-study';
         ></jsonforms>
       </mat-card-content>
     </mat-card>
-  `,
+  `
 })
 export class RequiredInfoComponent {
   /**
@@ -76,16 +76,16 @@ const JSON_FORMS_DATA_SCHEMA = {
   type: 'object',
   properties: {
     name: {
-      type: 'string',
+      type: 'string'
     },
     description: {
-      type: 'string',
+      type: 'string'
     },
     instructions: {
-      type: 'string',
-    },
+      type: 'string'
+    }
   },
-  required: ['name', 'description', 'instructions'],
+  required: ['name', 'description', 'instructions']
 };
 
 /**
@@ -96,15 +96,15 @@ const JSON_FORMS_UI_SCHEMA = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/name',
+      scope: '#/properties/name'
     },
     {
       type: 'Control',
-      scope: '#/properties/description',
+      scope: '#/properties/description'
     },
     {
       type: 'Control',
-      scope: '#/properties/instructions',
-    },
-  ],
+      scope: '#/properties/instructions'
+    }
+  ]
 };

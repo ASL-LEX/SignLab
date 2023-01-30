@@ -12,9 +12,9 @@ import { ProjectModule } from '../project/project.module';
     MongooseModule.forFeature([{ name: Dataset.name, schema: DatasetSchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => SharedModule),
-    forwardRef(() => ProjectModule),
+    forwardRef(() => ProjectModule)
   ],
   providers: [DatasetService, DatasetResolver],
-  exports: [DatasetService],
+  exports: [DatasetService]
 })
 export class DatasetModule {}

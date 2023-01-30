@@ -1,11 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-  FormBuilder,
-  FormArray,
-  FormGroup,
-  Validators,
-  AbstractControl,
-} from '@angular/forms';
+import { FormBuilder, FormArray, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { EntryService } from '../../../core/services/entry.service';
 
 /**
@@ -27,20 +21,17 @@ function uniqueValidator(control: AbstractControl) {
 
 @Component({
   selector: 'entry-meta-form',
-  templateUrl: './entry-meta-form.component.html',
+  templateUrl: './entry-meta-form.component.html'
 })
 export class EntryMetaForm {
   /** Form that controls the fields of the metadata */
   entryMetadataFormGroup = this.formBuilder.group({
-    entryMetadata: this.formBuilder.array([], uniqueValidator),
+    entryMetadata: this.formBuilder.array([], uniqueValidator)
   });
   /** Callback for after the metadata has been submitted */
   @Input() onMetadataSubmit: () => void;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private entryService: EntryService
-  ) {}
+  constructor(private formBuilder: FormBuilder, private entryService: EntryService) {}
 
   get entryMetadata() {
     return this.entryMetadataFormGroup.get('entryMetadata') as FormArray;
@@ -49,7 +40,7 @@ export class EntryMetaForm {
   addMetaField() {
     const newForm: FormGroup = this.formBuilder.group({
       name: ['', Validators.required],
-      type: ['', Validators.required],
+      type: ['', Validators.required]
     });
     this.entryMetadata.push(newForm);
   }

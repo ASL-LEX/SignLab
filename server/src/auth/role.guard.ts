@@ -17,10 +17,7 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector, private authService: AuthService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride('roles', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride('roles', [context.getHandler(), context.getClass()]);
 
     // If the required roles are not defined, assume no access limit
     if (!requiredRoles) {

@@ -19,7 +19,7 @@ import { SelectDialogOptions } from './selector-dialog.component';
       [(selected)]="activeStudyID"
       (selectedChange)="changeStudy($event)"
     ></selector-dialog>
-  `,
+  `
 })
 export class StudySelectDialog {
   /** The options the user can select from */
@@ -29,10 +29,7 @@ export class StudySelectDialog {
   /** The active study ID, for rendering to the user the current selection */
   activeStudyID = '';
 
-  constructor(
-    private dialogRef: MatDialogRef<StudySelectDialog>,
-    private studyService: StudyService
-  ) {
+  constructor(private dialogRef: MatDialogRef<StudySelectDialog>, private studyService: StudyService) {
     // Generate the study list
     this.studyService.getStudiesForActiveProject().then((studies) => {
       this.updateStudyOptions(studies);
@@ -46,9 +43,7 @@ export class StudySelectDialog {
 
   /** Handles selecting a study */
   changeStudy(studyOption: SelectDialogOptions) {
-    const study = this.studies.find(
-      (study) => study._id! === studyOption.value
-    );
+    const study = this.studies.find((study) => study._id! === studyOption.value);
     if (!study) {
       throw new Error('Study not found');
     }
@@ -63,7 +58,7 @@ export class StudySelectDialog {
     this.studyOptions = studies.map((study) => {
       return {
         name: study.name,
-        value: study._id!,
+        value: study._id!
       };
     });
   }

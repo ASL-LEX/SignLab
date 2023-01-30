@@ -13,13 +13,7 @@ import { VideoRecordingModule } from '../video-recording/video-recording.module'
 
 @NgModule({
   declarations: [TaggingInterface, TaggingLanding, TaggingForm],
-  imports: [
-    TaggingInterfaceRoutingModule,
-    SharedModule,
-    VideoRecordingModule,
-    CoreModule,
-    StudiesModule,
-  ],
-  providers: [],
+  imports: [TaggingInterfaceRoutingModule, SharedModule, VideoRecordingModule, CoreModule, StudiesModule],
+  providers: []
 })
 export class TaggingInterfaceModule {}

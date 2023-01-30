@@ -22,6 +22,4 @@ export class SignLabEntryRecording {
   videoNumber: number;
 }
 
-export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(
-  SignLabEntryRecording,
-);
+export const SignLabEntryRecordingSchema = SchemaFactory.createForClass(SignLabEntryRecording);

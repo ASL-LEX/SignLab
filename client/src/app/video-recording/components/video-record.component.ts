@@ -1,12 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ViewChild,
-  EventEmitter,
-  Output,
-  OnInit,
-  Input,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, EventEmitter, Output, OnInit, Input } from '@angular/core';
 import { VideoPreviewComponent } from './video-preview.component';
 
 /**
@@ -35,33 +27,22 @@ import { VideoPreviewComponent } from './video-preview.component';
 
       <!-- Showing how many videos that have to be required, check icon if the required number of videos are required -->
       <div fxLayout="row" fxLayoutAlign="space-evenly none">
-        <h3>
-          Required: {{ minVideos }}
-          {{ minVideos > 1 ? 'Videos' : 'Video' }} Optional: {{ maxVideos }}
-        </h3>
+        <h3>Required: {{ minVideos }} {{ minVideos > 1 ? 'Videos' : 'Video' }} Optional: {{ maxVideos }}</h3>
         <mat-icon *ngIf="numVideosRecorded >= minVideos">check_circle</mat-icon>
       </div>
 
       <!-- Recording info message -->
       <div fxLayout="row" fxLayoutAlign="start center" class="recording-info">
-        <mat-icon *ngIf="isRecording" class="recordingIndicator"
-          >videocam</mat-icon
-        >
+        <mat-icon *ngIf="isRecording" class="recordingIndicator">videocam</mat-icon>
         <span>{{ isRecording ? 'Recording...' : 'Preview' }}</span>
       </div>
 
       <!-- Video preview and navigation buttons -->
-      <div
-        fxLayout="row"
-        fxLayoutAlign="space-between center"
-        class="videoSwitcher"
-      >
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="videoSwitcher">
         <!-- Left arrow -->
         <div fxLayout="row" fxLayoutAlign="start center">
           <button mat-icon-button (click)="previousVideo()">
-            <mat-icon
-              class="arrow"
-              [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording"
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === 0 || isRecording"
               >keyboard_arrow_left</mat-icon
             >
           </button>
@@ -72,11 +53,7 @@ import { VideoPreviewComponent } from './video-preview.component';
         <!-- Right arrow -->
         <div fxLayout="row" fxLayoutAlign="end center">
           <button mat-icon-button (click)="nextVideo()">
-            <mat-icon
-              class="arrow"
-              [class.arrowDisabled]="
-                selectedVideoIndex === maxVideos - 1 || isRecording
-              "
+            <mat-icon class="arrow" [class.arrowDisabled]="selectedVideoIndex === maxVideos - 1 || isRecording"
               >keyboard_arrow_right</mat-icon
             >
           </button>
@@ -93,8 +70,8 @@ import { VideoPreviewComponent } from './video-preview.component';
   `,
   styleUrls: ['./video-record.component.css'],
   host: {
-    '(document:keydown)': 'handleKeyboardEvent($event)',
-  },
+    '(document:keydown)': 'handleKeyboardEvent($event)'
+  }
 })
 export class VideoRecordComponent implements OnInit {
   /** The view element for the video element */
@@ -129,9 +106,7 @@ export class VideoRecordComponent implements OnInit {
 
     // Cannot setup component until the min and max videos are set
     if (this.minVideos === undefined || this.maxVideos === undefined) {
-      console.debug(
-        `Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`
-      );
+      console.debug(`Min videos: ${this.minVideos}, Max videos: ${this.maxVideos}`);
       throw new Error('minVideos and maxVideos must be defined');
     }
   }
@@ -156,12 +131,10 @@ export class VideoRecordComponent implements OnInit {
 
   saveBlob(blob: Blob): void {
     this.videos[this.selectedVideoIndex] = blob;
-    this.numVideosRecorded = this.videos.filter(
-      (video) => video !== null
-    ).length;
+    this.numVideosRecorded = this.videos.filter((video) => video !== null).length;
     this.videoBlob.emit({
       videoBlob: blob,
-      videoNumber: this.selectedVideoIndex,
+      videoNumber: this.selectedVideoIndex
     });
     this.changeDetector.detectChanges();
   }

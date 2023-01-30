@@ -1,8 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  GraphQLSchemaBuilderModule,
-  GraphQLSchemaFactory,
-} from '@nestjs/graphql';
+import { GraphQLSchemaBuilderModule, GraphQLSchemaFactory } from '@nestjs/graphql';
 import { writeFileSync } from 'fs';
 import { printSchema } from 'graphql';
 import { join } from 'path';

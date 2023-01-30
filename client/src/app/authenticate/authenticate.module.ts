@@ -12,6 +12,6 @@ import { SignupComponent } from './components/signup/signup.component';
   declarations: [AuthenticateComponent, LoginComponent, SignupComponent],
   imports: [SharedModule, AuthenticateRoutingModule],
   providers: [],
-  exports: [AuthenticateComponent, SignupComponent],
+  exports: [AuthenticateComponent, SignupComponent]
 })
 export class AuthenticateModule {}

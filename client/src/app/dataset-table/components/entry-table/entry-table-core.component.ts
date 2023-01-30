@@ -7,12 +7,9 @@ import {
   ViewChild,
   AfterViewInit,
   OnChanges,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
-import {
-  EntryTableElement,
-  EntryTableToggleChange,
-} from '../../models/entry-table-element';
+import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -28,11 +25,9 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'entry-table-core',
   templateUrl: './entry-table-core.component.html',
-  styleUrls: ['./entry-table-core.component.css'],
+  styleUrls: ['./entry-table-core.component.css']
 })
-export class EntryTableCoreComponent
-  implements OnInit, AfterViewInit, OnChanges
-{
+export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * The columns to show, these are the default options showed in every table
    * view
@@ -42,7 +37,7 @@ export class EntryTableCoreComponent
   possibleColumns: { name: string; visible: boolean }[] = [
     { name: 'Video Preview', visible: true },
     { name: 'Entry ID', visible: true },
-    { name: 'Responder ID', visible: true },
+    { name: 'Responder ID', visible: true }
   ];
   displayedColumns: string[] = [];
 
@@ -98,8 +93,6 @@ export class EntryTableCoreComponent
   }
 
   updateColumns() {
-    this.displayedColumns = this.possibleColumns
-      .filter((column) => column.visible)
-      .map((column) => column.name);
+    this.displayedColumns = this.possibleColumns.filter((column) => column.visible).map((column) => column.name);
   }
 }

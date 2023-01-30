@@ -23,10 +23,10 @@ import { EntryModule } from '../entry/entry.module';
     forwardRef(() => SharedModule),
     forwardRef(() => BucketModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => EntryModule),
+    forwardRef(() => EntryModule)
   ],
   controllers: [TagController],
   providers: [TagService, TagGuard],
-  exports: [TagService],
+  exports: [TagService]
 })
 export class TagModule {}

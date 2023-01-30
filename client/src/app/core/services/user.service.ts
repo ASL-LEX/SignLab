@@ -9,10 +9,7 @@ import { SignLabHttpClient } from './http.service';
  */
 @Injectable()
 export class UserService {
-  constructor(
-    private signLab: SignLabHttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private signLab: SignLabHttpClient, private authService: AuthService) {}
 
   /**
    * Get back all of the users. If the result is malformed or no users are in
@@ -33,11 +30,7 @@ export class UserService {
    * @param hasRole If the user will have the given role
    * @return True on success, false otherwise
    */
-  async changeRole(
-    user: User,
-    role: string,
-    hasRole: boolean
-  ): Promise<boolean> {
+  async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
     const targetURL = `api/users/${role}/${user._id}`;
 
     // Try to make the change
@@ -64,11 +57,11 @@ export class UserService {
 
     const requestBody = {
       originalID: currentUser._id,
-      newOwnerID: newOwner._id,
+      newOwnerID: newOwner._id
     };
 
     this.signLab.post<any>('api/users/owner/transfer', requestBody, {
-      provideToken: true,
+      provideToken: true
     });
   }
 
@@ -76,22 +69,13 @@ export class UserService {
    * Add the provided user as a new owner
    */
   async addOwner(newOwner: User) {
-    this.signLab.post<any>(
-      `api/users/owner/add/${newOwner._id}`,
-      {},
-      { provideToken: true }
-    );
+    this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {}, { provideToken: true });
   }
 
   /**
    * Get information on the number of owner accounts
    */
-  async getOwnerInfo(): Promise<{
-    numberOfOwners: number;
-    maxOwnerAccounts: number;
-  }> {
-    return this.signLab.get<any>('api/users/owner/info', {
-      provideToken: true,
-    });
+  async getOwnerInfo(): Promise<{ numberOfOwners: number; maxOwnerAccounts: number }> {
+    return this.signLab.get<any>('api/users/owner/info', { provideToken: true });
   }
 }

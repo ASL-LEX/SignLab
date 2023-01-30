@@ -6,7 +6,7 @@ import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
   selector: 'tagging-landing',
-  templateUrl: './tagging-landing.component.html',
+  templateUrl: './tagging-landing.component.html'
 })
 export class TaggingLanding implements OnInit {
   /** The view that the user is seeing */
@@ -14,22 +14,14 @@ export class TaggingLanding implements OnInit {
   /** The representation of the user for the specific study */
   userStudy: UserStudy | null = null;
 
-  constructor(
-    public studyService: StudyService,
-    private authService: AuthService
-  ) {}
+  constructor(public studyService: StudyService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.studyService.activeStudy.subscribe(async (study: Study | null) => {
       if (study) {
-        this.userStudy = await this.studyService.getUserStudy(
-          this.authService.user,
-          study
-        );
+        this.userStudy = await this.studyService.getUserStudy(this.authService.user, study);
 
-        if (
-          !this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]
-        ) {
+        if (!this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]) {
           this.activeView = 'info';
         }
       }

@@ -49,7 +49,7 @@ import { MatTreeModule } from '@angular/material/tree';
     MatTooltipModule,
     MatExpansionModule,
     MatMenuModule,
-    MatTreeModule,
+    MatTreeModule
   ],
   exports: [
     MatButtonModule,
@@ -75,7 +75,7 @@ import { MatTreeModule } from '@angular/material/tree';
     MatTooltipModule,
     MatExpansionModule,
     MatMenuModule,
-    MatTreeModule,
-  ],
+    MatTreeModule
+  ]
 })
 export class MaterialModule {}

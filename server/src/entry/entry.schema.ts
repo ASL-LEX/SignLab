@@ -4,10 +4,7 @@ import { app } from '../main';
 import { SchemaService } from './schema.service';
 import * as dto from 'shared/dtos/entry.dto';
 import { Dataset } from '../dataset/dataset.schema';
-import {
-  SignLabEntryRecording,
-  SignLabEntryRecordingSchema,
-} from './signlab-recording.schema';
+import { SignLabEntryRecording, SignLabEntryRecordingSchema } from './signlab-recording.schema';
 import { User } from '../user/user.schema';
 
 /**
@@ -65,7 +62,7 @@ export class Entry implements dto.Entry {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: Dataset.name,
-    required: true,
+    required: true
   })
   dataset: Dataset;
 
@@ -76,7 +73,7 @@ export class Entry implements dto.Entry {
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: User.name,
-    required: true,
+    required: true
   })
   creator: User;
 
@@ -95,8 +92,8 @@ export class Entry implements dto.Entry {
       validator: async (value: any) => {
         const schemaService = app.get(SchemaService);
         return schemaService.validate('Entry', value);
-      },
-    },
+      }
+    }
   })
   meta: any;
 }

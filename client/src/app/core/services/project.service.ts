@@ -6,30 +6,21 @@ import {
   GetProjectsQuery,
   GetProjectsQueryVariables,
   CreateProjectGQL,
-  CreateProjectMutation,
+  CreateProjectMutation
 } from '../../graphql/projects/projects.generated';
 import { MutationResult, QueryRef } from 'apollo-angular';
 
 @Injectable()
 export class ProjectService {
   /** The available projects */
-  private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<
-    Project[]
-  >([]);
+  private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
   /** The query to get the project list, used for refetching */
-  private readonly projectQuery: QueryRef<
-    GetProjectsQuery,
-    GetProjectsQueryVariables
-  >;
+  private readonly projectQuery: QueryRef<GetProjectsQuery, GetProjectsQueryVariables>;
 
   /** The actively selected project */
-  activeProjectObs: BehaviorSubject<Project | null> =
-    new BehaviorSubject<Project | null>(null);
+  activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
 
-  constructor(
-    projectsGQL: GetProjectsGQL,
-    private readonly createProjectGQL: CreateProjectGQL
-  ) {
+  constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL) {
     // Subscribe to the project query
     this.projectQuery = projectsGQL.watch();
     this.projectQuery.valueChanges.subscribe((result) => {
@@ -43,9 +34,7 @@ export class ProjectService {
 
   setActiveProject(project: Project | null | string) {
     if (typeof project === 'string') {
-      const foundProject = this.projectsObs
-        .getValue()
-        .find((s) => s._id === project);
+      const foundProject = this.projectsObs.getValue().find((s) => s._id === project);
       if (!foundProject) {
         throw new Error('Project not found');
       }
@@ -63,9 +52,7 @@ export class ProjectService {
     return this.activeProjectObs.value != null;
   }
 
-  public createProject(
-    project: ProjectCreate
-  ): Observable<MutationResult<CreateProjectMutation>> {
+  public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
     const result = this.createProjectGQL.mutate({ projectCreate: project });
 
     // Update the project list

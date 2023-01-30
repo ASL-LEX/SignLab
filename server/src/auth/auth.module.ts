@@ -6,10 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import {
-  UserCredentials,
-  UserCredentialsSchema,
-} from './usercredentials.schema';
+import { UserCredentials, UserCredentialsSchema } from './usercredentials.schema';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { RolesGuard } from './role.guard';
@@ -26,27 +23,18 @@ import { StudyModule } from '../study/study.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.getOrThrow<string>('auth.jwtSecret'),
-        signOptions: { expiresIn: '4h' },
+        signOptions: { expiresIn: '4h' }
       }),
-      inject: [ConfigService],
+      inject: [ConfigService]
     }),
-    MongooseModule.forFeature([
-      { name: UserCredentials.name, schema: UserCredentialsSchema },
-    ]),
+    MongooseModule.forFeature([{ name: UserCredentials.name, schema: UserCredentialsSchema }]),
     ConfigModule,
     forwardRef(() => UserModule),
     forwardRef(() => UserStudyModule),
-    forwardRef(() => StudyModule),
+    forwardRef(() => StudyModule)
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    RolesGuard,
-    OwnerGuard,
-    ProjectGuard,
-    StudyGuard,
-  ],
-  exports: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard],
+  exports: [AuthService, JwtStrategy]
 })
 export class AuthModule {}

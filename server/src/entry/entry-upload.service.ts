@@ -46,13 +46,13 @@ export class EntryUploadService {
     private entryUploadModel: Model<EntryUploadDocument>,
     private entryService: EntryService,
     private bucketService: BucketStorage,
-    configService: ConfigService,
+    configService: ConfigService
   ) {
     this.supportedVideoFormats = new Set<string>(
-      configService.getOrThrow<string[]>('mediaSettings.supportedVideoTypes'),
+      configService.getOrThrow<string[]>('mediaSettings.supportedVideoTypes')
     );
     this.supportedImageFormsts = new Set<string>(
-      configService.getOrThrow<string[]>('mediaSettings.supportedImageTypes'),
+      configService.getOrThrow<string[]>('mediaSettings.supportedImageTypes')
     );
   }
 
@@ -89,14 +89,13 @@ export class EntryUploadService {
         if (saveResult.type == 'error') {
           return {
             type: 'error',
-            message:
-              'Error found in the CSV, please fix the error and reupload the CSV',
+            message: 'Error found in the CSV, please fix the error and reupload the CSV',
             where: [
               {
                 place: `Line ${lineNumber}`,
-                message: saveResult.message ? saveResult.message : '',
-              },
-            ],
+                message: saveResult.message ? saveResult.message : ''
+              }
+            ]
           };
         }
 
@@ -106,7 +105,7 @@ export class EntryUploadService {
       // Error related to the CSV parsing
       return {
         type: 'error',
-        message: `Failed to parse CSV with message "${error.message}" on line ${lineNumber}`,
+        message: `Failed to parse CSV with message "${error.message}" on line ${lineNumber}`
       };
     }
 
@@ -115,7 +114,7 @@ export class EntryUploadService {
       return {
         type: 'error',
         message: `No entries found in CSV, ensure there is at least one line
-                  of data not including the required header`,
+                  of data not including the required header`
       };
     }
 
@@ -163,21 +162,15 @@ export class EntryUploadService {
 
       // Check the file type based on the extension
       const fileExtension = file.slice(file.lastIndexOf('.') + 1);
-      if (
-        !this.supportedVideoFormats.has(fileExtension) &&
-        !this.supportedImageFormsts.has(fileExtension)
-      ) {
+      if (!this.supportedVideoFormats.has(fileExtension) && !this.supportedImageFormsts.has(fileExtension)) {
         console.warn(`Unsupported file type uploaded: ${fileExtension}`);
         // Supported file types is all video and image types
-        const supportedFileTypes = [
-          ...this.supportedVideoFormats,
-          ...this.supportedImageFormsts,
-        ].join(', ');
+        const supportedFileTypes = [...this.supportedVideoFormats, ...this.supportedImageFormsts].join(', ');
 
         fileWarnings.push({
           type: 'warning',
           message: `File has unsupported type "${fileExtension}", supported formats ${supportedFileTypes}`,
-          where: [{ place: `${file}`, message: 'Invalid extension' }],
+          where: [{ place: `${file}`, message: 'Invalid extension' }]
         });
 
         continue;
@@ -200,8 +193,8 @@ export class EntryUploadService {
         entries: [],
         saveResult: {
           type: 'warning',
-          message: 'No entry videos found in ZIP, no entries saved',
-        },
+          message: 'No entry videos found in ZIP, no entries saved'
+        }
       };
     }
 
@@ -210,9 +203,9 @@ export class EntryUploadService {
       files.map((file) => {
         return rm(join('./upload/entries', file), {
           recursive: true,
-          force: true,
+          force: true
         });
-      }),
+      })
     );
 
     // Get the entry-uploads that were found in the CSV, but not in the zip.
@@ -223,12 +216,12 @@ export class EntryUploadService {
       fileWarnings.push({
         type: 'warning',
         message: `Entry not found in ZIP, entry not saved`,
-        where: [{ place: `${entryUpload.filename}`, message: '' }],
+        where: [{ place: `${entryUpload.filename}`, message: '' }]
       });
     }
 
     const result: SaveAttempt = {
-      type: 'success',
+      type: 'success'
     };
 
     // Collect all of the warnings generated
@@ -241,14 +234,14 @@ export class EntryUploadService {
         const place = warning.where ? warning.where[0].place : '';
         result.where.push({
           message: warning.message || '',
-          place: place,
+          place: place
         });
       }
     }
 
     return {
       entries: entriesCreated,
-      saveResult: result,
+      saveResult: result
     };
   }
 
@@ -266,14 +259,9 @@ export class EntryUploadService {
    * @param filename The name of the file of the video
    * @param _filePath The path to the file including the name
    */
-  private async saveEntry(
-    filename: string,
-    _filePath: string,
-  ): Promise<EntryUploadResult> {
+  private async saveEntry(filename: string, _filePath: string): Promise<EntryUploadResult> {
     // Try to find a cooresponding EntryUpload based on filename
-    const entryUpload = await this.entryUploadModel
-      .findOne({ filename: filename })
-      .exec();
+    const entryUpload = await this.entryUploadModel.findOne({ filename: filename }).exec();
     if (!entryUpload) {
       return {
         entries: [],
@@ -283,10 +271,10 @@ export class EntryUploadService {
           where: [
             {
               place: `${filename}`,
-              message: 'Entry upload not found',
-            },
-          ],
-        },
+              message: 'Entry upload not found'
+            }
+          ]
+        }
       };
     }
 
@@ -296,28 +284,26 @@ export class EntryUploadService {
     const newEntry: Entry = {
       entryID: entryUpload.entryID,
       mediaURL: 'placeholder',
-      mediaType: this.supportedVideoFormats.has(fileExtension)
-        ? 'video'
-        : 'image',
+      mediaType: this.supportedVideoFormats.has(fileExtension) ? 'video' : 'image',
       recordedInSignLab: false,
       meta: entryUpload.meta,
       dataset: this.dataset!,
       creator: this.user!,
-      dateCreated: new Date(),
+      dateCreated: new Date()
     };
     const entry = await this.entryService.createEntry(newEntry);
 
     // Move the file into the bucket
     const uploadResult = await this.bucketService.objectUpload(
       `upload/entries/${entryUpload.filename}`,
-      `Entries/${entry._id!}.${fileExtension}`,
+      `Entries/${entry._id!}.${fileExtension}`
     );
     this.entryService.updateMediaURL(entry, uploadResult.uri);
 
     // Remove the EntryUpload entity
     await this.entryUploadModel
       .deleteOne({
-        entryID: entryUpload.entryID,
+        entryID: entryUpload.entryID
       })
       .exec();
 
@@ -325,8 +311,8 @@ export class EntryUploadService {
     return {
       entries: [entry],
       saveResult: {
-        type: 'success',
-      },
+        type: 'success'
+      }
     };
   }
 
@@ -341,9 +327,7 @@ export class EntryUploadService {
    * @return The result of attempting to save, if there is an error, a human
    *         readable error field will be present in the result
    */
-  private async entryUploadSave(
-    entryUpload: EntryUpload,
-  ): Promise<SaveAttempt> {
+  private async entryUploadSave(entryUpload: EntryUpload): Promise<SaveAttempt> {
     // Make sure the schema matches the expectation
     const schemaResult = await this.validateSchema(entryUpload);
 
@@ -358,12 +342,11 @@ export class EntryUploadService {
 
     // Make sure the EntryUpload ID is unique
     const entryExists =
-      (await this.entryService.entryExists(entryUpload.entryID)) ||
-      (await this.entryUploadExists(entryUpload.entryID));
+      (await this.entryService.entryExists(entryUpload.entryID)) || (await this.entryUploadExists(entryUpload.entryID));
     if (entryExists) {
       return {
         type: 'error',
-        message: `Entry with ID ${entryUpload.entryID} already exists`,
+        message: `Entry with ID ${entryUpload.entryID} already exists`
       };
     }
 
@@ -389,7 +372,7 @@ export class EntryUploadService {
       entryID: row.entryID,
       responderID: row.responderID,
       filename: row.filename,
-      meta: {},
+      meta: {}
     };
 
     delete row.entryID;
@@ -402,9 +385,7 @@ export class EntryUploadService {
   }
 
   private async entryUploadExists(entryID: string): Promise<boolean> {
-    const entryUpload = await this.entryUploadModel
-      .findOne({ entryID: entryID })
-      .exec();
+    const entryUpload = await this.entryUploadModel.findOne({ entryID: entryID }).exec();
     return entryUpload != null;
   }
 
@@ -432,7 +413,7 @@ export class EntryUploadService {
 
       return {
         type: 'error',
-        message: errorMessage,
+        message: errorMessage
       };
     }
   }
@@ -458,8 +439,7 @@ export class EntryUploadService {
       console.warn('Failed to extract user provided zip');
       return {
         type: 'error',
-        message:
-          'Was unable to extract provided ZIP, ensure the file is valid and not corrupt',
+        message: 'Was unable to extract provided ZIP, ensure the file is valid and not corrupt'
       };
     }
 

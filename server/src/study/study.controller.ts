@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-  Query,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Query, Put, UseGuards } from '@nestjs/common';
 import { EntryService } from '../entry/entry.service';
 import { Study } from '../study/study.schema';
 import { StudyService } from '../study/study.service';
@@ -31,7 +21,7 @@ export class StudyController {
     private entryService: EntryService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
   /**
    * Get all of the studies
@@ -45,10 +35,7 @@ export class StudyController {
    * Deterine if a study with the given name exists
    */
   @Get('/exists')
-  async studyExists(
-    @Query('studyName') studyName: string,
-    @Query('projectID') projectID: string,
-  ): Promise<boolean> {
+  async studyExists(@Query('studyName') studyName: string, @Query('projectID') projectID: string): Promise<boolean> {
     return this.studyService.exists(studyName, projectID);
   }
 
@@ -58,9 +45,7 @@ export class StudyController {
    */
   @Get('/users')
   @UseGuards(JwtAuthGuard, StudyGuard)
-  async getUserStudies(
-    @Query('studyID', StudyPipe) study: Study,
-  ): Promise<UserStudy[]> {
+  async getUserStudies(@Query('studyID', StudyPipe) study: Study): Promise<UserStudy[]> {
     return this.userStudyService.getUserStudies(study);
   }
 
@@ -72,7 +57,7 @@ export class StudyController {
   @Get('/user')
   async getUserStudy(
     @Query('studyID', StudyPipe) study: Study,
-    @Query('userID', UserPipe) user: User,
+    @Query('userID', UserPipe) user: User
   ): Promise<UserStudy> {
     return this.userStudyService.getUserStudy(user, study);
   }
@@ -88,7 +73,7 @@ export class StudyController {
       studyID: string;
       userID: string;
       hasAdminAccess: boolean;
-    },
+    }
   ): Promise<void> {
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
@@ -100,11 +85,7 @@ export class StudyController {
       throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
 
-    return this.userService.markAsStudyAdmin(
-      user,
-      study,
-      changeRequest.hasAdminAccess,
-    );
+    return this.userService.markAsStudyAdmin(user, study, changeRequest.hasAdminAccess);
   }
 
   /**
@@ -118,21 +99,15 @@ export class StudyController {
       studyID: string;
       userID: string;
       hasAccess: boolean;
-    },
+    }
   ): Promise<void> {
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
-      throw new HttpException(
-        `The study with id ${changeRequest.studyID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);
     }
     const user = await this.userService.findOne({ _id: changeRequest.userID });
     if (!user) {
-      throw new HttpException(
-        `The user with id ${changeRequest.userID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`The user with id ${changeRequest.userID} does not exist`, HttpStatus.BAD_REQUEST);
     }
 
     this.userService.markAsContributor(user, study, changeRequest.hasAccess);
@@ -147,20 +122,14 @@ export class StudyController {
   @UseGuards(JwtAuthGuard, ProjectGuard)
   async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
     // Make sure the study name is unique
-    const exists = await this.studyService.exists(
-      studyCreation.study.name,
-      studyCreation.projectID,
-    );
+    const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {
-      throw new HttpException(
-        `Study with name '${studyCreation.study.name}' already exists`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Study with name '${studyCreation.study.name}' already exists`, HttpStatus.BAD_REQUEST);
     }
 
     const newStudy = await this.studyService.createStudy({
       ...studyCreation.study,
-      project: studyCreation.projectID,
+      project: studyCreation.projectID
     });
 
     // Now add a EntryStudy for each entry
@@ -169,14 +138,8 @@ export class StudyController {
 
     // Mark training and disabled entries
     await Promise.all([
-      this.entryStudyService.markTraining(
-        newStudy._id!,
-        studyCreation.trainingEntries,
-      ),
-      this.entryStudyService.markDisabled(
-        newStudy._id!,
-        studyCreation.disabledEntries,
-      ),
+      this.entryStudyService.markTraining(newStudy._id!, studyCreation.trainingEntries),
+      this.entryStudyService.markDisabled(newStudy._id!, studyCreation.disabledEntries)
     ]);
 
     // Create user studies for all existing users
@@ -184,7 +147,7 @@ export class StudyController {
     await Promise.all(
       users.map((user) => {
         return this.userStudyService.create(user, newStudy);
-      }),
+      })
     );
 
     return newStudy;

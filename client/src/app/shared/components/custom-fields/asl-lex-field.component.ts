@@ -1,12 +1,6 @@
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import {
-  Actions,
-  RankedTester,
-  rankWith,
-  composeWithUi,
-  ControlElement,
-} from '@jsonforms/core';
+import { Actions, RankedTester, rankWith, composeWithUi, ControlElement } from '@jsonforms/core';
 import { AslLexService } from '../../services/asl-lex.service';
 import { VideoOption, VideoSelection } from './video-option-field.component';
 
@@ -28,7 +22,7 @@ import { VideoOption, VideoSelection } from './video-option-field.component';
       (videoSelected)="selectOption($event)"
       (searchValue)="searchUpdate($event)"
     ></video-option-field>
-  `,
+  `
 })
 export class AslLexSignBankField extends JsonFormsControl implements OnInit {
   tagSearchResults: VideoOption[] = [];
@@ -50,9 +44,7 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
 
     // Check to see if the `allowCustomTags` is an option present on the
     // JSON UI schema
-    this.allowCustomLabels =
-      this.uischema.options != undefined &&
-      this.uischema.options.allowCustomLabels;
+    this.allowCustomLabels = this.uischema.options != undefined && this.uischema.options.allowCustomLabels;
   }
 
   /**
@@ -79,7 +71,7 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
       return {
         videoURL: sign.videoURL,
         code: sign.code,
-        searchTerm: sign.englishTag,
+        searchTerm: sign.englishTag
       };
     });
     this.changeDetectorRef.detectChanges();
@@ -103,13 +95,10 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
  * Will return true if the UI schema has an option field for "customType"
  * with a value of "asl-lex"
  */
-export const aslLexSignBankControlRendererTester: RankedTester = rankWith(
-  10,
-  (uischema, _schema, _rootSchema) => {
-    return (
-      uischema.options != undefined &&
-      uischema.options.customType != undefined &&
-      uischema.options.customType == 'asl-lex'
-    );
-  }
-);
+export const aslLexSignBankControlRendererTester: RankedTester = rankWith(10, (uischema, _schema, _rootSchema) => {
+  return (
+    uischema.options != undefined &&
+    uischema.options.customType != undefined &&
+    uischema.options.customType == 'asl-lex'
+  );
+});

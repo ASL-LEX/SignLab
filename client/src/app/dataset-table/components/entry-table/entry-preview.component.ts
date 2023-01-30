@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnDestroy,
-  Input,
-  ElementRef,
-  ViewChild,
-  OnInit,
-} from '@angular/core';
+import { Component, OnDestroy, Input, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { EntryTableElement } from '../../models/entry-table-element';
 
 @Component({
@@ -30,7 +23,7 @@ import { EntryTableElement } from '../../models/entry-table-element';
       />
     </div>
   `,
-  styleUrls: ['./entry-preview.component.css'],
+  styleUrls: ['./entry-preview.component.css']
 })
 export class EntryPreview implements OnDestroy, OnInit {
   @Input() entryElem: EntryTableElement;

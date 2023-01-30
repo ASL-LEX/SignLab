@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { StudyService } from '../services/study.service';
 import { StudySelectDialog } from '../../shared/components/study-select-dialog.component';
 import { Observable, of, map } from 'rxjs';
@@ -17,10 +13,7 @@ import { Observable, of, map } from 'rxjs';
 export class StudyGuard implements CanActivate {
   constructor(private studyService: StudyService, private dialog: MatDialog) {}
 
-  canActivate(
-    _route: ActivatedRouteSnapshot,
-    _state: RouterStateSnapshot
-  ): Observable<boolean> {
+  canActivate(_route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<boolean> {
     if (this.studyService.hasActiveStudy()) {
       return of(true);
     }
@@ -31,7 +24,7 @@ export class StudyGuard implements CanActivate {
   private openDialog(): Observable<boolean> {
     const dialogRef = this.dialog.open(StudySelectDialog, {
       width: '500px',
-      data: {},
+      data: {}
     });
 
     return dialogRef.afterClosed().pipe(

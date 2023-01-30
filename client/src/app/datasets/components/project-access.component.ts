@@ -22,10 +22,7 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
         </mat-expansion-panel-header>
 
         <!-- Project View Table -->
-        <div
-          *ngIf="projectService.projects | async as projects"
-          class="project-grid"
-        >
+        <div *ngIf="projectService.projects | async as projects" class="project-grid">
           <table mat-table [dataSource]="projects" class="mat-elevation-z8">
             <!-- Project Name Column -->
             <ng-container matColumnDef="projectName">
@@ -43,9 +40,7 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
 
             <!-- Project Access Column -->
             <ng-container matColumnDef="projectAccess">
-              <th mat-header-cell *matHeaderCellDef>
-                Project Access to Dataset
-              </th>
+              <th mat-header-cell *matHeaderCellDef>Project Access to Dataset</th>
               <td mat-cell *matCellDef="let project">
                 <mat-slide-toggle
                   (change)="toggleProjectAccess(dataset, project, $event)"
@@ -61,14 +56,10 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
       </mat-expansion-panel>
     </div>
   `,
-  styleUrls: ['./project-access.component.css'],
+  styleUrls: ['./project-access.component.css']
 })
 export class ProjectAccess {
-  displayedColumns: string[] = [
-    'projectName',
-    'projectDescription',
-    'projectAccess',
-  ];
+  displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
 
   constructor(
     public readonly datasetService: DatasetService,
@@ -76,18 +67,14 @@ export class ProjectAccess {
     private readonly changeProcessAccessGQL: ChangeProjectAccessGQL
   ) {}
 
-  toggleProjectAccess(
-    dataset: Dataset,
-    project: Project,
-    change: MatSlideToggleChange
-  ) {
+  toggleProjectAccess(dataset: Dataset, project: Project, change: MatSlideToggleChange) {
     this.changeProcessAccessGQL
       .mutate({
         projectAccessChange: {
           datasetID: dataset.id,
           projectID: project._id,
-          hasAccess: change.checked,
-        },
+          hasAccess: change.checked
+        }
       })
       .subscribe((result) => {
         if (result.errors) {

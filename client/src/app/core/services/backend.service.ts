@@ -14,9 +14,7 @@ export class BackendService {
    * Determine if the application is in the "first time setup mode" or not.
    */
   async isInFirstTimeSetup(): Promise<boolean> {
-    const result = await this.signLab.get<{ isFirstTimeSetup: boolean }>(
-      'api/first'
-    );
+    const result = await this.signLab.get<{ isFirstTimeSetup: boolean }>('api/first');
     return result.isFirstTimeSetup;
   }
 }

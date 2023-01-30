@@ -9,7 +9,7 @@ import { StudyService } from '../../core/services/study.service';
       [study]="activeStudy"
     ></dataset-study-table>
     <ng-template #loading>No Study Selected</ng-template>
-  `,
+  `
 })
 export class EntryControlsComponent {
   constructor(public studyService: StudyService) {}

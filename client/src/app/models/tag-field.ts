@@ -13,7 +13,7 @@ export enum TagFieldType {
   FreeText,
   Numeric,
   Slider,
-  VideoRecord,
+  VideoRecord
 }
 
 /**
@@ -88,21 +88,17 @@ export abstract class TagField {
       type: 'object',
       properties: {
         fieldName: {
-          type: 'string',
+          type: 'string'
         },
         shortDescription: {
-          type: 'string',
+          type: 'string'
         },
         ...properties,
         required: {
-          type: 'boolean',
-        },
+          type: 'boolean'
+        }
       },
-      required: [
-        'fieldName',
-        'shortDescription',
-        ...this.getRequiredFieldProperties(),
-      ],
+      required: ['fieldName', 'shortDescription', ...this.getRequiredFieldProperties()]
     };
   }
 
@@ -116,18 +112,18 @@ export abstract class TagField {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/fieldName',
+          scope: '#/properties/fieldName'
         },
         {
           type: 'Control',
-          scope: '#/properties/shortDescription',
+          scope: '#/properties/shortDescription'
         },
         ...this.getFieldSpecificUiSchema(),
         {
           type: 'Control',
-          scope: '#/properties/required',
-        },
-      ],
+          scope: '#/properties/required'
+        }
+      ]
     };
   }
 
@@ -172,8 +168,8 @@ export abstract class TagField {
     return {
       [this.getFieldName()]: {
         type: this.type,
-        description: this.getDescription(),
-      },
+        description: this.getDescription()
+      }
     };
   }
 
@@ -198,9 +194,9 @@ export abstract class TagField {
         type: 'Control',
         scope: `#/properties/${this.getFieldName()}`,
         options: {
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 }
@@ -221,8 +217,8 @@ export class AslLexField extends TagField {
   }> {
     return Promise.resolve({
       allowCustomLabels: {
-        type: 'boolean',
-      },
+        type: 'boolean'
+      }
     });
   }
 
@@ -231,8 +227,8 @@ export class AslLexField extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/allowCustomLabels',
-      },
+        scope: '#/properties/allowCustomLabels'
+      }
     ];
   }
 
@@ -248,9 +244,9 @@ export class AslLexField extends TagField {
         options: {
           customType: 'asl-lex',
           allowCustomLabels: this.data.allowCustomLabels,
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 }
@@ -271,9 +267,9 @@ export class AutocompleteField extends TagField {
       userOptions: {
         type: 'array',
         items: {
-          type: 'string',
-        },
-      },
+          type: 'string'
+        }
+      }
     });
   }
 
@@ -288,9 +284,9 @@ export class AutocompleteField extends TagField {
         type: 'Control',
         scope: '#/properties/userOptions',
         options: {
-          customType: 'file-list',
-        },
-      },
+          customType: 'file-list'
+        }
+      }
     ];
   }
 
@@ -304,8 +300,8 @@ export class AutocompleteField extends TagField {
       [this.getFieldName()]: {
         type: this.type,
         description: this.getDescription(),
-        enum: [...this.data.userOptions],
-      },
+        enum: [...this.data.userOptions]
+      }
     };
   }
 
@@ -334,7 +330,7 @@ export class EmbeddedVideoOption extends TagField {
   }> {
     return Promise.resolve({
       allowCustomLabels: {
-        type: 'boolean',
+        type: 'boolean'
       },
       userVideoParameters: {
         type: 'array',
@@ -342,18 +338,18 @@ export class EmbeddedVideoOption extends TagField {
           type: 'object',
           properties: {
             videoURL: {
-              type: 'string',
+              type: 'string'
             },
             code: {
-              type: 'string',
+              type: 'string'
             },
             searchTerm: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
-          required: ['videoURL', 'code', 'searchTerm'],
-        },
-      },
+          required: ['videoURL', 'code', 'searchTerm']
+        }
+      }
     });
   }
 
@@ -362,15 +358,15 @@ export class EmbeddedVideoOption extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/allowCustomLabels',
+        scope: '#/properties/allowCustomLabels'
       },
       {
         type: 'Control',
         scope: '#/properties/userVideoParameters',
         options: {
-          customType: 'video-option-upload',
-        },
-      },
+          customType: 'video-option-upload'
+        }
+      }
     ];
   }
 
@@ -383,9 +379,9 @@ export class EmbeddedVideoOption extends TagField {
           customType: 'video-options',
           allowCustomLabels: this.data.allowCustomLabels,
           userVideoParameters: this.data.userVideoParameters,
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 
@@ -411,11 +407,11 @@ export class NumericField extends TagField {
   getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
     return Promise.resolve({
       minimum: {
-        type: 'number',
+        type: 'number'
       },
       maximum: {
-        type: 'number',
-      },
+        type: 'number'
+      }
     });
   }
 
@@ -423,19 +419,19 @@ export class NumericField extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/minimum',
+        scope: '#/properties/minimum'
       },
       {
         type: 'Control',
-        scope: '#/properties/maximum',
-      },
+        scope: '#/properties/maximum'
+      }
     ];
   }
 
   asDataProperty(): JsonSchema {
     const schema: JsonSchema = {
       type: 'number',
-      description: this.getDescription(),
+      description: this.getDescription()
     };
 
     if (this.data.minimum) {
@@ -447,7 +443,7 @@ export class NumericField extends TagField {
     }
 
     return {
-      [this.getFieldName()]: schema,
+      [this.getFieldName()]: schema
     };
   }
 }
@@ -463,15 +459,15 @@ export class SliderField extends TagField {
   getFieldSpecificProperties(): Promise<{ [property: string]: JsonSchema }> {
     return Promise.resolve({
       minimum: {
-        type: 'number',
+        type: 'number'
       },
       maximum: {
-        type: 'number',
+        type: 'number'
       },
       stepSize: {
         type: 'number',
-        description: 'The step size of the slider',
-      },
+        description: 'The step size of the slider'
+      }
     });
   }
 
@@ -479,16 +475,16 @@ export class SliderField extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/minimum',
+        scope: '#/properties/minimum'
       },
       {
         type: 'Control',
-        scope: '#/properties/maximum',
+        scope: '#/properties/maximum'
       },
       {
         type: 'Control',
-        scope: '#/properties/stepSize',
-      },
+        scope: '#/properties/stepSize'
+      }
     ];
   }
 
@@ -504,8 +500,8 @@ export class SliderField extends TagField {
         minimum: this.data.minimum,
         maximum: this.data.maximum,
         multipleOf: this.data.stepSize,
-        default: this.data.minimum,
-      },
+        default: this.data.minimum
+      }
     };
   }
 
@@ -516,9 +512,9 @@ export class SliderField extends TagField {
         scope: `#/properties/${this.getFieldName()}`,
         options: {
           slider: true,
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 }
@@ -542,25 +538,23 @@ export class VideoRecordField extends TagField {
     const options = datasets.map((dataset) => {
       return {
         const: dataset.id,
-        title: dataset.name,
+        title: dataset.name
       };
     });
     return {
       dataset: {
         type: 'string',
         oneOf: options,
-        description: 'The dataset to save the videos into',
+        description: 'The dataset to save the videos into'
       },
       minimumRequired: {
         type: 'number',
-        description:
-          'The minimum number of videos the user needs to record, (defaults to 1)',
+        description: 'The minimum number of videos the user needs to record, (defaults to 1)'
       },
       maximumOptional: {
         type: 'number',
-        description:
-          'The maximum number of videos the user can record (including required, defaults to 1)',
-      },
+        description: 'The maximum number of videos the user can record (including required, defaults to 1)'
+      }
     };
   }
 
@@ -568,22 +562,22 @@ export class VideoRecordField extends TagField {
     return [
       {
         type: 'Control',
-        scope: '#/properties/dataset',
+        scope: '#/properties/dataset'
       },
       {
         type: 'Control',
         scope: '#/properties/minimumRequired',
         options: {
-          showUnfocusedDescription: true,
-        },
+          showUnfocusedDescription: true
+        }
       },
       {
         type: 'Control',
         scope: '#/properties/maximumOptional',
         options: {
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 
@@ -597,10 +591,10 @@ export class VideoRecordField extends TagField {
         type: 'array',
         description: this.getDescription(),
         items: {
-          type: 'string',
+          type: 'string'
         },
-        minItems: this.data.minimumRequired || 1,
-      },
+        minItems: this.data.minimumRequired || 1
+      }
     };
   }
 
@@ -614,9 +608,9 @@ export class VideoRecordField extends TagField {
           dataset: this.data.dataset,
           minimumRequired: this.data.minimumRequired || 1,
           maximumOptional: this.data.maximumOptional || 1,
-          showUnfocusedDescription: true,
-        },
-      },
+          showUnfocusedDescription: true
+        }
+      }
     ];
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  ResolveField,
-  ID,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, ID } from '@nestjs/graphql';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
 import {
@@ -14,7 +7,7 @@ import {
   DatasetCreatePipe,
   ProjectAccessChange,
   ProjectAccessChangeFull,
-  ProjectAccessChangePipe,
+  ProjectAccessChangePipe
 } from './dataset.dto';
 import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
@@ -24,10 +17,7 @@ import { Project } from '../project/project.schema';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(
-    private readonly datasetService: DatasetService,
-    private readonly userPipe: UserPipe,
-  ) {}
+  constructor(private readonly datasetService: DatasetService, private readonly userPipe: UserPipe) {}
 
   // TODO: Add owner only guard
   @Query(() => [Dataset])
@@ -37,16 +27,14 @@ export class DatasetResolver {
 
   // TODO: Add guard for project access
   @Query(() => [Dataset])
-  async getDatasetsByProject(
-    @Args('project', { type: () => ID }, ProjectPipe) project: Project,
-  ): Promise<Dataset[]> {
+  async getDatasetsByProject(@Args('project', { type: () => ID }, ProjectPipe) project: Project): Promise<Dataset[]> {
     return this.datasetService.getByProject(project);
   }
 
   @Mutation(() => Dataset)
   async createDataset(
     @Args('datasetCreate', { type: () => DatasetCreate }, DatasetCreatePipe)
-    datasetCreate: DatasetCreateFull,
+    datasetCreate: DatasetCreateFull
   ): Promise<Dataset> {
     return this.datasetService.create(datasetCreate);
   }
@@ -58,12 +46,8 @@ export class DatasetResolver {
 
   @Mutation(() => Boolean)
   async changeProjectAccess(
-    @Args(
-      'projectAccessChange',
-      { type: () => ProjectAccessChange },
-      ProjectAccessChangePipe,
-    )
-    projectAccessChange: ProjectAccessChangeFull,
+    @Args('projectAccessChange', { type: () => ProjectAccessChange }, ProjectAccessChangePipe)
+    projectAccessChange: ProjectAccessChangeFull
   ): Promise<boolean> {
     await this.datasetService.changeProjectAccess(projectAccessChange);
     return true;

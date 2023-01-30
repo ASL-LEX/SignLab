@@ -7,45 +7,36 @@ import { ProjectGuard } from './core/guards/project.guard';
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: HomeComponent
   },
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./authenticate/authenticate.module').then(
-        (m) => m.AuthenticateModule
-      ),
+    loadChildren: () => import('./authenticate/authenticate.module').then((m) => m.AuthenticateModule)
   },
   {
     path: 'tag',
     canActivate: [AuthenticatedGuard, ProjectGuard],
-    loadChildren: () =>
-      import('./tagging-interface/tagging-interface.module').then(
-        (m) => m.TaggingInterfaceModule
-      ),
+    loadChildren: () => import('./tagging-interface/tagging-interface.module').then((m) => m.TaggingInterfaceModule)
   },
   {
     path: 'studies',
     canActivate: [AuthenticatedGuard, ProjectGuard],
-    loadChildren: () =>
-      import('./studies/studies.module').then((m) => m.StudiesModule),
+    loadChildren: () => import('./studies/studies.module').then((m) => m.StudiesModule)
   },
   {
     path: 'datasets',
     canActivate: [AuthenticatedGuard],
-    loadChildren: () =>
-      import('./datasets/datasets.module').then((m) => m.DatasetsModule),
+    loadChildren: () => import('./datasets/datasets.module').then((m) => m.DatasetsModule)
   },
   {
     path: 'projects',
     canActivate: [AuthenticatedGuard],
-    loadChildren: () =>
-      import('./projects/projects.module').then((m) => m.ProjectsModule),
-  },
+    loadChildren: () => import('./projects/projects.module').then((m) => m.ProjectsModule)
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

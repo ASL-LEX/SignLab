@@ -8,16 +8,16 @@ const routes: Routes = [
   {
     path: 'user-permissions',
     component: UserPermissionsComponent,
-    canActivate: [ProjectGuard],
+    canActivate: [ProjectGuard]
   },
   {
     path: 'new-project',
-    component: NewProjectComponent,
-  },
+    component: NewProjectComponent
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class ProjectRoutingModule {}

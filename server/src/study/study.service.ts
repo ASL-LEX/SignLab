@@ -9,7 +9,7 @@ import { Validator, ValidatorResult } from 'jsonschema';
 export class StudyService {
   constructor(
     @InjectModel(Study.name)
-    private studyModel: Model<StudyDocument>,
+    private studyModel: Model<StudyDocument>
   ) {}
 
   /**
@@ -19,7 +19,7 @@ export class StudyService {
   async find(studyID: string): Promise<Study | null> {
     return this.studyModel
       .findOne({
-        _id: studyID,
+        _id: studyID
       })
       .exec();
   }
@@ -28,7 +28,7 @@ export class StudyService {
     const result = await this.studyModel
       .findOne({
         name: studyName,
-        project: projectID,
+        project: projectID
       })
       .exec();
 
@@ -57,10 +57,7 @@ export class StudyService {
   validate(tag: Tag): ValidatorResult {
     const validator = new Validator();
     // TODO: Should pull the expected schema directly from the database
-    const results = validator.validate(
-      tag.info,
-      tag.study.tagSchema.dataSchema,
-    );
+    const results = validator.validate(tag.info, tag.study.tagSchema.dataSchema);
     return results;
   }
 

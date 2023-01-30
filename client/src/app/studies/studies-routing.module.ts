@@ -12,23 +12,23 @@ const routes: Routes = [
   {
     path: 'user-permissions',
     component: UserPermissionsComponent,
-    canActivate: [StudyGuard],
+    canActivate: [StudyGuard]
   },
   {
     path: 'entry-controls',
     component: EntryControlsComponent,
-    canActivate: [StudyGuard],
+    canActivate: [StudyGuard]
   },
   { path: 'create-new-study', component: NewStudyComponent },
   {
     path: 'tag-download',
     component: TagViewComponent,
-    canActivate: [StudyGuard],
-  },
+    canActivate: [StudyGuard]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class StudiesRoutingModule {}

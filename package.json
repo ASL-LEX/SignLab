@@ -9,9 +9,11 @@
     "start:prod": "npm run start:prod --workspace=server",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
+    "prettier": "npm run prettier --workspaces --if-present",
+    "prettier:fix": "npm run prettier:fix --workspaces --if-present",
     "start:ci": "NODE_ENV=test npm run start:prod --workspace=server",
     "introspection": "npm run introspection --workspace=server && npm run introspection --workspace=client"
- },
+  },
   "workspaces": [
     "server",
     "client",
@@ -24,7 +26,8 @@
     "dotenv": "^16.0.2",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0"
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.8.3"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.47.0",

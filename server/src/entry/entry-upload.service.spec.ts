@@ -32,22 +32,22 @@ const entryUploadFindOneMock = jest.fn((params: any) => {
       responderID: '1',
       filename: 'my_video.mp4',
       meta: {
-        prompt: 'grass',
-      },
+        prompt: 'grass'
+      }
     };
   }
 
   return {
     async exec() {
       return result;
-    },
+    }
   };
 });
 const entryUploadFindMock = jest.fn((_params: any) => {
   return {
     async exec() {
       return [];
-    },
+    }
   };
 });
 
@@ -55,7 +55,7 @@ const entryUploadModel = {
   // Delete many implementation to avoid errors
   deleteMany(_params: any) {
     return {
-      async exec() {},
+      async exec() {}
     };
   },
 
@@ -71,7 +71,7 @@ const entryUploadModel = {
     return {
       async exec() {
         return params;
-      },
+      }
     };
   },
 
@@ -80,26 +80,26 @@ const entryUploadModel = {
     const result: any = { errors: {} };
     if (!params.responderID) {
       result.errors['entryrID'] = {
-        properties: { message: 'entryID must be of type string' },
+        properties: { message: 'entryID must be of type string' }
       };
     }
     if (!params.entryID) {
       result.errors['entryID'] = {
-        properties: { message: 'entryID must be of type string' },
+        properties: { message: 'entryID must be of type string' }
       };
     }
     if (!params.filename) {
       result.errors['filename'] = {
-        properties: { message: 'filename must be of type string' },
+        properties: { message: 'filename must be of type string' }
       };
     }
     if (!params.meta) {
       result.errors['meta'] = {
-        properties: { message: 'meta must be an object' },
+        properties: { message: 'meta must be an object' }
       };
     } else if (!params.meta.prompt) {
       result.errors['prompt'] = {
-        properties: { message: 'prompt must be a string' },
+        properties: { message: 'prompt must be a string' }
       };
     }
 
@@ -110,9 +110,9 @@ const entryUploadModel = {
 
   deleteOne(_params: any) {
     return {
-      async exec() {},
+      async exec() {}
     };
-  },
+  }
 };
 
 const entryService = {
@@ -125,8 +125,8 @@ const entryService = {
         responderID: '1',
         filename: 'my_video.mp4',
         meta: {
-          prompt: 'grass',
-        },
+          prompt: 'grass'
+        }
       };
     }
 
@@ -137,23 +137,23 @@ const entryService = {
     return {
       async exec() {
         return params;
-      },
+      }
     };
   },
 
-  updateMediaURL(_params: any) {},
+  updateMediaURL(_params: any) {}
 };
 
 const studyService = {
   getStudies() {
     return ['study1', 'study2', 'study3'];
-  },
+  }
 };
 
 const configService = {
   getOrThrow<T>(search: string) {
     return ['mp4', 'oog', 'webm'];
-  },
+  }
 };
 
 /**
@@ -163,12 +163,12 @@ const configService = {
 jest.mock('./entry.schema', () => ({
   Entry: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 jest.mock('./entry-upload.schema', () => ({
   EntryUpload: () => {
     return { name: 'Entry' };
-  },
+  }
 }));
 
 /**
@@ -186,12 +186,12 @@ jest.mock('fs/promises', () => ({
     return {
       isDirectory: () => {
         return false;
-      },
+      }
     };
   },
   rm: (_path: string) => {
     return Promise.resolve();
-  },
+  }
 }));
 
 /**
@@ -200,7 +200,7 @@ jest.mock('fs/promises', () => ({
 const bucketService = {
   objectUpload(path: string, target: string): Promise<BucketFile> {
     return Promise.resolve({ name: path, uri: target });
-  },
+  }
 };
 
 describe('EntryService', () => {
@@ -213,46 +213,42 @@ describe('EntryService', () => {
         EntryUploadService,
         {
           provide: getModelToken(EntryUpload.name),
-          useValue: entryUploadModel,
+          useValue: entryUploadModel
         },
         {
           provide: getModelToken(EntryStudy.name),
-          useValue: {},
+          useValue: {}
         },
         {
           provide: StudyService,
-          useValue: studyService,
+          useValue: studyService
         },
         {
           provide: TagService,
-          useValue: {},
+          useValue: {}
         },
         {
           provide: EntryService,
-          useValue: entryService,
+          useValue: entryService
         },
         {
           provide: BucketStorage,
-          useValue: bucketService,
+          useValue: bucketService
         },
         {
           provide: ConfigService,
-          useValue: configService,
-        },
-      ],
+          useValue: configService
+        }
+      ]
     }).compile();
 
     entryUploadService = await module.resolve(EntryUploadService);
-    jest
-      .spyOn(entryUploadService, 'extractZIP')
-      .mockReturnValue(Promise.resolve({ type: 'success' }));
+    jest.spyOn(entryUploadService, 'extractZIP').mockReturnValue(Promise.resolve({ type: 'success' }));
   });
 
   describe('uploadEntryDataCSV()', () => {
     it('single line CSV should fail', async () => {
-      const testInput = Readable.from([
-        `This is garbage and now good no commas for you`,
-      ]);
+      const testInput = Readable.from([`This is garbage and now good no commas for you`]);
 
       const result = await entryUploadService.uploadEntryDataCSV(testInput);
       expect(result.type).toEqual('error');
@@ -270,7 +266,7 @@ describe('EntryService', () => {
       // Missing responderID
       const testInput = Readable.from([
         `entryID,filename,prompt
-         1,example.mp4,tree`,
+         1,example.mp4,tree`
       ]);
 
       const result = await entryUploadService.uploadEntryDataCSV(testInput);
@@ -281,7 +277,7 @@ describe('EntryService', () => {
       // Extra input on last line (butterfly)
       const testInput = Readable.from([
         `entryID,responderID,filename,prompt
-         1,2,example.mp4,tree,butterfly`,
+         1,2,example.mp4,tree,butterfly`
       ]);
 
       const result = await entryUploadService.uploadEntryDataCSV(testInput);
@@ -294,7 +290,7 @@ describe('EntryService', () => {
       const testInput = Readable.from([
         `entryID,responderID,filename,prompt
         2,2,example.mp4,tree
-        1,3,example.mp4,bread`,
+        1,3,example.mp4,bread`
       ]);
 
       const result = await entryUploadService.uploadEntryDataCSV(testInput);
@@ -308,7 +304,7 @@ describe('EntryService', () => {
          1,2,example.mp4,tree
          3,4,another.mp4,bread
          5,6,what.mp4,grass
-         7,8,another.mp4,water`,
+         7,8,another.mp4,water`
       ]);
 
       const result = await entryUploadService.uploadEntryDataCSV(testInput);
@@ -321,9 +317,7 @@ describe('EntryService', () => {
       const result = await entryUploadService.uploadEntryVideos('empty.zip');
 
       expect(result.saveResult.type).toEqual('warning');
-      expect(result.saveResult.message).toContain(
-        'No entry videos found in ZIP, no entries saved',
-      );
+      expect(result.saveResult.message).toContain('No entry videos found in ZIP, no entries saved');
     });
 
     it('should give warning if file does not have a cooresponding entry upload', async () => {
@@ -334,18 +328,14 @@ describe('EntryService', () => {
         return {
           async exec() {
             return null;
-          },
+          }
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos(
-        'missing_entry_upload.zip',
-      );
+      const result = await entryUploadService.uploadEntryVideos('missing_entry_upload.zip');
 
       expect(result.saveResult.type).toEqual('warning');
-      expect(result.saveResult.message).toContain(
-        'Uploading video files caused warnings',
-      );
+      expect(result.saveResult.message).toContain('Uploading video files caused warnings');
     });
 
     it('should work for ZIP that has the cooresponding EntryUploads', async () => {
@@ -362,8 +352,8 @@ describe('EntryService', () => {
             responderID: '2',
             filename: 'tree_entry.mp4',
             meta: {
-              prompt: 'tree',
-            },
+              prompt: 'tree'
+            }
           };
         } else if (params.filename == 'bread_entry.mp4') {
           result = {
@@ -371,15 +361,15 @@ describe('EntryService', () => {
             responderID: '2',
             filename: 'bread_entry.mp4',
             meta: {
-              prompt: 'bread',
-            },
+              prompt: 'bread'
+            }
           };
         }
 
         return {
           async exec() {
             return result;
-          },
+          }
         };
       });
 
@@ -402,8 +392,8 @@ describe('EntryService', () => {
             responderID: '2',
             filename: 'tree_entry.mp4',
             meta: {
-              prompt: 'tree',
-            },
+              prompt: 'tree'
+            }
           };
         } else if (params.filename == 'bread_entry.mp4') {
           result = {
@@ -411,25 +401,23 @@ describe('EntryService', () => {
             responderID: '2',
             filename: 'bread_entry.mp4',
             meta: {
-              prompt: 'bread',
-            },
+              prompt: 'bread'
+            }
           };
         }
 
         return {
           async exec() {
             return result;
-          },
+          }
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos(
-        'additional_videos.zip',
-      );
+      const result = await entryUploadService.uploadEntryVideos('additional_videos.zip');
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.where![0].message).toContain(
-        'Entry for file grass_entry.mp4 was not found in original CSV',
+        'Entry for file grass_entry.mp4 was not found in original CSV'
       );
     });
   });

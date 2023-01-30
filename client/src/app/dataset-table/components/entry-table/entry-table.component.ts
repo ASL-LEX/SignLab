@@ -12,7 +12,7 @@ import { Dataset } from '../../../graphql/graphql';
     [entryData]="entryData"
     [displayDeletion]="true"
     (deleteEntry)="handleDeletion($event)"
-  ></entry-table-core>`,
+  ></entry-table-core>`
 })
 export class EntryTable implements OnInit {
   /** The dataset this entry table is displaying for */
@@ -37,7 +37,7 @@ export class EntryTable implements OnInit {
       return {
         entry: entry,
         isPartOfStudy: true,
-        isUsedForTraining: true,
+        isUsedForTraining: true
       };
     });
   }

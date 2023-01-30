@@ -4,13 +4,9 @@ import { EntryStudy, EntryStudySchema } from './entrystudy.schema';
 import { EntryStudyService } from './entrystudy.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: EntryStudy.name, schema: EntryStudySchema },
-    ]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: EntryStudy.name, schema: EntryStudySchema }])],
   controllers: [],
   providers: [EntryStudyService],
-  exports: [EntryStudyService],
+  exports: [EntryStudyService]
 })
 export class EntryStudyModule {}

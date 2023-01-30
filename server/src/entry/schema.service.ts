@@ -22,7 +22,7 @@ export class SchemaService {
 
   constructor(
     @InjectModel(DynamicSchema.name)
-    private dynamicSchemaModel: Model<DynamicSchemaDocument>,
+    private dynamicSchemaModel: Model<DynamicSchemaDocument>
   ) {
     this.schemaMap = new Map();
     this.validator = new Validator();
@@ -58,7 +58,7 @@ export class SchemaService {
   async saveSchema(schemaType: string, value: any): Promise<void> {
     const schema = await this.dynamicSchemaModel.create({
       schemaName: schemaType,
-      schema: value,
+      schema: value
     });
 
     // If its in the cached schema map, update the cached map
@@ -73,7 +73,7 @@ export class SchemaService {
   async hasSchema(schemaType: string): Promise<boolean> {
     const schema = await this.dynamicSchemaModel
       .findOne({
-        schemaName: schemaType,
+        schemaName: schemaType
       })
       .exec();
 
@@ -103,9 +103,7 @@ export class SchemaService {
     }
 
     // Otherwise try to read from the database and cache
-    const schema = await this.dynamicSchemaModel
-      .findOne({ schemaName: schemaType })
-      .exec();
+    const schema = await this.dynamicSchemaModel.findOne({ schemaName: schemaType }).exec();
     if (schema) {
       this.schemaMap.set(schemaType, schema);
       return schema;

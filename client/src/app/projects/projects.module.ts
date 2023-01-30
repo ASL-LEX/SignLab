@@ -7,6 +7,6 @@ import { UserPermissionsComponent } from './components/user-permissions.componen
 
 @NgModule({
   declarations: [NewProjectComponent, UserPermissionsComponent],
-  imports: [CoreModule, SharedModule, ProjectRoutingModule],
+  imports: [CoreModule, SharedModule, ProjectRoutingModule]
 })
 export class ProjectsModule {}

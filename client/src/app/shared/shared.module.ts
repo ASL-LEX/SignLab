@@ -32,7 +32,7 @@ import { SafePipe } from './pipes/safe.pipe';
     OneOfField,
     StudySelectDialog,
     SelectorDialog,
-    ProjectSelectDialog,
+    ProjectSelectDialog
   ],
   imports: [
     FormsModule,
@@ -40,7 +40,7 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     FlexModule,
-    NgxCsvParserModule,
+    NgxCsvParserModule
   ],
   exports: [
     AslLexSignBankField,
@@ -51,7 +51,7 @@ import { SafePipe } from './pipes/safe.pipe';
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     FlexModule,
-    StudySelectDialog,
-  ],
+    StudySelectDialog
+  ]
 })
 export class SharedModule {}

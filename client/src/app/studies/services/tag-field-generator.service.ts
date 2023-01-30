@@ -9,7 +9,7 @@ import {
   FreeTextField,
   NumericField,
   SliderField,
-  VideoRecordField,
+  VideoRecordField
 } from '../../models/tag-field';
 import { DatasetService } from '../../core/services/dataset.service';
 

@@ -8,7 +8,7 @@ import { ProjectAdminChangeGQL } from '../../graphql/projects/projects.generated
 @Component({
   selector: 'project-user-permissions',
   templateUrl: './user-permissions.component.html',
-  styleUrls: ['./user-permissions.component.css'],
+  styleUrls: ['./user-permissions.component.css']
 })
 export class UserPermissionsComponent {
   /**
@@ -36,17 +36,14 @@ export class UserPermissionsComponent {
     });
   }
 
-  async toggleProjectAdmin(toggleChange: {
-    user: User;
-    change: MatSlideToggleChange;
-  }) {
+  async toggleProjectAdmin(toggleChange: { user: User; change: MatSlideToggleChange }) {
     this.projectAdminChangeGQL
       .mutate({
         projectAdminChange: {
           userID: toggleChange.user._id!,
           projectID: this.activeProjectID!,
-          hasAdminAccess: toggleChange.change.checked,
-        },
+          hasAdminAccess: toggleChange.change.checked
+        }
       })
       .subscribe((result) => {
         if (result.errors) {
@@ -58,8 +55,7 @@ export class UserPermissionsComponent {
           toggleChange.change.source.checked = !toggleChange.change.checked;
         } else {
           // Update the user object to reflect the toggle
-          toggleChange.user.roles.projectAdmin[this.activeProjectID!] =
-            toggleChange.change.checked;
+          toggleChange.user.roles.projectAdmin[this.activeProjectID!] = toggleChange.change.checked;
         }
       });
   }

@@ -10,7 +10,7 @@ import { Dataset } from 'shared/dtos/dataset.dto';
 export class EntryStudyService {
   constructor(
     @InjectModel(EntryStudy.name)
-    private entryStudyModel: Model<EntryStudyDocument>,
+    private entryStudyModel: Model<EntryStudyDocument>
   ) {}
 
   /**
@@ -25,11 +25,11 @@ export class EntryStudyService {
     const query = {
       study: study._id,
       isPartOfStudy: true,
-      hasTag: false,
+      hasTag: false
     };
 
     const update = {
-      hasTag: true,
+      hasTag: true
     };
 
     const entryStudy = await this.entryStudyModel
@@ -49,11 +49,7 @@ export class EntryStudyService {
    * @param study The study each EntryStudy will be associated with
    * @param isPartOfStudy If the entry is part of the study
    */
-  async createEntryStudies(
-    entries: Entry[],
-    study: Study,
-    isPartOfStudy: boolean,
-  ): Promise<void> {
+  async createEntryStudies(entries: Entry[], study: Study, isPartOfStudy: boolean): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
         await this.entryStudyModel.create({
@@ -61,9 +57,9 @@ export class EntryStudyService {
           study: study,
           isPartOfStudy: isPartOfStudy,
           isUsedForTraining: false,
-          hasTag: false,
+          hasTag: false
         });
-      }),
+      })
     );
   }
 
@@ -78,22 +74,19 @@ export class EntryStudyService {
             from: 'entries',
             localField: 'entry',
             foreignField: '_id',
-            as: 'entryForeign',
-          },
+            as: 'entryForeign'
+          }
         },
         {
           $match: {
             'entryForeign.dataset': dataset._id,
-            study: study._id,
-          },
-        },
+            study: study._id
+          }
+        }
       ])
       .exec();
 
-    await this.entryStudyModel.populate(result, [
-      { path: 'entry' },
-      { path: 'study' },
-    ]);
+    await this.entryStudyModel.populate(result, [{ path: 'entry' }, { path: 'study' }]);
 
     return result;
   }
@@ -105,7 +98,7 @@ export class EntryStudyService {
     return this.entryStudyModel
       .findOne({
         entry: entry._id,
-        study: study._id,
+        study: study._id
       })
       .populate('entry')
       .populate('study')
@@ -116,11 +109,7 @@ export class EntryStudyService {
    * Find all the Entry studies related to a given entry
    */
   async findMany(entry: Entry): Promise<EntryStudy[]> {
-    return this.entryStudyModel
-      .find({ entry: entry._id })
-      .populate('entry')
-      .populate('study')
-      .exec();
+    return this.entryStudyModel.find({ entry: entry._id }).populate('entry').populate('study').exec();
   }
 
   /**
@@ -131,18 +120,15 @@ export class EntryStudyService {
    * @param isPartOfStudy Represents if the entry should be used in the
    *                      study.
    */
-  async changePartOfStudy(
-    entryStudy: EntryStudy,
-    isPartOfStudy: boolean,
-  ): Promise<void> {
+  async changePartOfStudy(entryStudy: EntryStudy, isPartOfStudy: boolean): Promise<void> {
     await this.entryStudyModel
       .findOneAndUpdate(
         {
-          _id: entryStudy._id,
+          _id: entryStudy._id
         },
         {
-          isPartOfStudy: isPartOfStudy,
-        },
+          isPartOfStudy: isPartOfStudy
+        }
       )
       .exec();
   }
@@ -155,7 +141,7 @@ export class EntryStudyService {
     await Promise.all(
       entryIDs.map(async (entryID) => {
         await this.markSingleTraining(studyID, entryID);
-      }),
+      })
     );
   }
 
@@ -167,7 +153,7 @@ export class EntryStudyService {
     await Promise.all(
       entryIDs.map(async (entryID) => {
         await this.markSingleDisabled(studyID, entryID);
-      }),
+      })
     );
   }
 
@@ -179,7 +165,7 @@ export class EntryStudyService {
     return this.entryStudyModel
       .find({
         study: study._id!,
-        isUsedForTraining: true,
+        isUsedForTraining: true
       })
       .exec();
   }
@@ -190,7 +176,7 @@ export class EntryStudyService {
   async deleteEntry(entry: Entry) {
     this.entryStudyModel
       .deleteMany({
-        entry: entry._id,
+        entry: entry._id
       })
       .exec();
   }
@@ -203,11 +189,11 @@ export class EntryStudyService {
       .findOneAndUpdate(
         {
           study: studyID,
-          entry: entryID,
+          entry: entryID
         },
         {
-          isUsedForTraining: true,
-        },
+          isUsedForTraining: true
+        }
       )
       .exec();
   }
@@ -220,11 +206,11 @@ export class EntryStudyService {
       .findOneAndUpdate(
         {
           study: studyID,
-          entry: entryID,
+          entry: entryID
         },
         {
-          isPartOfStudy: false,
-        },
+          isPartOfStudy: false
+        }
       )
       .exec();
   }

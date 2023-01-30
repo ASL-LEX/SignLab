@@ -20,29 +20,23 @@ import { ProjectExistsGQL } from '../../graphql/projects/projects.generated';
           (errors)="errorHandler($event)"
         ></jsonforms>
 
-        <button
-          mat-stroked-button
-          (click)="projectSubmit()"
-          [disabled]="!formValid"
-        >
-          Submit
-        </button>
+        <button mat-stroked-button (click)="projectSubmit()" [disabled]="!formValid">Submit</button>
       </mat-card-content>
     </mat-card>
-  `,
+  `
 })
 export class NewProjectComponent {
   NEW_PROJECT_SCHEMA = {
     type: 'object',
     properties: {
       name: {
-        type: 'string',
+        type: 'string'
       },
       description: {
-        type: 'string',
-      },
+        type: 'string'
+      }
     },
-    required: ['name', 'description'],
+    required: ['name', 'description']
   };
 
   NEW_PROJECT_UI_SCHEMA = {
@@ -50,13 +44,13 @@ export class NewProjectComponent {
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/name',
+        scope: '#/properties/name'
       },
       {
         type: 'Control',
-        scope: '#/properties/description',
-      },
-    ],
+        scope: '#/properties/description'
+      }
+    ]
   };
 
   renderers = angularMaterialRenderers;
@@ -81,9 +75,7 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      const projectExists = await firstValueFrom(
-        this.projectExistsGQL.fetch({ name: this.formData.name })
-      );
+      const projectExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.formData.name }));
       if (projectExists.data.projectExists) {
         this.addProjectExistsError();
       } else {
@@ -99,8 +91,8 @@ export class NewProjectComponent {
         message: 'Project name already exists',
         schemaPath: '',
         keyword: '',
-        params: {},
-      },
+        params: {}
+      }
     ];
     this.formValid = false;
   }

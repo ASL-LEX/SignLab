@@ -12,7 +12,7 @@ export interface SelectDialogOptions {
  */
 @Component({
   selector: 'selector-dialog',
-  templateUrl: './selector-dialog.component.html',
+  templateUrl: './selector-dialog.component.html'
 })
 export class SelectorDialog {
   /** Header displayed at the top of the option list */

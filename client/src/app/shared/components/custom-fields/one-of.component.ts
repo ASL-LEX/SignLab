@@ -1,14 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
-import {
-  Actions,
-  composeWithUi,
-  ControlElement,
-  isOneOfEnumControl,
-  RankedTester,
-  rankWith,
-} from '@jsonforms/core';
+import { Actions, composeWithUi, ControlElement, isOneOfEnumControl, RankedTester, rankWith } from '@jsonforms/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { startWith } from 'rxjs/operators';
@@ -70,25 +63,16 @@ import { startWith } from 'rxjs/operators';
         [ngModel]="valueTitle"
         (keydown)="updateFilter($event)"
       />
-      <mat-autocomplete
-        autoActiveFirstOption
-        #auto="matAutocomplete"
-        (optionSelected)="onSelect($event)"
-      >
-        <mat-option
-          *ngFor="let option of filteredOptions | async"
-          [value]="option.const"
-        >
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelect($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.const">
           {{ option.title }}
         </mat-option>
       </mat-autocomplete>
-      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{
-        description
-      }}</mat-hint>
+      <mat-hint *ngIf="shouldShowUnfocusedDescription()">{{ description }}</mat-hint>
       <mat-error>{{ error }}</mat-error>
     </mat-form-field>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OneOfField extends JsonFormsControl {
   filteredOptions: Observable<{ title: string; const: any }[]>;
@@ -146,15 +130,11 @@ export class OneOfField extends JsonFormsControl {
     // Update the value with JSON Forms
     const path = composeWithUi(this.uischema as ControlElement, this.path);
     this.shouldFilter = false;
-    this.jsonFormsService.updateCore(
-      Actions.update(path, () => ev.option.value)
-    );
+    this.jsonFormsService.updateCore(Actions.update(path, () => ev.option.value));
     this.triggerValidation();
 
     // Have the input display the title value not the const value
-    this.valueTitle = this.options.filter(
-      (option) => option.const === ev.option.value
-    )[0].title;
+    this.valueTitle = this.options.filter((option) => option.const === ev.option.value)[0].title;
   }
 
   filter(val: string): { title: string; const: any }[] {

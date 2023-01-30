@@ -1,9 +1,4 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SignupComponent } from './signup.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,7 +12,7 @@ describe('SignupComponent', () => {
     upperCase: 1,
     numeric: 0,
     symbol: 0,
-    requirementCount: 4,
+    requirementCount: 4
   };
 
   // Unit under test
@@ -27,22 +22,14 @@ describe('SignupComponent', () => {
 
   beforeEach(fakeAsync(() => {
     // Setup signup component
-    authSpy = jasmine.createSpyObj('AuthService', [
-      'signup',
-      'getPasswordComplexity',
-      'isUserAvailable',
-    ]);
-    authSpy.getPasswordComplexity.and.returnValue(
-      Promise.resolve(passwordComplexity)
-    );
-    authSpy.isUserAvailable.and.returnValue(
-      Promise.resolve({ username: true, email: true })
-    );
+    authSpy = jasmine.createSpyObj('AuthService', ['signup', 'getPasswordComplexity', 'isUserAvailable']);
+    authSpy.getPasswordComplexity.and.returnValue(Promise.resolve(passwordComplexity));
+    authSpy.isUserAvailable.and.returnValue(Promise.resolve({ username: true, email: true }));
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [SignupComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthService, useValue: authSpy }]
     });
 
     signup = TestBed.createComponent(SignupComponent);

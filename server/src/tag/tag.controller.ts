@@ -8,7 +8,7 @@ import {
   Body,
   UseGuards,
   UploadedFile,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
 import { StudyService } from '../study/study.service';
 import { TagService } from '../tag/tag.service';
@@ -35,7 +35,7 @@ export class TagController {
     private userStudyService: UserStudyService,
     private bucketService: BucketStorage,
     private datasetService: DatasetService,
-    private entryService: EntryService,
+    private entryService: EntryService
   ) {}
 
   /**
@@ -51,7 +51,7 @@ export class TagController {
   @UseGuards(JwtAuthGuard, TagGuard)
   async getNextTag(
     @Query('userID', UserPipe) user: User,
-    @Query('studyID', StudyPipe) study: Study,
+    @Query('studyID', StudyPipe) study: Study
   ): Promise<Tag | null> {
     // Check if the user already has an assigned tag for the study
     const incompleteTag = await this.tagService.getIncompleteTag(user, study);
@@ -79,30 +79,22 @@ export class TagController {
   @Get('/nextTraining')
   async getNextTrainingTag(
     @Query('userID', UserPipe) user: User,
-    @Query('studyID', StudyPipe) study: Study,
+    @Query('studyID', StudyPipe) study: Study
   ): Promise<Tag | null> {
     // Check if the user has an incomplete training tag first
-    const incompleteTag = await this.tagService.getIncompleteTrainingTag(
-      user,
-      study,
-    );
+    const incompleteTag = await this.tagService.getIncompleteTrainingTag(user, study);
     if (incompleteTag) {
       return incompleteTag;
     }
 
     // Otherwise make a new training tag
-    const nextTrainingEntryStudy =
-      await this.userStudyService.getNextTrainingEntryStudy(user, study);
+    const nextTrainingEntryStudy = await this.userStudyService.getNextTrainingEntryStudy(user, study);
     if (!nextTrainingEntryStudy) {
       return null;
     }
 
     // Create a new tag
-    return this.tagService.createTrainingTag(
-      user,
-      nextTrainingEntryStudy.entry,
-      study,
-    );
+    return this.tagService.createTrainingTag(user, nextTrainingEntryStudy.entry, study);
   }
 
   /**
@@ -150,9 +142,7 @@ export class TagController {
    *       replaces by a more flexible view users can export from.
    */
   @Get('/forStudy')
-  async getTagsForStudy(
-    @Query('studyID', StudyPipe) study: Study,
-  ): Promise<Tag[]> {
+  async getTagsForStudy(@Query('studyID', StudyPipe) study: Study): Promise<Tag[]> {
     return this.tagService.getCompleteTags(study);
   }
 
@@ -162,7 +152,7 @@ export class TagController {
   @Get('/training')
   async getTrainingTags(
     @Query('studyID', StudyPipe) study: Study,
-    @Query('userID', UserPipe) user: User,
+    @Query('userID', UserPipe) user: User
   ): Promise<Tag[]> {
     return this.tagService.getCompleteTrainingTags(user, study);
   }
@@ -183,34 +173,25 @@ export class TagController {
     @Body('tag') tagStr: string,
     @Body('field') field: string,
     @Body('datasetID') datasetID: string,
-    @Body('videoNumber') videoNumber: number,
+    @Body('videoNumber') videoNumber: number
   ): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
     // Ensure the tag exists
     const existingTag = await this.tagService.find(tagID);
     if (!existingTag) {
-      throw new HttpException(
-        `Tag with ID '${tagID}' not found`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Tag with ID '${tagID}' not found`, HttpStatus.BAD_REQUEST);
     }
 
     // Ensure the field exists
     if (!existingTag.study.tagSchema.dataSchema.properties[field]) {
-      throw new HttpException(
-        `Field '${field}' not found on tag`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`Field '${field}' not found on tag`, HttpStatus.BAD_REQUEST);
     }
 
     // Ensure that the dataset that is the target exists
     const dataset = await this.datasetService.findOne({ _id: datasetID });
     if (dataset === null) {
-      throw new HttpException(
-        `Dataset with ID ${datasetID} not found`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException(`Dataset with ID ${datasetID} not found`, HttpStatus.NOT_FOUND);
     }
 
     // URL encode the fieldname for saving the video in the bucket
@@ -229,7 +210,7 @@ export class TagController {
         dataset: datasetID,
         'signLabRecording.tag': existingTag._id,
         'signLabRecording.fieldName': field,
-        'signLabRecording.videoNumber': videoNumber,
+        'signLabRecording.videoNumber': videoNumber
       });
       if (existingEntry === null) {
         // TODO: Remove concept of the `entryID`
@@ -244,26 +225,22 @@ export class TagController {
           signLabRecording: {
             tag: existingTag,
             fieldName: field,
-            videoNumber: videoNumber,
+            videoNumber: videoNumber
           },
           // TODO: Make it so validation does not run on metadata for entries
           //       recorded in SignLab
           meta: {
             prompt: 'placeholder',
-            responderID: existingTag.user._id,
-          },
+            responderID: existingTag.user._id
+          }
         });
 
         const studies = await this.studyService.getAllStudies();
         const entries = [entry];
         Promise.all(
           studies.map(async (study) => {
-            return this.entryStudyService.createEntryStudies(
-              entries,
-              study,
-              false,
-            );
-          }),
+            return this.entryStudyService.createEntryStudies(entries, study, false);
+          })
         );
       }
     }

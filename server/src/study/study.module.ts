@@ -16,10 +16,10 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => EntryModule),
     forwardRef(() => EntryStudyModule),
     forwardRef(() => UserStudyModule),
-    forwardRef(() => UserModule),
+    forwardRef(() => UserModule)
   ],
   controllers: [StudyController],
   providers: [StudyService],
-  exports: [StudyService],
+  exports: [StudyService]
 })
 export class StudyModule {}

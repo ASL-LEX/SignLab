@@ -28,8 +28,7 @@ export class AslLexService {
    *         identify ASL-LEX tags.
    */
   async getAslLexView(search: string): Promise<TagSearchResult[]> {
-    const baseURL =
-      'https://api.knack.com/v1/pages/scene_139/views/view_203/records';
+    const baseURL = 'https://api.knack.com/v1/pages/scene_139/views/view_203/records';
 
     // Build the request.
     //
@@ -56,7 +55,7 @@ export class AslLexService {
     const result = await this.httpClient
       .get<any>(baseURL, {
         headers: headers,
-        params: queryParams,
+        params: queryParams
       })
       .toPromise();
 
@@ -73,10 +72,7 @@ export class AslLexService {
       .map((row: any) => {
         // Have to splice out the vimeo link from this field which containes
         // an existing iframe
-        const link = row.field_782
-          .split('src=')[1]
-          .split(/[ >]/)[0]
-          .replaceAll('"', '');
+        const link = row.field_782.split('src=')[1].split(/[ >]/)[0].replaceAll('"', '');
 
         // Make a URL that will autoplay and loop
         const videoURL = `${link}?&loop=1&autoplay=1&controls=0&background=1`;
@@ -84,7 +80,7 @@ export class AslLexService {
         return {
           code: row.field_52,
           englishTag: row.field_2,
-          videoURL: videoURL,
+          videoURL: videoURL
         };
       });
 

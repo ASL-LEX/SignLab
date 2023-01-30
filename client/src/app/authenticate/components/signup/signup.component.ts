@@ -1,17 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  ComplexityOptions,
-  default as passwordValidate,
-} from 'joi-password-complexity';
+import { ComplexityOptions, default as passwordValidate } from 'joi-password-complexity';
 import { User } from 'shared/dtos/user.dto';
 
 import { AuthService } from '../../../core/services/auth.service';
@@ -22,9 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
  */
 function complexityValidator(complexity: ComplexityOptions): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const result = passwordValidate(complexity, 'password').validate(
-      control.value
-    );
+    const result = passwordValidate(complexity, 'password').validate(control.value);
     if (result.error) {
       return { complexity: result.error.message };
     }
@@ -73,7 +61,7 @@ function alwaysInvalid(_control: AbstractControl) {
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
   /** The form group for the signup */
@@ -86,7 +74,7 @@ export class SignupComponent implements OnInit {
       // the password field can only be validated after the complexity is
       // retrieved and added to the field
       pass: new FormControl('', [alwaysInvalid]),
-      confirmPass: new FormControl('', [Validators.required]),
+      confirmPass: new FormControl('', [Validators.required])
     },
     mustMatch('pass', 'confirmPass')
   );
@@ -100,9 +88,7 @@ export class SignupComponent implements OnInit {
     // Get the password requirements
     this.authService.getPasswordComplexity().then((passwordComplexity) => {
       // Add the password complexity validator
-      this.signupForm
-        .get('pass')
-        ?.setValidators(complexityValidator(passwordComplexity));
+      this.signupForm.get('pass')?.setValidators(complexityValidator(passwordComplexity));
     });
   }
 
@@ -134,10 +120,7 @@ export class SignupComponent implements OnInit {
     }
 
     // See if the username and email is available
-    const availability = await this.authService.isUserAvailable(
-      this.username.value!,
-      this.email.value!
-    );
+    const availability = await this.authService.isUserAvailable(this.username.value!, this.email.value!);
 
     // If the username/email is not available, notify the user and
     // don't attempt to signup

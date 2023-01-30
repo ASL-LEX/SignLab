@@ -1,10 +1,5 @@
 import { Tag } from 'shared/dtos/tag.dto';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { TaggingForm } from './tagging-form.compont';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,15 +14,15 @@ describe('TaggingForm', () => {
       owner: false,
       studyContributor: {},
       projectAdmin: {},
-      studyAdmin: {},
-    },
+      studyAdmin: {}
+    }
   };
 
   const dataset = {
     _id: '1',
     name: 'test',
     description: 'test',
-    creator: creator,
+    creator: creator
   };
 
   const testTag1: Tag = {
@@ -41,7 +36,7 @@ describe('TaggingForm', () => {
       meta: {},
       creator: creator,
       dateCreated: new Date(),
-      dataset: dataset,
+      dataset: dataset
     },
     study: {
       _id: 'study1',
@@ -53,22 +48,22 @@ describe('TaggingForm', () => {
           type: 'object',
           properties: {
             name: {
-              type: 'string',
-            },
+              type: 'string'
+            }
           },
-          required: ['name'],
+          required: ['name']
         },
         uiSchema: {
           type: 'VerticalLayout',
           elements: [
             {
               type: 'Control',
-              scope: '#/properties/name',
-            },
-          ],
-        },
+              scope: '#/properties/name'
+            }
+          ]
+        }
       },
-      project: '1',
+      project: '1'
     },
     user: {
       _id: 'some user',
@@ -79,12 +74,12 @@ describe('TaggingForm', () => {
         owner: false,
         studyContributor: {},
         projectAdmin: {},
-        studyAdmin: {},
-      },
+        studyAdmin: {}
+      }
     },
     complete: false,
     isTraining: false,
-    info: {},
+    info: {}
   };
 
   let taggingForm: ComponentFixture<TaggingForm>;
@@ -92,7 +87,7 @@ describe('TaggingForm', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TaggingForm],
-      imports: [SharedModule, BrowserAnimationsModule],
+      imports: [SharedModule, BrowserAnimationsModule]
     });
 
     taggingForm = TestBed.createComponent(TaggingForm);

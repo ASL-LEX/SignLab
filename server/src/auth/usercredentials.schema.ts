@@ -15,5 +15,4 @@ export class UserCredentials implements dto.UserCredentials {
 }
 
 export type UserCredentialsDocument = UserCredentials & Document;
-export const UserCredentialsSchema =
-  SchemaFactory.createForClass(UserCredentials);
+export const UserCredentialsSchema = SchemaFactory.createForClass(UserCredentials);

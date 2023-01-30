@@ -7,6 +7,6 @@ import { EnvironmentSelect } from './components/environment-select.component';
 @NgModule({
   declarations: [NavbarComponent, EnvironmentSelect],
   imports: [SharedModule, RouterModule],
-  exports: [NavbarComponent],
+  exports: [NavbarComponent]
 })
 export class NavigationModule {}

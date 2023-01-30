@@ -1,11 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  Output,
-  ElementRef,
-  OnDestroy,
-  EventEmitter,
-} from '@angular/core';
+import { Component, ViewChild, Output, ElementRef, OnDestroy, EventEmitter } from '@angular/core';
 
 /**
  * Handles the record logic for a single video. Provides a preview of the
@@ -18,9 +11,7 @@ import {
       <video class="video" #previewVideo class="videoView" controls></video>
     </div>
   `,
-  styles: [
-    '.videoView { width: 100%; height: 100%; min-width: 300px; min-height: 300px; overflow: hidden; }',
-  ],
+  styles: ['.videoView { width: 100%; height: 100%; min-width: 300px; min-height: 300px; overflow: hidden; }']
 })
 export class VideoPreviewComponent implements OnDestroy {
   /** The view element for the video element */
@@ -56,7 +47,7 @@ export class VideoPreviewComponent implements OnDestroy {
     try {
       stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
-        video: true,
+        video: true
       });
     } catch (err: any) {
       // Display the error to the user
@@ -82,10 +73,7 @@ export class VideoPreviewComponent implements OnDestroy {
       options = { mimeType: 'video/webm; codecs=vp8' };
     } else {
       console.error('Cannot instantiate mediaRecorder');
-      this.displayWebcamError(
-        'Unable to record video, please try again and ' +
-          'report this issue if it persists.'
-      );
+      this.displayWebcamError('Unable to record video, please try again and ' + 'report this issue if it persists.');
       return false;
     }
 

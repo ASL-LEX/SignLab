@@ -7,14 +7,12 @@ import { StudyModule } from '../study/study.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: UserStudy.name, schema: UserStudySchema },
-    ]),
+    MongooseModule.forFeature([{ name: UserStudy.name, schema: UserStudySchema }]),
     EntryStudyModule,
-    forwardRef(() => StudyModule),
+    forwardRef(() => StudyModule)
   ],
   controllers: [],
   providers: [UserStudyService],
-  exports: [UserStudyService],
+  exports: [UserStudyService]
 })
 export class UserStudyModule {}

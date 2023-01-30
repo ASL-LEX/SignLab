@@ -11,6 +11,6 @@ import { EntryMetaForm } from './components/entry-meta-form/entry-meta-form.comp
   declarations: [FirstTimeSetupComponent, EntryMetaForm],
   imports: [SharedModule, AuthenticateModule],
   providers: [],
-  exports: [FirstTimeSetupComponent],
+  exports: [FirstTimeSetupComponent]
 })
 export class FirstTimeSetupModule {}

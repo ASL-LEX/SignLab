@@ -8,7 +8,7 @@ import { Entry, EntryDocument } from './entry.schema';
 export class EntryService {
   constructor(
     @InjectModel(Entry.name)
-    private entryModel: Model<EntryDocument>,
+    private entryModel: Model<EntryDocument>
   ) {}
 
   async find(query: FilterQuery<Entry>): Promise<Entry | null> {
@@ -51,7 +51,7 @@ export class EntryService {
   async delete(entry: Entry): Promise<void> {
     this.entryModel
       .deleteOne({
-        _id: entry._id,
+        _id: entry._id
       })
       .exec();
   }
@@ -60,8 +60,6 @@ export class EntryService {
    * Update the video URL of the given entry
    */
   async updateMediaURL(entry: Entry, mediaURL: string): Promise<void> {
-    this.entryModel
-      .updateOne({ _id: entry._id! }, { $set: { mediaURL: mediaURL } })
-      .exec();
+    this.entryModel.updateOne({ _id: entry._id! }, { $set: { mediaURL: mediaURL } }).exec();
   }
 }

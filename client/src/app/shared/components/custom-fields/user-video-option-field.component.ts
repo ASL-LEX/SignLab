@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JsonFormsAngularService, JsonFormsControl } from '@jsonforms/angular';
 import { VideoOption, VideoSelection } from './video-option-field.component';
-import {
-  composeWithUi,
-  Actions,
-  ControlElement,
-  RankedTester,
-  rankWith,
-} from '@jsonforms/core';
+import { composeWithUi, Actions, ControlElement, RankedTester, rankWith } from '@jsonforms/core';
 
 /**
  * Provides videos are options to a user where the videos, identitfication
@@ -25,7 +19,7 @@ import {
       (videoSelected)="selectOption($event)"
       (searchValue)="searchUpdate($event)"
     ></video-option-field>
-  `,
+  `
 })
 export class UserVideoOption extends JsonFormsControl implements OnInit {
   /** The video options presented to the user based on user search */
@@ -44,9 +38,7 @@ export class UserVideoOption extends JsonFormsControl implements OnInit {
     super.ngOnInit();
 
     // Check to see if `allowCustomLabels` is an option
-    this.allowCustomLabels =
-      this.uischema.options != undefined &&
-      this.uischema.options.allowCustomLabels;
+    this.allowCustomLabels = this.uischema.options != undefined && this.uischema.options.allowCustomLabels;
 
     // Pull out the video options from the data
     if (!this.uischema.options || !this.uischema.options.userVideoParameters) {
@@ -68,9 +60,7 @@ export class UserVideoOption extends JsonFormsControl implements OnInit {
   /** On search filter the videos to display to the user */
   searchUpdate(searchTerm: string): void {
     this.videoOptions = this.allVideoOptions.filter((option) => {
-      return (
-        option.searchTerm.toLowerCase().indexOf(searchTerm.toLowerCase()) == 0
-      );
+      return option.searchTerm.toLowerCase().indexOf(searchTerm.toLowerCase()) == 0;
     });
   }
 
@@ -85,13 +75,10 @@ export class UserVideoOption extends JsonFormsControl implements OnInit {
   }
 }
 
-export const userVideoOptionRendererTester: RankedTester = rankWith(
-  10,
-  (uischema, _schema, _rootSchema) => {
-    return (
-      uischema.options != undefined &&
-      uischema.options.customType != undefined &&
-      uischema.options.customType == 'video-options'
-    );
-  }
-);
+export const userVideoOptionRendererTester: RankedTester = rankWith(10, (uischema, _schema, _rootSchema) => {
+  return (
+    uischema.options != undefined &&
+    uischema.options.customType != undefined &&
+    uischema.options.customType == 'video-options'
+  );
+});

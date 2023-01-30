@@ -22,9 +22,9 @@ import { TagViewComponent } from './components/tag-view.component';
     RequiredInfoComponent,
     TagFormPreviewDialog,
     TagFieldComponent,
-    TagViewComponent,
+    TagViewComponent
   ],
   imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, SharedModule],
-  providers: [TagFieldGeneratorService],
+  providers: [TagFieldGeneratorService]
 })
 export class StudiesModule {}

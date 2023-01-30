@@ -14,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
       [(selected)]="activeProjectID"
       (selectedChange)="changeProject($event)"
     ></selector-dialog>
-  `,
+  `
 })
 export class ProjectSelectDialog {
   /** The options the user can select from */
@@ -24,10 +24,7 @@ export class ProjectSelectDialog {
   /** The active project ID, for rendering to the user the current selection */
   activeProjectID = '';
 
-  constructor(
-    private dialogRef: MatDialogRef<ProjectSelectDialog>,
-    private projectService: ProjectService
-  ) {
+  constructor(private dialogRef: MatDialogRef<ProjectSelectDialog>, private projectService: ProjectService) {
     // Generate the project list
     firstValueFrom(this.projectService.projects).then((projects) => {
       this.updateProjectOptions(projects);
@@ -40,9 +37,7 @@ export class ProjectSelectDialog {
   }
 
   changeProject(projectOption: SelectDialogOptions) {
-    const project = this.projects.find(
-      (project) => project._id! === projectOption.value
-    );
+    const project = this.projects.find((project) => project._id! === projectOption.value);
     if (!project) {
       throw new Error('Project not found');
     }
@@ -56,7 +51,7 @@ export class ProjectSelectDialog {
     this.projectOptions = projects.map((project) => {
       return {
         name: project.name,
-        value: project._id!,
+        value: project._id!
       };
     });
   }

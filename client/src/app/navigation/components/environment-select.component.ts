@@ -55,13 +55,10 @@ import { StudyService } from '../../core/services/study.service';
       </mat-card-content>
     </mat-card>
   `,
-  styleUrls: ['./environment-select.component.css'],
+  styleUrls: ['./environment-select.component.css']
 })
 export class EnvironmentSelect {
-  constructor(
-    public studyService: StudyService,
-    public projectService: ProjectService
-  ) {}
+  constructor(public studyService: StudyService, public projectService: ProjectService) {}
 
   /** Update the study that is active */
   studySelect(event: MatSelectChange): void {

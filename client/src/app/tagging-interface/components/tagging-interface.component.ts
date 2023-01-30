@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Tag } from 'shared/dtos/tag.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
@@ -26,18 +20,14 @@ import { TagService } from '../../core/services/tag.service';
         <mat-card-title>No Entries Untagged</mat-card-title>
         <mat-card-content>
           <!-- Training "no more tags" message -->
-          <div *ngIf="isTraining">
-            Training complete, notify your admin for further access to the study
-          </div>
+          <div *ngIf="isTraining">Training complete, notify your admin for further access to the study</div>
 
           <!-- Normal tagging "no more tags" message -->
-          <div *ngIf="!isTraining">
-            All entries have been tagged so far, come back later
-          </div>
+          <div *ngIf="!isTraining">All entries have been tagged so far, come back later</div>
         </mat-card-content>
       </mat-card>
     </ng-template>
-  `,
+  `
 })
 export class TaggingInterface implements OnChanges, OnInit {
   /** The tag to be completed */
@@ -52,10 +42,7 @@ export class TaggingInterface implements OnChanges, OnInit {
   /** Flag that determines if the tagging is being done or training or not */
   @Input() isTraining = false;
 
-  constructor(
-    private authService: AuthService,
-    private tagService: TagService
-  ) {}
+  constructor(private authService: AuthService, private tagService: TagService) {}
 
   ngOnInit(): void {
     this.getNextTag();
@@ -84,11 +71,7 @@ export class TaggingInterface implements OnChanges, OnInit {
    * the user.
    */
   async getNextTag() {
-    const tag = await this.tagService.getNextUntaggedEntry(
-      this.authService.user,
-      this.study,
-      this.isTraining
-    );
+    const tag = await this.tagService.getNextUntaggedEntry(this.authService.user, this.study, this.isTraining);
 
     // No more tags for this study
     if (!tag) {
@@ -112,9 +95,7 @@ export class TaggingInterface implements OnChanges, OnInit {
       // Get next tag to complete
       this.getNextTag();
     } catch (error) {
-      alert(
-        'Please fill out all required fields following the instructions for each field'
-      );
+      alert('Please fill out all required fields following the instructions for each field');
     }
   }
 }

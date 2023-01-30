@@ -9,6 +9,8 @@
     "test:watch": "ng test",
     "lint:fix": "ng lint --fix",
     "lint": "ng lint",
+    "prettier": "prettier -l \"src/**/*.ts\"",
+    "prettier:fix": "prettier -wl \"src/**/*.ts\"",
     "setup": "node setup.js",
     "introspection": "graphql-codegen --config graphql-codegen.yml"
   },

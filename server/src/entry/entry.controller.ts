@@ -10,7 +10,7 @@ import {
   Body,
   Query,
   Delete,
-  Param,
+  Param
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
@@ -45,7 +45,7 @@ export class EntryController {
     private entryStudyService: EntryStudyService,
     private tagService: TagService,
     private userStudyService: UserStudyService,
-    private bucketStorage: BucketStorage,
+    private bucketStorage: BucketStorage
   ) {}
 
   /**
@@ -59,10 +59,7 @@ export class EntryController {
   async setMetadata(@Body() fields: MetadataDefinition[]) {
     // If the schema already exists, throw an error
     if (await this.schemaService.hasSchema('Entry')) {
-      throw new HttpException(
-        'Entry schema already exists',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Entry schema already exists', HttpStatus.BAD_REQUEST);
     }
 
     // Generate a JSON Schmea from the meta data
@@ -71,7 +68,7 @@ export class EntryController {
       $schema: 'https://json-schema.org/draft/2020-12/schema',
       type: 'object',
       properties: {},
-      required: fields.map((field) => field.name),
+      required: fields.map((field) => field.name)
     };
     for (const field of fields) {
       (schema.properties as any)[field.name] = { type: field.type };
@@ -97,9 +94,7 @@ export class EntryController {
   @Post('/upload/csv')
   @Auth('admin')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCSV(
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<SaveAttempt> {
+  async uploadCSV(@UploadedFile() file: Express.Multer.File): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
@@ -130,9 +125,7 @@ export class EntryController {
    */
   @Get('/dataset/:datasetID')
   @Auth('admin')
-  async getEntriesForDataset(
-    @Param('datasetID', DatasetPipe) dataset: Dataset,
-  ): Promise<Entry[]> {
+  async getEntriesForDataset(@Param('datasetID', DatasetPipe) dataset: Dataset): Promise<Entry[]> {
     return this.entryService.getEntriesForDataset(dataset);
   }
 
@@ -175,29 +168,21 @@ export class EntryController {
         destination: './upload/',
         filename: (_req, _file, cb) => {
           cb(null, 'upload.zip');
-        },
-      }),
-    }),
+        }
+      })
+    })
   )
-  async uploadZIP(
-    @UploadedFile() _file: Express.Multer.File,
-  ): Promise<SaveAttempt> {
+  async uploadZIP(@UploadedFile() _file: Express.Multer.File): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
-    const result = await this.entryUploadService.uploadEntryVideos(
-      './upload/upload.zip',
-    );
+    const result = await this.entryUploadService.uploadEntryVideos('./upload/upload.zip');
 
     // Now create a EntryStudy for each entry for each study
     if (result.entries) {
       const studies = await this.studyService.getAllStudies();
       await Promise.all(
         studies.map(async (study) => {
-          this.entryStudyService.createEntryStudies(
-            result.entries,
-            study,
-            true,
-          );
-        }),
+          this.entryStudyService.createEntryStudies(result.entries, study, true);
+        })
       );
     }
 
@@ -220,7 +205,7 @@ export class EntryController {
   @Auth('admin')
   async getEntryStudies(
     @Query('studyID', StudyPipe) study: Study,
-    @Query('datasetID', DatasetPipe) dataset: Dataset,
+    @Query('datasetID', DatasetPipe) dataset: Dataset
   ): Promise<EntryStudy[]> {
     return this.entryStudyService.getEntryStudies(study, dataset);
   }
@@ -236,23 +221,17 @@ export class EntryController {
       studyID: string;
       entryID: string;
       isPartOfStudy: boolean;
-    },
+    }
   ): Promise<void> {
     // Get the study and entry
     // TODO: Standardized this process of existence checking and querying
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
-      throw new HttpException(
-        `The study with id ${changeRequest.studyID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);
     }
     const entry = await this.entryService.find({ _id: changeRequest.entryID });
     if (!entry) {
-      throw new HttpException(
-        `The entry with id ${changeRequest.entryID} does not exist`,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(`The entry with id ${changeRequest.entryID} does not exist`, HttpStatus.BAD_REQUEST);
     }
 
     // This would be bad if the entry study does not exist since the
@@ -263,14 +242,11 @@ export class EntryController {
     if (!entryStudy) {
       throw new HttpException(
         `Something went wrong trying to find the entry study information`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
 
-    this.entryStudyService.changePartOfStudy(
-      entryStudy,
-      changeRequest.isPartOfStudy,
-    );
+    this.entryStudyService.changePartOfStudy(entryStudy, changeRequest.isPartOfStudy);
   }
 
   /**

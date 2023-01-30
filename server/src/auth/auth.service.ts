@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {
-  UserAvailability,
-  UserCredentials,
-  UserIdentification,
-  UserSignup,
-} from 'shared/dtos/user.dto';
+import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
 import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
 import * as usercredentials from '../auth/usercredentials.schema';
@@ -24,7 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectModel(usercredentials.UserCredentials.name)
     private userCredentialsModel: Model<usercredentials.UserCredentialsDocument>,
-    private userService: UserService,
+    private userService: UserService
   ) {}
 
   /**
@@ -32,17 +27,15 @@ export class AuthService {
    *
    * @return The authenticated user on success, null otherwise
    */
-  public async authenticate(
-    credentials: UserCredentials,
-  ): Promise<AuthResponse | null> {
+  public async authenticate(credentials: UserCredentials): Promise<AuthResponse | null> {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel
       .findOne({
-        username: credentials.username,
+        username: credentials.username
       })
       .exec();
     const user = await this.userService.findOne({
-      username: credentials.username,
+      username: credentials.username
     });
 
     // If a user is not found with that username, return null
@@ -64,9 +57,7 @@ export class AuthService {
    *
    * @return The availability of the username and email
    */
-  public async availability(
-    userId: UserIdentification,
-  ): Promise<UserAvailability> {
+  public async availability(userId: UserIdentification): Promise<UserAvailability> {
     const availability = { username: true, email: true };
 
     // Check username availability
@@ -104,13 +95,13 @@ export class AuthService {
         owner: isOwner,
         projectAdmin: {},
         studyAdmin: {},
-        studyContributor: {},
-      },
+        studyContributor: {}
+      }
     };
 
     const userCredentials = {
       username: userSignup.username,
-      password: hashedPassword,
+      password: hashedPassword
     };
 
     const newUser = await this.userService.create(user);

@@ -8,10 +8,8 @@ import { AuthService } from './core/services/auth.service';
 
     <p *ngIf="!authService.isAuthenticated()">Please login to continue</p>
 
-    <p *ngIf="authService.isAuthenticated()">
-      Welcome {{ this.authService.user.name }}
-    </p>
-  `,
+    <p *ngIf="authService.isAuthenticated()">Welcome {{ this.authService.user.name }}</p>
+  `
 })
 export class HomeComponent {
   constructor(public authService: AuthService) {}

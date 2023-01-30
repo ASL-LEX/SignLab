@@ -30,9 +30,9 @@ import { GraphQLModule } from './graphql.module';
     FirstTimeSetupModule,
     CoreModule.forRoot(),
     NavigationModule,
-    GraphQLModule,
+    GraphQLModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

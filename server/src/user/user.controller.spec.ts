@@ -14,8 +14,8 @@ const testUser1: User = {
     owner: false,
     studyAdmin: {},
     projectAdmin: {},
-    studyContributor: {},
-  },
+    studyContributor: {}
+  }
 };
 
 const testUser2: User = {
@@ -27,8 +27,8 @@ const testUser2: User = {
     owner: false,
     studyAdmin: {},
     projectAdmin: {},
-    studyContributor: {},
-  },
+    studyContributor: {}
+  }
 };
 
 // Test user service
@@ -55,21 +55,21 @@ const userService = {
     } else {
       return false;
     }
-  }),
+  })
 };
 
 // Test rolesguard
 const rolesGuard = {
   async canActivate() {
     return true;
-  },
+  }
 };
 
 // Test config service
 const configService = {
   get(_param: string) {
     return 3;
-  },
+  }
 };
 
 describe('UserController', () => {
@@ -82,13 +82,13 @@ describe('UserController', () => {
       providers: [
         {
           provide: UserService,
-          useValue: userService,
+          useValue: userService
         },
         {
           provide: ConfigService,
-          useValue: configService,
-        },
-      ],
+          useValue: configService
+        }
+      ]
     })
       .overrideGuard(RolesGuard)
       .useValue(rolesGuard)

@@ -1,20 +1,7 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Get,
-  Query,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Body, Controller, Post, Get, Query, HttpException, HttpStatus } from '@nestjs/common';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { AuthService } from './auth.service';
-import {
-  UserAvailability,
-  UserCredentials,
-  UserIdentification,
-  UserSignup,
-} from 'shared/dtos/user.dto';
+import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { AuthResponse } from 'shared/dtos/auth.dto';
 
@@ -30,13 +17,10 @@ export class AuthController {
     upperCase: 0,
     numeric: 0,
     symbol: 0,
-    requirementCount: 3,
+    requirementCount: 3
   };
 
-  constructor(
-    private authService: AuthService,
-    private userStudyService: UserStudyService,
-  ) {}
+  constructor(private authService: AuthService, private userStudyService: UserStudyService) {}
 
   /**
    * Endpoint to attempt to login. Logging in will attempt to find the
@@ -47,9 +31,7 @@ export class AuthController {
    * @return The user credentials for the given user on success
    */
   @Post('/login')
-  async login(
-    @Body() userCredentials: UserCredentials,
-  ): Promise<AuthResponse | null> {
+  async login(@Body() userCredentials: UserCredentials): Promise<AuthResponse | null> {
     return this.authService.authenticate(userCredentials);
   }
 
@@ -72,9 +54,7 @@ export class AuthController {
    * @return The availability information
    */
   @Get('/availability')
-  async userAvailabiliy(
-    @Query() userId: UserIdentification,
-  ): Promise<UserAvailability> {
+  async userAvailabiliy(@Query() userId: UserIdentification): Promise<UserAvailability> {
     return this.authService.availability(userId);
   }
 
@@ -89,21 +69,13 @@ export class AuthController {
     // Ensure the user is available, otherwise throw an error
     const availability = await this.authService.availability(userSignup);
     if (!availability.username || !availability.email) {
-      throw new HttpException(
-        'Username and/or email already exists',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Username and/or email already exists', HttpStatus.BAD_REQUEST);
     }
 
     // Ensure the password complexity is met
-    const complexityValidation = passwordValidator(
-      this.passwordComplexity,
-    ).validate(userSignup.password);
+    const complexityValidation = passwordValidator(this.passwordComplexity).validate(userSignup.password);
     if (complexityValidation.error) {
-      throw new HttpException(
-        complexityValidation.error,
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException(complexityValidation.error, HttpStatus.BAD_REQUEST);
     }
 
     const authResponse = await this.authService.signup(userSignup);

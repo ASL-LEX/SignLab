@@ -7,11 +7,11 @@ import { ProjectAccess } from './components/project-access.component';
 
 const routes: Routes = [
   { path: 'dataset-control', component: DatasetControlComponent },
-  { path: 'project-access', component: ProjectAccess },
+  { path: 'project-access', component: ProjectAccess }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
 export class DatasetsRoutingModule {}

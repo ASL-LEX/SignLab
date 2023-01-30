@@ -12,9 +12,9 @@ describe('UserService', () => {
         owner: true,
         studyContributor: {},
         projectAdmin: {},
-        studyAdmin: {},
+        studyAdmin: {}
       },
-      _id: '10',
+      _id: '10'
     },
     {
       email: 'test@bu.edu',
@@ -24,11 +24,11 @@ describe('UserService', () => {
         owner: false,
         studyContributor: {},
         projectAdmin: {},
-        studyAdmin: {},
+        studyAdmin: {}
       },
       username: 'test',
-      _id: '11',
-    },
+      _id: '11'
+    }
   ];
 
   // Test to make sure the users can be pulled successfully
@@ -39,7 +39,7 @@ describe('UserService', () => {
 
     // Make a spy auth service that always returns the same user
     const authSpy = jasmine.createSpyObj('AuthService', [], {
-      user: exampleUserData[0],
+      user: exampleUserData[0]
     });
 
     // Make the test service
@@ -57,7 +57,7 @@ describe('UserService', () => {
 
     // Make a spy auth service that always returns the same user
     const authSpy = jasmine.createSpyObj('AuthService', [], {
-      user: exampleUserData[0],
+      user: exampleUserData[0]
     });
 
     // Make the test service
@@ -66,17 +66,13 @@ describe('UserService', () => {
     // Test adding a role to the user
     let result = await service.changeRole(exampleUserData[0], 'tagging', true);
     expect(result).toBeTrue();
-    expect(spy.put).toHaveBeenCalledWith(
-      'api/users/tagging/10',
-      {},
-      { provideToken: true }
-    );
+    expect(spy.put).toHaveBeenCalledWith('api/users/tagging/10', {}, { provideToken: true });
 
     // Test deleting a role from the user
     result = await service.changeRole(exampleUserData[0], 'tagging', false);
     expect(result).toBeTrue();
     expect(spy.delete).toHaveBeenCalledWith('api/users/tagging/10', {
-      provideToken: true,
+      provideToken: true
     });
   });
 
@@ -88,18 +84,14 @@ describe('UserService', () => {
 
     // Make a spy auth service that always returns the same user
     const authSpy = jasmine.createSpyObj('AuthService', [], {
-      user: exampleUserData[0],
+      user: exampleUserData[0]
     });
 
     // Make the test service
     const service = new UserService(spy, authSpy);
 
     // Test trying to change a role
-    const result = await service.changeRole(
-      exampleUserData[0],
-      'tagging',
-      true
-    );
+    const result = await service.changeRole(exampleUserData[0], 'tagging', true);
     expect(result).toBeFalse();
   });
 });

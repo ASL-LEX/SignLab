@@ -59,8 +59,8 @@ export class EntryUpload {
       validator: async (value: any) => {
         const schemaService = app.get(SchemaService);
         return schemaService.validate('Entry', value);
-      },
-    },
+      }
+    }
   })
   meta: any;
 }
