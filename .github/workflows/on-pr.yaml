@@ -29,6 +29,9 @@ jobs:
       - name: Check for Linting Issues
         run: npm run lint
 
+      - name: Check for Prettier Issues
+        run: npm run prettier
+
   client-unit-tests:
     runs-on: ubuntu-latest
     name: Run Client Side Unit Tests
