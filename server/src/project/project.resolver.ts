@@ -4,7 +4,9 @@ import { ProjectAdminChange, ProjectChangePipe, ProjectCreate, ProjectAdminChang
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
 import { UserContext } from '../user/user.decorator';
-import { User } from 'src/user/user.schema';
+import { User } from '../user/user.schema';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Resolver()
 export class ProjectResolver {
@@ -37,8 +39,8 @@ export class ProjectResolver {
   }
 
   @Query(() => [Project])
+  @UseGuards(JwtAuthGuard)
   async getProjectsForUser(@UserContext() user: User): Promise<Project[]> {
-    console.log(user);
-    return [];
+    return this.projectService.findByUser(user);
   }
 }
