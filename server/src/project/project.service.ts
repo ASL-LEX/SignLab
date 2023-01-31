@@ -46,22 +46,45 @@ export class ProjectService {
       return this.findAll();
     }
 
+    // The roles are retrived from the database as maps, however they need
+    // to be convereted to objects
+
+    console.log(user.roles);
+
+
     // Get the IDs of projects the user is an admin of
-    const visibleIDs = Object.keys(user.roles.projectAdmin).filter((id) => user.roles.projectAdmin[id]);
+    const projectAdminIDs = [];
+    for (const [id, isAdmin] of user.roles.projectAdmin) {
+      if (isAdmin) {
+        projectAdminIDs.push(id);
+      }
+    }
 
     // Get the IDs of projects the user is an admin of a study in
     // Requires querying the study to determing the corresponding project
-    const studyAdmin = await Promise.all(Object.keys(user.roles.studyAdmin)
-                                               .filter((id) => user.roles.studyAdmin[id])
-                                               .map(async (id) => (await this.studyService.find(id))!.project));
+    const studyAdminIDs = [];
+    for (const [id, isAdmin] of user.roles.studyAdmin) {
+      if (isAdmin) {
+        const study = await this.studyService.find(id);
+        if (study) {
+          studyAdminIDs.push(study.project);
+        }
+      }
+    }
 
     // Get the IDs of studies that are visible to the user
-    const studyVisible = await Promise.all(Object.keys(user.roles.studyVisible)
-                                                 .filter((id) => user.roles.studyVisible[id])
-                                                 .map(async (id) => (await this.studyService.find(id))!.project));
+    const studyVisibleIDs = [];
+    for (const [id, isVisible] of user.roles.studyVisible) {
+      if (isVisible) {
+        const study = await this.studyService.find(id);
+        if (study) {
+          studyVisibleIDs.push(study.project);
+        }
+      }
+    }
 
     // Combine all the IDs
-    const allIDs = [...visibleIDs, ...studyAdmin, ...studyVisible];
+    const allIDs = [...projectAdminIDs, ...studyAdminIDs, ...studyVisibleIDs];
 
     // Remove duplicates
     const uniqueIDs = [...new Set(allIDs)];

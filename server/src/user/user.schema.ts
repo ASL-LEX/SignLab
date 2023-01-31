@@ -11,27 +11,19 @@ export class Roles {
 
   /** Mapping between Project ID and if the user is an admin for that project */
   @Prop({ type: mongoose.SchemaTypes.Map })
-  projectAdmin: {
-    [projectID: string]: boolean;
-  };
+  projectAdmin: Map<string, boolean>;
 
   /** Mapping between Study ID and if the user is an admin for that study */
   @Prop({ type: mongoose.SchemaTypes.Map })
-  studyAdmin: {
-    [studyID: string]: boolean;
-  };
+  studyAdmin: Map<string, boolean>;
 
   /** Mapping between Study ID and if the user can contribute to that study */
   @Prop({ type: mongoose.SchemaTypes.Map })
-  studyContributor: {
-    [studyID: string]: boolean;
-  };
+  studyContributor: Map<string, boolean>;
 
   /** Mapping between Study ID and if the user can view that study */
   @Prop({ type: mongoose.SchemaTypes.Map })
-  studyVisible: {
-    [studyID: string]: boolean;
-  };
+  studyVisible: Map<string, boolean>;
 }
 
 const RolesSchema = SchemaFactory.createForClass(Roles);

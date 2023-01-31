@@ -46,6 +46,6 @@ export class TagGuard implements CanActivate {
     }
 
     // Check against the user roles
-    return user.roles.studyContributor[studyID];
+    return !!user.roles.studyContributor.get(study._id!);
   }
 }
