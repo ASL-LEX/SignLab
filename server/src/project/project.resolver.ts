@@ -12,11 +12,6 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 export class ProjectResolver {
   constructor(private readonly projectService: ProjectService, private readonly userService: UserService) {}
 
-  @Query(() => [Project])
-  getProjects(): Promise<Project[]> {
-    return this.projectService.findAll();
-  }
-
   // TODO: Add owner role guard once GraphQL role guards are supported
   @Mutation(() => Project)
   async createProject(@Args('projectCreate') projectCreate: ProjectCreate): Promise<Project> {
@@ -40,7 +35,7 @@ export class ProjectResolver {
 
   @Query(() => [Project])
   @UseGuards(JwtAuthGuard)
-  async getProjectsForUser(@UserContext() user: User): Promise<Project[]> {
+  async getProjects(@UserContext() user: User): Promise<Project[]> {
     return this.projectService.findByUser(user);
   }
 }
