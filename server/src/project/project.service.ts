@@ -46,12 +46,6 @@ export class ProjectService {
       return this.findAll();
     }
 
-    // The roles are retrived from the database as maps, however they need
-    // to be convereted to objects
-
-    console.log(user.roles);
-
-
     // Get the IDs of projects the user is an admin of
     const projectAdminIDs = [];
     for (const [id, isAdmin] of user.roles.projectAdmin) {

@@ -33,25 +33,25 @@ export class UserPermissionsComponent {
   async toggleStudyAdmin(toggleChange: { user: User; change: MatSlideToggleChange }) {
     try {
       await this.studyService.changeAdminStatus(toggleChange.user, toggleChange.change.checked);
-      toggleChange.user.roles.studyAdmin[this.activeStudyID!] = toggleChange.change.checked;
+      toggleChange.user.roles.studyAdmin.set(this.activeStudyID!, toggleChange.change.checked);
     } catch (error: any) {
       console.log('Failed to change admin status', error);
-      toggleChange.user.roles.studyAdmin[this.activeStudyID!] = !toggleChange.change.checked;
+      toggleChange.user.roles.studyAdmin.set(this.activeStudyID!, !toggleChange.change.checked);
     }
 
-    toggleChange.change.source.checked = toggleChange.user.roles.studyAdmin[this.activeStudyID!];
+    toggleChange.change.source.checked = toggleChange.user.roles.studyAdmin.get(this.activeStudyID!)!;
   }
 
   async toggleContribute(toggleChange: { user: User; change: MatSlideToggleChange }) {
     try {
       await this.studyService.changeContributorStatus(toggleChange.user, toggleChange.change.checked);
-      toggleChange.user.roles.studyContributor[this.activeStudyID!] = toggleChange.change.checked;
+      toggleChange.user.roles.studyContributor.set(this.activeStudyID!, toggleChange.change.checked);
     } catch (error: any) {
       console.log('Failed to change contributor status', error);
-      toggleChange.user.roles.studyContributor[this.activeStudyID!] = !toggleChange.change.checked;
+      toggleChange.user.roles.studyContributor.set(this.activeStudyID!, !toggleChange.change.checked);
     }
 
-    toggleChange.change.source.checked = toggleChange.user.roles.studyContributor[this.activeStudyID!];
+    toggleChange.change.source.checked = toggleChange.user.roles.studyContributor.get(this.activeStudyID!)!;
   }
 
   /*!*

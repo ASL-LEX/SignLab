@@ -21,7 +21,7 @@ export class TaggingLanding implements OnInit {
       if (study) {
         this.userStudy = await this.studyService.getUserStudy(this.authService.user, study);
 
-        if (!this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]) {
+        if (!this.userStudy.user.roles.studyContributor.get(this.userStudy.study._id!)) {
           this.activeView = 'info';
         }
       }
