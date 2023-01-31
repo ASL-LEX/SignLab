@@ -2,8 +2,8 @@
   "name": "client",
   "scripts": {
     "ng": "ng",
-    "start:watch": "ng build --watch",
-    "build:dev": "ng build",
+    "start:watch": "ng build --watch --configuration development",
+    "build:dev": "ng build --configuration development",
     "build:prod": "ng build --configuration production",
     "test": "ng test --browsers=ChromeHeadless --watch=false --code-coverage",
     "test:watch": "ng test",

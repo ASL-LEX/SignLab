@@ -146,9 +146,9 @@ export class StudyService {
   /**
    * Get the training tags associated with the given user study
    */
-  async getTrainingTags(userStudy: UserStudy): Promise<Tag[]> {
+  async getTrainingTags(user: User, studyID: string): Promise<Tag[]> {
     const query = {
-      params: { studyID: userStudy.study._id!, userID: userStudy.user._id },
+      params: { studyID: studyID, userID: user._id },
       provideToken: true
     };
     return this.signLab.get<Tag[]>('api/tag/training', query);
