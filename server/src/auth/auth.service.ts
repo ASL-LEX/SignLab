@@ -95,7 +95,8 @@ export class AuthService {
         owner: isOwner,
         projectAdmin: {},
         studyAdmin: {},
-        studyContributor: {}
+        studyContributor: {},
+        studyVisible: {}
       }
     };
 

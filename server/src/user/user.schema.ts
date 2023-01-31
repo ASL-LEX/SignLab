@@ -26,6 +26,12 @@ export class Roles {
   studyContributor: {
     [studyID: string]: boolean;
   };
+
+  /** Mapping between Study ID and if the user can view that study */
+  @Prop({ type: mongoose.SchemaTypes.Map })
+  studyVisible: {
+    [studyID: string]: boolean;
+  };
 }
 
 const RolesSchema = SchemaFactory.createForClass(Roles);

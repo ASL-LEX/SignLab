@@ -52,5 +52,8 @@ export interface User {
     studyContributor: {
       [studyID: string]: boolean;
     };
+    studyVisible: {
+      [studyID: string]: boolean;
+    };
   }
 }

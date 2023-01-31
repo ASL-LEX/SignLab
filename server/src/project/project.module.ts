@@ -7,13 +7,15 @@ import { ProjectService } from './project.service';
 import { ProjectResolver } from './project.resolver';
 import { SharedModule } from '../shared/shared.module';
 import { ProjectChangePipe } from './project.dto';
+import { StudyModule } from '../study/study.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
-    forwardRef(() => SharedModule)
+    forwardRef(() => SharedModule),
+    forwardRef(() => StudyModule)
   ],
   providers: [ProjectService, ProjectResolver, ProjectChangePipe],
   exports: [ProjectService]
