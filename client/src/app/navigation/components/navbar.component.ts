@@ -35,7 +35,7 @@ export class NavbarComponent {
         // If the project exists, the user can also see the project
         // if they are a project admin
         if (user && project) {
-          return !!user.roles.projectAdmin.get(project._id!);
+          return (user.roles.projectAdmin as any)[project._id!];
         }
 
         // Otherwise the user cannot see the project
@@ -58,7 +58,7 @@ export class NavbarComponent {
             }
 
             if (user && project) {
-              return !!user.roles.projectAdmin.get(project._id!);
+              return !!(user.roles.projectAdmin as any)[project._id!];
             }
             return false;
           }
@@ -84,12 +84,12 @@ export class NavbarComponent {
         }
 
         // Project admin can access all studies
-        if (user && project && user.roles.projectAdmin.get(project._id!)) {
+        if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
           return true;
         }
 
         // Study admins can access the study
-        if (user && study && user.roles.studyAdmin.get(study._id!)) {
+        if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
           return true;
         }
 
@@ -114,12 +114,12 @@ export class NavbarComponent {
             }
 
             // Project admin can access all studies
-            if (user && project && user.roles.projectAdmin.get(project._id!)) {
+            if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
               return true;
             }
 
             // Study admins can access the study
-            if (user && study && user.roles.studyAdmin.get(study._id!)) {
+            if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
               return true;
             }
 
@@ -144,12 +144,12 @@ export class NavbarComponent {
             }
 
             // Project admin can access all studies
-            if (user && project && user.roles.projectAdmin.get(project._id!)) {
+            if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
               return true;
             }
 
             // Study admins can access the study
-            if (user && study && user.roles.studyAdmin.get(study._id!)) {
+            if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
               return true;
             }
 
@@ -174,12 +174,12 @@ export class NavbarComponent {
             }
 
             // Project admin can access all studies
-            if (user && project && user.roles.projectAdmin.get(project._id!)) {
+            if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
               return true;
             }
 
             // Study admins can access the study
-            if (user && study && user.roles.studyAdmin.get(study._id!)) {
+            if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
               return true;
             }
 
@@ -198,7 +198,7 @@ export class NavbarComponent {
             }
 
             // Project admins can make a new study
-            if (user && project && user.roles.projectAdmin.get(project._id!)) {
+            if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
               return true;
             }
 
@@ -255,17 +255,17 @@ export class NavbarComponent {
         }
 
         // Project admin can contribute to a study that is part of their project
-        if (user && project && user.roles.projectAdmin.get(project._id!)) {
+        if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
           return true;
         }
 
         // Study admins can contribute to a study that is part of their study
-        if (user && study && user.roles.studyAdmin.get(study._id!)) {
+        if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
           return true;
         }
 
         // A user who is marked as a contributor can contribute to a study
-        if (user && study && user.roles.studyContributor.get(study._id!)) {
+        if (user && study && (user.roles.studyContributor as any)[study._id!]) {
           return true;
         }
         return false;
@@ -282,17 +282,17 @@ export class NavbarComponent {
             }
 
             // Project admin can contribute to a study that is part of their project
-            if (user && project && user.roles.projectAdmin.get(project._id!)) {
+            if (user && project && (user.roles.projectAdmin as any)[project._id!]) {
               return true;
             }
 
             // Study admins can contribute to a study that is part of their study
-            if (user && study && user.roles.studyAdmin.get(study._id!)) {
+            if (user && study && (user.roles.studyAdmin as any)[study._id!]) {
               return true;
             }
 
             // A user who is marked as a contributor can contribute to a study
-            if (user && study && user.roles.studyContributor.get(study._id!)) {
+            if (user && study && (user.roles.studyContributor as any)[study._id!]) {
               return true;
             }
             return false;

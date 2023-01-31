@@ -55,7 +55,7 @@ export class UserPermissionsComponent {
           toggleChange.change.source.checked = !toggleChange.change.checked;
         } else {
           // Update the user object to reflect the toggle
-          toggleChange.user.roles.projectAdmin.set(this.activeProjectID!, toggleChange.change.checked);
+          (toggleChange.user.roles.projectAdmin as any)[this.activeProjectID!] = toggleChange.change.checked;
         }
       });
   }
