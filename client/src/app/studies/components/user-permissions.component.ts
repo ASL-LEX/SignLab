@@ -19,10 +19,7 @@ export class UserPermissionsComponent {
   activeProjectID: string | null = null;
   displayedColumns = ['name', 'username', 'email', 'studyAdmin', 'contribute', 'taggingTrainingResults'];
 
-  constructor(
-    public studyService: StudyService,
-    private projectService: ProjectService
-  ) {
+  constructor(public studyService: StudyService, private projectService: ProjectService) {
     this.studyService.activeStudy.subscribe((study) => {
       this.activeStudyID = study ? study._id! : null;
       this.loadData(study);
@@ -57,7 +54,7 @@ export class UserPermissionsComponent {
     toggleChange.change.source.checked = toggleChange.user.roles.studyContributor[this.activeStudyID!];
   }
 
-    /*!*
+  /*!*
    * Download the training tags as a CSV
    *
    * NOTE: This is a tempory feature for exporting information and
@@ -77,7 +74,7 @@ export class UserPermissionsComponent {
         study: tag.study.name,
         user: tag.user.username,
         ...tag.entry.meta,
-        ...tag.info,
+        ...tag.info
       };
     });
 
@@ -90,14 +87,9 @@ export class UserPermissionsComponent {
   }
 
   private downloadFile(user: User, data: any[]) {
-    const replacer = (_key: string, value: any) =>
-      value === null ? '' : value; // specify how you want to handle null values here
+    const replacer = (_key: string, value: any) => (value === null ? '' : value); // specify how you want to handle null values here
     const header = Object.keys(data[0]);
-    const csv = data.map((row) =>
-      header
-        .map((fieldName) => JSON.stringify(row[fieldName], replacer))
-        .join(',')
-    );
+    const csv = data.map((row) => header.map((fieldName) => JSON.stringify(row[fieldName], replacer)).join(','));
     csv.unshift(header.join(','));
     const csvArray = csv.join('\r\n');
 
