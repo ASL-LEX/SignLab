@@ -4,6 +4,7 @@ import { Study, StudyDocument } from '../study/study.schema';
 import { Model } from 'mongoose';
 import { Tag } from '../tag/tag.schema';
 import { Validator, ValidatorResult } from 'jsonschema';
+import { User } from '../user/user.schema';
 
 @Injectable()
 export class StudyService {
@@ -22,6 +23,43 @@ export class StudyService {
         _id: studyID
       })
       .exec();
+  }
+
+  /**
+   * Get Studies that a user can view. Studies that meet the following
+   * criteria are visible.
+   *
+   * 1. If the user is the owner, all studies are visible
+   * 2. If the user is an admin for the project, all the studies under the project are visible
+   * 3. If the user is an admin for the study, that study is visible
+   * 4. If the user is a viewer for the study, that study is visible
+   */
+  async findByUser(user: User, projectID: string): Promise<Study[]> {
+    if (user.roles.owner || user.roles.projectAdmin.get(projectID)) {
+      return this.getStudies(projectID);
+    }
+
+    const studyAdminIDs = [];
+    for (const [id, isAdmin] of user.roles.studyAdmin) {
+      if (isAdmin) {
+        studyAdminIDs.push(id);
+      }
+    }
+
+    const studyVisibleIDs = [];
+    for (const [id, isVisible] of user.roles.studyVisible) {
+      if (isVisible) {
+        studyVisibleIDs.push(id);
+      }
+    }
+
+    // Combine all the IDs
+    const allIDs = [...studyAdminIDs, ...studyVisibleIDs];
+
+    // Remove duplicates
+    const uniqueIDs = [...new Set(allIDs)];
+
+    return this.studyModel.find({ _id: { $in: uniqueIDs } }).exec();
   }
 
   async exists(studyName: string, projectID: string) {
