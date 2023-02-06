@@ -108,7 +108,6 @@ describe('EntryUploadDialog', () => {
 
     const compiled = entryDialog.debugElement.nativeElement;
     const zipButton = compiled.querySelectorAll('button')[1];
-    console.log(zipButton);
 
     // ZIP button should be disabled
     expect(zipButton.getAttribute('disabled')).toBeDefined();

@@ -80,7 +80,6 @@ describe('TaggingLanding', () => {
 
     // Should have a message explaining to the user they don't have access
     const message = compiled.querySelector('div p');
-    console.log(message);
     expect(message.textContent).toContain(
       'Training Complete! Reach out to your study administrator to get access to tagging'
     );
@@ -103,7 +102,6 @@ describe('TaggingLanding', () => {
 
     // Should be able to select the enter tagging button
     const button = compiled.querySelectorAll('mat-card-content div button')[0];
-    console.log(button);
     expect(button.getAttribute('disabled')).toBeNull();
   });
 
