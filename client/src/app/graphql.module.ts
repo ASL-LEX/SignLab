@@ -4,12 +4,11 @@ import { ApolloClientOptions, InMemoryCache, ApolloLink } from '@apollo/client/c
 import { HttpLink } from 'apollo-angular/http';
 import { setContext } from '@apollo/client/link/context';
 import { Router, RouterModule } from '@angular/router';
-import { onError } from '@apollo/client/link/error'
+import { onError } from '@apollo/client/link/error';
 
 // TODO: Bring in URL from configuration
 const uri = 'http://localhost:3000/graphql'; // <-- add the URL of the GraphQL server here
 export function createApollo(httpLink: HttpLink, router: Router): ApolloClientOptions<any> {
-
   // Logic to get the token from local storage
   const auth = setContext((_operation, _context) => {
     const authInfo = localStorage.getItem('SIGNLAB_AUTH_INFO');
@@ -19,9 +18,9 @@ export function createApollo(httpLink: HttpLink, router: Router): ApolloClientOp
     const { token } = JSON.parse(authInfo);
     return {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       }
-    }
+    };
   });
 
   // Logic to handle auth errors
@@ -48,7 +47,7 @@ export function createApollo(httpLink: HttpLink, router: Router): ApolloClientOp
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink, Router],
+      deps: [HttpLink, Router]
     }
   ]
 })

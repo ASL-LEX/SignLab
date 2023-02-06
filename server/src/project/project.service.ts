@@ -8,8 +8,10 @@ import { StudyService } from '../study/study.service';
 
 @Injectable()
 export class ProjectService {
-  constructor(@InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-              private readonly studyService: StudyService) {}
+  constructor(
+    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
+    private readonly studyService: StudyService
+  ) {}
 
   async create(project: ProjectCreate): Promise<Project> {
     const newProject: ProjectCreate & { created: Date } = {

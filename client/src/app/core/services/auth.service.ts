@@ -15,8 +15,7 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService,
-              private apollo: Apollo) {
+  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService, private apollo: Apollo) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
       this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
