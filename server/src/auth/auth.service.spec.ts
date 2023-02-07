@@ -167,7 +167,7 @@ describe('AuthService', () => {
 
         // Should not get here
         expect(false).toBeTruthy();
-      } catch(e: any) {}
+      } catch (e: any) {}
     });
 
     it('should authenticate a user with a valid username + password', async () => {
