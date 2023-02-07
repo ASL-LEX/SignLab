@@ -83,10 +83,12 @@ export class SignupComponent implements OnInit {
   /** Callback which is called once the signup has taken place */
   @Input() onUserSignup: (user: User) => void;
 
-  constructor(private authService: AuthService,
-              private router: Router,
-              private passwordComplexityGQL: PasswordComplexityGQL,
-              private userAvailableGQL: UserAvailableGQL) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private passwordComplexityGQL: PasswordComplexityGQL,
+    private userAvailableGQL: UserAvailableGQL
+  ) {}
 
   ngOnInit(): void {
     firstValueFrom(this.passwordComplexityGQL.fetch()).then((result) => {
@@ -133,9 +135,11 @@ export class SignupComponent implements OnInit {
     }
 
     // See if the username and email is available
-    const availability = await firstValueFrom(this.userAvailableGQL.fetch({
-      identification: { username: this.username.value!, email: this.email.value! }
-    }));
+    const availability = await firstValueFrom(
+      this.userAvailableGQL.fetch({
+        identification: { username: this.username.value!, email: this.email.value! }
+      })
+    );
 
     // If the username/email is not available, notify the user and
     // don't attempt to signup

@@ -14,9 +14,11 @@ import { UserStudyService } from '../userstudy/userstudy.service';
 
 @Resolver(() => AuthResponse)
 export class AuthResolver {
-  constructor(private readonly authService: AuthService,
-              private readonly userService: UserService,
-              private readonly userStudyService: UserStudyService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly userStudyService: UserStudyService
+  ) {}
 
   /** Get requirements for password complexity */
   @Query(() => PasswordComplexity)
