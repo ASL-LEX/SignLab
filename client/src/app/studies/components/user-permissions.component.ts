@@ -18,7 +18,7 @@ export class UserPermissionsComponent {
   activeStudyID: string | null = null;
   /** The currently selected project ID */
   activeProjectID: string | null = null;
-  displayedColumns = ['name', 'username', 'email', 'studyAdmin', 'contribute', 'taggingTrainingResults'];
+  displayedColumns = ['name', 'username', 'email', 'studyAdmin', 'studyVisible', 'contribute', 'taggingTrainingResults'];
 
   constructor(public studyService: StudyService, private projectService: ProjectService) {
     this.studyService.activeStudy.subscribe((study) => {
@@ -53,6 +53,10 @@ export class UserPermissionsComponent {
     }
 
     toggleChange.change.source.checked = (toggleChange.user.roles.studyContributor as any)[this.activeStudyID!];
+  }
+
+  async toggleVisibility(_toggleChange: { user: User; change: MatSlideToggleChange }) {
+
   }
 
   /*!*
