@@ -11,6 +11,8 @@ import { User } from 'shared/dtos/user.dto';
 import { AuthResponse } from './dtos/auth-response.dto';
 import { UnauthorizedException } from '@nestjs/common';
 import mongoose from 'mongoose';
+import { ComplexityOptions } from 'joi-password-complexity';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -18,12 +20,17 @@ import mongoose from 'mongoose';
  */
 @Injectable()
 export class AuthService {
+  passwordComplexity: ComplexityOptions;
+
   constructor(
     private jwtService: JwtService,
     @InjectModel(usercredentials.UserCredentials.name)
     private userCredentialsModel: Model<usercredentials.UserCredentialsDocument>,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private readonly configService: ConfigService
+  ) {
+    this.passwordComplexity = this.configService.getOrThrow('auth.passwordComplexity');
+  }
 
   /**
    * Attempt to authenticate the given user based on username and password.

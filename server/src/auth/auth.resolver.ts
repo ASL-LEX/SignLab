@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import { Query, Resolver, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { AuthService } from './auth.service';
@@ -9,17 +8,20 @@ import { User } from '../user/user.schema';
 import { UserService } from '../user/user.service';
 import { UserIdentification } from './dtos/user-identification.dto';
 import { UserAvailability } from './dtos/user-availability.dto';
+import { UserSignup } from './dtos/user-signup.dto';
+import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
+import { UserStudyService } from '../userstudy/userstudy.service';
 
 @Resolver(() => AuthResponse)
 export class AuthResolver {
-  constructor(private readonly configService: ConfigService,
-              private readonly authService: AuthService,
-              private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService,
+              private readonly userService: UserService,
+              private readonly userStudyService: UserStudyService) {}
 
   /** Get requirements for password complexity */
   @Query(() => PasswordComplexity)
   getPasswordComplexity(): ComplexityOptions {
-    return this.configService.getOrThrow('auth.passwordComplexity');
+    return this.authService.passwordComplexity;
   }
 
   /** Check if the username and email are available */
@@ -28,9 +30,21 @@ export class AuthResolver {
     return this.authService.availability(identification);
   }
 
-  @Mutation(() => AuthResponse, { nullable: true })
-  async login(@Args('credentials') credentials: UserCredentials): Promise<AuthResponse | null> {
+  @Mutation(() => AuthResponse)
+  async login(@Args('credentials') credentials: UserCredentials): Promise<AuthResponse> {
     return this.authService.authenticate(credentials);
+  }
+
+  @Mutation(() => AuthResponse)
+  async signup(@Args('credentials', UserSignupPipe) signup: UserSignup): Promise<AuthResponse> {
+    const authResponse = await this.authService.signup(signup);
+
+    // Make the user studies
+    // TODO: Replace with better logic for making user studies
+    const user = await this.userService.findOne({ _id: authResponse.user });
+    await this.userStudyService.makeForUser(user!);
+
+    return authResponse;
   }
 
   @ResolveField(() => User)
