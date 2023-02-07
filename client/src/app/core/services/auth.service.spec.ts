@@ -34,7 +34,7 @@ describe('AuthService', () => {
     );
 
     apolloSpy = jasmine.createSpyObj('Apollo', [], {
-      client: { resetStore: () => {} },
+      client: { resetStore: () => {} }
     });
 
     // Create unit under test
