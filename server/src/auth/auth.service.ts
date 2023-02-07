@@ -2,17 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
-import { TokenPayload } from 'shared/dtos/auth.dto';
+import { TokenPayload } from './dtos/token-payload.dto';
 import { hash, compare } from 'bcrypt';
 import * as usercredentials from '../auth/usercredentials.schema';
 import { UserService } from '../user/user.service';
-import { User } from 'shared/dtos/user.dto';
 import { AuthResponse } from './dtos/auth-response.dto';
 import { UnauthorizedException } from '@nestjs/common';
 import mongoose from 'mongoose';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { ConfigService } from '@nestjs/config';
+import { User } from '../user/user.schema';
+import { UserCredentials } from '../auth/usercredentials.schema';
+import { UserSignup } from './dtos/user-signup.dto';
+import { UserAvailability } from './dtos/user-availability.dto';
+import { UserIdentification } from './dtos/user-identification.dto';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
