@@ -15,6 +15,7 @@ import { OwnerGuard } from './owner.guard';
 import { ProjectGuard } from './project.guard';
 import { StudyGuard } from './study.guard';
 import { StudyModule } from '../study/study.module';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { StudyModule } from '../study/study.module';
     forwardRef(() => StudyModule)
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard],
+  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard, AuthResolver],
   exports: [AuthService, JwtStrategy]
 })
 export class AuthModule {}
