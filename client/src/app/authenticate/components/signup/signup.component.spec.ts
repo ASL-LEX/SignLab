@@ -2,19 +2,10 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { SignupComponent } from './signup.component';
 import { AuthService } from '../../../core/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BehaviorSubject } from 'rxjs';
+import { PasswordComplexityGQL, UserAvailableGQL } from '../../../graphql/auth/auth.generated';
 
 describe('SignupComponent', () => {
-  // Test password complexity requirements
-  const passwordComplexity = {
-    min: 4,
-    max: 32,
-    lowerCase: 1,
-    upperCase: 1,
-    numeric: 0,
-    symbol: 0,
-    requirementCount: 4
-  };
-
   // Unit under test
   let signup: ComponentFixture<SignupComponent>;
   // Spy auth service
@@ -22,14 +13,41 @@ describe('SignupComponent', () => {
 
   beforeEach(fakeAsync(() => {
     // Setup signup component
-    authSpy = jasmine.createSpyObj('AuthService', ['signup', 'getPasswordComplexity', 'isUserAvailable']);
-    authSpy.getPasswordComplexity.and.returnValue(Promise.resolve(passwordComplexity));
-    authSpy.isUserAvailable.and.returnValue(Promise.resolve({ username: true, email: true }));
+    const passwordComplexity = {
+      getPasswordComplexity: {
+        min: 4,
+        max: 32,
+        lowerCase: 1,
+        upperCase: 1,
+        numeric: 0,
+        symbol: 0,
+        requirementCount: 4
+      }
+    };
+
+    const userAvailability = {
+      userAvailable: {
+        username: true,
+        email: true
+      }
+    };
+
+    authSpy = jasmine.createSpyObj('AuthService', ['signup']);
+
+    const passwordComplexityGQLSpy = jasmine.createSpyObj('PasswordComplexityGQL', ['fetch']);
+    passwordComplexityGQLSpy.fetch.and.returnValue(new BehaviorSubject({ data: passwordComplexity }).asObservable());
+
+    const userAvailableGQLSpy = jasmine.createSpyObj('UserAvailableGQL', ['fetch']);
+    userAvailableGQLSpy.fetch.and.returnValue(new BehaviorSubject({ data: userAvailability }).asObservable());
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [SignupComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }]
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: PasswordComplexityGQL, useValue: passwordComplexityGQLSpy },
+        { provide: UserAvailableGQL, useValue: userAvailableGQLSpy }
+      ]
     });
 
     signup = TestBed.createComponent(SignupComponent);

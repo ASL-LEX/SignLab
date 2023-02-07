@@ -7,10 +7,11 @@ import { AuthService } from './auth.service';
 import { hashSync } from 'bcrypt';
 import * as usercredentials from './usercredentials.schema';
 import { UserService } from '../user/user.service';
+import { ConfigService } from '@nestjs/config';
 
 // Test user in the system
 const testUser: User = {
-  _id: 'bobby',
+  _id: '63c0457d7448ab0b577b5c27',
   name: 'bob',
   email: 'bob@bu.edu',
   username: 'bob',
@@ -50,7 +51,10 @@ const userService = {
   },
 
   async create(params: UserSignup) {
-    return params;
+    return Promise.resolve({
+      _id: testUser._id,
+      ...params
+    });
   }
 };
 
@@ -79,6 +83,20 @@ const credentialsModel = {
 const jwtService = {
   sign(_payload: any) {
     return 'signed';
+  }
+};
+
+const configService = {
+  getOrThrow(_key: string) {
+    return {
+      min: 4,
+      max: 36,
+      lowerCase: 1,
+      upperCase: 0,
+      numeric: 0,
+      symbol: 0,
+      requirementCount: 3
+    };
   }
 };
 
@@ -116,6 +134,10 @@ describe('AuthService', () => {
         {
           provide: getModelToken(usercredentials.UserCredentials.name),
           useValue: credentialsModel
+        },
+        {
+          provide: ConfigService,
+          useValue: configService
         }
       ]
     }).compile();
@@ -125,21 +147,27 @@ describe('AuthService', () => {
 
   describe('authenticate()', () => {
     it('should not authenticate a user not found in the system', async () => {
-      const result = await authService.authenticate({
-        username: 'sam',
-        password: 'sammy'
-      });
+      try {
+        await authService.authenticate({
+          username: 'sam',
+          password: 'sammy'
+        });
 
-      expect(result).toBeNull();
+        // Should not get here
+        expect(false).toBeTruthy();
+      } catch (e) {}
     });
 
     it('should not authenticate a user with an invalid password', async () => {
-      const result = await authService.authenticate({
-        username: testUser.username,
-        password: 'sammy'
-      });
+      try {
+        await authService.authenticate({
+          username: testUser.username,
+          password: 'sammy'
+        });
 
-      expect(result).toBeNull();
+        // Should not get here
+        expect(false).toBeTruthy();
+      } catch(e: any) {}
     });
 
     it('should authenticate a user with a valid username + password', async () => {
@@ -148,7 +176,8 @@ describe('AuthService', () => {
         password: testCredentials.password
       });
 
-      expect(result).toEqual({ token: 'signed', user: testUser });
+      expect(result.token).toEqual('signed');
+      expect(result.user._id.toString()).toEqual(testUser._id);
     });
   });
 
@@ -203,13 +232,16 @@ describe('AuthService', () => {
           projectAdmin: new Map<string, boolean>(),
           studyContributor: new Map<string, boolean>(),
           studyVisible: new Map<string, boolean>()
-        }
+        },
+        _id: '63e2baca1b3b296f1e7da5e1'
       };
       const result: any = await authService.signup(newUser);
 
       // Password not present on user model
       delete newUser.password;
-      expect(result).toEqual({ token: 'signed', user: newUser });
+      // ID comes from mock user service
+      expect(result.token).toEqual('signed');
+      expect(result.user.toString()).toEqual(testUser._id);
     });
   });
 });

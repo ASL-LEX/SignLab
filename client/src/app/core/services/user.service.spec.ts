@@ -15,7 +15,7 @@ describe('UserService', () => {
         studyAdmin: new Map<string, boolean>(),
         studyVisible: new Map<string, boolean>()
       },
-      _id: '10'
+      id: '10'
     },
     {
       email: 'test@bu.edu',
@@ -29,7 +29,7 @@ describe('UserService', () => {
         studyVisible: new Map<string, boolean>()
       },
       username: 'test',
-      _id: '11'
+      id: '11'
     }
   ];
 
