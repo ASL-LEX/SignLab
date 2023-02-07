@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComplexityOptions, default as passwordValidate } from 'joi-password-complexity';
-import { User } from 'shared/dtos/user.dto';
-
+import { PasswordComplexityGQL, UserAvailableGQL } from '../../../graphql/auth/auth.generated';
 import { AuthService } from '../../../core/services/auth.service';
+import { firstValueFrom } from 'rxjs';
+import { User } from '../../../graphql/graphql';
 
 /**
  * Custom form validator which ensures the password complexity meets
@@ -82,13 +83,25 @@ export class SignupComponent implements OnInit {
   /** Callback which is called once the signup has taken place */
   @Input() onUserSignup: (user: User) => void;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService,
+              private router: Router,
+              private passwordComplexityGQL: PasswordComplexityGQL,
+              private userAvailableGQL: UserAvailableGQL) {}
 
   ngOnInit(): void {
-    // Get the password requirements
-    this.authService.getPasswordComplexity().then((passwordComplexity) => {
-      // Add the password complexity validator
-      this.signupForm.get('pass')?.setValidators(complexityValidator(passwordComplexity));
+    firstValueFrom(this.passwordComplexityGQL.fetch()).then((result) => {
+      const complexity = {
+        min: result.data.getPasswordComplexity.min ?? undefined,
+        max: result.data.getPasswordComplexity.max ?? undefined,
+        lowerCase: result.data.getPasswordComplexity.lowerCase ?? undefined,
+        upperCase: result.data.getPasswordComplexity.upperCase ?? undefined,
+        numeric: result.data.getPasswordComplexity.numeric ?? undefined,
+        symbol: result.data.getPasswordComplexity.symbol ?? undefined,
+        requirementCount: result.data.getPasswordComplexity.requirementCount ?? undefined
+      };
+
+      // Add the complexity validator to the password field
+      this.pass.setValidators([Validators.required, complexityValidator(complexity)]);
     });
   }
 
@@ -120,15 +133,17 @@ export class SignupComponent implements OnInit {
     }
 
     // See if the username and email is available
-    const availability = await this.authService.isUserAvailable(this.username.value!, this.email.value!);
+    const availability = await firstValueFrom(this.userAvailableGQL.fetch({
+      identification: { username: this.username.value!, email: this.email.value! }
+    }));
 
     // If the username/email is not available, notify the user and
     // don't attempt to signup
     let message = '';
-    if (!availability.username) {
+    if (!availability.data.userAvailable.username) {
       message += `${this.username.value!} is not an available username\n`;
     }
-    if (!availability.email) {
+    if (!availability.data.userAvailable.email) {
       message += `${this.email.value!} is not an available email`;
     }
     if (message != '') {

@@ -49,7 +49,7 @@ export class DatasetUploadDialog {
     const dataset = {
       name: this.name!.value!,
       description: this.description!.value!,
-      creatorID: this.authService.user._id
+      creatorID: this.authService.user.id
     };
 
     this.datasetService.createDataset(dataset);

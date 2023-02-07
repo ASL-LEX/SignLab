@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { User } from 'shared/dtos/user.dto';
 import { StudyService } from '../../core/services/study.service';
 import { ProjectService } from '../../core/services/project.service';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { Study } from 'shared/dtos/study.dto';
+import { User } from '../../graphql/graphql';
 
 /** TODO: Remove the need to cast to any on roles */
 @Component({

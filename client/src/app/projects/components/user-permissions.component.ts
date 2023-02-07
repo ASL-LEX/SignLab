@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { User } from 'shared/dtos/user.dto';
 import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
 import { ProjectAdminChangeGQL } from '../../graphql/projects/projects.generated';
+import { User } from '../../graphql/graphql';
 
 @Component({
   selector: 'project-user-permissions',
@@ -40,7 +40,7 @@ export class UserPermissionsComponent {
     this.projectAdminChangeGQL
       .mutate({
         projectAdminChange: {
-          userID: toggleChange.user._id!,
+          userID: toggleChange.user.id,
           projectID: this.activeProjectID!,
           hasAdminAccess: toggleChange.change.checked
         }

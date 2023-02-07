@@ -3,9 +3,8 @@ import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
 import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { MetadataDefinition } from 'shared/dtos/entry.dto';
-import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
-import { Dataset } from '../../graphql/graphql';
+import { Dataset, User } from '../../graphql/graphql';
 
 /**
  * Handle access and modifications make to entries.
@@ -67,7 +66,7 @@ export class EntryService {
    * Set the target user for the entry upload
    */
   async setTargetUser(user: User) {
-    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, {
+    this.signLab.put<any>(`api/entry/upload/user/${user.id}`, null, {
       provideToken: true
     });
   }

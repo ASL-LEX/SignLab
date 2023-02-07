@@ -5,7 +5,7 @@ import { StudyService } from '../../core/services/study.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Project } from 'shared/dtos/project.dto';
 import { Study } from 'shared/dtos/study.dto';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../../graphql/graphql';
 
 interface NavElement {
   name: string;

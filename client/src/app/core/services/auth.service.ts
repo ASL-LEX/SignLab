@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { User, UserAvailability } from 'shared/dtos/user.dto';
-import { AuthResponse } from 'shared/dtos/auth.dto';
-import { ComplexityOptions } from 'joi-password-complexity';
 import { SignLabHttpClient } from './http.service';
 import { TokenService } from './token.service';
 import { Apollo } from 'apollo-angular';
+import { SignupGQL } from '../../graphql/auth/auth.generated';
+import { firstValueFrom } from 'rxjs';
+import { User, AuthResponse } from '../../graphql/graphql';
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -15,7 +15,10 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService, private apollo: Apollo) {
+  constructor(private signLab: SignLabHttpClient,
+              private tokenService: TokenService,
+              private apollo: Apollo,
+              private readonly signupGQL: SignupGQL) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
       this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
@@ -75,34 +78,6 @@ export class AuthService {
   }
 
   /**
-   * Get the password complexity requirements. These are the requirements that
-   * must be meet for the password to be considered valid.
-   *
-   * NOTE: Currently this works by getting the password complexity from the
-   *       server and wraps up the data as an object. Ideally this may be done
-   *       with some shared schema. Or this request should instead check the
-   *       complexity of the password and return any error message to the
-   *       user
-   *
-   * @return Password complexity requirements
-   */
-  public async getPasswordComplexity(): Promise<ComplexityOptions> {
-    return this.signLab.get<ComplexityOptions>('api/auth/complexity');
-  }
-
-  /**
-   * Check to see if the given username and email combination is available
-   *
-   * @param username The username to check the availability of
-   * @param email The email to check the availability of
-   * @return Availability info
-   */
-  public async isUserAvailable(username: string, email: string): Promise<UserAvailability> {
-    const options = { params: { username: username, email: email } };
-    return this.signLab.get<UserAvailability>('api/auth/availability', options);
-  }
-
-  /**
    * Attempt to signup the given user. Will throw an error on failure. On
    * success will return the newly created user.
    *
@@ -117,15 +92,18 @@ export class AuthService {
    */
   public async signup(name: string, email: string, username: string, password: string): Promise<User> {
     const request = {
-      name: name,
-      email: email,
-      username: username,
-      password: password
+      credentials: {
+        name: name,
+        email: email,
+        username: username,
+        password: password
+      }
     };
-    const result = await this.signLab.post<AuthResponse>('api/auth/signup', request);
-    this.tokenService.storeAuthInformation(result);
 
-    return result.user;
+    const result = await firstValueFrom(this.signupGQL.mutate(request));
+    this.tokenService.storeAuthInformation(result.data!.signup);
+
+    return result.data!.signup.user;
   }
 
   /**
