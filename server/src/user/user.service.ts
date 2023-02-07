@@ -106,7 +106,6 @@ export class UserService {
     await this.userModel
       .findOneAndUpdate({ _id: user._id }, { $set: { [`roles.studyVisible.${study._id!}`]: isVisible } })
       .exec();
-
   }
 
   /**

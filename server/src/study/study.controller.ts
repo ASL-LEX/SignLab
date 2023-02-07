@@ -94,7 +94,9 @@ export class StudyController {
   /** Change if the user can view the given study */
   @Put('/visibility/enable')
   @UseGuards(JwtAuthGuard, StudyGuard)
-  async controlVisibility(@Body() changeRequest: { studyID: string; userID: string; isVisible: boolean }): Promise<void> {
+  async controlVisibility(
+    @Body() changeRequest: { studyID: string; userID: string; isVisible: boolean }
+  ): Promise<void> {
     const study = await this.studyService.find(changeRequest.studyID);
     if (!study) {
       throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);

@@ -18,7 +18,15 @@ export class UserPermissionsComponent {
   activeStudyID: string | null = null;
   /** The currently selected project ID */
   activeProjectID: string | null = null;
-  displayedColumns = ['name', 'username', 'email', 'studyAdmin', 'studyVisible', 'contribute', 'taggingTrainingResults'];
+  displayedColumns = [
+    'name',
+    'username',
+    'email',
+    'studyAdmin',
+    'studyVisible',
+    'contribute',
+    'taggingTrainingResults'
+  ];
 
   constructor(public studyService: StudyService, private projectService: ProjectService) {
     this.studyService.activeStudy.subscribe((study) => {
