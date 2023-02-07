@@ -55,8 +55,16 @@ export class UserPermissionsComponent {
     toggleChange.change.source.checked = (toggleChange.user.roles.studyContributor as any)[this.activeStudyID!];
   }
 
-  async toggleVisibility(_toggleChange: { user: User; change: MatSlideToggleChange }) {
+  async toggleVisibility(toggleChange: { user: User; change: MatSlideToggleChange }) {
+    try {
+      await this.studyService.changeVisibilityStatus(toggleChange.user, toggleChange.change.checked);
+      (toggleChange.user.roles.studyVisible as any)[this.activeStudyID!] = toggleChange.change.checked;
+    } catch (error: any) {
+      console.log('Failed to change visibility status', error);
+      (toggleChange.user.roles.studyVisible as any).this.activeStudyID! = !toggleChange.change.checked;
+    }
 
+    toggleChange.change.source.checked = (toggleChange.user.roles.studyVisible as any)[this.activeStudyID!];
   }
 
   /*!*

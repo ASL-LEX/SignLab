@@ -166,6 +166,18 @@ export class StudyService {
     );
   }
 
+  async changeVisibilityStatus(user: User, visibilityStatus: boolean): Promise<void> {
+    await this.signLab.put(
+      'api/study/visibility/enable',
+      {
+        userID: user._id,
+        studyID: this.activeStudyObservable.value!._id!,
+        isVisible: visibilityStatus
+      },
+      { provideToken: true }
+    );
+  }
+
   async changeContributorStatus(user: User, contributorStatus: boolean): Promise<void> {
     await this.signLab.put(
       'api/study/contributor/enable',
