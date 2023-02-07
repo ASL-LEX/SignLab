@@ -18,9 +18,10 @@ describe('TaggingInterface', () => {
     username: 'test',
     email: '',
     roles: {
-      studyAdmin: {},
-      projectAdmin: {},
-      studyContributor: {},
+      studyAdmin: new Map<string, boolean>(),
+      projectAdmin: new Map<string, boolean>(),
+      studyContributor: new Map<string, boolean>(),
+      studyVisible: new Map<string, boolean>(),
       owner: false
     }
   };
@@ -78,9 +79,10 @@ describe('TaggingInterface', () => {
       email: 'bob@bu.edu',
       username: 'bobby',
       roles: {
-        studyContributor: {},
-        studyAdmin: {},
-        projectAdmin: {},
+        studyContributor: new Map<string, boolean>(),
+        studyAdmin: new Map<string, boolean>(),
+        projectAdmin: new Map<string, boolean>(),
+        studyVisible: new Map<string, boolean>(),
         owner: false
       }
     },
@@ -135,9 +137,10 @@ describe('TaggingInterface', () => {
       email: 'bob@bu.edu',
       username: 'bobby',
       roles: {
-        studyContributor: {},
-        studyAdmin: {},
-        projectAdmin: {},
+        studyContributor: new Map<string, boolean>(),
+        studyAdmin: new Map<string, boolean>(),
+        projectAdmin: new Map<string, boolean>(),
+        studyVisible: new Map<string, boolean>(),
         owner: false
       }
     },

@@ -68,6 +68,7 @@ export class AuthService {
 
       return this.user;
     } catch (error) {
+      console.debug(error);
       console.debug(`Failed to authenticate user`);
       return null;
     }

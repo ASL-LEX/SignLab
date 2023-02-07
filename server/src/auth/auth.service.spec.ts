@@ -16,9 +16,10 @@ const testUser: User = {
   username: 'bob',
   roles: {
     owner: false,
-    studyAdmin: {},
-    projectAdmin: {},
-    studyContributor: {}
+    studyAdmin: new Map<string, boolean>(),
+    projectAdmin: new Map<string, boolean>(),
+    studyContributor: new Map<string, boolean>(),
+    studyVisible: new Map<string, boolean>()
   }
 };
 

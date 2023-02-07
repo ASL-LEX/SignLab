@@ -14,11 +14,10 @@ describe('TaggingLanding', () => {
     username: 'mary',
     roles: {
       owner: false,
-      studyContributor: {
-        '1': false
-      },
-      projectAdmin: {},
-      studyAdmin: {}
+      studyContributor: new Map<string, boolean>([['1', true]]),
+      projectAdmin: new Map<string, boolean>(),
+      studyAdmin: new Map<string, boolean>(),
+      studyVisible: new Map<string, boolean>()
     }
   };
 
