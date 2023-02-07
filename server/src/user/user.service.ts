@@ -101,6 +101,13 @@ export class UserService {
       .exec();
   }
 
+  /** Set if the user can view a given study */
+  async markAsVisible(user: User, study: Study, isVisible: boolean): Promise<void> {
+    await this.userModel
+      .findOneAndUpdate({ _id: user._id }, { $set: { [`roles.studyVisible.${study._id!}`]: isVisible } })
+      .exec();
+  }
+
   /**
    * Set if the user can contribute to the study or not
    */

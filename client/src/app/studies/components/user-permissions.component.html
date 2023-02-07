@@ -30,6 +30,18 @@
       </td>
     </ng-container>
 
+    <!-- Study View -->
+    <ng-container matColumnDef="studyVisible">
+      <td mat-header-cell *matHeaderCellDef>Study Visible</td>
+      <td mat-cell *matCellDef="let user">
+        <mat-slide-toggle
+          (change)="toggleVisibility({ user: user.user, change: $event })"
+          [checked]="user.user.roles.studyVisible[activeStudyID]"
+          [disabled]="user.user.roles.studyAdmin[activeStudyID] || user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+
     <!-- Contribute Acccess -->
     <ng-container matColumnDef="contribute">
       <th mat-header-cell *matHeaderCellDef>Contribute</th>

@@ -265,7 +265,7 @@ export class NavbarComponent {
         }
 
         // A user who is marked as a contributor can contribute to a study
-        if (user && study && (user.roles.studyContributor as any)[study._id!]) {
+        if (user && study && (user.roles.studyVisible as any)[study._id!]) {
           return true;
         }
         return false;
@@ -292,7 +292,7 @@ export class NavbarComponent {
             }
 
             // A user who is marked as a contributor can contribute to a study
-            if (user && study && (user.roles.studyContributor as any)[study._id!]) {
+            if (user && study && (user.roles.studyVisible as any)[study._id!]) {
               return true;
             }
             return false;

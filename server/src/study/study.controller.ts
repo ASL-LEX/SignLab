@@ -91,9 +91,25 @@ export class StudyController {
     return this.userService.markAsStudyAdmin(user, study, changeRequest.hasAdminAccess);
   }
 
-  /**
-   * Change if a user can contribute to the study
-   */
+  /** Change if the user can view the given study */
+  @Put('/visibility/enable')
+  @UseGuards(JwtAuthGuard, StudyGuard)
+  async controlVisibility(
+    @Body() changeRequest: { studyID: string; userID: string; isVisible: boolean }
+  ): Promise<void> {
+    const study = await this.studyService.find(changeRequest.studyID);
+    if (!study) {
+      throw new HttpException(`The study with id ${changeRequest.studyID} does not exist`, HttpStatus.BAD_REQUEST);
+    }
+    const user = await this.userService.findOne({ _id: changeRequest.userID });
+    if (!user) {
+      throw new HttpException(`The user with id ${changeRequest.userID} does not exist`, HttpStatus.BAD_REQUEST);
+    }
+
+    this.userService.markAsVisible(user, study, changeRequest.isVisible);
+  }
+
+  /** Change if a user can contribute to the study */
   @Put('/contributor/enable')
   @UseGuards(JwtAuthGuard, StudyGuard)
   async controlContributeAccess(
