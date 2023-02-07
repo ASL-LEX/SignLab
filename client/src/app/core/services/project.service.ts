@@ -16,14 +16,17 @@ export class ProjectService {
   private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
   /** The query to get the project list, used for refetching */
   private readonly projectQuery: QueryRef<GetProjectsQuery, GetProjectsQueryVariables>;
-
   /** The actively selected project */
-  activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
+  private activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
 
   constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL) {
     // Subscribe to the project query
-    this.projectQuery = projectsGQL.watch();
+    this.projectQuery = projectsGQL.watch({}, { errorPolicy: 'all' });
     this.projectQuery.valueChanges.subscribe((result) => {
+      if (result.errors) {
+        this.projectsObs.next([]);
+        return;
+      }
       this.projectsObs.next(result.data.getProjects);
     });
   }

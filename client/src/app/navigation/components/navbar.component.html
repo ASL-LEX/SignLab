@@ -2,7 +2,7 @@
   <h1 class="software-title">ASL-LEX SignLab</h1>
 
   <!-- Study Selection -->
-  <environment-select></environment-select>
+  <environment-select *ngIf="authService.isAuthenticated()"></environment-select>
 
   <mat-card class="navigation-body">
     <mat-card-header>

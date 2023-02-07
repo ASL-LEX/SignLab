@@ -93,9 +93,10 @@ export class AuthService {
       name: userSignup.name,
       roles: {
         owner: isOwner,
-        projectAdmin: {},
-        studyAdmin: {},
-        studyContributor: {}
+        projectAdmin: new Map<string, boolean>(),
+        studyAdmin: new Map<string, boolean>(),
+        studyContributor: new Map<string, boolean>(),
+        studyVisible: new Map<string, boolean>()
       }
     };
 

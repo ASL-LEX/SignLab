@@ -3,15 +3,14 @@ import { UserService } from '../user/user.service';
 import { ProjectAdminChange, ProjectChangePipe, ProjectCreate, ProjectAdminChangeFull } from './project.dto';
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
+import { UserContext } from '../user/user.decorator';
+import { User } from '../user/user.schema';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Resolver()
 export class ProjectResolver {
   constructor(private readonly projectService: ProjectService, private readonly userService: UserService) {}
-
-  @Query(() => [Project])
-  getProjects(): Promise<Project[]> {
-    return this.projectService.findAll();
-  }
 
   // TODO: Add owner role guard once GraphQL role guards are supported
   @Mutation(() => Project)
@@ -32,5 +31,11 @@ export class ProjectResolver {
   ): Promise<boolean> {
     await this.userService.markAsProjectAdmin(projectAdminChange);
     return true;
+  }
+
+  @Query(() => [Project])
+  @UseGuards(JwtAuthGuard)
+  async getProjects(@UserContext() user: User): Promise<Project[]> {
+    return this.projectService.findByUser(user);
   }
 }

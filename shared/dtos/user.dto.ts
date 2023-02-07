@@ -43,14 +43,9 @@ export interface User {
   username: string;
   roles: {
     owner: boolean;
-    projectAdmin: {
-      [projectID: string]: boolean;
-    };
-    studyAdmin: {
-      [studyID: string]: boolean;
-    };
-    studyContributor: {
-      [studyID: string]: boolean;
-    };
+    projectAdmin: Map<string, boolean>;
+    studyAdmin: Map<string, boolean>;
+    studyContributor: Map<string, boolean>;
+    studyVisible: Map<string, boolean>;
   }
 }

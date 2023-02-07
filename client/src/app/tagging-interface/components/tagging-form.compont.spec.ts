@@ -12,9 +12,10 @@ describe('TaggingForm', () => {
     email: '',
     roles: {
       owner: false,
-      studyContributor: {},
-      projectAdmin: {},
-      studyAdmin: {}
+      studyContributor: new Map<string, boolean>(),
+      projectAdmin: new Map<string, boolean>(),
+      studyAdmin: new Map<string, boolean>(),
+      studyVisible: new Map<string, boolean>()
     }
   };
 
@@ -72,9 +73,10 @@ describe('TaggingForm', () => {
       username: 'bobby',
       roles: {
         owner: false,
-        studyContributor: {},
-        projectAdmin: {},
-        studyAdmin: {}
+        studyContributor: new Map<string, boolean>(),
+        projectAdmin: new Map<string, boolean>(),
+        studyAdmin: new Map<string, boolean>(),
+        studyVisible: new Map<string, boolean>()
       }
     },
     complete: false,

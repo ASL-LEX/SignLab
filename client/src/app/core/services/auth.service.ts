@@ -4,6 +4,7 @@ import { AuthResponse } from 'shared/dtos/auth.dto';
 import { ComplexityOptions } from 'joi-password-complexity';
 import { SignLabHttpClient } from './http.service';
 import { TokenService } from './token.service';
+import { Apollo } from 'apollo-angular';
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -14,7 +15,7 @@ export class AuthService {
   /**
    * Make a new instance of the authentication service.
    */
-  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService) {
+  constructor(private signLab: SignLabHttpClient, private tokenService: TokenService, private apollo: Apollo) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
       this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
@@ -61,9 +62,13 @@ export class AuthService {
       const response = await this.signLab.post<AuthResponse>('api/auth/login', credentials, {});
 
       this.tokenService.storeAuthInformation(response);
+
+      // Refetch queries to update having an active user
+      this.apollo.client.resetStore();
+
       return this.user;
     } catch (error) {
-      console.log(error);
+      console.debug(error);
       console.debug(`Failed to authenticate user`);
       return null;
     }

@@ -11,9 +11,10 @@ const testUsers: User[] = [
     username: 'bob',
     roles: {
       owner: false,
-      studyAdmin: {},
-      projectAdmin: {},
-      studyContributor: {}
+      studyAdmin: new Map<string, boolean>(),
+      projectAdmin: new Map<string, boolean>(),
+      studyContributor: new Map<string, boolean>(),
+      studyVisible: new Map<string, boolean>()
     }
   },
   {
@@ -23,9 +24,10 @@ const testUsers: User[] = [
     username: 'sam',
     roles: {
       owner: false,
-      studyAdmin: {},
-      projectAdmin: {},
-      studyContributor: {}
+      studyAdmin: new Map<string, boolean>(),
+      projectAdmin: new Map<string, boolean>(),
+      studyContributor: new Map<string, boolean>(),
+      studyVisible: new Map<string, boolean>()
     }
   }
 ];

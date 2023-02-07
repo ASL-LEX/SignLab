@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StudyService } from '../../core/services/study.service';
 import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
-import { UserStudy } from 'shared/dtos/userstudy.dto';
 
 @Component({
   selector: 'tagging-landing',
@@ -12,7 +11,7 @@ export class TaggingLanding implements OnInit {
   /** The view that the user is seeing */
   activeView: 'info' | 'tagging' | 'training' = 'info';
   /** The representation of the user for the specific study */
-  userStudy: UserStudy | null = null;
+  userStudy: any | null = null;
 
   constructor(public studyService: StudyService, private authService: AuthService) {}
 
@@ -21,7 +20,7 @@ export class TaggingLanding implements OnInit {
       if (study) {
         this.userStudy = await this.studyService.getUserStudy(this.authService.user, study);
 
-        if (!this.userStudy.user.roles.studyContributor[this.userStudy.study._id!]) {
+        if (!this.userStudy.user.roles.studyContributor.get(this.userStudy.study._id!)) {
           this.activeView = 'info';
         }
       }

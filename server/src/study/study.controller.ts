@@ -13,6 +13,7 @@ import { User } from 'shared/dtos/user.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';
+import { UserContext } from '../user/user.decorator';
 
 @Controller('/api/study')
 export class StudyController {
@@ -27,8 +28,9 @@ export class StudyController {
    * Get all of the studies
    */
   @Get('/')
-  async getStudies(@Query('projectID') projectID: string): Promise<Study[]> {
-    return this.studyService.getStudies(projectID);
+  @UseGuards(JwtAuthGuard)
+  async getStudies(@Query('projectID') projectID: string, @UserContext() user: User): Promise<Study[]> {
+    return this.studyService.findByUser(user, projectID);
   }
 
   /**

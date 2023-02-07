@@ -1,3 +1,4 @@
+import { Apollo } from 'apollo-angular';
 import { AuthResponse } from 'shared/dtos/auth.dto';
 import { User } from 'shared/dtos/user.dto';
 import { AuthService } from './auth.service';
@@ -15,6 +16,7 @@ describe('AuthService', () => {
   const invalidPassword = 'not';
 
   let tokenSpy: jasmine.SpyObj<TokenService>;
+  let apolloSpy: jasmine.SpyObj<Apollo>;
 
   beforeEach(() => {
     // Make spy for the authentication service, this one will always not
@@ -27,12 +29,16 @@ describe('AuthService', () => {
 
     tokenSpy = jasmine.createSpyObj(
       'TokenService',
-      ['token', 'storeAuthInformation', 'hasAuthInfo', 'removeAuthInformation'],
+      ['token', 'storeAuthInformation', 'hasAuthInfo', 'removeAuthInformation', 'updateUser'],
       { user: {} }
     );
 
+    apolloSpy = jasmine.createSpyObj('Apollo', [], {
+      client: { resetStore: () => {} }
+    });
+
     // Create unit under test
-    service = new AuthService(spy, tokenSpy);
+    service = new AuthService(spy, tokenSpy, apolloSpy);
   });
 
   // When initially setup, the system is not authenticated
@@ -71,16 +77,17 @@ describe('AuthService', () => {
         name: 'bob',
         roles: {
           owner: false,
-          projectAdmin: {},
-          studyAdmin: {},
-          studyContributor: {}
+          projectAdmin: new Map<string, boolean>(),
+          studyAdmin: new Map<string, boolean>(),
+          studyContributor: new Map<string, boolean>(),
+          studyVisible: new Map<string, boolean>()
         },
         username: 'bob',
         _id: 'sadlkfj'
       },
       token: 'some-fake-token'
     };
-    spy.post.and.returnValue(data);
+    spy.post.and.returnValue(Promise.resolve(data));
     spy.get.and.returnValue(Promise.resolve(data.user));
 
     tokenSpy.storeAuthInformation.and.callFake((param) => {
@@ -89,7 +96,7 @@ describe('AuthService', () => {
     tokenSpy.hasAuthInfo.and.returnValue(true);
     (Object.getOwnPropertyDescriptor(tokenSpy, 'user')?.get as jasmine.Spy<() => User>).and.returnValue(data.user);
 
-    service = new AuthService(spy, tokenSpy);
+    service = new AuthService(spy, tokenSpy, apolloSpy);
 
     const result = await service.authenticate(validUsername, validPassword);
     expect(result).not.toEqual(null);
@@ -104,7 +111,7 @@ describe('AuthService', () => {
     // Make a spy that "knows" of a used email and username
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
     spy.get.and.returnValue({ username: false, email: false });
-    service = new AuthService(spy, tokenSpy);
+    service = new AuthService(spy, tokenSpy, apolloSpy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
     expect(result).toEqual({ username: false, email: false });
@@ -115,7 +122,7 @@ describe('AuthService', () => {
     // Make a spy that believe every username and email is available
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['get']);
     spy.get.and.returnValue({ username: true, email: true });
-    service = new AuthService(spy, tokenSpy);
+    service = new AuthService(spy, tokenSpy, apolloSpy);
 
     const result = await service.isUserAvailable('bob', 'bob@bu.edu');
     expect(result).toEqual({ username: true, email: true });
@@ -130,9 +137,10 @@ describe('AuthService', () => {
         name: 'bob',
         roles: {
           owner: false,
-          projectAdmin: {},
-          studyAdmin: {},
-          studyContributor: {}
+          projectAdmin: new Map<string, boolean>(),
+          studyAdmin: new Map<string, boolean>(),
+          studyContributor: new Map<string, boolean>(),
+          studyVisible: new Map<string, boolean>()
         },
         username: 'bob',
         _id: '1'
@@ -142,7 +150,7 @@ describe('AuthService', () => {
 
     const spy = jasmine.createSpyObj('SignLabHttpClient', ['post']);
     spy.post.and.returnValue(authResponse);
-    service = new AuthService(spy, tokenSpy);
+    service = new AuthService(spy, tokenSpy, apolloSpy);
 
     const result = await service.signup(
       authResponse.user.name,
