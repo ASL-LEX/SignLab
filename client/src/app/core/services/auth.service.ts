@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { TokenService } from './token.service';
 import { Apollo } from 'apollo-angular';
-import { SignupGQL } from '../../graphql/auth/auth.generated';
+import { LoginGQL, SignupGQL } from '../../graphql/auth/auth.generated';
 import { firstValueFrom } from 'rxjs';
 import { User, AuthResponse } from '../../graphql/graphql';
 
@@ -18,7 +18,8 @@ export class AuthService {
   constructor(private signLab: SignLabHttpClient,
               private tokenService: TokenService,
               private apollo: Apollo,
-              private readonly signupGQL: SignupGQL) {
+              private readonly signupGQL: SignupGQL,
+              private readonly loginGQL: LoginGQL) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
       this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
@@ -62,9 +63,9 @@ export class AuthService {
     const credentials = { username: username, password: password };
 
     try {
-      const response = await this.signLab.post<AuthResponse>('api/auth/login', credentials, {});
+      const response = await firstValueFrom(this.loginGQL.mutate({ credentials: credentials }));
 
-      this.tokenService.storeAuthInformation(response);
+      this.tokenService.storeAuthInformation(response.data!.login);
 
       // Refetch queries to update having an active user
       this.apollo.client.resetStore();
