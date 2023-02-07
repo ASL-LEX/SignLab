@@ -145,6 +145,7 @@ export class EntryController {
   @Put('/upload/user/:userID')
   @Auth('admin')
   setUser(@Param('userID', UserPipe) user: User) {
+    console.log('USER', user);
     this.entryUploadService.setTargetUser(user);
   }
 

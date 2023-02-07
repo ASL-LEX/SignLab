@@ -97,12 +97,8 @@ describe('Upload CSV', () => {
 describe('Upload Entry ZIP', () => {
   beforeEach(() => {
     // Clear out any existing data
-    cy.resetDB();
-    cy.firstTimeSetup();
-
-    // Navigate to the entry interface and select the upload option
-    // then upload the small dataset
-    cy
+    cy.resetDB()
+      .firstTimeSetup()
       .login(users.existingUser)
       .makeDefaultDataset()
       .visit('/datasets/dataset-control')

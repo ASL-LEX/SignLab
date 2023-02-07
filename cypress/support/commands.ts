@@ -18,16 +18,32 @@ Cypress.Commands.add('resetDB', () => {
 
 Cypress.Commands.add('login', (user: { username: string, password: string }) => {
   // Make the login request and insert into local storage
-  console.log(user);
   cy
     .request({
       method: 'POST',
-      url: 'api/auth/login',
-      body: { username: user.username, password: user.password }
+      url: 'graphql',
+      body: {
+        query: `mutation login($credentials: UserCredentials!) {
+          login(credentials: $credentials) {
+            token,
+            user {
+              id,
+              username,
+              email,
+              roles
+            }
+          }
+        }`,
+        variables: {
+          credentials: { username: user.username, password: user.password },
+        }
+      }
     })
     .then(entry => {
       Cypress.env('token', entry.body.token);
-      window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(entry.body));
+      const auth = { token: entry.body.data.login.token, user: entry.body.data.login.user };
+      console.log(auth);
+      window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(auth));
     });
 });
 
@@ -41,16 +57,8 @@ Cypress.Commands.add('firstTimeSetup', () => {
 
   // Make the initial user and a non-admin user
   cy
-    .request({
-      method: 'POST',
-      url: 'api/auth/signup',
-      body: user.existingUser
-    })
-    .request({
-      method: 'POST',
-      url: 'api/auth/signup',
-      body: user.nonAdmin
-    });
+    .signup(user.existingUser)
+    .signup(user.nonAdmin);
 
   // Add in a starting dataset
 });
@@ -59,8 +67,24 @@ Cypress.Commands.add('signup', (user: UserSignup) => {
   cy
     .request({
       method: 'POST',
-      url: 'api/auth/signup',
-      body: user
+      url: 'graphql',
+      body: {
+        query: `mutation signup($credentials: UserSignup!) {
+          signup(credentials: $credentials) {
+            token,
+            user {
+              id,
+              username,
+              email,
+              roles
+            }
+          }
+        }`,
+        variables: {
+          credentials: user
+        }
+      },
+
     })
 });
 
@@ -76,7 +100,7 @@ Cypress.Commands.add('makeStudy', (studyCreation: any) => {
 
 Cypress.Commands.add('makeDefaultDataset', () => {
   const dataset = datasets.existingDataset;
-  dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user;
+  dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user.id;
 
   cy.request({
     method: 'POST',
@@ -91,7 +115,7 @@ Cypress.Commands.add('makeDefaultDataset', () => {
         datasetCreate: {
           name: dataset.name,
           description: dataset.description,
-          creatorID: (dataset.creator as any)._id,
+          creatorID: (dataset.creator as any),
         }
       }
     },
