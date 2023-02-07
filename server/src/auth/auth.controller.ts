@@ -3,7 +3,7 @@ import { ComplexityOptions } from 'joi-password-complexity';
 import { AuthService } from './auth.service';
 import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
 import { UserStudyService } from '../userstudy/userstudy.service';
-import { AuthResponse } from 'shared/dtos/auth.dto';
+import { AuthResponse } from './dtos/auth-response.dto';
 
 const passwordValidator = require('joi-password-complexity');
 
@@ -81,7 +81,8 @@ export class AuthController {
     const authResponse = await this.authService.signup(userSignup);
 
     // Make a user study for each study
-    await this.userStudyService.makeForUser(authResponse.user);
+    // TODO: Uncomment when types are resolved
+    // await this.userStudyService.makeForUser(authResponse.user);
 
     return authResponse;
   }

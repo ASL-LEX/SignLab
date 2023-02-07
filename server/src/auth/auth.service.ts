@@ -3,11 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserAvailability, UserCredentials, UserIdentification, UserSignup } from 'shared/dtos/user.dto';
-import { AuthResponse, TokenPayload } from 'shared/dtos/auth.dto';
+import { TokenPayload } from 'shared/dtos/auth.dto';
 import { hash, compare } from 'bcrypt';
 import * as usercredentials from '../auth/usercredentials.schema';
 import { UserService } from '../user/user.service';
 import { User } from 'shared/dtos/user.dto';
+import { AuthResponse } from './dtos/auth-response.dto';
+import { UnauthorizedException } from '@nestjs/common';
+import mongoose from 'mongoose';
 
 /**
  * Handles authentication level logic. This involves checking user credentials
@@ -27,7 +30,7 @@ export class AuthService {
    *
    * @return The authenticated user on success, null otherwise
    */
-  public async authenticate(credentials: UserCredentials): Promise<AuthResponse | null> {
+  public async authenticate(credentials: UserCredentials): Promise<AuthResponse> {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel
       .findOne({
@@ -40,14 +43,14 @@ export class AuthService {
 
     // If a user is not found with that username, return null
     if (userCredentials === null || user === null) {
-      return null;
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     // Check password
     if (await compare(credentials.password, userCredentials.password)) {
-      return { user: user, token: this.generateToken(user) };
+      return { user: new mongoose.Types.ObjectId(user._id), token: this.generateToken(user) };
     } else {
-      return null;
+      throw new UnauthorizedException('Invalid username or password');
     }
   }
 
@@ -107,7 +110,7 @@ export class AuthService {
 
     const newUser = await this.userService.create(user);
     await this.userCredentialsModel.create(userCredentials);
-    return { user: newUser, token: this.generateToken(newUser) };
+    return { user: new mongoose.Types.ObjectId(newUser._id), token: this.generateToken(newUser) };
   }
 
   /**
