@@ -21,7 +21,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "introspection": "nest start --entryFile generate-schema"
+    "introspection": "export MAKE_INTROSPECTION=1;npm run start:dev"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.161.0",
