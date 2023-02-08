@@ -42,7 +42,6 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
     .then(entry => {
       Cypress.env('token', entry.body.token);
       const auth = { token: entry.body.data.login.token, user: entry.body.data.login.user };
-      console.log(auth);
       window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(auth));
     });
 });

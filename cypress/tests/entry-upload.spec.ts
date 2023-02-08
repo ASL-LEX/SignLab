@@ -107,9 +107,6 @@ describe('Upload Entry ZIP', () => {
       // Select the first dataset
       .get(datasetSelect)
       .click()
-      .get('mat-option')
-      .contains('Test')
-      .click()
       // Upload a sample CSV
       .get(csvFileUploadInput)
       .selectFile('cypress/fixtures/entries/small-set.csv', { force: true });
