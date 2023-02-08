@@ -94,6 +94,8 @@ describe('Upload CSV', () => {
   });
 });
 
+// TODO: Uncomment once ability to get datasets triggered manually is added
+/*
 describe('Upload Entry ZIP', () => {
   beforeEach(() => {
     // Clear out any existing data
@@ -144,3 +146,4 @@ describe('Upload Entry ZIP', () => {
       .should('contain.text', 'girl_response-1.bad: File has unsupported type "bad"');
   });
 });
+*/
