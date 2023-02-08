@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { User } from '../../graphql/graphql';
 
 @Component({
@@ -8,9 +8,7 @@ import { User } from '../../graphql/graphql';
 })
 export class FirstTimeSetupComponent {
   /** Form thaat contains the activation code */
-  activationFormGroup = this.formBuilder.group({
-    code: ['', Validators.required]
-  });
+  activationFormGroup: FormGroup;
   /** Callback for when the first time setup has completed */
   @Input() onSetupComplete: () => void;
 
@@ -18,9 +16,7 @@ export class FirstTimeSetupComponent {
    * Used to control the stepper logic without having to reach into the signup
    * form and grap its form directly
    */
-  ownerCreateGhostForm = this.formBuilder.group({
-    empty: ['', Validators.required]
-  });
+  ownerCreateGhostForm: FormGroup;
   /**
    * Flag that controls the user either seeing a success message or the
    * signup view
@@ -30,6 +26,14 @@ export class FirstTimeSetupComponent {
   constructor(private formBuilder: FormBuilder) {
     this.userMade = this.userMade.bind(this);
     this.metadataSubmit = this.metadataSubmit.bind(this);
+
+    this.activationFormGroup = this.formBuilder.group({
+      code: ['', Validators.required]
+    });
+
+    this.ownerCreateGhostForm = this.formBuilder.group({
+      empty: ['', Validators.required]
+    });
   }
 
   /**

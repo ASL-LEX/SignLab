@@ -25,13 +25,15 @@ function uniqueValidator(control: AbstractControl) {
 })
 export class EntryMetaForm {
   /** Form that controls the fields of the metadata */
-  entryMetadataFormGroup = this.formBuilder.group({
-    entryMetadata: this.formBuilder.array([], uniqueValidator)
-  });
+  entryMetadataFormGroup: FormGroup;
   /** Callback for after the metadata has been submitted */
   @Input() onMetadataSubmit: () => void;
 
-  constructor(private formBuilder: FormBuilder, private entryService: EntryService) {}
+  constructor(private formBuilder: FormBuilder, private entryService: EntryService) {
+    this.entryMetadataFormGroup = this.formBuilder.group({
+      entryMetadata: this.formBuilder.array([], uniqueValidator)
+    });
+  }
 
   get entryMetadata() {
     return this.entryMetadataFormGroup.get('entryMetadata') as FormArray;
