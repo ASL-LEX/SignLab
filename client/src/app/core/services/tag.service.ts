@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Tag } from 'shared/dtos/tag.dto';
-import { User } from 'shared/dtos/user.dto';
 import { Study } from 'shared/dtos/study.dto';
+import { User } from '../../graphql/graphql';
 
 /**
  * Handles all tag related requests. This includes keeping track of the current
@@ -55,7 +55,7 @@ export class TagService {
    */
   async getNextUntaggedEntry(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
     const query = {
-      params: { userID: user._id, studyID: study._id! },
+      params: { userID: user.id, studyID: study._id! },
       provideToken: true
     };
 

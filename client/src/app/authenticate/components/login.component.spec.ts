@@ -30,7 +30,7 @@ describe('LoginComponent', () => {
             studyVisible: new Map<string, boolean>()
           },
           username: 'bob',
-          _id: 'sadlkfj'
+          id: 'sadlkfj'
         };
       }
       return null;

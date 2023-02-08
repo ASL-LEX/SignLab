@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { User } from 'shared/dtos/user.dto';
 import { AuthService } from './auth.service';
 import { SignLabHttpClient } from './http.service';
+import { User } from '../../graphql/graphql';
 
 /**
  * This service provides the ability to interact with user information
@@ -31,7 +31,7 @@ export class UserService {
    * @return True on success, false otherwise
    */
   async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
-    const targetURL = `api/users/${role}/${user._id}`;
+    const targetURL = `api/users/${role}/${user.id}`;
 
     // Try to make the change
     try {
@@ -56,8 +56,8 @@ export class UserService {
     const currentUser = this.authService.user;
 
     const requestBody = {
-      originalID: currentUser._id,
-      newOwnerID: newOwner._id
+      originalID: currentUser.id,
+      newOwnerID: newOwner.id
     };
 
     this.signLab.post<any>('api/users/owner/transfer', requestBody, {
@@ -69,7 +69,7 @@ export class UserService {
    * Add the provided user as a new owner
    */
   async addOwner(newOwner: User) {
-    this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {}, { provideToken: true });
+    this.signLab.post<any>(`api/users/owner/add/${newOwner.id}`, {}, { provideToken: true });
   }
 
   /**

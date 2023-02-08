@@ -3,11 +3,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Project } from 'shared/dtos/project.dto';
 import { Study, StudyCreation } from 'shared/dtos/study.dto';
 import { Tag } from 'shared/dtos/tag.dto';
-import { User } from 'shared/dtos/user.dto';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { ProjectService } from './project.service';
 import { firstValueFrom } from 'rxjs';
+import { User } from '../../graphql/graphql';
 
 @Injectable()
 export class StudyService {
@@ -99,7 +99,7 @@ export class StudyService {
    */
   async getUserStudy(user: User, study: Study): Promise<UserStudy> {
     const query = {
-      params: { userID: user._id, studyID: study._id! },
+      params: { userID: user.id, studyID: study._id! },
       provideToken: true
     };
     return this.signLab.get<UserStudy>('api/study/user', query);
@@ -148,7 +148,7 @@ export class StudyService {
    */
   async getTrainingTags(user: User, studyID: string): Promise<Tag[]> {
     const query = {
-      params: { studyID: studyID, userID: user._id },
+      params: { studyID: studyID, userID: user.id },
       provideToken: true
     };
     return this.signLab.get<Tag[]>('api/tag/training', query);
@@ -158,7 +158,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/admin/enable',
       {
-        userID: user._id,
+        userID: user.id,
         studyID: this.activeStudyObservable.value!._id!,
         hasAdminAccess: adminStatus
       },
@@ -170,7 +170,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/visibility/enable',
       {
-        userID: user._id,
+        userID: user.id,
         studyID: this.activeStudyObservable.value!._id!,
         isVisible: visibilityStatus
       },
@@ -182,7 +182,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/contributor/enable',
       {
-        userID: user._id,
+        userID: user.id,
         studyID: this.activeStudyObservable.value!._id!,
         hasAccess: contributorStatus
       },

@@ -8,7 +8,17 @@ export default () => ({
     /** Used for generating the JWT tokens */
     jwtSecret: process.env.JWT_SECRET,
     /** The maximum number of owner accounts supported */
-    maxOwnerAccounts: 3
+    maxOwnerAccounts: 3,
+    /** Password strength requirements */
+    passwordComplexity: {
+      min: 4,
+      max: 36,
+      lowerCase: 1,
+      upperCase: 0,
+      numeric: 0,
+      symbol: 0,
+      requirementCount: 3
+    }
   },
   database: {
     /** The hostname of the database to connect to */

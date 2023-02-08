@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthResponse } from 'shared/dtos/auth.dto';
-import { User } from 'shared/dtos/user.dto';
+import { AuthResponse, User } from '../../graphql/graphql';
 
 /**
  * Handles storage and access of the authentication information. The user and

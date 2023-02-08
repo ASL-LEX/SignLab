@@ -1,0 +1,44 @@
+query passwordComplexity {
+  getPasswordComplexity {
+    min,
+    max,
+    lowerCase,
+    upperCase,
+    numeric,
+    symbol,
+    requirementCount
+  }
+}
+
+mutation login($credentials: UserCredentials!) {
+  login(credentials: $credentials) {
+    user {
+      id,
+      username,
+      email,
+      name,
+      roles,
+    },
+    token
+  }
+}
+
+mutation signup($credentials: UserSignup!) {
+  signup(credentials: $credentials) {
+    user {
+      id,
+      username,
+      email,
+      name,
+      roles,
+    },
+    token
+  }
+}
+
+query userAvailable($identification: UserIdentification!) {
+  userAvailable(identification: $identification) {
+    username,
+    email
+  }
+}

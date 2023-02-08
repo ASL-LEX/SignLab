@@ -1,7 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
@@ -15,6 +14,8 @@ import { OwnerGuard } from './owner.guard';
 import { ProjectGuard } from './project.guard';
 import { StudyGuard } from './study.guard';
 import { StudyModule } from '../study/study.module';
+import { AuthResolver } from './auth.resolver';
+import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
 
 @Module({
   imports: [
@@ -33,8 +34,7 @@ import { StudyModule } from '../study/study.module';
     forwardRef(() => UserStudyModule),
     forwardRef(() => StudyModule)
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard],
+  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard, AuthResolver, UserSignupPipe],
   exports: [AuthService, JwtStrategy]
 })
 export class AuthModule {}

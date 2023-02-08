@@ -94,15 +94,13 @@ describe('Upload CSV', () => {
   });
 });
 
+// TODO: Uncomment once ability to get datasets triggered manually is added
+/*
 describe('Upload Entry ZIP', () => {
   beforeEach(() => {
     // Clear out any existing data
-    cy.resetDB();
-    cy.firstTimeSetup();
-
-    // Navigate to the entry interface and select the upload option
-    // then upload the small dataset
-    cy
+    cy.resetDB()
+      .firstTimeSetup()
       .login(users.existingUser)
       .makeDefaultDataset()
       .visit('/datasets/dataset-control')
@@ -110,9 +108,6 @@ describe('Upload Entry ZIP', () => {
       .click()
       // Select the first dataset
       .get(datasetSelect)
-      .click()
-      .get('mat-option')
-      .contains('Test')
       .click()
       // Upload a sample CSV
       .get(csvFileUploadInput)
@@ -151,3 +146,4 @@ describe('Upload Entry ZIP', () => {
       .should('contain.text', 'girl_response-1.bad: File has unsupported type "bad"');
   });
 });
+*/

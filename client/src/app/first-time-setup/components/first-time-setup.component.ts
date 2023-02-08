@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../../graphql/graphql';
 
 @Component({
   selector: 'first-time-setup',
