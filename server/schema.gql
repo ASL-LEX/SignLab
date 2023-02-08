@@ -1,0 +1,147 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  username: String!
+  roles: JSON!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Dataset {
+  id: ID!
+
+  """Human readable way to idenfity the dataset, unique"""
+  name: String!
+
+  """Human readable discription to describe the purpose of the dataset"""
+  description: String!
+
+  """The user who created the dataset"""
+  creator: User!
+  projectAccess: JSON!
+}
+
+"""Projects that are part of an organization"""
+type Project {
+  """unique identifier for the project"""
+  _id: ID!
+
+  """name of the project, unique in an organization"""
+  name: String!
+
+  """description of the project"""
+  description: String!
+
+  """organization that the project belongs to"""
+  created: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PasswordComplexity {
+  min: Float
+  max: Float
+  lowerCase: Float
+  upperCase: Float
+  numeric: Float
+  symbol: Float
+  requirementCount: Float
+}
+
+type AuthResponse {
+  user: User!
+  token: String!
+}
+
+type UserAvailability {
+  username: Boolean!
+  email: Boolean!
+}
+
+type Query {
+  getPasswordComplexity: PasswordComplexity!
+  userAvailable(identification: UserIdentification!): UserAvailability!
+  getDatasets: [Dataset!]!
+  getDatasetsByProject(project: ID!): [Dataset!]!
+  datasetExists(name: String!): Boolean!
+  projectExists(name: String!): Boolean!
+  getProjects: [Project!]!
+}
+
+input UserIdentification {
+  username: String!
+  email: String!
+}
+
+type Mutation {
+  login(credentials: UserCredentials!): AuthResponse!
+  signup(credentials: UserSignup!): AuthResponse!
+  createDataset(datasetCreate: DatasetCreate!): Dataset!
+  changeProjectAccess(projectAccessChange: ProjectAccessChange!): Boolean!
+  createProject(projectCreate: ProjectCreate!): Project!
+  projectAdminChange(projectAdminChange: ProjectAdminChange!): Boolean!
+}
+
+input UserCredentials {
+  username: String!
+  password: String!
+}
+
+input UserSignup {
+  username: String!
+  email: String!
+  name: String!
+  password: String!
+}
+
+input DatasetCreate {
+  """Human readable way to idenfity the dataset, unique"""
+  name: String!
+
+  """Human readable discription to describe the purpose of the dataset"""
+  description: String!
+
+  """The ID of the user who is creating the dataset"""
+  creatorID: ID!
+}
+
+input ProjectAccessChange {
+  """The ID of the dataset to change project access to"""
+  datasetID: ID!
+
+  """The ID of the project to change access to"""
+  projectID: ID!
+
+  """If the project should have access to the dataset"""
+  hasAccess: Boolean!
+}
+
+input ProjectCreate {
+  """name of the project, unique in an organization"""
+  name: String!
+
+  """description of the project"""
+  description: String!
+}
+
+input ProjectAdminChange {
+  """The ID of the project to update"""
+  projectID: ID!
+
+  """The ID of the user to update"""
+  userID: ID!
+
+  """Whether the user should have admin access to the project"""
+  hasAdminAccess: Boolean!
+}

@@ -12,7 +12,7 @@
     "prettier": "npm run prettier --workspaces --if-present",
     "prettier:fix": "npm run prettier:fix --workspaces --if-present",
     "start:ci": "NODE_ENV=test npm run start:prod --workspace=server",
-    "introspection": "npm run introspection --workspace=server && npm run introspection --workspace=client"
+    "introspection": "npm run introspection --workspace=client"
   },
   "workspaces": [
     "server",
