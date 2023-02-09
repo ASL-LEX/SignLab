@@ -3,6 +3,7 @@ services:
   mongo:
     image: mongo
     ports: ["27019:27017"]
+    restart: "always"
     volumes:
       - signlab:/data/db
   signlab:
