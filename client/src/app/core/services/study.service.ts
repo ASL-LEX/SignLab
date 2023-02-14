@@ -99,7 +99,7 @@ export class StudyService {
    */
   async getUserStudy(user: User, study: Study): Promise<UserStudy> {
     const query = {
-      params: { userID: user.id, studyID: study._id! },
+      params: { userID: user._id, studyID: study._id! },
       provideToken: true
     };
     return this.signLab.get<UserStudy>('api/study/user', query);
@@ -148,7 +148,7 @@ export class StudyService {
    */
   async getTrainingTags(user: User, studyID: string): Promise<Tag[]> {
     const query = {
-      params: { studyID: studyID, userID: user.id },
+      params: { studyID: studyID, userID: user._id },
       provideToken: true
     };
     return this.signLab.get<Tag[]>('api/tag/training', query);
@@ -158,7 +158,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/admin/enable',
       {
-        userID: user.id,
+        userID: user._id,
         studyID: this.activeStudyObservable.value!._id!,
         hasAdminAccess: adminStatus
       },
@@ -170,7 +170,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/visibility/enable',
       {
-        userID: user.id,
+        userID: user._id,
         studyID: this.activeStudyObservable.value!._id!,
         isVisible: visibilityStatus
       },
@@ -182,7 +182,7 @@ export class StudyService {
     await this.signLab.put(
       'api/study/contributor/enable',
       {
-        userID: user.id,
+        userID: user._id,
         studyID: this.activeStudyObservable.value!._id!,
         hasAccess: contributorStatus
       },

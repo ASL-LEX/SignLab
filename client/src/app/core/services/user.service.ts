@@ -31,7 +31,7 @@ export class UserService {
    * @return True on success, false otherwise
    */
   async changeRole(user: User, role: string, hasRole: boolean): Promise<boolean> {
-    const targetURL = `api/users/${role}/${user.id}`;
+    const targetURL = `api/users/${role}/${user._id}`;
 
     // Try to make the change
     try {
@@ -56,8 +56,8 @@ export class UserService {
     const currentUser = this.authService.user;
 
     const requestBody = {
-      originalID: currentUser.id,
-      newOwnerID: newOwner.id
+      originalID: currentUser._id,
+      newOwnerID: newOwner._id
     };
 
     this.signLab.post<any>('api/users/owner/transfer', requestBody, {
@@ -69,7 +69,7 @@ export class UserService {
    * Add the provided user as a new owner
    */
   async addOwner(newOwner: User) {
-    this.signLab.post<any>(`api/users/owner/add/${newOwner.id}`, {}, { provideToken: true });
+    this.signLab.post<any>(`api/users/owner/add/${newOwner._id}`, {}, { provideToken: true });
   }
 
   /**

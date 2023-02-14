@@ -40,7 +40,7 @@ export class UserPermissionsComponent {
     this.projectAdminChangeGQL
       .mutate({
         projectAdminChange: {
-          userID: toggleChange.user.id,
+          userID: toggleChange.user._id,
           projectID: this.activeProjectID!,
           hasAdminAccess: toggleChange.change.checked
         }
