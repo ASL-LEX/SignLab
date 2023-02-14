@@ -48,11 +48,7 @@
       <td mat-cell *matCellDef="let user">
         <mat-slide-toggle
           (change)="toggleContribute({user: user.user, change: $event})"
-          [checked]="user.user.roles.studyContributor[activeStudyID] ||
-                     user.user.roles.studyAdmin[activeStudyID] ||
-                     user.user.roles.projectAdmin[activeProjectID] ||
-                     user.user.roles.owner"
-          [disabled]="user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+          [checked]="user.user.roles.studyContributor[activeStudyID]"
         ></mat-slide-toggle>
       </td>
     </ng-container>
