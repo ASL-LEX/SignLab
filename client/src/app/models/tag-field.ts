@@ -520,8 +520,24 @@ export class SliderField extends TagField {
 }
 
 export class VideoRecordField extends TagField {
+  /** Reflects if there are datasets, used to determine if the form can render */
+  private hasDatasets: boolean;
+
   constructor(private datasetService: DatasetService) {
     super(TagFieldType.VideoRecord, 'Video Record', 'string');
+  }
+
+  /** Override that handles if the view cannot be rendered */
+  getUISchema(): Layout {
+    if (this.hasDatasets) {
+      return super.getUISchema();
+    }
+
+    // No datasets, cannot render video record field
+    return {
+      type: 'Label',
+      text: 'No datasets to save into, make a dataset before adding a video record field'
+    } as any;
   }
 
   /**
@@ -541,6 +557,20 @@ export class VideoRecordField extends TagField {
         title: dataset.name
       };
     });
+    this.hasDatasets = options.length > 0;
+
+    // No datasets, cannot make an list of dataset options
+    // return an object that can never be valid to prevent the form
+    // from being submitted
+    if (!this.hasDatasets) {
+      return {
+        alwaysError: {
+          type: 'number',
+          default: 'BAD'
+        }
+      };
+    }
+
     return {
       dataset: {
         type: 'string',
