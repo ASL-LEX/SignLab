@@ -560,8 +560,15 @@ export class VideoRecordField extends TagField {
     this.hasDatasets = options.length > 0;
 
     // No datasets, cannot make an list of dataset options
+    // return an object that can never be valid to prevent the form
+    // from being submitted
     if (!this.hasDatasets) {
-      return {};
+      return {
+        alwaysError: {
+          type: 'number',
+          default: 'BAD'
+        }
+      };
     }
 
     return {

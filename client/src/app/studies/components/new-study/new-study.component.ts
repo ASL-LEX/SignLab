@@ -152,7 +152,7 @@ export class NewStudyComponent implements AfterViewInit {
     for (const tagField of this.tagFields) {
       // Field is incomplete
       if (!tagField.isValid) {
-        alert('Please completly fill out all tag fields');
+        alert('Please completly fill out all tag fields and ensure they are valid');
         return;
       }
 
