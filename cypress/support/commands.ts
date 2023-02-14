@@ -27,7 +27,7 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
           login(credentials: $credentials) {
             token,
             user {
-              id,
+              _id,
               username,
               email,
               roles
@@ -72,7 +72,7 @@ Cypress.Commands.add('signup', (user: UserSignup) => {
           signup(credentials: $credentials) {
             token,
             user {
-              id,
+              _id,
               username,
               email,
               roles
@@ -99,7 +99,7 @@ Cypress.Commands.add('makeStudy', (studyCreation: any) => {
 
 Cypress.Commands.add('makeDefaultDataset', () => {
   const dataset = datasets.existingDataset;
-  dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user.id;
+  dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user._id;
 
   cy.request({
     method: 'POST',
