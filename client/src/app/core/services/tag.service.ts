@@ -55,7 +55,7 @@ export class TagService {
    */
   async getNextUntaggedEntry(user: User, study: Study, isTraining: boolean): Promise<Tag | null> {
     const query = {
-      params: { userID: user.id, studyID: study._id! },
+      params: { userID: user._id, studyID: study._id! },
       provideToken: true
     };
 

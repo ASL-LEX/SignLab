@@ -4,7 +4,7 @@ query getDatasets {
     name,
     description,
     creator {
-      id,
+      _id,
       name,
       email,
       username,
@@ -20,7 +20,7 @@ query getDatasetsByProject($project: ID!) {
     name,
     description,
     creator {
-      id,
+      _id,
       name,
       email,
       username,
@@ -40,7 +40,7 @@ mutation createDataset($datasetCreate: DatasetCreate!) {
     name,
     description,
     creator {
-      id,
+      _id,
       name,
       email,
       username,

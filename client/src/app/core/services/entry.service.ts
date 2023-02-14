@@ -66,8 +66,7 @@ export class EntryService {
    * Set the target user for the entry upload
    */
   async setTargetUser(user: User) {
-    const id = user.id == null ? (user as any)._id : user.id;
-    this.signLab.put<any>(`api/entry/upload/user/${id}`, null, {
+    this.signLab.put<any>(`api/entry/upload/user/${user._id}`, null, {
       provideToken: true
     });
   }
