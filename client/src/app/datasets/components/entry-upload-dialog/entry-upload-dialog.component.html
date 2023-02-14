@@ -9,7 +9,14 @@
           <div>
             <h2>Select Existing Dataset</h2>
             <mat-form-field *ngIf="datasetService.datasets | async as datasets">
-              <mat-select placeholder="Select dataset" (selectionChange)="datasetSelection($event)" data-cy="datasetSelect">
+              <mat-select
+                  placeholder="Select dataset"
+                  (selectionChange)="datasetSelection($event)"
+                  data-cy="datasetSelect"
+                  [compareWith]="selectCompareWith"
+                  [ngModel]="dataset"
+                  [ngModelOptions]="{standalone: true}"
+                >
                 <mat-option *ngFor="let dataset of datasets" [value]="dataset">
                   {{ dataset.name }}
                 </mat-option>

@@ -62,6 +62,14 @@ export class EntryUploadDialog {
     this.datasetSelectControl.markAsValid();
   }
 
+  /** Used in the select panel to display the dataset name */
+  selectCompareWith(a: Dataset, b: Dataset) {
+    if (a == null || b == null) {
+      return false;
+    }
+    return a.id === b.id;
+  }
+
   async uploadCSV(event: any) {
     const result = await this.entryService.uploadCSV(event.target.files[0]);
 
