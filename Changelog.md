@@ -2,7 +2,12 @@
 
 ## 0.5.0
 
-### Changes
+### Added
+
+* Concept of projects
+* Project and study visibility
+
+### Changed
 
 * Modified navigation method to use sidenav view
 * Have visibility of navigation links be based on user permissions
