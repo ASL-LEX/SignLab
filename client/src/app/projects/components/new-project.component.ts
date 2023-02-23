@@ -112,6 +112,7 @@ export class NewProjectComponent {
       } else {
         alert('Project created successfully');
         this.formData = {};
+        this.projectService.updateProjectList();
         this.router.navigate(['/projects']);
       }
     });
