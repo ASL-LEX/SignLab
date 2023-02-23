@@ -85,7 +85,10 @@ export class SchemaService {
    */
   async getFields(schemaType: string): Promise<string[]> {
     const schema = await this.getSchema(schemaType);
-    return Object.keys(schema.schema.properties);
+    if (schema.schema.properties) {
+      return Object.keys(schema.schema.properties);
+    }
+    return [];
   }
 
   /**
