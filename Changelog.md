@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+### Fixed
+
+* Dataset name preview no longer ID on new study form
+
 ## 0.5.0
 
 ### Added
