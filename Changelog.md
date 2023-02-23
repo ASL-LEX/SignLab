@@ -7,6 +7,7 @@
 * Dataset name preview no longer ID on new study form
 * New projects automatically appear in nav list
 * New studies automatically appear in nav list
+* Handle when no metadata is present on template download
 
 ## 0.5.0
 
