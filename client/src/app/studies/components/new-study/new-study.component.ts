@@ -172,7 +172,7 @@ export class NewStudyComponent implements AfterViewInit {
 
     // Save the new study
     const schema = this.produceJSONForm();
-    this.studyService.saveStudy({
+    await this.studyService.saveStudy({
       study: {
         name: this.studyMetadata.name,
         description: this.studyMetadata.description,

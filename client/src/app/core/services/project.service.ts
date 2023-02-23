@@ -55,12 +55,11 @@ export class ProjectService {
     return this.activeProjectObs.value != null;
   }
 
-  public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
-    const result = this.createProjectGQL.mutate({ projectCreate: project });
-
-    // Update the project list
+  public updateProjectList(): void {
     this.projectQuery.refetch();
+  }
 
-    return result;
+  public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
+    return this.createProjectGQL.mutate({ projectCreate: project });
   }
 }

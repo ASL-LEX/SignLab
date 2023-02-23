@@ -5,6 +5,8 @@
 ### Fixed
 
 * Dataset name preview no longer ID on new study form
+* New projects automatically appear in nav list
+* New studies automatically appear in nav list
 
 ## 0.5.0
 
