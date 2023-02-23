@@ -1,6 +1,7 @@
 import { JsonSchema, Layout } from '@jsonforms/core';
 import { DatasetService } from '../core/services/dataset.service';
 import { firstValueFrom } from 'rxjs';
+import { Dataset } from '../graphql/graphql';
 
 /**
  * The different kind of tag fields that are supported
@@ -522,6 +523,8 @@ export class SliderField extends TagField {
 export class VideoRecordField extends TagField {
   /** Reflects if there are datasets, used to determine if the form can render */
   private hasDatasets: boolean;
+  /** The dataset options, needs to be searched through to find the dataset based on name */
+  private datasets: Dataset[];
 
   constructor(private datasetService: DatasetService) {
     super(TagFieldType.VideoRecord, 'Video Record', 'string');
@@ -550,10 +553,10 @@ export class VideoRecordField extends TagField {
   async getFieldSpecificProperties(): Promise<{
     [property: string]: JsonSchema;
   }> {
-    const datasets = await firstValueFrom(this.datasetService.datasets);
-    const options = datasets.map((dataset) => {
+    this.datasets = await firstValueFrom(this.datasetService.datasets);
+    const options = this.datasets.map((dataset) => {
       return {
-        const: dataset.id,
+        const: dataset.name,
         title: dataset.name
       };
     });
@@ -629,13 +632,15 @@ export class VideoRecordField extends TagField {
   }
 
   asUIProperty(): any[] {
+    const dataset = this.datasets.find((dataset) => dataset.name === this.data.dataset);
+    console.log(dataset);
     return [
       {
         type: 'Control',
         scope: `#/properties/${this.getFieldName()}`,
         options: {
           customType: 'video',
-          dataset: this.data.dataset,
+          dataset: dataset?.id,
           minimumRequired: this.data.minimumRequired || 1,
           maximumOptional: this.data.maximumOptional || 1,
           showUnfocusedDescription: true
