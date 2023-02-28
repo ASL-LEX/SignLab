@@ -24,7 +24,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
 @Component({
   selector: 'tagging-form',
   template: `
-    <div>
+    <div fxLayout="row" fxLayoutAlign="space-around">
       <!-- Entry Video View -->
       <div class="video-tag-child">
         <video *ngIf="tag.entry.mediaType === 'video'" src="{{ tag.entry.mediaURL }}" controls autoplay loop></video>
@@ -32,7 +32,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
       </div>
 
       <!-- Form View -->
-      <div>
+      <div style="minWidth: 500px">
         <jsonforms
           [data]="tagData"
           [schema]="tag.study.tagSchema.dataSchema"
