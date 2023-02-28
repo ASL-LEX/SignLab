@@ -32,7 +32,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
       </div>
 
       <!-- Form View -->
-      <div class="video-tag-child">
+      <div style="minWidth: 500px">
         <jsonforms
           [data]="tagData"
           [schema]="tag.study.tagSchema.dataSchema"
@@ -45,21 +45,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
         <button mat-stroked-button (click)="formSubmit()" [disabled]="!formValid">Submit</button>
       </div>
     </div>
-  `,
-  styles: [
-    `
-      .video-tag-container {
-        padding: 20px;
-      }
-    `,
-    `
-      .video-tag-child {
-        width: 50%;
-        float: left;
-        padding: 20px;
-      }
-    `
-  ]
+  `
 })
 export class TaggingForm implements OnChanges, OnInit {
   /** The tag to complete */
