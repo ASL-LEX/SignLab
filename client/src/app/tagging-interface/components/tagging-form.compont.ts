@@ -24,7 +24,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
 @Component({
   selector: 'tagging-form',
   template: `
-    <div fxLayout="row" fxLayoutAlign="space-around">
+    <div>
       <!-- Entry Video View -->
       <div class="video-tag-child">
         <video *ngIf="tag.entry.mediaType === 'video'" src="{{ tag.entry.mediaURL }}" controls autoplay loop></video>
@@ -32,7 +32,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
       </div>
 
       <!-- Form View -->
-      <div class="video-tag-child">
+      <div>
         <jsonforms
           [data]="tagData"
           [schema]="tag.study.tagSchema.dataSchema"
@@ -45,21 +45,7 @@ import { VideoFieldComponent, videoFieldTester } from '../../video-recording/com
         <button mat-stroked-button (click)="formSubmit()" [disabled]="!formValid">Submit</button>
       </div>
     </div>
-  `,
-  styles: [
-    `
-      .video-tag-container {
-        padding: 20px;
-      }
-    `,
-    `
-      .video-tag-child {
-        width: 50%;
-        float: left;
-        padding: 20px;
-      }
-    `
-  ]
+  `
 })
 export class TaggingForm implements OnChanges, OnInit {
   /** The tag to complete */
