@@ -5,6 +5,7 @@ import { Study } from '../study/study.schema';
 import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
 
 @Injectable()
 export class EntryStudyService {
@@ -21,22 +22,44 @@ export class EntryStudyService {
    * @return The untagged EntryStudy or null if no untagged entries
    *         remain
    */
-  async getAndMarkTagged(study: Study): Promise<EntryStudy | null> {
-    const query = {
+  async getAndMarkTagged(study: Study, user: User): Promise<EntryStudy | null> {
+    // First, try to get a entry that hasn't been tagged for this study
+    const untagged = await this.entryStudyModel.findOneAndUpdate({
       study: study._id,
       isPartOfStudy: true,
-      numberTags: { $lt: study.tagsPerEntry }
-    };
+      numberTags: 0
+    }, { $inc: { numberTags: 1 } }).exec();
 
-    const update = {
-      $inc: { numberTags: 1 }
-    };
+    if (untagged) {
+      return this.entryStudyModel.findOne({ _id: untagged._id }).populate('entry').populate('study').exec();
+    }
 
-    const entryStudy = await this.entryStudyModel
-      .findOneAndUpdate(query, update)
-      .populate('entry')
-      .populate('study')
-      .exec();
+
+    const queryPipeline = [
+      // First we only want entrystudies for the current study with less then
+      // the required number of tags
+      { $match: { numberTags: { $lt: study.tagsPerEntry }, isPartOfStudy: true, study: study._id! } },
+      // Next, join with the tags to get information on who has tagged
+      // this entry
+      { $lookup: { from: 'tags', localField: 'entry', foreignField: 'entry', as: 'tags' } },
+      // Unwind on tag
+      { $unwind: '$tags' },
+      // Keep only entries belonging to this study and not done by the user
+      { $match: { $and: [ { 'tags.user': { $ne: user._id } }, { 'tags.study': study._id } ] } }
+    ];
+
+
+    const possibleEntryStudies = await this.entryStudyModel.aggregate(queryPipeline);
+
+    // No entries found
+    if (possibleEntryStudies.length == 0) {
+      return null;
+    }
+
+    const entryStudy = await this.entryStudyModel.findOneAndUpdate(
+      { _id: possibleEntryStudies[0]._id },
+      { $inc: { numberTags: 1 } }
+    ).populate('entry').populate('study').exec();
 
     return entryStudy;
   }
