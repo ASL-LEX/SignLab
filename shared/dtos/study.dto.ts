@@ -24,6 +24,8 @@ export interface Study {
     /** How the tag form should be displayed */
     uiSchema: any;
   }
+  /** The number of tags needed per entry for the study to be complete */
+  tagsPerEntry: number;
 }
 
 /**

@@ -25,7 +25,7 @@ export class EntryStudyService {
     const query = {
       study: study._id,
       isPartOfStudy: true,
-      hasTag: false
+      numberTags: { $lt: study.tagsPerEntry }
     };
 
     const update = {
