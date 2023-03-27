@@ -29,7 +29,7 @@ export class EntryStudyService {
     };
 
     const update = {
-      hasTag: true
+      $inc: { numberTags: 1 }
     };
 
     const entryStudy = await this.entryStudyModel
