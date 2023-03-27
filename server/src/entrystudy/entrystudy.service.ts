@@ -57,7 +57,7 @@ export class EntryStudyService {
           study: study,
           isPartOfStudy: isPartOfStudy,
           isUsedForTraining: false,
-          hasTag: false
+          numberTags: 0
         });
       })
     );

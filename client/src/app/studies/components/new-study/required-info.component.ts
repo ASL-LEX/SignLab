@@ -83,7 +83,11 @@ const JSON_FORMS_DATA_SCHEMA = {
     },
     instructions: {
       type: 'string'
-    }
+    },
+    tagsPerEntry: {
+      type: 'number',
+      default: 1
+    },
   },
   required: ['name', 'description', 'instructions']
 };
@@ -105,6 +109,11 @@ const JSON_FORMS_UI_SCHEMA = {
     {
       type: 'Control',
       scope: '#/properties/instructions'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/tagsPerEntry',
+      label: 'Number of times each entry needs to be tagged (default 1)'
     }
   ]
 };
