@@ -50,14 +50,18 @@ export class Study implements dto.Study {
    * JSON Schema schema that defines the information contained in each tag
    * associated with this study.
    */
-  @Prop({ type: TagSchemaSchema })
+  @Prop({ type: TagSchemaSchema, required: true })
   tagSchema: TagSchema;
 
   /**
    * The project the study is a part of
    */
-  @Prop({ type: mongoose.SchemaTypes.ObjectId, ref: Project.name })
+  @Prop({ type: mongoose.SchemaTypes.ObjectId, ref: Project.name, required: true })
   project: Project | string;
+
+  /** The number of tags needed per entry for the study to be complete */
+  @Prop({ required: true })
+  tagsPerEntry: number;
 }
 
 export type StudyDocument = Study & Document;

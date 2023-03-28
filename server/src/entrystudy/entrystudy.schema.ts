@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { Entry } from '../entry/entry.schema';
 import { Study } from '../study/study.schema';
 import * as dto from 'shared/dtos/entrystudy.dto';
+import { Tag } from '../tag/tag.schema';
 
 /**
  * A `EntryStudy` is used to represent information about a entry
@@ -51,15 +52,16 @@ export class EntryStudy implements dto.EntryStudy {
   isUsedForTraining: boolean;
 
   /**
-   * Flag that represents if the entry has been given a tag as part of
-   * this study. Used to determine which entries need to be tagged next.
-   *
-   * NOTE: Having a tag doesn't mean there is a complete tag. A user could
-   *       have been assigned to tag this entry and have not yet completed
-   *       that tag.
+   * Represents the number of tags that exist for the entry in the specific
+   * study. These represent the number of times it has been assigned. It
+   * could be that the entry is assigned, but not finished.
    */
   @Prop({ required: true })
-  hasTag: boolean;
+  numberTags: number;
+
+  /** Tags associated with this entry study */
+  @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: Tag.name }] })
+  tags: string[];
 }
 
 export type EntryStudyDocument = EntryStudy & Document;

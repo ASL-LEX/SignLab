@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Study } from '../study/study.schema';
@@ -134,8 +134,16 @@ export class TagService {
    *
    * @param tag The tag to update
    */
-  async save(tag: Tag) {
-    await this.tagModel.findOneAndUpdate({ _id: tag._id }, tag).exec();
+  async save(tag: Tag): Promise<Tag> {
+    const result = await this.tagModel
+      .findOneAndUpdate({ _id: tag._id }, tag)
+      .populate('study')
+      .populate('entry')
+      .exec();
+    if (!result) {
+      throw new BadRequestException(`Tag with id ${tag._id} does not exist`);
+    }
+    return result;
   }
 
   /**

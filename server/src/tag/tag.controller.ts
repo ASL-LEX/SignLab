@@ -60,7 +60,7 @@ export class TagController {
     }
 
     // Find the next entry without a tag in this study
-    const nextEntryStudy = await this.entryStudyService.getAndMarkTagged(study);
+    const nextEntryStudy = await this.entryStudyService.getAndMarkTagged(study, user);
 
     // If there is no next entry study, return null
     if (!nextEntryStudy) {
@@ -129,9 +129,11 @@ export class TagController {
     }
 
     // Save the tag
-    // TODO: Ensure this tag actually exists and is valid
     tag.complete = true;
-    this.tagService.save(tag);
+    const updatedTag = await this.tagService.save(tag);
+
+    // Handle adding the tag to the list of tags on the entry study
+    this.entryStudyService.addTag(updatedTag);
   }
 
   /**

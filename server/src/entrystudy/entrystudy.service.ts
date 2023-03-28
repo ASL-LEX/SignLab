@@ -5,6 +5,8 @@ import { Study } from '../study/study.schema';
 import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
 import { Dataset } from 'shared/dtos/dataset.dto';
+import { User } from 'shared/dtos/user.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 
 @Injectable()
 export class EntryStudyService {
@@ -21,24 +23,56 @@ export class EntryStudyService {
    * @return The untagged EntryStudy or null if no untagged entries
    *         remain
    */
-  async getAndMarkTagged(study: Study): Promise<EntryStudy | null> {
-    const query = {
-      study: study._id,
-      isPartOfStudy: true,
-      hasTag: false
-    };
+  async getAndMarkTagged(study: Study, user: User): Promise<EntryStudy | null> {
+    // First, try to get a entry that hasn't been tagged for this study
+    const untagged = await this.entryStudyModel
+      .findOneAndUpdate(
+        {
+          study: study._id,
+          isPartOfStudy: true,
+          numberTags: 0
+        },
+        { $inc: { numberTags: 1 } }
+      )
+      .populate('entry')
+      .populate('study')
+      .exec();
 
-    const update = {
-      hasTag: true
-    };
+    if (untagged) {
+      return untagged;
+    }
+
+    const queryPipeline = [
+      // First we only want entrystudies for the current study with less then
+      // the required number of tags
+      { $match: { numberTags: { $lt: study.tagsPerEntry }, isPartOfStudy: true, study: study._id! } },
+      // Populate the tags
+      { $lookup: { from: 'tags', localField: 'tags', foreignField: '_id', as: 'tags' } },
+      // Keep entries that are not tagged by the user
+      { $match: { 'tags.user': { $ne: user._id } } }
+    ];
+
+    const possibleEntryStudies = await this.entryStudyModel.aggregate(queryPipeline);
+
+    // No entries found
+    if (possibleEntryStudies.length == 0) {
+      return null;
+    }
 
     const entryStudy = await this.entryStudyModel
-      .findOneAndUpdate(query, update)
+      .findOneAndUpdate({ _id: possibleEntryStudies[0]._id }, { $inc: { numberTags: 1 } })
       .populate('entry')
       .populate('study')
       .exec();
 
     return entryStudy;
+  }
+
+  async addTag(tag: Tag) {
+    await this.entryStudyModel.findOneAndUpdate(
+      { entry: tag.entry._id, study: tag.study._id },
+      { $push: { tags: tag._id } }
+    );
   }
 
   /**
@@ -57,7 +91,8 @@ export class EntryStudyService {
           study: study,
           isPartOfStudy: isPartOfStudy,
           isUsedForTraining: false,
-          hasTag: false
+          numberTags: 0,
+          tags: []
         });
       })
     );

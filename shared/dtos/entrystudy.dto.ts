@@ -16,6 +16,11 @@ export interface EntryStudy {
   isPartOfStudy: boolean;
   /** If this entry should be presented for training */
   isUsedForTraining: boolean;
-  /** If this entry has a tag for the given study */
-  hasTag: boolean;
+  /**
+   * Represents the number of tags that exist for the entry in the specific
+   * study. These represent the number of times it has been assigned. It
+   * could be that the entry is assigned, but not finished.
+   */
+  numberTags: number;
+  tags: string[];
 }

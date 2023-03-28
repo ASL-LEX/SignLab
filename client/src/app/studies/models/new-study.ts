@@ -5,4 +5,5 @@ export interface NewStudyMeta {
   name: string;
   description: string;
   instructions: string;
+  tagsPerEntry: number;
 }
