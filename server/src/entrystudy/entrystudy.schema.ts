@@ -60,7 +60,7 @@ export class EntryStudy implements dto.EntryStudy {
   numberTags: number;
 
   /** Tags associated with this entry study */
-  @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: Tag.name } ] })
+  @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: Tag.name }] })
   tags: string[];
 }
 

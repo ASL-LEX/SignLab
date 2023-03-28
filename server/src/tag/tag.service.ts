@@ -135,7 +135,11 @@ export class TagService {
    * @param tag The tag to update
    */
   async save(tag: Tag): Promise<Tag> {
-    const result = await this.tagModel.findOneAndUpdate({ _id: tag._id }, tag).populate('study').populate('entry').exec();
+    const result = await this.tagModel
+      .findOneAndUpdate({ _id: tag._id }, tag)
+      .populate('study')
+      .populate('entry')
+      .exec();
     if (!result) {
       throw new BadRequestException(`Tag with id ${tag._id} does not exist`);
     }

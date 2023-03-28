@@ -6,7 +6,7 @@ import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { User } from 'shared/dtos/user.dto';
-import {Tag} from 'shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 
 @Injectable()
 export class EntryStudyService {
@@ -25,11 +25,18 @@ export class EntryStudyService {
    */
   async getAndMarkTagged(study: Study, user: User): Promise<EntryStudy | null> {
     // First, try to get a entry that hasn't been tagged for this study
-    const untagged = await this.entryStudyModel.findOneAndUpdate({
-      study: study._id,
-      isPartOfStudy: true,
-      numberTags: 0
-    }, { $inc: { numberTags: 1 } }).populate('entry').populate('study').exec();
+    const untagged = await this.entryStudyModel
+      .findOneAndUpdate(
+        {
+          study: study._id,
+          isPartOfStudy: true,
+          numberTags: 0
+        },
+        { $inc: { numberTags: 1 } }
+      )
+      .populate('entry')
+      .populate('study')
+      .exec();
 
     if (untagged) {
       return untagged;
@@ -52,10 +59,11 @@ export class EntryStudyService {
       return null;
     }
 
-    const entryStudy = await this.entryStudyModel.findOneAndUpdate(
-      { _id: possibleEntryStudies[0]._id },
-      { $inc: { numberTags: 1 } }
-    ).populate('entry').populate('study').exec();
+    const entryStudy = await this.entryStudyModel
+      .findOneAndUpdate({ _id: possibleEntryStudies[0]._id }, { $inc: { numberTags: 1 } })
+      .populate('entry')
+      .populate('study')
+      .exec();
 
     return entryStudy;
   }

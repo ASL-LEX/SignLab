@@ -87,7 +87,7 @@ const JSON_FORMS_DATA_SCHEMA = {
     tagsPerEntry: {
       type: 'number',
       default: 1
-    },
+    }
   },
   required: ['name', 'description', 'instructions']
 };
