@@ -5,10 +5,12 @@ import { Study } from '../study/study.schema';
 import { User } from '../user/user.schema';
 import { Tag, TagDocument } from './tag.schema';
 import { Entry } from '../entry/entry.schema';
+import { EntryService } from '../entry/entry.service';
 
 @Injectable()
 export class TagService {
-  constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>) {}
+  constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>,
+              private readonly entryService: EntryService) {}
 
   /**
    * Get the tag with the given id
@@ -155,5 +157,18 @@ export class TagService {
         entry: entry._id
       })
       .exec();
+  }
+
+  async deleteForStudy(study: Study): Promise<void> {
+    // Determine what tags are impacted
+    const tags = await this.tagModel.find({ study: study._id });
+
+    // Remove the tags
+    await this.tagModel.deleteMany({ study: study._id });
+
+    // Remove each tag relation for any impacted entity
+    await Promise.all(tags.map(async (tag) => {
+      await this.entryService.removeTag(tag);
+    }));
   }
 }
