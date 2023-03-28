@@ -22,4 +22,5 @@ export interface EntryStudy {
    * could be that the entry is assigned, but not finished.
    */
   numberTags: number;
+  tags: string[];
 }

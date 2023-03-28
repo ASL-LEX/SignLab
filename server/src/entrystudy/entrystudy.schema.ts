@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { Entry } from '../entry/entry.schema';
 import { Study } from '../study/study.schema';
 import * as dto from 'shared/dtos/entrystudy.dto';
+import { Tag } from '../tag/tag.schema';
 
 /**
  * A `EntryStudy` is used to represent information about a entry
@@ -57,6 +58,10 @@ export class EntryStudy implements dto.EntryStudy {
    */
   @Prop({ required: true })
   numberTags: number;
+
+  /** Tags associated with this entry study */
+  @Prop({ required: true, type: [{ type: mongoose.Schema.Types.ObjectId, ref: Tag.name } ] })
+  tags: string[];
 }
 
 export type EntryStudyDocument = EntryStudy & Document;

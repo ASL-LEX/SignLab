@@ -6,6 +6,7 @@ import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { User } from 'shared/dtos/user.dto';
+import {Tag} from 'shared/dtos/tag.dto';
 
 @Injectable()
 export class EntryStudyService {
@@ -28,26 +29,21 @@ export class EntryStudyService {
       study: study._id,
       isPartOfStudy: true,
       numberTags: 0
-    }, { $inc: { numberTags: 1 } }).exec();
+    }, { $inc: { numberTags: 1 } }).populate('entry').populate('study').exec();
 
     if (untagged) {
-      return this.entryStudyModel.findOne({ _id: untagged._id }).populate('entry').populate('study').exec();
+      return untagged;
     }
-
 
     const queryPipeline = [
       // First we only want entrystudies for the current study with less then
       // the required number of tags
       { $match: { numberTags: { $lt: study.tagsPerEntry }, isPartOfStudy: true, study: study._id! } },
-      // Next, join with the tags to get information on who has tagged
-      // this entry
-      { $lookup: { from: 'tags', localField: 'entry', foreignField: 'entry', as: 'tags' } },
-      // Unwind on tag
-      { $unwind: '$tags' },
-      // Keep only entries belonging to this study and not done by the user
-      { $match: { $and: [ { 'tags.user': { $ne: user._id } }, { 'tags.study': study._id } ] } }
+      // Populate the tags
+      { $lookup: { from: 'tags', localField: 'tags', foreignField: '_id', as: 'tags' } },
+      // Keep entries that are not tagged by the user
+      { $match: { 'tags.user': { $ne: user._id } } }
     ];
-
 
     const possibleEntryStudies = await this.entryStudyModel.aggregate(queryPipeline);
 
@@ -62,6 +58,13 @@ export class EntryStudyService {
     ).populate('entry').populate('study').exec();
 
     return entryStudy;
+  }
+
+  async addTag(tag: Tag) {
+    await this.entryStudyModel.findOneAndUpdate(
+      { entry: tag.entry._id, study: tag.study._id },
+      { $push: { tags: tag._id } }
+    );
   }
 
   /**
@@ -80,7 +83,8 @@ export class EntryStudyService {
           study: study,
           isPartOfStudy: isPartOfStudy,
           isUsedForTraining: false,
-          numberTags: 0
+          numberTags: 0,
+          tags: []
         });
       })
     );
