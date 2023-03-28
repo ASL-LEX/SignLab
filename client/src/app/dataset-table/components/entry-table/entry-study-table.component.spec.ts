@@ -55,11 +55,13 @@ describe('EntryStudyTable', () => {
           dataSchema: {},
           uiSchema: {}
         },
-        project: '1'
+        project: '1',
+        tagsPerEntry: 1
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false
+      numberTags: 0,
+      tags: []
     },
     {
       _id: '2',
@@ -85,11 +87,13 @@ describe('EntryStudyTable', () => {
           dataSchema: {},
           uiSchema: {}
         },
-        project: '1'
+        project: '1',
+        tagsPerEntry: 1
       },
       isPartOfStudy: false,
       isUsedForTraining: false,
-      hasTag: false
+      numberTags: 0,
+      tags: []
     },
     {
       _id: '3',
@@ -115,11 +119,13 @@ describe('EntryStudyTable', () => {
           dataSchema: {},
           uiSchema: {}
         },
-        project: '1'
+        project: '1',
+        tagsPerEntry: 1
       },
       isPartOfStudy: true,
       isUsedForTraining: false,
-      hasTag: false
+      numberTags: 0,
+      tags: []
     }
   ];
 

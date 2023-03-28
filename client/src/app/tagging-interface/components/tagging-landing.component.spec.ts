@@ -30,7 +30,9 @@ describe('TaggingLanding', () => {
       dataSchema: {},
       uiSchema: {}
     },
-    project: '1'
+    project: '1',
+    tagsPerEntry: 1,
+    tags: []
   };
 
   const testUserStudy = {
