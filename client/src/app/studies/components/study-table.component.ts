@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({
@@ -7,9 +8,9 @@ import { StudyService } from '../../core/services/study.service';
   styleUrls: ['./study-table.component.css']
 })
 export class StudyTable {
-  displayedColumns = [
-    'name'
-  ];
+  displayedColumns = ['name', 'description', 'delete'];
 
   constructor(private readonly studyService: StudyService) {}
+
+  handleDeletion(study: Study) {}
 }
