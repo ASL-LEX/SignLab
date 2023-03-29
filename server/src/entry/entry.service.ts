@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Dataset } from 'shared/dtos/dataset.dto';
 import { Entry, EntryDocument } from './entry.schema';
+import { Tag } from '../tag/tag.schema';
 
 @Injectable()
 export class EntryService {
@@ -61,5 +62,16 @@ export class EntryService {
    */
   async updateMediaURL(entry: Entry, mediaURL: string): Promise<void> {
     this.entryModel.updateOne({ _id: entry._id! }, { $set: { mediaURL: mediaURL } }).exec();
+  }
+
+  /**
+   * Remove tag relationship from entry. This removes the "recordedInSignLab"
+   * context
+   */
+  async removeTag(tag: Tag) {
+    await this.entryModel.updateMany(
+      { 'signLabRecording.tag': tag._id },
+      { $unset: { signLabRecording: '' }, recordedInSignLab: false }
+    );
   }
 }

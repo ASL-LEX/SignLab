@@ -6,8 +6,9 @@ import { Study, StudySchema } from './study.schema';
 import { AuthModule } from '../auth/auth.module';
 import { EntryModule } from '../entry/entry.module';
 import { EntryStudyModule } from '../entrystudy/entrystudy.module';
-import { UserStudyModule } from 'src/userstudy/userstudy.module';
+import { UserStudyModule } from '../userstudy/userstudy.module';
 import { UserModule } from '../user/user.module';
+import { TagModule } from '../tag/tag.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => EntryModule),
     forwardRef(() => EntryStudyModule),
     forwardRef(() => UserStudyModule),
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule),
+    forwardRef(() => TagModule)
   ],
   controllers: [StudyController],
   providers: [StudyService],

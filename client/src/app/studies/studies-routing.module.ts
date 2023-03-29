@@ -7,8 +7,13 @@ import { UserPermissionsComponent } from './components/user-permissions.componen
 import { EntryControlsComponent } from './components/entry-controls.component';
 import { NewStudyComponent } from './components/new-study/new-study.component';
 import { TagViewComponent } from './components/tag-view.component';
+import { StudyTable } from './components/study-table.component';
 
 const routes: Routes = [
+  {
+    path: 'study-control',
+    component: StudyTable
+  },
   {
     path: 'user-permissions',
     component: UserPermissionsComponent,

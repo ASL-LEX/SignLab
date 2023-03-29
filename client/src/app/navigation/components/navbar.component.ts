@@ -98,6 +98,24 @@ export class NavbarComponent {
       },
       sublinks: [
         {
+          name: 'Study Control',
+          url: '/studies/study-control',
+          visible: true,
+          visibleCondition(project, _study, user) {
+            // Have to have a project selected to see studies
+            if (!project) {
+              return false;
+            }
+
+            // Need to be either the owner or the project admin to view the
+            // study control
+            if (user && (user.roles.owner || (user.roles.projectAdmin as any)[project._id!])) {
+              return true;
+            }
+            return false;
+          }
+        },
+        {
           name: 'User Permissions',
           url: '/studies/user-permissions',
           visible: true,

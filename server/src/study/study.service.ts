@@ -5,12 +5,14 @@ import { Model } from 'mongoose';
 import { Tag } from '../tag/tag.schema';
 import { Validator, ValidatorResult } from 'jsonschema';
 import { User } from '../user/user.schema';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class StudyService {
   constructor(
     @InjectModel(Study.name)
-    private studyModel: Model<StudyDocument>
+    private studyModel: Model<StudyDocument>,
+    private readonly tagService: TagService
   ) {}
 
   /**
@@ -101,5 +103,13 @@ export class StudyService {
 
   async createStudy(study: Study): Promise<Study> {
     return this.studyModel.create(study);
+  }
+
+  async delete(study: Study): Promise<void> {
+    // Delete all of the tags
+    await this.tagService.deleteForStudy(study);
+
+    // Delete the study itself
+    await this.studyModel.deleteOne({ _id: study._id });
   }
 }
