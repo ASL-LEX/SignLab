@@ -216,6 +216,10 @@ export class EntryStudyService {
       .exec();
   }
 
+  async deleteForStudy(study: Study) {
+    await this.entryStudyModel.deleteMany({ study: study._id });
+  }
+
   /**
    * Mark a single entry study as being part of the training set
    */

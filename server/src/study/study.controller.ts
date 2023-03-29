@@ -176,5 +176,6 @@ export class StudyController {
   @UseGuards(JwtAuthGuard, ProjectGuard)
   async deleteStudy(@Param('id', StudyPipe) study: Study): Promise<void> {
     await this.studyService.delete(study);
+    await this.entryStudyService.deleteForStudy(study);
   }
 }
