@@ -14,6 +14,7 @@ import { TagFieldComponent } from './components/new-study/tag-field.component';
 import { TagFieldGeneratorService } from './services/tag-field-generator.service';
 import { TagViewComponent } from './components/tag-view.component';
 import { StudyTable } from './components/study-table.component';
+import { ConfirmationDialog } from './components/study-table.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { StudyTable } from './components/study-table.component';
     TagFormPreviewDialog,
     TagFieldComponent,
     TagViewComponent,
-    StudyTable
+    StudyTable,
+    ConfirmationDialog
   ],
   imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, SharedModule],
   providers: [TagFieldGeneratorService]
