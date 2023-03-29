@@ -192,5 +192,6 @@ export class StudyService {
 
   async deleteStudy(study: Study): Promise<void> {
     await this.signLab.delete(`api/study/${study._id}`, { provideToken: true });
+    await this.updateStudies();
   }
 }
