@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 
@@ -11,7 +11,7 @@ import { StudyService } from '../../core/services/study.service';
 export class StudyTable {
   displayedColumns = ['name', 'description', 'delete'];
 
-  constructor(private readonly studyService: StudyService, private readonly dialog: MatDialog) {}
+  constructor(public readonly studyService: StudyService, private readonly dialog: MatDialog) {}
 
   handleDeletion(study: Study) {
     const ref = this.dialog.open(ConfirmationDialog, {
