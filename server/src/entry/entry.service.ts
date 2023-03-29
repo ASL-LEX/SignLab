@@ -71,7 +71,7 @@ export class EntryService {
   async removeTag(tag: Tag) {
     await this.entryModel.updateMany(
       { 'signLabRecording.tag': tag._id },
-      { $unset: { 'signLabRecording': '' }, 'recordedInSignLab': false }
+      { $unset: { signLabRecording: '' }, recordedInSignLab: false }
     );
   }
 }

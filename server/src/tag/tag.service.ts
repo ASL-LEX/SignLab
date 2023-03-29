@@ -9,8 +9,10 @@ import { EntryService } from '../entry/entry.service';
 
 @Injectable()
 export class TagService {
-  constructor(@InjectModel(Tag.name) private tagModel: Model<TagDocument>,
-              private readonly entryService: EntryService) {}
+  constructor(
+    @InjectModel(Tag.name) private tagModel: Model<TagDocument>,
+    private readonly entryService: EntryService
+  ) {}
 
   /**
    * Get the tag with the given id
@@ -167,8 +169,10 @@ export class TagService {
     await this.tagModel.deleteMany({ study: study._id });
 
     // Remove each tag relation for any impacted entity
-    await Promise.all(tags.map(async (tag) => {
-      await this.entryService.removeTag(tag);
-    }));
+    await Promise.all(
+      tags.map(async (tag) => {
+        await this.entryService.removeTag(tag);
+      })
+    );
   }
 }
