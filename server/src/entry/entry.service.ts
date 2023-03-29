@@ -69,6 +69,9 @@ export class EntryService {
    * context
    */
   async removeTag(tag: Tag) {
-    await this.entryModel.deleteMany({ 'signLabRecording.tag': tag._id });
+    await this.entryModel.updateMany(
+      { 'signLabRecording.tag': tag._id },
+      { $unset: { 'signLabRecording': '' }, 'recordedInSignLab': false }
+    );
   }
 }
