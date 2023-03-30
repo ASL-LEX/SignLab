@@ -62,7 +62,9 @@ export class ProjectService {
   }
 
   public updateProjectList(): void {
-    this.projectQuery.refetch();
+    this.projectQuery.refetch().then(value => {
+      this.setActiveProject(value.data.getProjects[0] || null);
+    });
   }
 
   public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
