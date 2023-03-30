@@ -6,7 +6,9 @@ import {
   GetProjectsQuery,
   GetProjectsQueryVariables,
   CreateProjectGQL,
-  CreateProjectMutation
+  CreateProjectMutation,
+  DeleteProjectGQL,
+  DeleteProjectMutation
 } from '../../graphql/projects/projects.generated';
 import { MutationResult, QueryRef } from 'apollo-angular';
 
@@ -19,7 +21,8 @@ export class ProjectService {
   /** The actively selected project */
   private activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
 
-  constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL) {
+  constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL,
+              private readonly deleteProjectGQL: DeleteProjectGQL) {
     // Subscribe to the project query
     this.projectQuery = projectsGQL.watch({}, { errorPolicy: 'all' });
     this.projectQuery.valueChanges.subscribe((result) => {
@@ -61,5 +64,9 @@ export class ProjectService {
 
   public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
     return this.createProjectGQL.mutate({ projectCreate: project });
+  }
+
+  public deleteProject(project: Project): Observable<MutationResult<DeleteProjectMutation>> {
+    return this.deleteProjectGQL.mutate({ projectID: project._id });
   }
 }

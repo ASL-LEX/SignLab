@@ -43,6 +43,14 @@ export class NavbarComponent {
       },
       sublinks: [
         {
+          name: 'Project Control',
+          url: '/projects/project-control',
+          visible: true,
+          visibleCondition: (_project, _study, user) => {
+            return user && user.roles.owner;
+          }
+        },
+        {
           name: 'Project User Permissions',
           url: '/projects/user-permissions',
           visible: true,

@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProjectGuard } from '../core/guards/project.guard';
 import { NewProjectComponent } from './components/new-project.component';
 import { UserPermissionsComponent } from './components/user-permissions.component';
+import { ProjectTable } from './components/project-table.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'new-project',
     component: NewProjectComponent
+  },
+  {
+    path: 'project-control',
+    component: ProjectTable
   }
 ];
 

@@ -23,3 +23,7 @@ query projectExists($name: String!) {
 mutation projectAdminChange($projectAdminChange: ProjectAdminChange!) {
   projectAdminChange(projectAdminChange: $projectAdminChange)
 }
+
+mutation deleteProject($projectID: ID!) {
+  deleteProject(projectID: $projectID)
+}
