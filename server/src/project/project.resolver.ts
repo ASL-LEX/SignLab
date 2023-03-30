@@ -7,7 +7,7 @@ import { UserContext } from '../user/user.decorator';
 import { User } from '../user/user.schema';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt.guard';
-import { ProjectPipe} from '../shared/pipes/project.pipe';
+import { ProjectPipe } from '../shared/pipes/project.pipe';
 
 @Resolver()
 export class ProjectResolver {

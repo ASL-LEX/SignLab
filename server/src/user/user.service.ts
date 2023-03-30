@@ -121,31 +121,39 @@ export class UserService {
   /** Remove project information from all users */
   async removeProjectRole(project: Project) {
     // Remove project admin deliniation
-    await this.userModel.updateMany(
-      { [`roles.projectAdmin.${project._id}`]: { $exists: true } },
-      { $unset: { [`roles.projectAdmin.${project._id}`]: "" }
-    }).exec();
+    await this.userModel
+      .updateMany(
+        { [`roles.projectAdmin.${project._id}`]: { $exists: true } },
+        { $unset: { [`roles.projectAdmin.${project._id}`]: '' } }
+      )
+      .exec();
   }
 
   /** Remove study information for all users */
   async removeStudyRole(study: Study) {
     await Promise.all([
       // Remove study admin deliniation
-      this.userModel.updateMany(
-        { [`roles.studyAdmin.${study._id}`]: { $exists: true } },
-        { $unset: { [`roles.studyAdmin.${study._id}`]: "" }
-      }).exec(),
+      this.userModel
+        .updateMany(
+          { [`roles.studyAdmin.${study._id}`]: { $exists: true } },
+          { $unset: { [`roles.studyAdmin.${study._id}`]: '' } }
+        )
+        .exec(),
       // Remove the study visible deliniation
-      this.userModel.updateMany(
-        { [`roles.studyVisible.${study._id}`]: { $exists: true } },
-        { $unset: { [`roles.studyVisible.${study._id}`]: "" }
-      }).exec(),
+      this.userModel
+        .updateMany(
+          { [`roles.studyVisible.${study._id}`]: { $exists: true } },
+          { $unset: { [`roles.studyVisible.${study._id}`]: '' } }
+        )
+        .exec(),
       // Remove the study contributor deliniation
-      this.userModel.updateMany(
-        { [`roles.studyContributor.${study._id}`]: { $exists: true } },
-        { $unset: { [`roles.studyContributor.${study._id}`]: "" }
-      }).exec()
-    ])
+      this.userModel
+        .updateMany(
+          { [`roles.studyContributor.${study._id}`]: { $exists: true } },
+          { $unset: { [`roles.studyContributor.${study._id}`]: '' } }
+        )
+        .exec()
+    ]);
   }
 
   /**
