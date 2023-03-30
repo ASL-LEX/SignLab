@@ -62,7 +62,7 @@ export class ProjectService {
   }
 
   public updateProjectList(): void {
-    this.projectQuery.refetch().then(value => {
+    this.projectQuery.refetch().then((value) => {
       this.setActiveProject(value.data.getProjects[0] || null);
     });
   }
