@@ -16,7 +16,7 @@ type TagPreviewInformation = {
       <div fxLayout="row" fxLayoutAlign="space-around">
         <!-- The video place holder -->
         <div style="background: black; width: 400px; height: 400px">
-          <p style="color: white">Video Placeholder</p>
+          <p style="color: white">Your Video Will Appear Here</p>
         </div>
 
         <!-- The form itself -->

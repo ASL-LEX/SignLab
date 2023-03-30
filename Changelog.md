@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0
+
+### Added
+
+* Ability to delete projects
+* Ability to delete studies
+* Entries can be tagged multiple times in a single study
+
+### Changed
+
+* Tweak wording on video view area in form preview
+
 ## 0.5.1
 
 ### Fixed
