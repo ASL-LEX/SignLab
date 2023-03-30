@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Injectable, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Study, StudyDocument } from '../study/study.schema';
 import { Model } from 'mongoose';
@@ -6,13 +6,21 @@ import { Tag } from '../tag/tag.schema';
 import { Validator, ValidatorResult } from 'jsonschema';
 import { User } from '../user/user.schema';
 import { TagService } from '../tag/tag.service';
+import { EntryStudyService } from '../entrystudy/entrystudy.service';
+import { Project } from '../project/project.schema';
+import { UserStudyService } from '../userstudy/userstudy.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class StudyService {
   constructor(
     @InjectModel(Study.name)
     private studyModel: Model<StudyDocument>,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
+    private readonly entryStudyService: EntryStudyService,
+    @Inject(forwardRef(() => UserStudyService))
+    private readonly userStudyService: UserStudyService,
+    private readonly userService: UserService
   ) {}
 
   /**
@@ -105,9 +113,22 @@ export class StudyService {
     return this.studyModel.create(study);
   }
 
+  async deleteForProject(project: Project): Promise<void> {
+    const studies = await this.studyModel.find({ project: project._id });
+    await Promise.all(studies.map(async (study) => this.delete(study)));
+  }
+
   async delete(study: Study): Promise<void> {
-    // Delete all of the tags
-    await this.tagService.deleteForStudy(study);
+    await Promise.all([
+      // Delete all of the tags
+      this.tagService.deleteForStudy(study),
+      // Delete the entry studies
+      this.entryStudyService.deleteForStudy(study),
+      // Delete the user studies
+      this.userStudyService.deleteForStudy(study),
+      // Remove the study roles
+      this.userService.removeStudyRole(study)
+    ]);
 
     // Delete the study itself
     await this.studyModel.deleteOne({ _id: study._id });

@@ -5,12 +5,14 @@ import { Project, ProjectDocument } from './project.schema';
 import { ProjectCreate } from './project.dto';
 import { User } from '../user/user.schema';
 import { StudyService } from '../study/study.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-    private readonly studyService: StudyService
+    private readonly studyService: StudyService,
+    private readonly userService: UserService
   ) {}
 
   async create(project: ProjectCreate): Promise<Project> {
@@ -86,5 +88,16 @@ export class ProjectService {
     const uniqueIDs = [...new Set(allIDs)];
 
     return this.projectModel.find({ _id: { $in: uniqueIDs } }).exec();
+  }
+
+  async delete(project: Project): Promise<void> {
+    // Delete all contained studies
+    await this.studyService.deleteForProject(project);
+
+    // Delete the project permissions on users
+    await this.userService.removeProjectRole(project);
+
+    // Delete the project itself
+    await this.projectModel.deleteOne({ _id: project._id });
   }
 }

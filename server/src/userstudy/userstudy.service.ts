@@ -145,4 +145,8 @@ export class UserStudyService {
       )
       .exec();
   }
+
+  async deleteForStudy(study: Study) {
+    await this.userStudyModel.deleteMany({ study: study._id });
+  }
 }
