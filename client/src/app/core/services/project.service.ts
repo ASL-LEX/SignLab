@@ -21,8 +21,11 @@ export class ProjectService {
   /** The actively selected project */
   private activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
 
-  constructor(projectsGQL: GetProjectsGQL, private readonly createProjectGQL: CreateProjectGQL,
-              private readonly deleteProjectGQL: DeleteProjectGQL) {
+  constructor(
+    projectsGQL: GetProjectsGQL,
+    private readonly createProjectGQL: CreateProjectGQL,
+    private readonly deleteProjectGQL: DeleteProjectGQL
+  ) {
     // Subscribe to the project query
     this.projectQuery = projectsGQL.watch({}, { errorPolicy: 'all' });
     this.projectQuery.valueChanges.subscribe((result) => {

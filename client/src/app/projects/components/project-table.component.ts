@@ -12,8 +12,7 @@ import { firstValueFrom } from 'rxjs';
 export class ProjectTable {
   displayedColumns = ['name', 'description', 'delete'];
 
-  constructor(public readonly projectService: ProjectService,
-              private readonly dialog: MatDialog) {}
+  constructor(public readonly projectService: ProjectService, private readonly dialog: MatDialog) {}
 
   handleDeletion(project: Project) {
     const ref = this.dialog.open(ConfirmationDialog, {
@@ -35,11 +34,9 @@ export class ProjectTable {
   template: `
     <h1 mat-dialog-title>Delete: {{ project.name }}</h1>
     <div mat-dialog-content>
-      Deleting a project will also delete all contained studies.
-
-      Deleting a study will remove all cooresponding tags and remove the relation between entries recorded as part of
-      the study and the source tag. Entries recorded as part of this study will not be deleted. Are you sure you want to
-      delete the study?
+      Deleting a project will also delete all contained studies. Deleting a study will remove all cooresponding tags and
+      remove the relation between entries recorded as part of the study and the source tag. Entries recorded as part of
+      this study will not be deleted. Are you sure you want to delete the study?
     </div>
     <div mat-dialog-actions>
       <button mat-raised-button [mat-dialog-close]="false">Cancel</button>
