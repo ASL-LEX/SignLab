@@ -178,7 +178,7 @@ export class NewStudyComponent implements AfterViewInit {
         description: this.studyMetadata.description,
         instructions: this.studyMetadata.instructions,
         tagSchema: schema,
-        tagsPerEntry: this.studyMetadata.tagsPerEntry
+        tagsPerEntry: this.studyMetadata.tagsPerEntry || 1
       },
       projectID: project._id!,
       trainingEntries: Array.from(this.markedTraining),
