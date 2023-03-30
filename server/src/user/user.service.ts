@@ -4,6 +4,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { Study } from 'shared/dtos/study.dto';
 import { User, UserDocument } from './user.schema';
 import { ProjectAdminChangeFull } from '../project/project.dto';
+import { Project } from '../project/project.schema';
 
 /**
  * The user service handles interactions with users that is not directly
@@ -115,6 +116,36 @@ export class UserService {
     await this.userModel
       .findOneAndUpdate({ _id: user._id }, { $set: { [`roles.studyContributor.${study._id!}`]: canContribute } })
       .exec();
+  }
+
+  /** Remove project information from all users */
+  async removeProjectRole(project: Project) {
+    // Remove project admin deliniation
+    await this.userModel.updateMany(
+      { [`roles.projectAdmin.${project._id}`]: { $exists: true } },
+      { $unset: { [`roles.projectAdmin.${project._id}`]: "" }
+    }).exec();
+  }
+
+  /** Remove study information for all users */
+  async removeStudyRole(study: Study) {
+    await Promise.all([
+      // Remove study admin deliniation
+      this.userModel.updateMany(
+        { [`roles.studyAdmin.${study._id}`]: { $exists: true } },
+        { $unset: { [`roles.studyAdmin.${study._id}`]: "" }
+      }).exec(),
+      // Remove the study visible deliniation
+      this.userModel.updateMany(
+        { [`roles.studyVisible.${study._id}`]: { $exists: true } },
+        { $unset: { [`roles.studyVisible.${study._id}`]: "" }
+      }).exec(),
+      // Remove the study contributor deliniation
+      this.userModel.updateMany(
+        { [`roles.studyContributor.${study._id}`]: { $exists: true } },
+        { $unset: { [`roles.studyContributor.${study._id}`]: "" }
+      }).exec()
+    ])
   }
 
   /**
