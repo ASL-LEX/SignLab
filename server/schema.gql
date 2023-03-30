@@ -91,6 +91,7 @@ type Mutation {
   changeProjectAccess(projectAccessChange: ProjectAccessChange!): Boolean!
   createProject(projectCreate: ProjectCreate!): Project!
   projectAdminChange(projectAdminChange: ProjectAdminChange!): Boolean!
+  deleteProject(projectID: ID!): Boolean!
 }
 
 input UserCredentials {

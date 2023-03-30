@@ -87,4 +87,12 @@ export class ProjectService {
 
     return this.projectModel.find({ _id: { $in: uniqueIDs } }).exec();
   }
+
+  async delete(project: Project): Promise<void> {
+    // Delete all contained studies
+    await this.studyService.deleteForProject(project);
+
+    // Delete the project itself
+    await this.projectModel.deleteOne({ _id: project._id });
+  }
 }

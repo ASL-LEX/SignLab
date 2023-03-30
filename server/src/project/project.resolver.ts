@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
 import { ProjectAdminChange, ProjectChangePipe, ProjectCreate, ProjectAdminChangeFull } from './project.dto';
 import { Project } from './project.schema';
@@ -7,6 +7,7 @@ import { UserContext } from '../user/user.decorator';
 import { User } from '../user/user.schema';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { ProjectPipe} from '../shared/pipes/project.pipe';
 
 @Resolver()
 export class ProjectResolver {
@@ -30,6 +31,12 @@ export class ProjectResolver {
     projectAdminChange: ProjectAdminChangeFull
   ): Promise<boolean> {
     await this.userService.markAsProjectAdmin(projectAdminChange);
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteProject(@Args('projectID', { type: () => ID }, ProjectPipe) project: Project): Promise<boolean> {
+    await this.projectService.delete(project);
     return true;
   }
 
