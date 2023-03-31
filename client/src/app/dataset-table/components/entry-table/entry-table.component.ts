@@ -52,7 +52,7 @@ export class EntryTable implements OnInit {
       return;
     }
 
-    for(const elem of entryElems) {
+    for (const elem of entryElems) {
       this.entryService.delete(elem.entry);
     }
 

@@ -13,7 +13,7 @@ import {
 import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import {MatCheckbox} from '@angular/material/checkbox';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 /**
  * The EntryTable displays entry information and controls in a tabular
@@ -123,7 +123,7 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   multiDelete() {
     this.deleteEntry.emit(this.selectedList);
     this.selectedList = [];
-    this.checkboxes.forEach((checkbox) => checkbox.checked = false);
+    this.checkboxes.forEach((checkbox) => (checkbox.checked = false));
   }
 
   selectAll(selected: boolean) {
@@ -136,6 +136,6 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
     }
 
     // Update the list of selection boxes accordingly
-    this.checkboxes.forEach((checkbox) => checkbox.checked = selected);
+    this.checkboxes.forEach((checkbox) => (checkbox.checked = selected));
   }
 }
