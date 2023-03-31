@@ -7,11 +7,13 @@ import {
   ViewChild,
   AfterViewInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ViewChildren
 } from '@angular/core';
 import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 /**
  * The EntryTable displays entry information and controls in a tabular
@@ -59,6 +61,8 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   @Output() deleteEntry = new EventEmitter<EntryTableElement[]>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  /** The selection boxes */
+  @ViewChildren(MatCheckbox) checkboxes: MatCheckbox[];
   /** The paged data */
   dataSource: MatTableDataSource<EntryTableElement>;
   /** List of the selected elements */
@@ -119,5 +123,19 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   multiDelete() {
     this.deleteEntry.emit(this.selectedList);
     this.selectedList = [];
+    this.checkboxes.forEach((checkbox) => checkbox.checked = false);
+  }
+
+  selectAll(selected: boolean) {
+    // Either fully populate the items or clear out the list.
+    // NOTE: This does not consider pagination
+    if (selected) {
+      this.selectedList = [...this.entryData];
+    } else {
+      this.selectedList = [];
+    }
+
+    // Update the list of selection boxes accordingly
+    this.checkboxes.forEach((checkbox) => checkbox.checked = selected);
   }
 }

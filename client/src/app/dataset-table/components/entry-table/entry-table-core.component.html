@@ -41,7 +41,10 @@
 
     <!-- Select Column -->
     <ng-container matColumnDef="Select">
-      <th mat-header-cell *matHeaderCellDef>Select</th>
+      <th mat-header-cell *matHeaderCellDef>
+        Select
+        <mat-checkbox (change)="selectAll($event.checked)"></mat-checkbox>
+      </th>
       <td mat-cell *matCellDef="let entryElem">
         <mat-checkbox (change)="setSelected(entryElem, $event.checked)"></mat-checkbox>
       </td>
