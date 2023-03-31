@@ -61,6 +61,8 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
   dataSource: MatTableDataSource<EntryTableElement>;
+  /** List of the selected elements */
+  selectedList: EntryTableElement[] = [];
 
   constructor() {
     this.dataSource = new MatTableDataSource();
@@ -99,5 +101,17 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
 
   updateColumns() {
     this.displayedColumns = this.possibleColumns.filter((column) => column.visible).map((column) => column.name);
+  }
+
+  /** Change the list of selected elements */
+  setSelected(entryElem: EntryTableElement, selected: boolean) {
+    if (selected) {
+      this.selectedList.push(entryElem);
+    } else {
+      const loc = this.selectedList.indexOf(entryElem);
+      if (loc >= 0) {
+        this.selectedList.splice(loc, 1);
+      }
+    }
   }
 }
