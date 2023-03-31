@@ -11,6 +11,7 @@ import { Dataset } from '../../../graphql/graphql';
   template: ` <entry-table-core
     [entryData]="entryData"
     [displayDeletion]="true"
+    [displaySelect]="true"
     (deleteEntry)="handleDeletion($event)"
   ></entry-table-core>`
 })

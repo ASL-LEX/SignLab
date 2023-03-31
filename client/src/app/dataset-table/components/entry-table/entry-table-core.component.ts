@@ -49,6 +49,8 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   @Input() displayDeletion = false;
   /** The entry elements to display */
   @Input() entryData: EntryTableElement[];
+  /** Column for selecting entries */
+  @Input() displaySelect = false;
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
@@ -74,6 +76,9 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
     }
     if (this.displayDeletion) {
       this.possibleColumns.push({ name: 'Delete Entry', visible: true });
+    }
+    if (this.displaySelect) {
+      this.possibleColumns.unshift({ name: 'Select', visible: true });
     }
     this.updateColumns();
   }
