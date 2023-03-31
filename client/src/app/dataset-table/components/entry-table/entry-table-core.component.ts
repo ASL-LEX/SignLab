@@ -95,8 +95,8 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
     }
   }
 
-  handleDeletion(entryElem: EntryTableElement) {
-    this.deleteEntry.emit([entryElem]);
+  handleDeletion(entryElem: EntryTableElement[]) {
+    this.deleteEntry.emit(entryElem);
   }
 
   updateColumns() {
@@ -113,5 +113,11 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
         this.selectedList.splice(loc, 1);
       }
     }
+  }
+
+  /** Delete all selected */
+  multiDelete() {
+    this.deleteEntry.emit(this.selectedList);
+    this.selectedList = [];
   }
 }
