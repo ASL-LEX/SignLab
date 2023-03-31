@@ -43,7 +43,7 @@ export class EntryTable implements OnInit {
     });
   }
 
-  handleDeletion(entryElem: EntryTableElement) {
+  handleDeletion(entryElems: EntryTableElement[]) {
     const message =
       'Are you sure you want to delete this entry? Doing so ' +
       'will remove all data related to this entry including ' +
@@ -52,10 +52,12 @@ export class EntryTable implements OnInit {
       return;
     }
 
-    this.entryService.delete(entryElem.entry);
+    for(const elem of entryElems) {
+      this.entryService.delete(elem.entry);
+    }
 
     this.entryData = this.entryData.filter((elem) => {
-      return elem.entry._id != entryElem.entry._id;
+      return entryElems.indexOf(elem) < 0;
     });
   }
 }

@@ -56,7 +56,7 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   /** Emits changes to when the part of training set change takes place */
   @Output() partOfTrainingChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits change when the user requests a deletion */
-  @Output() deleteEntry = new EventEmitter<EntryTableElement>();
+  @Output() deleteEntry = new EventEmitter<EntryTableElement[]>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
   /** The paged data */
@@ -96,7 +96,7 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   }
 
   handleDeletion(entryElem: EntryTableElement) {
-    this.deleteEntry.emit(entryElem);
+    this.deleteEntry.emit([entryElem]);
   }
 
   updateColumns() {
