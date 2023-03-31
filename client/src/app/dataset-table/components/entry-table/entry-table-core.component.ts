@@ -7,11 +7,13 @@ import {
   ViewChild,
   AfterViewInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ViewChildren
 } from '@angular/core';
 import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 /**
  * The EntryTable displays entry information and controls in a tabular
@@ -49,16 +51,22 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
   @Input() displayDeletion = false;
   /** The entry elements to display */
   @Input() entryData: EntryTableElement[];
+  /** Column for selecting entries */
+  @Input() displaySelect = false;
   /** Emits changes to when the part of study change takes place */
   @Output() partOfStudyChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits changes to when the part of training set change takes place */
   @Output() partOfTrainingChange = new EventEmitter<EntryTableToggleChange>();
   /** Emits change when the user requests a deletion */
-  @Output() deleteEntry = new EventEmitter<EntryTableElement>();
+  @Output() deleteEntry = new EventEmitter<EntryTableElement[]>();
   /** Controls the page based access */
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  /** The selection boxes */
+  @ViewChildren(MatCheckbox) checkboxes: MatCheckbox[];
   /** The paged data */
   dataSource: MatTableDataSource<EntryTableElement>;
+  /** List of the selected elements */
+  selectedList: EntryTableElement[] = [];
 
   constructor() {
     this.dataSource = new MatTableDataSource();
@@ -75,6 +83,9 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
     if (this.displayDeletion) {
       this.possibleColumns.push({ name: 'Delete Entry', visible: true });
     }
+    if (this.displaySelect) {
+      this.possibleColumns.unshift({ name: 'Select', visible: true });
+    }
     this.updateColumns();
   }
 
@@ -88,11 +99,43 @@ export class EntryTableCoreComponent implements OnInit, AfterViewInit, OnChanges
     }
   }
 
-  handleDeletion(entryElem: EntryTableElement) {
+  handleDeletion(entryElem: EntryTableElement[]) {
     this.deleteEntry.emit(entryElem);
   }
 
   updateColumns() {
     this.displayedColumns = this.possibleColumns.filter((column) => column.visible).map((column) => column.name);
+  }
+
+  /** Change the list of selected elements */
+  setSelected(entryElem: EntryTableElement, selected: boolean) {
+    if (selected) {
+      this.selectedList.push(entryElem);
+    } else {
+      const loc = this.selectedList.indexOf(entryElem);
+      if (loc >= 0) {
+        this.selectedList.splice(loc, 1);
+      }
+    }
+  }
+
+  /** Delete all selected */
+  multiDelete() {
+    this.deleteEntry.emit(this.selectedList);
+    this.selectedList = [];
+    this.checkboxes.forEach((checkbox) => (checkbox.checked = false));
+  }
+
+  selectAll(selected: boolean) {
+    // Either fully populate the items or clear out the list.
+    // NOTE: This does not consider pagination
+    if (selected) {
+      this.selectedList = [...this.entryData];
+    } else {
+      this.selectedList = [];
+    }
+
+    // Update the list of selection boxes accordingly
+    this.checkboxes.forEach((checkbox) => (checkbox.checked = selected));
   }
 }

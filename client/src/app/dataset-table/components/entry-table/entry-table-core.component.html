@@ -1,22 +1,35 @@
 <div class="entry-grid">
   <!-- Table view controls -->
-  <div fxLayout="row" fxLayoutAlign="end none" >
-    <!-- Paginator for selecting the number of elements to show at a time -->
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+  <div fxLayout="row" fxLayoutAlign="space-between none" >
+    <!-- Action Section -->
+    <div>
+      <!-- List of Actions -->
+      <div *ngIf="selectedList.length > 0">
+        <button mat-mini-fab color="accent" (click)="multiDelete()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
 
-    <!-- Menu for controlling the displayed columns -->
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <ul style="list-style-type: none; padding: 10px;">
-        <li *ngFor="let column of possibleColumns">
-          <mat-checkbox (change)="updateColumns()" [(ngModel)]="column.visible">
-            {{column.name}}
-          </mat-checkbox>
-        </li>
-      </ul>
-    </mat-menu>
+    <!-- Pagination and Column Control -->
+    <div fxLayout="row" fxLaoutAlign="end none">
+      <!-- Paginator for selecting the number of elements to show at a time -->
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+
+      <!-- Menu for controlling the displayed columns -->
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <ul style="list-style-type: none; padding: 10px;">
+          <li *ngFor="let column of possibleColumns">
+            <mat-checkbox (change)="updateColumns()" [(ngModel)]="column.visible">
+              {{column.name}}
+            </mat-checkbox>
+          </li>
+        </ul>
+      </mat-menu>
+    </div>
   </div>
 
   <!-- Entries table view -->
@@ -25,6 +38,17 @@
           The actual rendered columns are set as a property on the row definition" -->
 
     <!-- TODO: Add tool tip help for each column -->
+
+    <!-- Select Column -->
+    <ng-container matColumnDef="Select">
+      <th mat-header-cell *matHeaderCellDef>
+        Select
+        <mat-checkbox (change)="selectAll($event.checked)"></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let entryElem">
+        <mat-checkbox (change)="setSelected(entryElem, $event.checked)"></mat-checkbox>
+      </td>
+    </ng-container>
 
     <!-- View Column -->
     <ng-container matColumnDef="Video Preview">
@@ -79,7 +103,7 @@
         <mat-icon matTooltip="Delete the entry, this will delete all associated data including tags made for the entry">help_outline</mat-icon>
       </th>
       <td mat-cell *matCellDef="let entryElem">
-        <button mat-mini-fab (click)="handleDeletion(entryElem)"><mat-icon>delete</mat-icon></button>
+        <button mat-mini-fab (click)="handleDeletion([entryElem])"><mat-icon>delete</mat-icon></button>
       </td>
     </ng-container>
 
