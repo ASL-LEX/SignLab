@@ -8,18 +8,29 @@ import { DatasetService } from '../../core/services/dataset.service';
   selector: 'dataset-new-study-table',
   template: `
     <div *ngIf="datasetService.visibleDatasets | async as datasets">
-      <mat-expansion-panel *ngFor="let dataset of datasets">
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ dataset.name }}</mat-panel-title>
-          <mat-panel-description>{{ dataset.description }}</mat-panel-description>
-        </mat-expansion-panel-header>
+      <div *ngIf="datasets.length == 0; else datasetView">
+        <mat-card>
+          <mat-card-title>No Datasets Available to this Project</mat-card-title>
+          <mat-card-content>
+            Have an administrator grant this project access to a dataset to select training values. You can create the
+            study and later grant dataset access, doing so however will mean this study will not have a training set.
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <ng-template #datasetView>
+        <mat-expansion-panel *ngFor="let dataset of datasets">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ dataset.name }}</mat-panel-title>
+            <mat-panel-description>{{ dataset.description }}</mat-panel-description>
+          </mat-expansion-panel-header>
 
-        <entry-new-study
-          [dataset]="dataset"
-          (markedDisabledChange)="markedDisabledChange.emit($event)"
-          (markedTrainingChange)="markedTrainingChange.emit($event)"
-        ></entry-new-study>
-      </mat-expansion-panel>
+          <entry-new-study
+            [dataset]="dataset"
+            (markedDisabledChange)="markedDisabledChange.emit($event)"
+            (markedTrainingChange)="markedTrainingChange.emit($event)"
+          ></entry-new-study>
+        </mat-expansion-panel>
+      </ng-template>
     </div>
   `
 })
