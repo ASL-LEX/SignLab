@@ -11,6 +11,6 @@ export class ProjectGuard implements CanActivate {
       return false;
     }
 
-    return user.roles.owner || (body.projectID && user.roles.projectAdmin[body.projectID]);
+    return user.roles.owner || (body.projectID && user.roles.projectAdmin.get(body.projectID));
   }
 }

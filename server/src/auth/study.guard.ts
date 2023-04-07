@@ -37,6 +37,6 @@ export class StudyGuard implements CanActivate {
       return false;
     }
 
-    return user.roles.owner || user.roles.projectAdmin[projectID] || user.roles.studyAdmin[body.studyID];
+    return user.roles.owner || user.roles.projectAdmin.get(projectID) || user.roles.studyAdmin.get(body.studyID);
   }
 }
