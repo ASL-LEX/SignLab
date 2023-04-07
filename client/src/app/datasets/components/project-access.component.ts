@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Dataset, Project } from '../../graphql/graphql';
 import { DatasetService } from '../../core/services/dataset.service';
 import { ProjectService } from '../../core/services/project.service';
@@ -58,7 +58,7 @@ import { ChangeProjectAccessGQL } from '../../graphql/datasets/datasets.generate
   `,
   styleUrls: ['./project-access.component.css']
 })
-export class ProjectAccess implements OnInit {
+export class ProjectAccess implements OnDestroy {
   displayedColumns: string[] = ['projectName', 'projectDescription', 'projectAccess'];
 
   constructor(
@@ -67,7 +67,7 @@ export class ProjectAccess implements OnInit {
     private readonly changeProcessAccessGQL: ChangeProjectAccessGQL
   ) {}
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
     // Re-fetch since going onto and off of this page could cause some
     // changes to not be visualized
     this.datasetService.updateDatasets();

@@ -5,7 +5,9 @@ import {
   GetDatasetsGQL,
   GetDatasetsQuery,
   GetDatasetsQueryVariables,
-  GetDatasetsByProjectGQL
+  GetDatasetsByProjectGQL,
+  GetDatasetsByProjectQuery,
+  GetDatasetsByProjectQueryVariables
 } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { QueryRef } from 'apollo-angular';
@@ -21,6 +23,8 @@ export class DatasetService {
   private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
   /** Query which was used to get the datasets, used to refetch */
   private readonly datasetQuery: QueryRef<GetDatasetsQuery, GetDatasetsQueryVariables>;
+  /** Query which was used to get datasets visible to a project, used to refetch */
+  private readonly projectDatasetQuery: QueryRef<GetDatasetsByProjectQuery, GetDatasetsByProjectQueryVariables>;
   /** All the datasets which are visible to the active project */
   private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
 
@@ -36,6 +40,8 @@ export class DatasetService {
     this.datasetQuery.valueChanges.subscribe((result) => {
       this.datasetObs.next(result.data.getDatasets);
     });
+
+    this.projectDatasetQuery = this.getDatasetsByProjectGQL.watch();
 
     // Logic for getting datasets visible to the active project
     this.projectService.activeProject.subscribe((project) => {
@@ -78,5 +84,13 @@ export class DatasetService {
 
   async updateDatasets() {
     await this.datasetQuery.refetch();
+
+    // Update the visible datasets for the project
+    const currentProject = await firstValueFrom(this.projectService.activeProject);
+    if (currentProject) {
+      this.projectDatasetQuery.refetch({ project: currentProject._id }).then((data) => {
+        this.visibleDatasetObs.next(data.data.getDatasetsByProject);
+      });
+    }
   }
 }
