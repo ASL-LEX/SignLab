@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.1
+
+### Added
+
+* Multiselect on entries
+
+### Fixed
+
+* Project and Study Guard not retrieving user roles correctly
+* Changes to project access of datasets not updated without refresh
+* Visual indicator to show no datasets accessible to study
+
+
 ## 0.6.0
 
 ### Added
