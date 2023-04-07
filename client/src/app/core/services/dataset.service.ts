@@ -75,4 +75,8 @@ export class DatasetService {
 
     this.datasetQuery.refetch();
   }
+
+  async updateDatasets() {
+    await this.datasetQuery.refetch();
+  }
 }
