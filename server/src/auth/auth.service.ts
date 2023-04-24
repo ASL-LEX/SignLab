@@ -50,7 +50,7 @@ export class AuthService {
       .exec();
     const user = await this.userService.findOne({
       username: credentials.username,
-      organization: credentials.organization
+      organization: new mongoose.Types.ObjectId(credentials.organization)
     });
 
     // If a user is not found with that username, return null

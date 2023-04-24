@@ -1,6 +1,6 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import * as dto from 'shared/dtos/user.dto';
 
 /**
@@ -14,7 +14,7 @@ export class UserCredentials implements dto.UserCredentials {
   @Field()
   username: string;
 
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Field(() => ID)
   organization: string;
 

@@ -35,7 +35,7 @@ export class User implements dto.User {
   @Field(() => ID)
   _id: string;
 
-  @Prop()
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
   @Field(() => Organization)
   organization: string;
 
