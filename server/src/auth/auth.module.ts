@@ -36,7 +36,17 @@ import { OrganizationModule } from '../organization/organization.module';
     forwardRef(() => StudyModule),
     OrganizationModule
   ],
-  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard, AuthResolver, UserSignupPipe, UserResolver],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RolesGuard,
+    OwnerGuard,
+    ProjectGuard,
+    StudyGuard,
+    AuthResolver,
+    UserSignupPipe,
+    UserResolver
+  ],
   exports: [AuthService, JwtStrategy]
 })
 export class AuthModule {}

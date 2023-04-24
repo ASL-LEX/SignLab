@@ -94,7 +94,13 @@ export class AuthService {
    * @param organization The organization to login to
    * @return The newly created user
    */
-  public async signup(name: string, email: string, username: string, password: string, organization: string): Promise<User> {
+  public async signup(
+    name: string,
+    email: string,
+    username: string,
+    password: string,
+    organization: string
+  ): Promise<User> {
     const request = {
       credentials: {
         name: name,

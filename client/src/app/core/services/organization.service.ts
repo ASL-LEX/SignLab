@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {GetOrganizationsGQL} from 'src/app/graphql/organization/organization.generated';
+import { GetOrganizationsGQL } from 'src/app/graphql/organization/organization.generated';
 import { Organization } from '../../graphql/graphql';
 
 @Injectable()

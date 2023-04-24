@@ -84,7 +84,7 @@ export class AuthService {
     }
 
     // Check email availability
-    user = await this.userService.findOne({ email: userId.email, organization:userId.organization });
+    user = await this.userService.findOne({ email: userId.email, organization: userId.organization });
     if (user) {
       availability.email = false;
     }

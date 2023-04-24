@@ -56,7 +56,10 @@ describe('LoginComponent', () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [LoginComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }, { provide: OrganizationService, useValue: orgSpy }]
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: OrganizationService, useValue: orgSpy }
+      ]
     });
 
     login = TestBed.createComponent(LoginComponent);

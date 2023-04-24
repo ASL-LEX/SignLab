@@ -10,19 +10,27 @@ import { Organization } from '../../graphql/graphql';
   template: `
     <div class="login-container">
       <mat-card class="login-card">
-        <form class="login-form" (ngSubmit)="authenticateUser()" *ngIf="(orgService.organizations | async) as organizations">
+        <form
+          class="login-form"
+          (ngSubmit)="authenticateUser()"
+          *ngIf="orgService.organizations | async as organizations"
+        >
           <mat-form-field appearance="fill">
             <mat-label>Organization</mat-label>
             <mat-select
               data-cy="organizationField"
               [(ngModel)]="organizationValue"
-              [ngModelOptions]="{standalone: true}"
+              [ngModelOptions]="{ standalone: true }"
             >
-              <mat-option *ngFor="let organization of organizations" [value]="organization._id" [attr.data-cy]="organization.name">
-                {{organization.name}}
+              <mat-option
+                *ngFor="let organization of organizations"
+                [value]="organization._id"
+                [attr.data-cy]="organization.name"
+              >
+                {{ organization.name }}
               </mat-option>
-            </mat-select>
-          </mat-form-field><br />
+            </mat-select> </mat-form-field
+          ><br />
 
           <label for="username" class="label">Enter Participant Username</label><br />
           <input
@@ -87,6 +95,6 @@ export class LoginComponent {
   async compareOrgs(orgA: Organization, orgB: Organization) {
     console.log(orgA);
     console.log(orgB);
-    return (orgA && orgB) && (orgA._id == orgB._id);
+    return orgA && orgB && orgA._id == orgB._id;
   }
 }

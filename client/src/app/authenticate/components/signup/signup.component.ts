@@ -142,7 +142,11 @@ export class SignupComponent implements OnInit {
     // See if the username and email is available
     const availability = await firstValueFrom(
       this.userAvailableGQL.fetch({
-        identification: { username: this.username.value!, email: this.email.value!, organization: this.organizationValue }
+        identification: {
+          username: this.username.value!,
+          email: this.email.value!,
+          organization: this.organizationValue
+        }
       })
     );
 

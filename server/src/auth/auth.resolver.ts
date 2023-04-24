@@ -12,8 +12,8 @@ import { UserSignup } from './dtos/user-signup.dto';
 import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { OrganizationService } from '../organization/organization.service';
-import {Organization} from 'src/organization/organization.schema';
-import {BadRequestException} from '@nestjs/common';
+import { Organization } from 'src/organization/organization.schema';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => AuthResponse)
 export class AuthResolver {
