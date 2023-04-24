@@ -58,7 +58,7 @@ export class LoginComponent {
   username = new FormControl('');
   /** Field of the users password */
   pass = new FormControl('');
-
+  /** The organization the user is logging into */
   organizationValue = '';
 
   constructor(private authService: AuthService, private router: Router, public orgService: OrganizationService) {}

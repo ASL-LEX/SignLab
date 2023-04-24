@@ -6,6 +6,7 @@ import { PasswordComplexityGQL, UserAvailableGQL } from '../../../graphql/auth/a
 import { AuthService } from '../../../core/services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../../../graphql/graphql';
+import { OrganizationService } from '../../../core/services/organization.service';
 
 /**
  * Custom form validator which ensures the password complexity meets
@@ -83,11 +84,15 @@ export class SignupComponent implements OnInit {
   /** Callback which is called once the signup has taken place */
   @Input() onUserSignup: (user: User) => void;
 
+  /** The organization the user is signing up for */
+  organizationValue = '';
+
   constructor(
     private authService: AuthService,
     private router: Router,
     private passwordComplexityGQL: PasswordComplexityGQL,
-    private userAvailableGQL: UserAvailableGQL
+    private userAvailableGQL: UserAvailableGQL,
+    public orgService: OrganizationService
   ) {}
 
   ngOnInit(): void {
@@ -129,7 +134,7 @@ export class SignupComponent implements OnInit {
    */
   async signup(): Promise<void> {
     // Don't attempt to signup if the form is invalid
-    if (this.signupForm.invalid) {
+    if (this.signupForm.invalid || !this.organizationValue) {
       alert('Please complete the signup form');
       return;
     }
@@ -137,7 +142,7 @@ export class SignupComponent implements OnInit {
     // See if the username and email is available
     const availability = await firstValueFrom(
       this.userAvailableGQL.fetch({
-        identification: { username: this.username.value!, email: this.email.value!, organization: 'TODO' }
+        identification: { username: this.username.value!, email: this.email.value!, organization: this.organizationValue }
       })
     );
 
@@ -161,7 +166,7 @@ export class SignupComponent implements OnInit {
       this.email.value!,
       this.username.value!,
       this.pass.value!,
-      'TODO'
+      this.organizationValue
     );
 
     // Run the callback for when the user has signed in
