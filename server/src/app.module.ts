@@ -24,6 +24,7 @@ import { UserStudyModule } from './userstudy/userstudy.module';
 import { BucketModule } from './bucket/bucket.module';
 import { ProjectModule } from './project/project.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { OrganizationModule } from './organization/organization.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 // By default just use OS provided environment variables
@@ -68,7 +69,8 @@ if (process.env.NODE_ENV) {
     EntryStudyModule,
     UserStudyModule,
     BucketModule,
-    ProjectModule
+    ProjectModule,
+    OrganizationModule
   ],
   controllers: [AppController]
 })
