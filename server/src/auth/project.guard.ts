@@ -3,14 +3,18 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 @Injectable()
 export class ProjectGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const body = context.switchToHttp().getRequest().body;
+    const request = context.switchToHttp().getRequest();
+    const body = request.body;
+    const headers = request.headers;
 
-    const user = context.switchToHttp().getRequest().user;
+    const user = request.user;
     if (!user) {
       console.debug('ProjectGuard: no user');
       return false;
     }
 
-    return user.roles.owner || (body.projectID && user.roles.projectAdmin.get(body.projectID));
+    const projectID = body.projectID || headers['projectID'];
+
+    return user.roles.owner || (projectID && user.roles.projectAdmin.get(projectID));
   }
 }

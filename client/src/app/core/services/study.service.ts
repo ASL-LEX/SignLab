@@ -191,7 +191,19 @@ export class StudyService {
   }
 
   async deleteStudy(study: Study): Promise<void> {
-    await this.signLab.delete(`api/study/${study._id}`, { provideToken: true });
+    let projectID = '';
+    if (typeof study.project === 'string') {
+      projectID = study.project;
+    } else {
+      projectID = study.project._id;
+    }
+
+    await this.signLab.delete(`api/study/${study._id}`, {
+      headers: {
+        'projectID': projectID
+      },
+      provideToken: true
+    });
     await this.updateStudies();
   }
 }
