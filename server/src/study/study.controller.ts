@@ -21,7 +21,7 @@ import { UserStudyService } from '../userstudy/userstudy.service';
 import { UserService } from '../user/user.service';
 import { StudyPipe } from '../shared/pipes/study.pipe';
 import { UserPipe } from '../shared/pipes/user.pipe';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../user/user.schema';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';

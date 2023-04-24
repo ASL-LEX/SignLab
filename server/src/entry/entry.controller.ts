@@ -21,19 +21,19 @@ import { SchemaService } from './schema.service';
 import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
-import { EntryStudy } from 'shared/dtos/entrystudy.dto';
+import { EntryStudy } from '../entrystudy/entrystudy.schema';
 import { Auth } from '../auth/auth.guard';
 import { TagService } from '../tag/tag.service';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { BucketStorage } from '../bucket/bucket.service';
 import { StudyPipe } from '../shared/pipes/study.pipe';
-import { Study } from 'shared/dtos/study.dto';
+import { Study } from '../study/study.schema';
 import { EntryPipe } from '../shared/pipes/entry.pipe';
 import { Entry } from './entry.schema';
 import { DatasetPipe } from '../shared/pipes/dataset.pipe';
 import { Dataset } from '../dataset/dataset.schema';
 import { UserPipe } from '../shared/pipes/user.pipe';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../user/user.schema';
 
 @Controller('/api/entry')
 export class EntryController {

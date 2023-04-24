@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../../user/user.schema';
 import { UserService } from '../../user/user.service';
 
 @Injectable()

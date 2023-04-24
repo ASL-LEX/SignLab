@@ -1,5 +1,5 @@
 import { Field, InputType, OmitType, ID } from '@nestjs/graphql';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../user/user.schema';
 import { Project } from './project.schema';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { UserPipe } from '../shared/pipes/user.pipe';

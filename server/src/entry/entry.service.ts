@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { Dataset } from 'shared/dtos/dataset.dto';
+import { Dataset } from '../dataset/dataset.schema';
 import { Entry, EntryDocument } from './entry.schema';
 import { Tag } from '../tag/tag.schema';
 
