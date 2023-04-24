@@ -13,7 +13,7 @@ export class ProjectGuard implements CanActivate {
       return false;
     }
 
-    const projectID = body.projectID || headers['projectID'];
+    const projectID = body.projectID || headers['projectid'];
 
     return user.roles.owner || (projectID && user.roles.projectAdmin.get(projectID));
   }
