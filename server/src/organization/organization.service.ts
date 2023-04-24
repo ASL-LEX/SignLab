@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Organization, OrganizationDocument } from './organization.schema';
 import { Model } from 'mongoose';
-import {OrganizationCreate} from './organization.dto';
+import { OrganizationCreate } from './organization.dto';
 
 @Injectable()
 export class OrganizationService {
