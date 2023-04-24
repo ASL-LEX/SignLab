@@ -44,11 +44,13 @@ export class AuthService {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel
       .findOne({
-        username: credentials.username
+        username: credentials.username,
+        organization: credentials.organization
       })
       .exec();
     const user = await this.userService.findOne({
-      username: credentials.username
+      username: credentials.username,
+      organization: credentials.organization
     });
 
     // If a user is not found with that username, return null
@@ -76,13 +78,13 @@ export class AuthService {
     const availability = { username: true, email: true };
 
     // Check username availability
-    let user = await this.userService.findOne({ username: userId.username });
+    let user = await this.userService.findOne({ username: userId.username, organization: userId.organization });
     if (user) {
       availability.username = false;
     }
 
     // Check email availability
-    user = await this.userService.findOne({ email: userId.email });
+    user = await this.userService.findOne({ email: userId.email, organization:userId.organization });
     if (user) {
       availability.email = false;
     }
@@ -118,7 +120,8 @@ export class AuthService {
 
     const userCredentials = {
       username: userSignup.username,
-      password: hashedPassword
+      password: hashedPassword,
+      organization: userSignup.organization
     };
 
     const newUser = await this.userService.create(user);
