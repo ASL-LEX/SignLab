@@ -10,6 +10,15 @@ import { AuthService } from '../../core/services/auth.service';
     <div class="login-container">
       <mat-card class="login-card">
         <form class="login-form" (ngSubmit)="authenticateUser()">
+          <mat-form-field appearance="fill">
+            <mat-label>Organization</mat-label>
+            <mat-select [formControl]="organization" data-cy="organizationField">
+              <mat-option>
+                ASL-LEX
+              </mat-option>
+            </mat-select>
+          </mat-form-field><br />
+
           <label for="username" class="label">Enter Participant Username</label><br />
           <input
             #usernameElement
@@ -38,6 +47,8 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  /** The organization the user is logging into */
+  organization = new FormControl('');
   /** Field for the users email */
   username = new FormControl('');
   /** Field of the users password */
