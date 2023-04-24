@@ -200,7 +200,7 @@ export class StudyService {
 
     await this.signLab.delete(`api/study/${study._id}`, {
       headers: {
-        'projectid': projectID
+        projectid: projectID
       },
       provideToken: true
     });
