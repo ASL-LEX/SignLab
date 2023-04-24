@@ -12,7 +12,7 @@ import { Entry } from './entry.schema';
 import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 import { Dataset } from '../dataset/dataset.schema';
-import { User } from 'shared/dtos/user.dto';
+import { User } from '../user/user.schema';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');

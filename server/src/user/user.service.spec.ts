@@ -15,7 +15,8 @@ const testUsers: User[] = [
       projectAdmin: new Map<string, boolean>(),
       studyContributor: new Map<string, boolean>(),
       studyVisible: new Map<string, boolean>()
-    }
+    },
+    organization: '1'
   },
   {
     _id: '2',
@@ -28,7 +29,8 @@ const testUsers: User[] = [
       projectAdmin: new Map<string, boolean>(),
       studyContributor: new Map<string, boolean>(),
       studyVisible: new Map<string, boolean>()
-    }
+    },
+    organization: '1'
   }
 ];
 

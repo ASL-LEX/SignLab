@@ -31,7 +31,7 @@ const RolesSchema = SchemaFactory.createForClass(Roles);
 
 @Schema()
 @ObjectType()
-export class User implements dto.User {
+export class User {
   @Field(() => ID)
   _id: string;
 

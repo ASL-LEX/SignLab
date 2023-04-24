@@ -3,7 +3,6 @@ import mongoose, { Document } from 'mongoose';
 import { EntryStudy } from '../entrystudy/entrystudy.schema';
 import { Study } from '../study/study.schema';
 import { User } from '../user/user.schema';
-import * as dto from 'shared/dtos/userstudy.dto';
 
 /**
  * A `UserStudy` is used to represent information on a given user in relation
@@ -11,7 +10,7 @@ import * as dto from 'shared/dtos/userstudy.dto';
  * complete and if the user has access to tag for this given study.
  */
 @Schema()
-export class UserStudy implements dto.UserStudy {
+export class UserStudy {
   /** MongoDB assigned ID */
   _id?: string;
 
