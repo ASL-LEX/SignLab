@@ -14,8 +14,9 @@ import { OwnerGuard } from './owner.guard';
 import { ProjectGuard } from './project.guard';
 import { StudyGuard } from './study.guard';
 import { StudyModule } from '../study/study.module';
-import { AuthResolver } from './auth.resolver';
+import { AuthResolver, UserResolver } from './auth.resolver';
 import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
@@ -32,9 +33,10 @@ import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
     ConfigModule,
     forwardRef(() => UserModule),
     forwardRef(() => UserStudyModule),
-    forwardRef(() => StudyModule)
+    forwardRef(() => StudyModule),
+    OrganizationModule
   ],
-  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard, AuthResolver, UserSignupPipe],
+  providers: [AuthService, JwtStrategy, RolesGuard, OwnerGuard, ProjectGuard, StudyGuard, AuthResolver, UserSignupPipe, UserResolver],
   exports: [AuthService, JwtStrategy]
 })
 export class AuthModule {}
