@@ -17,6 +17,7 @@ import { MaterialModule } from '../material.module';
 import { ProjectService } from './services/project.service';
 import { ProjectGuard } from './guards/project.guard';
 import { ApolloModule } from 'apollo-angular';
+import { OrganizationService } from './services/organization.service';
 
 @NgModule({
   declarations: [],
@@ -40,6 +41,7 @@ export class CoreModule {
         VideoTagUploadService,
         ProjectService,
         ProjectGuard,
+        OrganizationService,
         {
           provide: SignLabHttpClient,
           useFactory: (http: HttpClient, tokenService: TokenService) => {

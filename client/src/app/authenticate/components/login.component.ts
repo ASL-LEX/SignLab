@@ -1,20 +1,25 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { OrganizationService } from '../../core/services/organization.service';
 import { AuthService } from '../../core/services/auth.service';
+import { Organization } from '../../graphql/graphql';
 
 @Component({
   selector: 'app-login',
   template: `
     <div class="login-container">
       <mat-card class="login-card">
-        <form class="login-form" (ngSubmit)="authenticateUser()">
+        <form class="login-form" (ngSubmit)="authenticateUser()" *ngIf="(orgService.organizations | async) as organizations">
           <mat-form-field appearance="fill">
             <mat-label>Organization</mat-label>
-            <mat-select [formControl]="organization" data-cy="organizationField">
-              <mat-option>
-                ASL-LEX
+            <mat-select
+              data-cy="organizationField"
+              [(ngModel)]="organizationValue"
+              [ngModelOptions]="{standalone: true}"
+            >
+              <mat-option *ngFor="let organization of organizations" [value]="organization._id">
+                {{organization.name}}
               </mat-option>
             </mat-select>
           </mat-form-field><br />
@@ -54,7 +59,9 @@ export class LoginComponent {
   /** Field of the users password */
   pass = new FormControl('');
 
-  constructor(private authService: AuthService, private router: Router) {}
+  organizationValue = '';
+
+  constructor(private authService: AuthService, private router: Router, public orgService: OrganizationService) {}
 
   /**
    * Called when the form is submitted. Will attempt to authenticate the user
@@ -62,18 +69,24 @@ export class LoginComponent {
    */
   async authenticateUser(): Promise<void> {
     // Don't try to login if email and password are not present
-    if (!this.username.value || !this.pass.value) {
-      alert('Please enter username and password');
+    if (!this.username.value || !this.pass.value || !this.organizationValue) {
+      alert('Please enter username, password, and organization');
       return;
     }
 
     // Attempt to login
-    const user = await this.authService.authenticate(this.username.value, this.pass.value, 'TODO');
+    const user = await this.authService.authenticate(this.username.value!, this.pass.value!, this.organizationValue);
 
     if (user) {
       this.router.navigate(['/']);
     } else {
       alert('Username or password is invalid');
     }
+  }
+
+  async compareOrgs(orgA: Organization, orgB: Organization) {
+    console.log(orgA);
+    console.log(orgB);
+    return (orgA && orgB) && (orgA._id == orgB._id);
   }
 }
