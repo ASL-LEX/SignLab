@@ -1,3 +1,5 @@
+import { Organization } from './organization.dto';
+
 /**
  * Defines the format user credentials are in when attempting to login.
  */
@@ -41,7 +43,7 @@ export interface UserAvailability {
  */
 export interface User {
   _id: string;
-  organization: string;
+  organization: Organization;
   name: string;
   email: string;
   username: string;

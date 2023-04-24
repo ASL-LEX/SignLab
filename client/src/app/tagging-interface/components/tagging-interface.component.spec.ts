@@ -23,6 +23,10 @@ describe('TaggingInterface', () => {
       studyContributor: new Map<string, boolean>(),
       studyVisible: new Map<string, boolean>(),
       owner: false
+    },
+    organization: {
+      _id: '1',
+      name: 'ASL-LEX'
     }
   };
 
@@ -85,6 +89,10 @@ describe('TaggingInterface', () => {
         projectAdmin: new Map<string, boolean>(),
         studyVisible: new Map<string, boolean>(),
         owner: false
+      },
+      organization: {
+        _id: '1',
+        name: 'ASL-LEX'
       }
     },
     complete: false,
@@ -144,6 +152,10 @@ describe('TaggingInterface', () => {
         projectAdmin: new Map<string, boolean>(),
         studyVisible: new Map<string, boolean>(),
         owner: false
+      },
+      organization: {
+        _id: '1',
+        name: 'ASL-LEX'
       }
     },
     complete: false,

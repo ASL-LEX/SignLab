@@ -15,6 +15,10 @@ describe('UserService', () => {
         studyAdmin: new Map<string, boolean>(),
         studyVisible: new Map<string, boolean>()
       },
+      organization: {
+        _id: '1',
+        name: 'ASL-LEX'
+      },
       _id: '10'
     },
     {
@@ -29,7 +33,11 @@ describe('UserService', () => {
         studyVisible: new Map<string, boolean>()
       },
       username: 'test',
-      _id: '11'
+      _id: '11',
+      organization: {
+        _id: '1',
+        name: 'ASL-LEX'
+      }
     }
   ];
 

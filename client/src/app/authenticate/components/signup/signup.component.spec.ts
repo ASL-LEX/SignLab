@@ -4,12 +4,14 @@ import { AuthService } from '../../../core/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs';
 import { PasswordComplexityGQL, UserAvailableGQL } from '../../../graphql/auth/auth.generated';
+import { OrganizationService } from '../../../core/services/organization.service';
 
 describe('SignupComponent', () => {
   // Unit under test
   let signup: ComponentFixture<SignupComponent>;
   // Spy auth service
   let authSpy: jasmine.SpyObj<AuthService>;
+  let orgSpy: jasmine.SpyObj<OrganizationService>;
 
   beforeEach(fakeAsync(() => {
     // Setup signup component
@@ -33,6 +35,14 @@ describe('SignupComponent', () => {
     };
 
     authSpy = jasmine.createSpyObj('AuthService', ['signup']);
+    orgSpy = jasmine.createSpyObj('OrganizationService', [], {
+      organizations: new BehaviorSubject([
+        {
+          _id: '1',
+          name: 'ASL-LEX'
+        }
+      ])
+    });
 
     const passwordComplexityGQLSpy = jasmine.createSpyObj('PasswordComplexityGQL', ['fetch']);
     passwordComplexityGQLSpy.fetch.and.returnValue(new BehaviorSubject({ data: passwordComplexity }).asObservable());
@@ -46,7 +56,8 @@ describe('SignupComponent', () => {
       providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: PasswordComplexityGQL, useValue: passwordComplexityGQLSpy },
-        { provide: UserAvailableGQL, useValue: userAvailableGQLSpy }
+        { provide: UserAvailableGQL, useValue: userAvailableGQLSpy },
+        { provide: OrganizationService, useValue: orgSpy }
       ]
     });
 
@@ -165,6 +176,7 @@ describe('SignupComponent', () => {
     signup.componentInstance.username.setValue('bob');
     signup.componentInstance.pass.setValue('Bobby');
     signup.componentInstance.confirmPass.setValue('Bobby');
+    signup.componentInstance.organizationValue = '1';
 
     tick();
     signup.detectChanges();
