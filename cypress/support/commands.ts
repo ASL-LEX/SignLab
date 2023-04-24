@@ -36,7 +36,7 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
           }
         }`,
         variables: {
-          credentials: { username: user.username, password: user.password, organization: Cypress.env('org') },
+          credentials: { username: user.username, password: user.password, organization: window.localStorage.getItem('org') },
         }
       }
     })
