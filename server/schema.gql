@@ -2,8 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Organization {
+  _id: ID!
+  name: String!
+}
+
 type User {
   _id: ID!
+  organization: Organization!
   name: String!
   email: String!
   username: String!
@@ -69,11 +75,6 @@ type UserAvailability {
   email: Boolean!
 }
 
-type Organization {
-  _id: ID!
-  name: String!
-}
-
 type Query {
   getPasswordComplexity: PasswordComplexity!
   userAvailable(identification: UserIdentification!): UserAvailability!
@@ -88,6 +89,7 @@ type Query {
 
 input UserIdentification {
   username: String!
+  organization: ID!
   email: String!
 }
 
@@ -104,11 +106,13 @@ type Mutation {
 
 input UserCredentials {
   username: String!
+  organization: ID!
   password: String!
 }
 
 input UserSignup {
   username: String!
+  organization: ID!
   email: String!
   name: String!
   password: String!

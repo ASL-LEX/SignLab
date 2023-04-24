@@ -68,6 +68,8 @@ export class AuthService {
    * Check to see if the given username and email are available. Will return
    * availabiliy info for both username and email
    *
+   * TODO: Make sure that the organization exists
+   *
    * @return The availability of the username and email
    */
   public async availability(userId: UserIdentification): Promise<UserAvailability> {
@@ -104,6 +106,7 @@ export class AuthService {
       username: userSignup.username,
       email: userSignup.email,
       name: userSignup.name,
+      organization: userSignup.organization,
       roles: {
         owner: isOwner,
         projectAdmin: new Map<string, boolean>(),
@@ -152,7 +155,7 @@ export class AuthService {
    * Generate a token for a given user
    */
   private generateToken(user: User): string {
-    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles };
+    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles, organization: user.organization };
     return this.jwtService.sign(tokenPayload);
   }
 }

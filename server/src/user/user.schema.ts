@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import * as dto from 'shared/dtos/user.dto';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import JSON from 'graphql-type-json';
+import { Organization } from '../organization/organization.schema';
 
 @Schema()
 export class Roles {
@@ -33,6 +34,10 @@ const RolesSchema = SchemaFactory.createForClass(Roles);
 export class User implements dto.User {
   @Field(() => ID)
   _id: string;
+
+  @Prop()
+  @Field(() => Organization)
+  organization: string;
 
   @Prop()
   @Field()
