@@ -18,7 +18,7 @@ import { Organization } from '../../graphql/graphql';
               [(ngModel)]="organizationValue"
               [ngModelOptions]="{standalone: true}"
             >
-              <mat-option *ngFor="let organization of organizations" [value]="organization._id">
+              <mat-option *ngFor="let organization of organizations" [value]="organization._id" [attr.data-cy]="organization.name">
                 {{organization.name}}
               </mat-option>
             </mat-select>

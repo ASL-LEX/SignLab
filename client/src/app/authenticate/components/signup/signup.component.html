@@ -5,11 +5,11 @@
       <mat-form-field appearance="fill">
         <mat-label>Organization</mat-label>
         <mat-select
-          data-cy="organizationField"
+          data-cy="organizationFieldSignup"
           [(ngModel)]="organizationValue"
           [ngModelOptions]="{standalone: true}"
         >
-          <mat-option *ngFor="let organization of organizations" [value]="organization._id">
+          <mat-option *ngFor="let organization of organizations" [value]="organization._id" [attr.data-cy]="organization.name">
             {{organization.name}}
           </mat-option>
         </mat-select>

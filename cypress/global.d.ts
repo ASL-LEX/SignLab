@@ -26,5 +26,9 @@ declare namespace Cypress {
      * Make the default dataset
      */
     makeDefaultDataset(): Chainable<any>;
+    /**
+     * Add the default organization
+     */
+    makeDefaultOrganization(): Chainable<any>;
   }
 }
