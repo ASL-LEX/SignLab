@@ -57,7 +57,7 @@ export class LoginComponent {
     }
 
     // Attempt to login
-    const user = await this.authService.authenticate(this.username.value, this.pass.value);
+    const user = await this.authService.authenticate(this.username.value, this.pass.value, 'TODO');
 
     if (user) {
       this.router.navigate(['/']);
