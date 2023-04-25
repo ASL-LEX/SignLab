@@ -173,6 +173,8 @@ export class SignupComponent implements OnInit {
       this.organizationValue
     );
 
+    this.orgService.setOrganization(result.organization);
+
     // Run the callback for when the user has signed in
     if (this.onUserSignup) {
       this.onUserSignup(result);

@@ -16,8 +16,8 @@ mutation createProject($projectCreate: ProjectCreate!) {
   }
 }
 
-query projectExists($name: String!) {
-  projectExists(name: $name)
+query projectExists($name: String!, $organization: String!) {
+  projectExists(name: $name, organization: $organization)
 }
 
 mutation projectAdminChange($projectAdminChange: ProjectAdminChange!) {

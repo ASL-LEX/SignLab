@@ -86,6 +86,7 @@ export class LoginComponent {
     const user = await this.authService.authenticate(this.username.value!, this.pass.value!, this.organizationValue);
 
     if (user) {
+      this.orgService.setOrganization(user.organization);
       this.router.navigate(['/']);
     } else {
       alert('Username or password is invalid');
@@ -93,8 +94,6 @@ export class LoginComponent {
   }
 
   async compareOrgs(orgA: Organization, orgB: Organization) {
-    console.log(orgA);
-    console.log(orgB);
     return orgA && orgB && orgA._id == orgB._id;
   }
 }

@@ -6,7 +6,7 @@ import { Organization } from '../../graphql/graphql';
 @Injectable()
 export class OrganizationService {
   private organizationObs: BehaviorSubject<Organization[]> = new BehaviorSubject<Organization[]>([]);
-  private currentOrganizationObs: BehaviorSubject<Organization>;
+  private currentOrganizationObs: BehaviorSubject<Organization | null> = new BehaviorSubject<Organization | null>(null);
 
   constructor(private readonly getOrganizationsGQL: GetOrganizationsGQL) {
     this.getOrganizationsGQL.watch().valueChanges.subscribe((result) => {
@@ -16,5 +16,13 @@ export class OrganizationService {
 
   get organizations(): Observable<Organization[]> {
     return this.organizationObs.asObservable();
+  }
+
+  get organization(): Observable<Organization | null> {
+    return this.currentOrganizationObs.asObservable();
+  }
+
+  setOrganization(organization: Organization | null) {
+    this.currentOrganizationObs.next(organization);
   }
 }
