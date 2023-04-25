@@ -4,3 +4,10 @@ query getOrganizations {
     name
   }
 }
+
+query findOrganization($organization: String!) {
+  findOrganization(organization: $organization) {
+    _id,
+    name
+  }
+}

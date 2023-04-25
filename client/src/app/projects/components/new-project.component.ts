@@ -107,8 +107,11 @@ export class NewProjectComponent {
     this.additionalErrors = [];
   }
 
-  projectSubmit(): void {
+  async projectSubmit(): Promise<void> {
     // Attempt to make the new project
+    const organization = await firstValueFrom(this.orgService.organization);
+    if (!organization) { throw new Error('Organization not present') }
+    this.formData.organization = organization._id;
     this.projectService.createProject(this.formData).subscribe((result) => {
       if (result.errors) {
         console.debug(result.errors);

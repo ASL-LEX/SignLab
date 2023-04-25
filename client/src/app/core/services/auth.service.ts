@@ -5,6 +5,7 @@ import { Apollo } from 'apollo-angular';
 import { LoginGQL, SignupGQL } from '../../graphql/auth/auth.generated';
 import { firstValueFrom } from 'rxjs';
 import { User } from '../../graphql/graphql';
+import { OrganizationService } from './organization.service';
 
 /**
  * This handles the user level authentication logic. This exposes an interface
@@ -20,12 +21,14 @@ export class AuthService {
     private tokenService: TokenService,
     private apollo: Apollo,
     private readonly signupGQL: SignupGQL,
-    private readonly loginGQL: LoginGQL
+    private readonly loginGQL: LoginGQL,
+    orgService: OrganizationService
   ) {
     // Update stored user information in case the roles have changes
     if (this.isAuthenticated()) {
       this.signLab.get('api/users/me', { provideToken: true }).then((user: any) => {
         this.tokenService.updateUser(user);
+        orgService.setOrganization(user.organization);
       });
     }
   }

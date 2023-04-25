@@ -81,6 +81,7 @@ type Query {
   userAvailable(identification: UserIdentification!): UserAvailability!
   getOrganizations: [Organization!]!
   exists(name: String!): Boolean!
+  findOrganization(organization: String!): Organization!
   getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
   datasetExists(name: String!): Boolean!

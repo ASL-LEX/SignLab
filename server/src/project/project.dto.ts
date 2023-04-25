@@ -18,8 +18,8 @@ export class ProjectCreatePipe implements PipeTransform<ProjectCreate, Promise<P
   constructor(private readonly orgService: OrganizationService) {}
 
   async transform(value: ProjectCreate): Promise<ProjectCreate> {
-    const orgExists = await this.orgService.exists(value.organization);
-    if (!orgExists) {
+    const org = await this.orgService.findOne(value.organization);
+    if (!org) {
       throw new BadRequestException(`Organization with ID ${value.organization} does not exist`);
     }
 

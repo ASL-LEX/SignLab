@@ -1,3 +1,4 @@
+import {BadRequestException} from '@nestjs/common';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { OrganizationCreate } from './organization.dto';
 import { Organization } from './organization.schema';
@@ -15,6 +16,15 @@ export class OrganizationResolver {
   @Query(() => Boolean)
   async exists(@Args('name') name: string): Promise<boolean> {
     return this.orgService.exists(name);
+  }
+
+  @Query(() => Organization)
+  async findOrganization(@Args('organization') organization: string): Promise<Organization> {
+    const org = await this.orgService.findOne(organization);
+    if (!org) {
+      throw new BadRequestException(`Organization with id ${organization} does not exist`);
+    }
+    return org;
   }
 
   @Mutation(() => Organization)
