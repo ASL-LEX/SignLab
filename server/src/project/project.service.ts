@@ -23,12 +23,12 @@ export class ProjectService {
     return await this.projectModel.create(newProject);
   }
 
-  async findAll(): Promise<Project[]> {
-    return this.projectModel.find().exec();
+  async findAll(organization: string): Promise<Project[]> {
+    return this.projectModel.find({ organization }).exec();
   }
 
-  async findByName(name: string): Promise<Project | null> {
-    return this.projectModel.findOne({ name: name }).exec();
+  async findByName(name: string, organization: string): Promise<Project | null> {
+    return this.projectModel.findOne({ name, organization }).exec();
   }
 
   async findById(id: string): Promise<Project | null> {
@@ -47,7 +47,7 @@ export class ProjectService {
   async findByUser(user: User): Promise<Project[]> {
     // Owner can see everything
     if (user.roles.owner) {
-      return this.findAll();
+      return this.findAll(user.organization);
     }
 
     // Get the IDs of projects the user is an admin of
@@ -87,7 +87,7 @@ export class ProjectService {
     // Remove duplicates
     const uniqueIDs = [...new Set(allIDs)];
 
-    return this.projectModel.find({ _id: { $in: uniqueIDs } }).exec();
+    return this.projectModel.find({ _id: { $in: uniqueIDs }, organization: user.organization }).exec();
   }
 
   async delete(project: Project): Promise<void> {

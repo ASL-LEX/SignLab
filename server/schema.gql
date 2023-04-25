@@ -84,7 +84,7 @@ type Query {
   getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
   datasetExists(name: String!): Boolean!
-  projectExists(name: String!): Boolean!
+  projectExists(name: String!, organization: String!): Boolean!
   getProjects: [Project!]!
 }
 

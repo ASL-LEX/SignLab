@@ -24,8 +24,8 @@ export class ProjectResolver {
   }
 
   @Query(() => Boolean)
-  async projectExists(@Args('name') name: string): Promise<boolean> {
-    return (await this.projectService.findByName(name)) !== null;
+  async projectExists(@Args('name') name: string, @Args('organization') organization: string): Promise<boolean> {
+    return (await this.projectService.findByName(name, organization)) !== null;
   }
 
   // TODO: Add project admin guard once GraphQL role guards are supported
