@@ -21,7 +21,7 @@ export class Dataset {
   organization: string;
 
   /** Human readable way to idenfity the dataset, unique */
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true })
   @Field({ description: 'Human readable way to idenfity the dataset, unique' })
   name: string;
 

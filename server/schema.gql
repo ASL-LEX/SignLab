@@ -34,7 +34,6 @@ type Dataset {
   """The user who created the dataset"""
   creator: User!
   projectAccess: JSON!
-  organizaation: Organization!
 }
 
 """Projects that are part of an organization"""
@@ -84,9 +83,9 @@ type Query {
   getOrganizations: [Organization!]!
   exists(name: String!): Boolean!
   findOrganization(organization: String!): Organization!
-  getDatasets: [Dataset!]!
+  getDatasets(organization: String!): [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
-  datasetExists(name: String!): Boolean!
+  datasetExists(name: String!, organization: String!): Boolean!
   projectExists(name: String!, organization: String!): Boolean!
   getProjects: [Project!]!
 }

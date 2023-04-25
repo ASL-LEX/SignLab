@@ -12,8 +12,8 @@ export class DatasetService {
   /**
    * Get all datasets
    */
-  async findAll(): Promise<Dataset[]> {
-    return this.datasetModel.find().exec();
+  async findAll(organization: string): Promise<Dataset[]> {
+    return this.datasetModel.find({ organization }).exec();
   }
 
   /**
@@ -33,8 +33,8 @@ export class DatasetService {
   /**
    * Check to see if a dataset exists
    */
-  async exists(name: string): Promise<boolean> {
-    return (await this.datasetModel.findOne({ name }).exec()) !== null;
+  async exists(name: string, organization: string): Promise<boolean> {
+    return (await this.datasetModel.findOne({ name, organization }).exec()) !== null;
   }
 
   async getByProject(project: Project): Promise<Dataset[]> {
