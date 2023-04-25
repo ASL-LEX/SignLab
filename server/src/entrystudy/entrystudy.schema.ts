@@ -2,7 +2,6 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { Entry } from '../entry/entry.schema';
 import { Study } from '../study/study.schema';
-import * as dto from 'shared/dtos/entrystudy.dto';
 import { Tag } from '../tag/tag.schema';
 
 /**
@@ -17,7 +16,7 @@ import { Tag } from '../tag/tag.schema';
  *    study.
  */
 @Schema()
-export class EntryStudy implements dto.EntryStudy {
+export class EntryStudy {
   /** MongoDB assigned ID */
   _id?: string;
 

@@ -16,7 +16,8 @@ const testUser1: User = {
     projectAdmin: new Map<string, boolean>(),
     studyContributor: new Map<string, boolean>(),
     studyVisible: new Map<string, boolean>()
-  }
+  },
+  organization: '6446bd91d0bf2d1a98124e67'
 };
 
 const testUser2: User = {
@@ -30,7 +31,8 @@ const testUser2: User = {
     projectAdmin: new Map<string, boolean>(),
     studyContributor: new Map<string, boolean>(),
     studyVisible: new Map<string, boolean>()
-  }
+  },
+  organization: '6446bd91d0bf2d1a98124e67'
 };
 
 // Test user service

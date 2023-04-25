@@ -21,12 +21,14 @@ const testUser: User = {
     projectAdmin: new Map<string, boolean>(),
     studyContributor: new Map<string, boolean>(),
     studyVisible: new Map<string, boolean>()
-  }
+  },
+  organization: '6446bd91d0bf2d1a98124e67'
 };
 
 const testCredentials: UserCredentials = {
   username: 'bob',
-  password: 'bobby'
+  password: 'bobby',
+  organization: '6446bd91d0bf2d1a98124e67'
 };
 
 // Test interface for user storage
@@ -150,7 +152,8 @@ describe('AuthService', () => {
       try {
         await authService.authenticate({
           username: 'sam',
-          password: 'sammy'
+          password: 'sammy',
+          organization: '1'
         });
 
         // Should not get here
@@ -162,7 +165,8 @@ describe('AuthService', () => {
       try {
         await authService.authenticate({
           username: testUser.username,
-          password: 'sammy'
+          password: 'sammy',
+          organization: '1'
         });
 
         // Should not get here
@@ -173,7 +177,8 @@ describe('AuthService', () => {
     it('should authenticate a user with a valid username + password', async () => {
       const result: any = await authService.authenticate({
         username: testUser.username,
-        password: testCredentials.password
+        password: testCredentials.password,
+        organization: '1'
       });
 
       expect(result.token).toEqual('signed');
@@ -185,7 +190,8 @@ describe('AuthService', () => {
     it('should handle non-available username and non-available email', async () => {
       const result = await authService.availability({
         username: testUser.username,
-        email: testUser.email
+        email: testUser.email,
+        organization: '1'
       });
 
       expect(result).toEqual({ username: false, email: false });
@@ -194,7 +200,8 @@ describe('AuthService', () => {
     it('should handle non-available username and available email', async () => {
       const result = await authService.availability({
         username: testUser.username,
-        email: 'sam@bu.edu'
+        email: 'sam@bu.edu',
+        organization: '1'
       });
 
       expect(result).toEqual({ username: false, email: true });
@@ -203,7 +210,8 @@ describe('AuthService', () => {
     it('should handle available username and non-available email', async () => {
       const result = await authService.availability({
         username: 'sam',
-        email: testUser.email
+        email: testUser.email,
+        organization: '1'
       });
 
       expect(result).toEqual({ username: true, email: false });
@@ -212,7 +220,8 @@ describe('AuthService', () => {
     it('should handle available username and available email', async () => {
       const result = await authService.availability({
         username: 'sam',
-        email: 'sam@bu.edu'
+        email: 'sam@bu.edu',
+        organization: '1'
       });
 
       expect(result).toEqual({ username: true, email: true });

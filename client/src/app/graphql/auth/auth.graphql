@@ -18,6 +18,10 @@ mutation login($credentials: UserCredentials!) {
       email,
       name,
       roles,
+      organization {
+        _id,
+        name
+      }
     },
     token
   }
@@ -31,6 +35,10 @@ mutation signup($credentials: UserSignup!) {
       email,
       name,
       roles,
+      organization {
+        _id,
+        name
+      }
     },
     token
   }

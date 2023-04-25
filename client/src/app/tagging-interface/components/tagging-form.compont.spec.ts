@@ -16,6 +16,10 @@ describe('TaggingForm', () => {
       projectAdmin: new Map<string, boolean>(),
       studyAdmin: new Map<string, boolean>(),
       studyVisible: new Map<string, boolean>()
+    },
+    organization: {
+      _id: '1',
+      name: 'ASL-LEX'
     }
   };
 
@@ -78,6 +82,10 @@ describe('TaggingForm', () => {
         projectAdmin: new Map<string, boolean>(),
         studyAdmin: new Map<string, boolean>(),
         studyVisible: new Map<string, boolean>()
+      },
+      organization: {
+        _id: '1',
+        name: 'ASL-LEX'
       }
     },
     complete: false,

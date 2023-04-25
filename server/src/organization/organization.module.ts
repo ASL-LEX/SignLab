@@ -6,6 +6,7 @@ import { Organization, OrganizationSchema } from './organization.schema';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }])],
-  providers: [OrganizationService, OrganizationResolver]
+  providers: [OrganizationService, OrganizationResolver],
+  exports: [OrganizationService]
 })
 export class OrganizationModule {}

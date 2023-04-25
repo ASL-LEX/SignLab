@@ -2,8 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Organization {
+  _id: ID!
+  name: String!
+}
+
 type User {
   _id: ID!
+  organization: Organization!
   name: String!
   email: String!
   username: String!
@@ -69,49 +75,51 @@ type UserAvailability {
   email: Boolean!
 }
 
-type Organization {
-  _id: ID!
-  name: String!
-}
-
 type Query {
   getPasswordComplexity: PasswordComplexity!
   userAvailable(identification: UserIdentification!): UserAvailability!
+  getOrganizations: [Organization!]!
+  exists(name: String!): Boolean!
   getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
   datasetExists(name: String!): Boolean!
   projectExists(name: String!): Boolean!
   getProjects: [Project!]!
-  getOrganizations: [Organization!]!
-  exists(name: String!): Boolean!
 }
 
 input UserIdentification {
   username: String!
+  organization: ID!
   email: String!
 }
 
 type Mutation {
   login(credentials: UserCredentials!): AuthResponse!
   signup(credentials: UserSignup!): AuthResponse!
+  createOrganization(orgCreate: OrganizationCreate!): Organization!
   createDataset(datasetCreate: DatasetCreate!): Dataset!
   changeProjectAccess(projectAccessChange: ProjectAccessChange!): Boolean!
   createProject(projectCreate: ProjectCreate!): Project!
   projectAdminChange(projectAdminChange: ProjectAdminChange!): Boolean!
   deleteProject(projectID: ID!): Boolean!
-  createOrganization(orgCreate: OrganizationCreate!): Organization!
 }
 
 input UserCredentials {
   username: String!
+  organization: ID!
   password: String!
 }
 
 input UserSignup {
   username: String!
+  organization: ID!
   email: String!
   name: String!
   password: String!
+}
+
+input OrganizationCreate {
+  name: String!
 }
 
 input DatasetCreate {
@@ -153,8 +161,4 @@ input ProjectAdminChange {
 
   """Whether the user should have admin access to the project"""
   hasAdminAccess: Boolean!
-}
-
-input OrganizationCreate {
-  name: String!
 }

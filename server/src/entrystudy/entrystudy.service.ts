@@ -4,9 +4,9 @@ import { Model } from 'mongoose';
 import { Study } from '../study/study.schema';
 import { EntryStudy, EntryStudyDocument } from './entrystudy.schema';
 import { Entry } from '../entry/entry.schema';
-import { Dataset } from 'shared/dtos/dataset.dto';
-import { User } from 'shared/dtos/user.dto';
-import { Tag } from 'shared/dtos/tag.dto';
+import { Dataset } from '../dataset/dataset.schema';
+import { User } from '../user/user.schema';
+import { Tag } from '../tag/tag.schema';
 
 @Injectable()
 export class EntryStudyService {

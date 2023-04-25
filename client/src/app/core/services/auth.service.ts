@@ -61,11 +61,11 @@ export class AuthService {
    * @param password The password to authenticate the user with
    * @return The user ID on success, null otherwise
    */
-  public async authenticate(username: string, password: string): Promise<User | null> {
-    const credentials = { username: username, password: password };
+  public async authenticate(username: string, password: string, organization: string): Promise<User | null> {
+    const credentials = { username, password, organization };
 
     try {
-      const response = await firstValueFrom(this.loginGQL.mutate({ credentials: credentials }));
+      const response = await firstValueFrom(this.loginGQL.mutate({ credentials }));
 
       this.tokenService.storeAuthInformation(response.data!.login);
 
@@ -91,15 +91,23 @@ export class AuthService {
    * @param email The email of the new user
    * @param username The username of the new user
    * @param password The password the user will use
+   * @param organization The organization to login to
    * @return The newly created user
    */
-  public async signup(name: string, email: string, username: string, password: string): Promise<User> {
+  public async signup(
+    name: string,
+    email: string,
+    username: string,
+    password: string,
+    organization: string
+  ): Promise<User> {
     const request = {
       credentials: {
         name: name,
         email: email,
         username: username,
-        password: password
+        password: password,
+        organization: organization
       }
     };
 

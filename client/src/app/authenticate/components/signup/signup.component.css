@@ -69,3 +69,12 @@ input {
 #browserCompatibility a {
   color: #89dbb4;
 }
+
+mat-form-field {
+  width: 70%;
+  margin: 1rem;
+}
+
+mat-select {
+  width: 100%;
+}

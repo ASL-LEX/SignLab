@@ -3,10 +3,9 @@ import mongoose, { Document } from 'mongoose';
 import type { Entry } from '../entry/entry.schema';
 import { Study } from '../study/study.schema';
 import { User } from '../user/user.schema';
-import * as dto from 'shared/dtos/tag.dto';
 
 @Schema()
-export class Tag implements dto.Tag {
+export class Tag {
   /** MongoDB generated ID */
   _id: string;
 

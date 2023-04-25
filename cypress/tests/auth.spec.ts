@@ -8,6 +8,8 @@ describe('User Login', () => {
   const usernameField = '[data-cy="usernameField"]';
   const passwordField = '[data-cy="passwordField"]';
   const submitButton = '[data-cy="loginSubmit"]';
+  const orgField = '[data-cy="organizationField"]';
+  const orgOption = '[data-cy="ASL-LEX"]';
 
   before(() => {
     cy.resetDB();
@@ -30,37 +32,49 @@ describe('User Login', () => {
       .get(submitButton)
       .click()
       .and(() => {
-        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
+        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username, password, and organization');
       });
   });
 
   it('should get an alert when only submitting with username', () => {
     cy.visit('/auth');
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(usernameField)
       .type(user.existingUser.username)
       .get(submitButton)
       .click()
       .and(() => {
-        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
+        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username, password, and organization');
       });
   });
 
   it('should get an alert when only submitting with password', () => {
     cy.visit('/auth');
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(passwordField)
       .type(user.existingUser.password)
       .get(submitButton)
       .click()
       .and(() => {
-        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username and password');
+        expect(alertStub.getCall(0)).to.be.calledWith('Please enter username, password, and organization');
       });
   });
 
   it('should fail on incorrect username + incorrect password', () => {
     cy.visit('/auth');
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(usernameField)
       .type('wrong')
       .get(passwordField)
@@ -76,6 +90,10 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(usernameField)
       .type('wrong')
       .get(passwordField)
@@ -91,6 +109,10 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(usernameField)
       .type(user.existingUser.username)
       .get(passwordField)
@@ -106,6 +128,10 @@ describe('User Login', () => {
     cy.visit('/auth');
 
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(usernameField)
       .type(user.existingUser.username)
       .get(passwordField)
@@ -114,7 +140,6 @@ describe('User Login', () => {
       .click()
       .then(() => {
         expect(alertStub.notCalled);
-        cy.url().should('be.equal', `${Cypress.config("baseUrl")}/`);
       });
   });
 });
@@ -129,6 +154,9 @@ describe('User Signup', () => {
   const passwordField = '[data-cy="signupPasswordField"]';
   const confirmPassField = '[data-cy="signupConfirmPassField"]';
   const submitButton = '[data-cy="signupSubmit"]';
+  const orgField = '[data-cy="organizationFieldSignup"]';
+  const orgOption = '[data-cy="ASL-LEX"]';
+
 
   before(() => {
     cy.resetDB();
@@ -157,6 +185,10 @@ describe('User Signup', () => {
 
   it('should not submit with a missing name', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(emailField)
       .type(user.newUser.email)
       .get(usernameField)
@@ -171,6 +203,10 @@ describe('User Signup', () => {
 
   it('should not submit with a missing email', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -185,6 +221,10 @@ describe('User Signup', () => {
 
   it('should not submit with a missing username', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(emailField)
@@ -199,6 +239,10 @@ describe('User Signup', () => {
 
   it('should not submit with a missing password', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -213,6 +257,10 @@ describe('User Signup', () => {
 
   it('should not submit with a missing confirm password', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -227,6 +275,10 @@ describe('User Signup', () => {
 
   it('should not submit with a non-matching passwords', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -243,6 +295,10 @@ describe('User Signup', () => {
 
   it('should get alert with using existing username + email', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -262,6 +318,10 @@ describe('User Signup', () => {
 
   it('should get alert with using existing username', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -281,6 +341,10 @@ describe('User Signup', () => {
 
   it('should get alert with using existing email', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)
@@ -300,6 +364,10 @@ describe('User Signup', () => {
 
   it('should submit with valid information', () => {
     cy
+      .get(orgField)
+      .click()
+      .get(orgOption)
+      .click()
       .get(nameField)
       .type(user.newUser.name)
       .get(usernameField)

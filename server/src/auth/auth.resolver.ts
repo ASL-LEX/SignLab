@@ -11,6 +11,9 @@ import { UserAvailability } from './dtos/user-availability.dto';
 import { UserSignup } from './dtos/user-signup.dto';
 import { UserSignupPipe } from './pipes/user-signup-pipe.dto';
 import { UserStudyService } from '../userstudy/userstudy.service';
+import { OrganizationService } from '../organization/organization.service';
+import { Organization } from 'src/organization/organization.schema';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => AuthResponse)
 export class AuthResolver {
@@ -55,6 +58,21 @@ export class AuthResolver {
     const result = await this.userService.findOne({ _id: authResponse.user });
     if (!result) {
       throw new Error(`User with id ${authResponse.user} not found`);
+    }
+
+    return result;
+  }
+}
+
+@Resolver(() => User)
+export class UserResolver {
+  constructor(private readonly orgService: OrganizationService) {}
+
+  @ResolveField(() => Organization)
+  async organization(@Parent() user: User): Promise<Organization> {
+    const result = await this.orgService.findOne(user.organization);
+    if (!result) {
+      throw new BadRequestException(`No organization found with id ${user.organization}`);
     }
 
     return result;

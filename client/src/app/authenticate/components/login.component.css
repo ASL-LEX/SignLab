@@ -57,6 +57,15 @@
   color: black;
 }
 
+mat-form-field {
+  width: 70%;
+  margin: 1rem;
+}
+
+mat-select {
+  width: 100%;
+}
+
 input {
   width: 70%;
   margin: 1rem;

@@ -12,6 +12,10 @@ export class OrganizationService {
     return this.orgModel.find();
   }
 
+  async findOne(id: string): Promise<Organization | null> {
+    return this.orgModel.findOne({ _id: id });
+  }
+
   /** Create a new organization. The name must be unique */
   async create(orgCreate: OrganizationCreate): Promise<Organization> {
     if (await this.exists(orgCreate.name)) {

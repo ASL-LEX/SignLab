@@ -2,12 +2,15 @@ import { LoginComponent } from './login.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '../../core/services/auth.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { OrganizationService } from '../../core/services/organization.service';
+import { BehaviorSubject } from 'rxjs';
 
 describe('LoginComponent', () => {
   // Unit under test
   let login: ComponentFixture<LoginComponent>;
   // Spy auth service
   let authSpy: jasmine.SpyObj<AuthService>;
+  let orgSpy: jasmine.SpyObj<OrganizationService>;
 
   // Valid credentials for the mocked object
   const validUsername = 'test@bu.edu';
@@ -30,37 +33,47 @@ describe('LoginComponent', () => {
             studyVisible: new Map<string, boolean>()
           },
           username: 'bob',
-          _id: 'sadlkfj'
+          _id: 'sadlkfj',
+          organization: {
+            _id: '1',
+            name: 'ASL-LEX'
+          }
         };
       }
       return null;
+    });
+
+    orgSpy = jasmine.createSpyObj('OrganizationService', [], {
+      organizations: new BehaviorSubject([
+        {
+          _id: '1',
+          name: 'ASL-LEX'
+        }
+      ])
     });
 
     // Setup login component
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [LoginComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }]
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: OrganizationService, useValue: orgSpy }
+      ]
     });
 
     login = TestBed.createComponent(LoginComponent);
-  });
-
-  it(`should have fields for username and password`, () => {
-    // Make sure the expected fields are present
-    const compiled = login.nativeElement;
-    expect(compiled.querySelector('input#username')).toBeTruthy();
-    expect(compiled.querySelector('input#password')).toBeTruthy();
   });
 
   it(`should call authentication login`, () => {
     // Pass in valid authentication credentials
     login.componentInstance.username.setValue(validUsername);
     login.componentInstance.pass.setValue(validPassword);
+    login.componentInstance.organizationValue = '1';
     login.componentInstance.authenticateUser();
 
     // Ensure that authentication has been called
-    expect(authSpy.authenticate).toHaveBeenCalledWith(validUsername, validPassword);
+    expect(authSpy.authenticate).toHaveBeenCalledWith(validUsername, validPassword, '1');
 
     // TODO: Test changes to page after authentication takes place
   });

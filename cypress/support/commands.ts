@@ -14,6 +14,7 @@ Cypress.Commands.add('resetDB', () => {
   cy.deleteMany({}, { collection: 'userstudies' });
   cy.deleteMany({}, { collection: 'usercredentials' });
   cy.deleteMany({}, { collection: 'datasets' });
+  cy.deleteMany({}, { collection: 'organizations' })
 });
 
 Cypress.Commands.add('login', (user: { username: string, password: string }) => {
@@ -35,7 +36,7 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
           }
         }`,
         variables: {
-          credentials: { username: user.username, password: user.password },
+          credentials: { username: user.username, password: user.password, organization: window.localStorage.getItem('org') },
         }
       }
     })
@@ -43,6 +44,27 @@ Cypress.Commands.add('login', (user: { username: string, password: string }) => 
       Cypress.env('token', entry.body.token);
       const auth = { token: entry.body.data.login.token, user: entry.body.data.login.user };
       window.localStorage.setItem('SIGNLAB_AUTH_INFO', JSON.stringify(auth));
+    });
+});
+
+Cypress.Commands.add('makeDefaultOrganization', () => {
+  cy
+    .request({
+      method: 'POST',
+      url: 'graphql',
+      body: {
+        query: `mutation createOrganization($orgCreate: OrganizationCreate!) {
+          createOrganization(orgCreate: $orgCreate) {
+            _id,
+            name
+          }
+        }`,
+        variables: {
+          orgCreate: { name: 'ASL-LEX' }
+        }
+      }
+    }).then(org => {
+      window.localStorage.setItem('org', org.body.data.createOrganization._id)
     });
 });
 
@@ -56,6 +78,7 @@ Cypress.Commands.add('firstTimeSetup', () => {
 
   // Make the initial user and a non-admin user
   cy
+    .makeDefaultOrganization()
     .signup(user.existingUser)
     .signup(user.nonAdmin);
 
@@ -63,6 +86,8 @@ Cypress.Commands.add('firstTimeSetup', () => {
 });
 
 Cypress.Commands.add('signup', (user: UserSignup) => {
+  const credentials: UserSignup = { ...user };
+  credentials.organization = window.localStorage.getItem('org');
   cy
     .request({
       method: 'POST',
@@ -80,10 +105,9 @@ Cypress.Commands.add('signup', (user: UserSignup) => {
           }
         }`,
         variables: {
-          credentials: user
+          credentials: credentials
         }
-      },
-
+      }
     })
 });
 

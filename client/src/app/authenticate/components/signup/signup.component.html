@@ -1,6 +1,19 @@
 <div class = "signup-container">
   <mat-card class="signup-card">
-    <form [formGroup]="signupForm" class="signup-form" (ngSubmit)="signup()">
+    <form [formGroup]="signupForm" class="signup-form" (ngSubmit)="signup()" *ngIf="(orgService.organizations | async) as organizations">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Organization</mat-label>
+        <mat-select
+          data-cy="organizationFieldSignup"
+          [(ngModel)]="organizationValue"
+          [ngModelOptions]="{standalone: true}"
+        >
+          <mat-option *ngFor="let organization of organizations" [value]="organization._id" [attr.data-cy]="organization.name">
+            {{organization.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field><br />
 
       <!-- Name field -->
       <label for="name" class="label">Name</label><br>

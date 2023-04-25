@@ -1,5 +1,5 @@
 import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { Entry } from 'shared/dtos/entry.dto';
+import { Entry } from '../../entry/entry.schema';
 import { EntryService } from '../../entry/entry.service';
 
 @Injectable()

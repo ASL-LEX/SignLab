@@ -8,7 +8,11 @@ query getDatasets {
       name,
       email,
       username,
-      roles
+      roles,
+      organization {
+        _id,
+        name
+      }
     },
     projectAccess
   }
@@ -24,7 +28,11 @@ query getDatasetsByProject($project: ID!) {
       name,
       email,
       username,
-      roles
+      roles,
+      organization {
+        _id,
+        name
+      }
     },
     projectAccess
   }
@@ -44,7 +52,11 @@ mutation createDataset($datasetCreate: DatasetCreate!) {
       name,
       email,
       username,
-      roles
+      roles,
+      organization {
+        _id,
+        name
+      }
     },
   }
 }

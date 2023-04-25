@@ -44,11 +44,13 @@ export class AuthService {
     // Attempt to get the user from the database
     const userCredentials = await this.userCredentialsModel
       .findOne({
-        username: credentials.username
+        username: credentials.username,
+        organization: credentials.organization
       })
       .exec();
     const user = await this.userService.findOne({
-      username: credentials.username
+      username: credentials.username,
+      organization: credentials.organization
     });
 
     // If a user is not found with that username, return null
@@ -68,19 +70,21 @@ export class AuthService {
    * Check to see if the given username and email are available. Will return
    * availabiliy info for both username and email
    *
+   * TODO: Make sure that the organization exists
+   *
    * @return The availability of the username and email
    */
   public async availability(userId: UserIdentification): Promise<UserAvailability> {
     const availability = { username: true, email: true };
 
     // Check username availability
-    let user = await this.userService.findOne({ username: userId.username });
+    let user = await this.userService.findOne({ username: userId.username, organization: userId.organization });
     if (user) {
       availability.username = false;
     }
 
     // Check email availability
-    user = await this.userService.findOne({ email: userId.email });
+    user = await this.userService.findOne({ email: userId.email, organization: userId.organization });
     if (user) {
       availability.email = false;
     }
@@ -104,6 +108,7 @@ export class AuthService {
       username: userSignup.username,
       email: userSignup.email,
       name: userSignup.name,
+      organization: userSignup.organization,
       roles: {
         owner: isOwner,
         projectAdmin: new Map<string, boolean>(),
@@ -115,7 +120,8 @@ export class AuthService {
 
     const userCredentials = {
       username: userSignup.username,
-      password: hashedPassword
+      password: hashedPassword,
+      organization: userSignup.organization
     };
 
     const newUser = await this.userService.create(user);
@@ -152,7 +158,7 @@ export class AuthService {
    * Generate a token for a given user
    */
   private generateToken(user: User): string {
-    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles };
+    const tokenPayload: TokenPayload = { _id: user._id, roles: user.roles, organization: user.organization };
     return this.jwtService.sign(tokenPayload);
   }
 }
