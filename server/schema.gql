@@ -23,6 +23,7 @@ scalar JSON
 
 type Dataset {
   id: ID!
+  organization: Organization!
 
   """Human readable way to idenfity the dataset, unique"""
   name: String!
@@ -33,6 +34,7 @@ type Dataset {
   """The user who created the dataset"""
   creator: User!
   projectAccess: JSON!
+  organizaation: Organization!
 }
 
 """Projects that are part of an organization"""
@@ -133,6 +135,7 @@ input DatasetCreate {
 
   """The ID of the user who is creating the dataset"""
   creatorID: ID!
+  organization: ID!
 }
 
 input ProjectAccessChange {

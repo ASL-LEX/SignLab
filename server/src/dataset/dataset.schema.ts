@@ -3,6 +3,7 @@ import { User } from '../user/user.schema';
 import mongoose from 'mongoose';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import JSON from 'graphql-type-json';
+import { Organization } from '../organization/organization.schema';
 
 /**
  * Schema for the dataset collection
@@ -13,6 +14,11 @@ export class Dataset {
   /** MongoDB assigned ID */
   @Field(() => ID, { name: 'id' })
   _id: string;
+
+  /** The organization the dataset is a part of */
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  @Field(() => Organization)
+  organization: string;
 
   /** Human readable way to idenfity the dataset, unique */
   @Prop({ unique: true, required: true })

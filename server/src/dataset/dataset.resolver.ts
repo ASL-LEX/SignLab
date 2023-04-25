@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ResolveField, ID } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, ID, Parent } from '@nestjs/graphql';
 import { DatasetService } from './dataset.service';
 import { Dataset } from './dataset.schema';
 import {
@@ -14,10 +14,15 @@ import mongoose from 'mongoose';
 import { UserPipe } from '../shared/pipes/user.pipe';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { Project } from '../project/project.schema';
+import { Organization } from '../organization/organization.schema';
+import { OrganizationService } from '../organization/organization.service';
+import {BadRequestException} from '@nestjs/common';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(private readonly datasetService: DatasetService, private readonly userPipe: UserPipe) {}
+  constructor(private readonly datasetService: DatasetService,
+              private readonly userPipe: UserPipe,
+              private readonly orgService: OrganizationService) {}
 
   // TODO: Add owner only guard
   @Query(() => [Dataset])
@@ -59,5 +64,14 @@ export class DatasetResolver {
       return this.userPipe.transform(dataset.creator.toString());
     }
     return dataset.creator;
+  }
+
+  @ResolveField(() => Organization)
+  async organizaation(@Parent() dataset: Dataset): Promise<Organization> {
+    const result = await this.orgService.findOne(dataset.organization);
+    if (!result) {
+      throw new BadRequestException(`Organaization with id ${dataset.organization} does not exist`);
+    }
+    return result;
   }
 }
