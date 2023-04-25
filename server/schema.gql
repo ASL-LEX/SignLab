@@ -39,6 +39,7 @@ type Dataset {
 type Project {
   """unique identifier for the project"""
   _id: ID!
+  organization: Organization!
 
   """name of the project, unique in an organization"""
   name: String!
@@ -150,6 +151,7 @@ input ProjectCreate {
 
   """description of the project"""
   description: String!
+  organization: String!
 }
 
 input ProjectAdminChange {
