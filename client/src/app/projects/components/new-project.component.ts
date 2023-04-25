@@ -4,6 +4,7 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import { firstValueFrom } from 'rxjs';
 import { ProjectService } from '../../core/services/project.service';
 import { ProjectExistsGQL } from '../../graphql/projects/projects.generated';
+import { OrganizationService } from '../../core/services/organization.service';
 
 @Component({
   selector: 'new-project',
@@ -63,7 +64,8 @@ export class NewProjectComponent {
   constructor(
     private readonly projectService: ProjectService,
     private readonly router: Router,
-    private readonly projectExistsGQL: ProjectExistsGQL
+    private readonly projectExistsGQL: ProjectExistsGQL,
+    private readonly orgService: OrganizationService
   ) {}
 
   fieldChange(data: any) {
@@ -75,7 +77,13 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      const projectExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.formData.name }));
+      const organization = await firstValueFrom(this.orgService.organization);
+      if (!organization) {
+        throw new Error('Organization not present');
+      }
+      const projectExists = await firstValueFrom(
+        this.projectExistsGQL.fetch({ name: this.formData.name, organization: organization._id })
+      );
       if (projectExists.data.projectExists) {
         this.addProjectExistsError();
       } else {
@@ -101,8 +109,13 @@ export class NewProjectComponent {
     this.additionalErrors = [];
   }
 
-  projectSubmit(): void {
+  async projectSubmit(): Promise<void> {
     // Attempt to make the new project
+    const organization = await firstValueFrom(this.orgService.organization);
+    if (!organization) {
+      throw new Error('Organization not present');
+    }
+    this.formData.organization = organization._id;
     this.projectService.createProject(this.formData).subscribe((result) => {
       if (result.errors) {
         console.debug(result.errors);

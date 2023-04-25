@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
-import { Study } from 'shared/dtos/study.dto';
+import { Study } from '../study/study.schema';
 import { User, UserDocument } from './user.schema';
 import { ProjectAdminChangeFull } from '../project/project.dto';
 import { Project } from '../project/project.schema';

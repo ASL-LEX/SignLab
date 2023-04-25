@@ -6,8 +6,9 @@ import { Project, ProjectSchema } from './project.schema';
 import { ProjectService } from './project.service';
 import { ProjectResolver } from './project.resolver';
 import { SharedModule } from '../shared/shared.module';
-import { ProjectChangePipe } from './project.dto';
+import { ProjectChangePipe, ProjectCreatePipe } from './project.dto';
 import { StudyModule } from '../study/study.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
@@ -15,9 +16,10 @@ import { StudyModule } from '../study/study.module';
     forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
     forwardRef(() => SharedModule),
-    forwardRef(() => StudyModule)
+    forwardRef(() => StudyModule),
+    OrganizationModule
   ],
-  providers: [ProjectService, ProjectResolver, ProjectChangePipe],
+  providers: [ProjectService, ProjectResolver, ProjectChangePipe, ProjectCreatePipe],
   exports: [ProjectService]
 })
 export class ProjectModule {}

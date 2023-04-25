@@ -3,38 +3,27 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Project, ProjectCreate } from '../../graphql/graphql';
 import {
   GetProjectsGQL,
-  GetProjectsQuery,
-  GetProjectsQueryVariables,
   CreateProjectGQL,
   CreateProjectMutation,
   DeleteProjectGQL,
   DeleteProjectMutation
 } from '../../graphql/projects/projects.generated';
-import { MutationResult, QueryRef } from 'apollo-angular';
+import { MutationResult } from 'apollo-angular';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProjectService {
   /** The available projects */
   private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
-  /** The query to get the project list, used for refetching */
-  private readonly projectQuery: QueryRef<GetProjectsQuery, GetProjectsQueryVariables>;
   /** The actively selected project */
   private activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
 
   constructor(
-    projectsGQL: GetProjectsGQL,
+    private readonly projectsGQL: GetProjectsGQL,
     private readonly createProjectGQL: CreateProjectGQL,
     private readonly deleteProjectGQL: DeleteProjectGQL
   ) {
-    // Subscribe to the project query
-    this.projectQuery = projectsGQL.watch({}, { errorPolicy: 'all' });
-    this.projectQuery.valueChanges.subscribe((result) => {
-      if (result.errors) {
-        this.projectsObs.next([]);
-        return;
-      }
-      this.projectsObs.next(result.data.getProjects);
-    });
+    this.updateProjectList();
   }
 
   get projects(): Observable<Project[]> {
@@ -61,17 +50,21 @@ export class ProjectService {
     return this.activeProjectObs.value != null;
   }
 
-  public updateProjectList(): void {
-    this.projectQuery.refetch().then((value) => {
-      this.setActiveProject(value.data.getProjects[0] || null);
-    });
-  }
-
   public createProject(project: ProjectCreate): Observable<MutationResult<CreateProjectMutation>> {
     return this.createProjectGQL.mutate({ projectCreate: project });
   }
 
   public deleteProject(project: Project): Observable<MutationResult<DeleteProjectMutation>> {
     return this.deleteProjectGQL.mutate({ projectID: project._id });
+  }
+
+  public async updateProjectList() {
+    const projects = await firstValueFrom(this.projectsGQL.fetch());
+    if (projects.errors) {
+      this.projectsObs.next([]);
+      return;
+    }
+    this.projectsObs.next(projects.data.getProjects);
+    this.setActiveProject(projects.data.getProjects[0] || null);
   }
 }

@@ -39,6 +39,7 @@ type Dataset {
 type Project {
   """unique identifier for the project"""
   _id: ID!
+  organization: Organization!
 
   """name of the project, unique in an organization"""
   name: String!
@@ -80,10 +81,11 @@ type Query {
   userAvailable(identification: UserIdentification!): UserAvailability!
   getOrganizations: [Organization!]!
   exists(name: String!): Boolean!
+  findOrganization(organization: String!): Organization!
   getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
   datasetExists(name: String!): Boolean!
-  projectExists(name: String!): Boolean!
+  projectExists(name: String!, organization: String!): Boolean!
   getProjects: [Project!]!
 }
 
@@ -150,6 +152,7 @@ input ProjectCreate {
 
   """description of the project"""
   description: String!
+  organization: String!
 }
 
 input ProjectAdminChange {

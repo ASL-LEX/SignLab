@@ -39,6 +39,8 @@ describe('User Login', () => {
   it('should get an alert when only submitting with username', () => {
     cy.visit('/auth');
     cy
+      .resetDB()
+      .firstTimeSetup()
       .get(orgField)
       .click()
       .get(orgOption)
@@ -71,6 +73,8 @@ describe('User Login', () => {
   it('should fail on incorrect username + incorrect password', () => {
     cy.visit('/auth');
     cy
+      .resetDB()
+      .firstTimeSetup()
       .get(orgField)
       .click()
       .get(orgOption)

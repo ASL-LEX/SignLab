@@ -114,6 +114,7 @@ jobs:
         uses: cypress-io/github-action@v4.2.0
         with:
           start: npm run start:ci
+          browser: chrome
         env:
           MONGO_URI: mongodb://localhost:27017/signlab-test
 
