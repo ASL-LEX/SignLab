@@ -81,7 +81,9 @@ export class NewProjectComponent {
       if (!organization) {
         throw new Error('Organization not present');
       }
-      const projectExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.formData.name, organization: organization._id }));
+      const projectExists = await firstValueFrom(
+        this.projectExistsGQL.fetch({ name: this.formData.name, organization: organization._id })
+      );
       if (projectExists.data.projectExists) {
         this.addProjectExistsError();
       } else {
@@ -110,7 +112,9 @@ export class NewProjectComponent {
   async projectSubmit(): Promise<void> {
     // Attempt to make the new project
     const organization = await firstValueFrom(this.orgService.organization);
-    if (!organization) { throw new Error('Organization not present') }
+    if (!organization) {
+      throw new Error('Organization not present');
+    }
     this.formData.organization = organization._id;
     this.projectService.createProject(this.formData).subscribe((result) => {
       if (result.errors) {

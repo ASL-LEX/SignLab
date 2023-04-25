@@ -4,7 +4,7 @@ import { Project } from './project.schema';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { UserPipe } from '../shared/pipes/user.pipe';
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import {OrganizationService} from 'src/organization/organization.service';
+import { OrganizationService } from 'src/organization/organization.service';
 
 @InputType()
 export class ProjectCreate extends OmitType(Project, ['_id', 'created', 'organization'] as const, InputType) {

@@ -21,7 +21,7 @@ export class ProjectService {
   constructor(
     private readonly projectsGQL: GetProjectsGQL,
     private readonly createProjectGQL: CreateProjectGQL,
-    private readonly deleteProjectGQL: DeleteProjectGQL,
+    private readonly deleteProjectGQL: DeleteProjectGQL
   ) {
     this.updateProjectList();
   }

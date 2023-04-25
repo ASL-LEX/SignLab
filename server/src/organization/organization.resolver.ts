@@ -1,4 +1,4 @@
-import {BadRequestException} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { OrganizationCreate } from './organization.dto';
 import { Organization } from './organization.schema';

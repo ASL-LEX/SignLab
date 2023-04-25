@@ -1,6 +1,12 @@
 import { Resolver, Query, Mutation, Args, ID, ResolveField, Parent } from '@nestjs/graphql';
 import { UserService } from '../user/user.service';
-import { ProjectAdminChange, ProjectChangePipe, ProjectCreate, ProjectAdminChangeFull, ProjectCreatePipe } from './project.dto';
+import {
+  ProjectAdminChange,
+  ProjectChangePipe,
+  ProjectCreate,
+  ProjectAdminChangeFull,
+  ProjectCreatePipe
+} from './project.dto';
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
 import { UserContext } from '../user/user.decorator';
@@ -13,9 +19,11 @@ import { OrganizationService } from '../organization/organization.service';
 
 @Resolver(() => Project)
 export class ProjectResolver {
-  constructor(private readonly projectService: ProjectService,
-              private readonly userService: UserService,
-              private readonly orgService: OrganizationService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly userService: UserService,
+    private readonly orgService: OrganizationService
+  ) {}
 
   // TODO: Add owner role guard once GraphQL role guards are supported
   @Mutation(() => Project)

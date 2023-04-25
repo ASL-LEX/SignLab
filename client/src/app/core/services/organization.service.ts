@@ -8,8 +8,10 @@ export class OrganizationService {
   private organizationObs: BehaviorSubject<Organization[]> = new BehaviorSubject<Organization[]>([]);
   private currentOrganizationObs: BehaviorSubject<Organization | null> = new BehaviorSubject<Organization | null>(null);
 
-  constructor(private readonly getOrganizationsGQL: GetOrganizationsGQL,
-              private readonly findOrganizationGQL: FindOrganizationGQL) {
+  constructor(
+    private readonly getOrganizationsGQL: GetOrganizationsGQL,
+    private readonly findOrganizationGQL: FindOrganizationGQL
+  ) {
     this.getOrganizationsGQL.watch().valueChanges.subscribe((result) => {
       this.organizationObs.next(result.data.getOrganizations);
     });

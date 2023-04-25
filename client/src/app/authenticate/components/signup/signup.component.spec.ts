@@ -35,24 +35,26 @@ describe('SignupComponent', () => {
     };
 
     authSpy = jasmine.createSpyObj('AuthService', ['signup']);
-    authSpy.signup.and.returnValue(Promise.resolve({
-      email: 'bob@bu.edu',
-      name: 'bob',
-      password: 'hi',
-      roles: {
-        owner: false,
-        studyContributor: new Map<string, boolean>(),
-        projectAdmin: new Map<string, boolean>(),
-        studyAdmin: new Map<string, boolean>(),
-        studyVisible: new Map<string, boolean>()
-      },
-      username: 'bob',
-      _id: 'sadlkfj',
-      organization: {
-        _id: '1',
-        name: 'ASL-LEX'
-      }
-    }));
+    authSpy.signup.and.returnValue(
+      Promise.resolve({
+        email: 'bob@bu.edu',
+        name: 'bob',
+        password: 'hi',
+        roles: {
+          owner: false,
+          studyContributor: new Map<string, boolean>(),
+          projectAdmin: new Map<string, boolean>(),
+          studyAdmin: new Map<string, boolean>(),
+          studyVisible: new Map<string, boolean>()
+        },
+        username: 'bob',
+        _id: 'sadlkfj',
+        organization: {
+          _id: '1',
+          name: 'ASL-LEX'
+        }
+      })
+    );
     orgSpy = jasmine.createSpyObj('OrganizationService', ['setOrganization'], {
       organizations: new BehaviorSubject([
         {
