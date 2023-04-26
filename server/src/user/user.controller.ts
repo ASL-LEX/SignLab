@@ -9,7 +9,8 @@ import {
   Post,
   Body,
   UseGuards,
-  Req
+  Req,
+  Query
 } from '@nestjs/common';
 import { User } from './user.schema';
 import { UserService } from './user.service';
@@ -27,8 +28,9 @@ export class UserController {
    */
   @Get('/')
   @Auth('admin')
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll({});
+  async getAllUsers(@Query('organization') organization: string): Promise<User[]> {
+    console.log(organization);
+    return this.userService.findAll({ organization });
   }
 
   /**

@@ -17,8 +17,8 @@ export class UserService {
    *
    * @return The list of users in the system
    */
-  async getUsers(): Promise<User[]> {
-    return this.signLab.get<User[]>('api/users', { provideToken: true });
+  async getUsers(organization: string): Promise<User[]> {
+    return this.signLab.get<User[]>('api/users', { provideToken: true, params: { 'organization': organization } });
   }
 
   /**

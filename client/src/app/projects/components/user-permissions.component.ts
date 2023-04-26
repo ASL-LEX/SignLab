@@ -4,6 +4,8 @@ import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
 import { ProjectAdminChangeGQL } from '../../graphql/projects/projects.generated';
 import { User } from '../../graphql/graphql';
+import { OrganizationService } from '../../core/services/organization.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'project-user-permissions',
@@ -24,15 +26,20 @@ export class UserPermissionsComponent {
   constructor(
     public readonly projectService: ProjectService,
     public readonly userService: UserService,
-    private readonly projectAdminChangeGQL: ProjectAdminChangeGQL
+    private readonly projectAdminChangeGQL: ProjectAdminChangeGQL,
+    private readonly orgService: OrganizationService
   ) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe((project) => {
       this.activeProjectID = project ? project._id! : null;
     });
 
-    userService.getUsers().then((users) => {
-      this.users = users;
+    // Load the users for the current organization
+    firstValueFrom(orgService.organization).then(async (org) => {
+      if (!org) {
+        return;
+      }
+      this.users = await userService.getUsers(org._id);
     });
   }
 
