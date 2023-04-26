@@ -139,6 +139,7 @@ Cypress.Commands.add('makeDefaultDataset', () => {
           name: dataset.name,
           description: dataset.description,
           creatorID: (dataset.creator as any),
+          organization: window.localStorage.getItem('org')
         }
       }
     },
