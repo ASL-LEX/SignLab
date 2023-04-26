@@ -1,30 +1,19 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Dataset } from '../../graphql/graphql';
-import {
-  GetDatasetsGQL,
-  GetDatasetsQuery,
-  GetDatasetsQueryVariables,
-  GetDatasetsByProjectGQL,
-  GetDatasetsByProjectQuery,
-  GetDatasetsByProjectQueryVariables
-} from '../../graphql/datasets/datasets.generated';
+import { GetDatasetsGQL, GetDatasetsByProjectGQL } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { QueryRef } from 'apollo-angular';
 import { DatasetCreate } from '../../graphql/graphql';
 import { CreateDatasetGQL } from '../../graphql/datasets/datasets.generated';
 import { firstValueFrom } from 'rxjs';
 import { ProjectService } from './project.service';
+import { OrganizationService } from './organization.service';
 
 @Injectable()
 export class DatasetService {
   /** All datasets that are in SignLab */
   // TODO: Handle if the user doesn't have access to all dataset
   private datasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
-  /** Query which was used to get the datasets, used to refetch */
-  private readonly datasetQuery: QueryRef<GetDatasetsQuery, GetDatasetsQueryVariables>;
-  /** Query which was used to get datasets visible to a project, used to refetch */
-  private readonly projectDatasetQuery: QueryRef<GetDatasetsByProjectQuery, GetDatasetsByProjectQueryVariables>;
   /** All the datasets which are visible to the active project */
   private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
 
@@ -33,27 +22,20 @@ export class DatasetService {
     private readonly getDatasetsGQL: GetDatasetsGQL,
     private readonly createDatasetGQL: CreateDatasetGQL,
     private readonly getDatasetsByProjectGQL: GetDatasetsByProjectGQL,
-    private readonly projectService: ProjectService
+    private readonly projectService: ProjectService,
+    private readonly orgService: OrganizationService
   ) {
-    // Logic for getting all datasets
-    this.datasetQuery = this.getDatasetsGQL.watch();
-    this.datasetQuery.valueChanges.subscribe((result) => {
-      this.datasetObs.next(result.data.getDatasets);
+    // Listen for changes to the organizations
+    this.orgService.organization.subscribe((_organization) => {
+      this.updateDatasets();
     });
-
-    this.projectDatasetQuery = this.getDatasetsByProjectGQL.watch();
 
     // Logic for getting datasets visible to the active project
-    this.projectService.activeProject.subscribe((project) => {
-      if (!project) {
-        this.visibleDatasetObs.next([]);
-        return;
-      }
-
-      this.getDatasetsByProjectGQL.fetch({ project: project._id }).subscribe((result) => {
-        this.visibleDatasetObs.next(result.data.getDatasetsByProject);
-      });
+    this.projectService.activeProject.subscribe((_project) => {
+      this.updateDatasets();
     });
+
+    this.updateDatasets();
   }
 
   /** Get all of the datasets */
@@ -79,18 +61,25 @@ export class DatasetService {
   async createDataset(dataset: DatasetCreate): Promise<void> {
     await firstValueFrom(this.createDatasetGQL.mutate({ datasetCreate: dataset }));
 
-    this.datasetQuery.refetch();
+    this.updateDatasets();
   }
 
   async updateDatasets() {
-    await this.datasetQuery.refetch();
+    const org = await firstValueFrom(this.orgService.organization);
+    if (org) {
+      const allDatasets = await firstValueFrom(this.getDatasetsGQL.fetch({ organization: org._id }));
+      this.datasetObs.next(allDatasets.data ? allDatasets.data.getDatasets : []);
+    }
 
     // Update the visible datasets for the project
     const currentProject = await firstValueFrom(this.projectService.activeProject);
     if (currentProject) {
-      this.projectDatasetQuery.refetch({ project: currentProject._id }).then((data) => {
-        this.visibleDatasetObs.next(data.data.getDatasetsByProject);
-      });
+      const projectDatasets = await firstValueFrom(this.getDatasetsByProjectGQL.fetch({ project: currentProject._id }));
+      if (projectDatasets.data) {
+        this.visibleDatasetObs.next(projectDatasets.data.getDatasetsByProject);
+      }
+    } else {
+      this.visibleDatasetObs.next([]);
     }
   }
 }

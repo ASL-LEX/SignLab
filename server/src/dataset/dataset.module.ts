@@ -6,13 +6,15 @@ import { DatasetResolver } from './dataset.resolver';
 import { Dataset, DatasetSchema } from './dataset.schema';
 import { DatasetService } from './dataset.service';
 import { ProjectModule } from '../project/project.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Dataset.name, schema: DatasetSchema }]),
     forwardRef(() => AuthModule),
     forwardRef(() => SharedModule),
-    forwardRef(() => ProjectModule)
+    forwardRef(() => ProjectModule),
+    OrganizationModule
   ],
   providers: [DatasetService, DatasetResolver],
   exports: [DatasetService]

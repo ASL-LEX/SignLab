@@ -1,18 +1,26 @@
 import { Field, ID, InputType, OmitType } from '@nestjs/graphql';
 import { Dataset } from './dataset.schema';
 import { UserPipe } from '../shared/pipes/user.pipe';
-import { Injectable, PipeTransform } from '@nestjs/common';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { Project } from '../project/project.schema';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { DatasetPipe } from '../shared/pipes/dataset.pipe';
+import { OrganizationService } from '../organization/organization.service';
 
 /** DTO that the user provides when creating a new dataset */
 @InputType()
-export class DatasetCreate extends OmitType(Dataset, ['_id', 'creator', 'projectAccess'] as const, InputType) {
+export class DatasetCreate extends OmitType(
+  Dataset,
+  ['_id', 'creator', 'projectAccess', 'organization'] as const,
+  InputType
+) {
   @Field(() => ID, {
     description: 'The ID of the user who is creating the dataset'
   })
   creatorID: string;
+
+  @Field(() => ID)
+  organization: string;
 }
 
 /** Represents the dataset create object with the populated user field */
@@ -21,9 +29,14 @@ export type DatasetCreateFull = Omit<Dataset, '_id'>;
 /** Pipe to convert the DatasetCreate to DatasetCreateFull */
 @Injectable()
 export class DatasetCreatePipe implements PipeTransform<DatasetCreate, Promise<DatasetCreateFull>> {
-  constructor(private readonly userPipe: UserPipe) {}
+  constructor(private readonly userPipe: UserPipe, private readonly orgService: OrganizationService) {}
 
   async transform(value: DatasetCreate): Promise<DatasetCreateFull> {
+    const org = await this.orgService.findOne(value.organization);
+    if (!org) {
+      throw new BadRequestException(`Organization with id ${value.organization} does not exist`);
+    }
+
     const creator = await this.userPipe.transform(value.creatorID);
     return { ...value, creator, projectAccess: {} };
   }

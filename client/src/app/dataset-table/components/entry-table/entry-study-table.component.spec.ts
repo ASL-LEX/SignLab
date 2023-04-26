@@ -32,7 +32,11 @@ describe('EntryStudyTable', () => {
     name: 'test',
     description: 'test',
     creator: creator,
-    projectAccess: {}
+    projectAccess: {},
+    organization: {
+      _id: '1',
+      name: 'ASL-LEX'
+    }
   };
   const exampleEntryData: EntryStudy[] = [
     {
