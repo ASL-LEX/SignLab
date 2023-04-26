@@ -34,7 +34,11 @@ describe('TaggingInterface', () => {
     _id: '1',
     name: 'test',
     description: 'test',
-    creator: creator
+    creator: creator,
+    organization: {
+      _id: '1',
+      name: 'ASL-LEX'
+    }
   };
 
   const testTag1: Tag = {
