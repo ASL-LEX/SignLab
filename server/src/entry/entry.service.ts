@@ -23,6 +23,11 @@ export class EntryService {
     return this.entryModel.find({}).exec();
   }
 
+  async getAllEntriesForDatasets(datasets: Dataset[]): Promise<Entry[]> {
+    const datasetIDs = datasets.map(dataset => dataset._id);
+    return this.entryModel.find({ dataset: { $in: datasetIDs }});
+  }
+
   /**
    * Check to see if the there is already a entry with the given entryID
    *

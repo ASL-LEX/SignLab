@@ -27,7 +27,7 @@ export class UserPermissionsComponent {
     public readonly projectService: ProjectService,
     public readonly userService: UserService,
     private readonly projectAdminChangeGQL: ProjectAdminChangeGQL,
-    private readonly orgService: OrganizationService
+    orgService: OrganizationService
   ) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe((project) => {

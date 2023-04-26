@@ -26,6 +26,7 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
+import { DatasetService } from 'src/dataset/dataset.service';
 
 @Controller('/api/study')
 export class StudyController {
@@ -34,7 +35,8 @@ export class StudyController {
     private entryService: EntryService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
-    private userService: UserService
+    private userService: UserService,
+    private datasetService: DatasetService,
   ) {}
   /**
    * Get all of the studies
@@ -151,7 +153,7 @@ export class StudyController {
    */
   @Post('/create')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
+  async createStudy(@Body() studyCreation: StudyCreation, @UserContext() user: User): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {
@@ -163,8 +165,12 @@ export class StudyController {
       project: studyCreation.projectID
     });
 
+    // Get all the datasets associated with the organization
+    const datasets = await this.datasetService.findAll(user.organization);
+    console.log(datasets);
+
     // Now add a EntryStudy for each entry
-    const entries = await this.entryService.getAllEntries();
+    const entries = await this.entryService.getAllEntriesForDatasets(datasets);
     await this.entryStudyService.createEntryStudies(entries, newStudy, true);
 
     // Mark training and disabled entries
@@ -174,7 +180,7 @@ export class StudyController {
     ]);
 
     // Create user studies for all existing users
-    const users = await this.userService.findAll({});
+    const users = await this.userService.findAll({ organization: user.organization });
     await Promise.all(
       users.map((user) => {
         return this.userStudyService.create(user, newStudy);

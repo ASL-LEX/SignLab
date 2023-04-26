@@ -29,7 +29,6 @@ export class UserController {
   @Get('/')
   @Auth('admin')
   async getAllUsers(@Query('organization') organization: string): Promise<User[]> {
-    console.log(organization);
     return this.userService.findAll({ organization });
   }
 
