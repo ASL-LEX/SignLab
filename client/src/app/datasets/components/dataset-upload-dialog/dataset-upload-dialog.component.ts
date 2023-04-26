@@ -47,7 +47,9 @@ export class DatasetUploadDialog {
       throw new Error('Organization is not defined');
     }
 
-    const datasetExists = await firstValueFrom(this.datasetExistsGQL.fetch({ name: this.name.value, organization: org._id }));
+    const datasetExists = await firstValueFrom(
+      this.datasetExistsGQL.fetch({ name: this.name.value, organization: org._id })
+    );
     if (datasetExists.data.datasetExists) {
       alert('Dataset with that name aleady exists');
       return;

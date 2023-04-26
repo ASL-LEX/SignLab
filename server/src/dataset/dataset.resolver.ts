@@ -16,13 +16,15 @@ import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { Project } from '../project/project.schema';
 import { Organization } from '../organization/organization.schema';
 import { OrganizationService } from '../organization/organization.service';
-import {BadRequestException} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(private readonly datasetService: DatasetService,
-              private readonly userPipe: UserPipe,
-              private readonly orgService: OrganizationService) {}
+  constructor(
+    private readonly datasetService: DatasetService,
+    private readonly userPipe: UserPipe,
+    private readonly orgService: OrganizationService
+  ) {}
 
   // TODO: Add owner only guard
   @Query(() => [Dataset])

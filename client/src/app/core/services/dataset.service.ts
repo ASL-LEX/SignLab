@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
 import { Dataset } from '../../graphql/graphql';
-import {
-  GetDatasetsGQL,
-  GetDatasetsByProjectGQL
-} from '../../graphql/datasets/datasets.generated';
+import { GetDatasetsGQL, GetDatasetsByProjectGQL } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DatasetCreate } from '../../graphql/graphql';
 import { CreateDatasetGQL } from '../../graphql/datasets/datasets.generated';

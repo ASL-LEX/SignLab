@@ -9,7 +9,11 @@ import { OrganizationService } from '../organization/organization.service';
 
 /** DTO that the user provides when creating a new dataset */
 @InputType()
-export class DatasetCreate extends OmitType(Dataset, ['_id', 'creator', 'projectAccess', 'organization'] as const, InputType) {
+export class DatasetCreate extends OmitType(
+  Dataset,
+  ['_id', 'creator', 'projectAccess', 'organization'] as const,
+  InputType
+) {
   @Field(() => ID, {
     description: 'The ID of the user who is creating the dataset'
   })
