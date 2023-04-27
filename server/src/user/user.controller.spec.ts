@@ -103,7 +103,7 @@ describe('UserController', () => {
 
   describe('getAllUsers()', () => {
     it('should be able to find all of the users', async () => {
-      const users = await userController.getAllUsers();
+      const users = await userController.getAllUsers({ _id: '1', name: 'ASL-LEX' });
       expect(users).toEqual([testUser1, testUser2]);
     });
   });

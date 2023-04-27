@@ -314,7 +314,7 @@ describe('EntryService', () => {
 
   describe('uploadEntryVideos()', () => {
     it('should give warning on a ZIP file with not content', async () => {
-      const result = await entryUploadService.uploadEntryVideos('empty.zip');
+      const result = await entryUploadService.uploadEntryVideos('empty.zip', { _id: '1', name: 'ASL-LEX' });
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain('No entry videos found in ZIP, no entries saved');
@@ -332,7 +332,7 @@ describe('EntryService', () => {
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos('missing_entry_upload.zip');
+      const result = await entryUploadService.uploadEntryVideos('missing_entry_upload.zip', { _id: '1', name: 'ASL-LEX' });
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain('Uploading video files caused warnings');
@@ -373,7 +373,7 @@ describe('EntryService', () => {
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos('all_good.zip');
+      const result = await entryUploadService.uploadEntryVideos('all_good.zip', { _id: '1', name: 'ASL-LEX' });
 
       expect(result.saveResult.type).toEqual('success');
     });
@@ -413,7 +413,7 @@ describe('EntryService', () => {
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos('additional_videos.zip');
+      const result = await entryUploadService.uploadEntryVideos('additional_videos.zip', { _id: '1', name: 'ASL-LEX' });
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.where![0].message).toContain(
