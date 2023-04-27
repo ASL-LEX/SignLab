@@ -7,13 +7,15 @@ import { StudyPipe } from './pipes/study.pipe';
 import { DatasetPipe } from './pipes/dataset.pipe';
 import { ProjectPipe } from './pipes/project.pipe';
 import { ProjectModule } from '../project/project.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
     forwardRef(() => StudyModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => ProjectModule)
+    forwardRef(() => ProjectModule),
+    forwardRef(() => OrganizationModule)
   ],
   providers: [UserPipe, StudyPipe, DatasetPipe, ProjectPipe],
   exports: [UserPipe, StudyPipe, DatasetPipe, ProjectPipe]

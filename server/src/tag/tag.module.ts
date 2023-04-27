@@ -12,6 +12,7 @@ import { SharedModule } from '../shared/shared.module';
 import { BucketModule } from '../bucket/bucket.module';
 import { DatasetModule } from '../dataset/dataset.module';
 import { EntryModule } from '../entry/entry.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { EntryModule } from '../entry/entry.module';
     forwardRef(() => SharedModule),
     forwardRef(() => BucketModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => EntryModule)
+    forwardRef(() => EntryModule),
+    forwardRef(() => OrganizationModule)
   ],
   controllers: [TagController],
   providers: [TagService, TagGuard],

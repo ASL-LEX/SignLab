@@ -16,6 +16,7 @@ import { TagModule } from '../tag/tag.module';
 import { UserStudyModule } from '../userstudy/userstudy.module';
 import { DatasetModule } from '../dataset/dataset.module';
 import { UserModule } from '../user/user.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { UserModule } from '../user/user.module';
     forwardRef(() => TagModule),
     forwardRef(() => UserStudyModule),
     forwardRef(() => DatasetModule),
-    forwardRef(() => UserModule)
+    forwardRef(() => UserModule),
+    forwardRef(() => OrganizationModule)
   ],
   controllers: [EntryController],
   providers: [EntryService, EntryUploadService, SchemaService],

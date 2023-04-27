@@ -10,6 +10,7 @@ import { UserStudyModule } from '../userstudy/userstudy.module';
 import { UserModule } from '../user/user.module';
 import { TagModule } from '../tag/tag.module';
 import { DatasetModule } from '../dataset/dataset.module';
+import { OrganizationModule } from '../organization/organization.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { DatasetModule } from '../dataset/dataset.module';
     forwardRef(() => UserStudyModule),
     forwardRef(() => UserModule),
     forwardRef(() => TagModule),
-    forwardRef(() => DatasetModule)
+    forwardRef(() => DatasetModule),
+    forwardRef(() => OrganizationModule)
   ],
   controllers: [StudyController],
   providers: [StudyService],
