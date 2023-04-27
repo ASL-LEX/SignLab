@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SignLabHttpClient } from './http.service';
 import { Dataset } from '../../graphql/graphql';
 import { GetDatasetsGQL, GetDatasetsByProjectGQL } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -18,7 +17,6 @@ export class DatasetService {
   private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
 
   constructor(
-    private http: SignLabHttpClient,
     private readonly getDatasetsGQL: GetDatasetsGQL,
     private readonly createDatasetGQL: CreateDatasetGQL,
     private readonly getDatasetsByProjectGQL: GetDatasetsByProjectGQL,
@@ -46,16 +44,6 @@ export class DatasetService {
   /** Get the datasets visible to the active project */
   get visibleDatasets(): Observable<Dataset[]> {
     return this.visibleDatasetObs.asObservable();
-  }
-
-  /** Get if the given dataset exists or not */
-  async datasetExists(datasetName: string): Promise<boolean> {
-    if (!datasetName || datasetName.length === 0) {
-      return false;
-    }
-    return this.http.get<boolean>(`/api/dataset/exists/${datasetName}`, {
-      provideToken: true
-    });
   }
 
   async createDataset(dataset: DatasetCreate): Promise<void> {

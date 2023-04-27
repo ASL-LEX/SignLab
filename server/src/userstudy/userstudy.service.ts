@@ -36,7 +36,7 @@ export class UserStudyService {
    * Make user studies for the given user against all studies
    */
   async makeForUser(user: User): Promise<UserStudy[]> {
-    const studies = await this.studyService.getAllStudies();
+    const studies = await this.studyService.getAllStudies(user.organization);
     const userStudies = await Promise.all(studies.map((study) => this.create(user, study)));
     return userStudies;
   }

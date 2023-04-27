@@ -242,7 +242,7 @@ export class TagController {
           }
         });
 
-        const studies = await this.studyService.getAllStudies();
+        const studies = await this.studyService.getAllStudies(organization._id);
         const entries = [entry];
         Promise.all(
           studies.map(async (study) => {
