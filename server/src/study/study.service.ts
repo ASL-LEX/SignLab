@@ -86,8 +86,8 @@ export class StudyService {
   /**
    * Get all of the studies regardless of project
    */
-  async getAllStudies(): Promise<Study[]> {
-    return this.studyModel.find({}).exec();
+  async getAllStudies(organization: string): Promise<Study[]> {
+    return this.studyModel.find({ organization }).exec();
   }
 
   /**

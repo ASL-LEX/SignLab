@@ -1,4 +1,3 @@
-import { Organization } from './organization.dto';
 import { User } from './user.dto';
 
 export interface Dataset {
@@ -6,5 +5,4 @@ export interface Dataset {
   name: string;
   description: string;
   creator: User;
-  organization: Organization;
 }

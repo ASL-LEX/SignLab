@@ -26,6 +26,8 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
+import { Organization } from '../organization/organization.schema';
+import { OrganizationContext } from '../organization/organization.decorator';
 
 @Controller('/api/study')
 export class StudyController {
@@ -151,7 +153,11 @@ export class StudyController {
    */
   @Post('/create')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async createStudy(@Body() studyCreation: StudyCreation): Promise<Study> {
+  async createStudy(
+    @Body() studyCreation: StudyCreation,
+    @UserContext() user: User,
+    @OrganizationContext() organization: Organization
+  ): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {
@@ -160,11 +166,12 @@ export class StudyController {
 
     const newStudy = await this.studyService.createStudy({
       ...studyCreation.study,
+      organization: organization._id,
       project: studyCreation.projectID
     });
 
     // Now add a EntryStudy for each entry
-    const entries = await this.entryService.getAllEntries();
+    const entries = await this.entryService.getAllEntries(organization._id);
     await this.entryStudyService.createEntryStudies(entries, newStudy, true);
 
     // Mark training and disabled entries
@@ -174,7 +181,7 @@ export class StudyController {
     ]);
 
     // Create user studies for all existing users
-    const users = await this.userService.findAll({});
+    const users = await this.userService.findAll({ organization: user.organization });
     await Promise.all(
       users.map((user) => {
         return this.userStudyService.create(user, newStudy);

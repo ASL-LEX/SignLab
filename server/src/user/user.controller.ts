@@ -17,6 +17,8 @@ import { Auth } from '../auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { Request } from 'express';
+import { OrganizationContext } from '../organization/organization.decorator';
+import { Organization } from '../organization/organization.schema';
 
 @Controller('/api/users')
 export class UserController {
@@ -27,8 +29,8 @@ export class UserController {
    */
   @Get('/')
   @Auth('admin')
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll({});
+  async getAllUsers(@OrganizationContext() organization: Organization): Promise<User[]> {
+    return this.userService.findAll({ organization: organization._id });
   }
 
   /**

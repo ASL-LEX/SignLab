@@ -19,8 +19,13 @@ export class EntryService {
   /**
    * Get all entries from the database
    */
-  async getAllEntries(): Promise<Entry[]> {
-    return this.entryModel.find({}).exec();
+  async getAllEntries(organization: string): Promise<Entry[]> {
+    return this.entryModel.find({ organization }).exec();
+  }
+
+  async getAllEntriesForDatasets(datasets: Dataset[]): Promise<Entry[]> {
+    const datasetIDs = datasets.map((dataset) => dataset._id);
+    return this.entryModel.find({ dataset: { $in: datasetIDs } });
   }
 
   /**

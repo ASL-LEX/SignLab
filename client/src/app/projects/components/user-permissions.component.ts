@@ -4,6 +4,8 @@ import { ProjectService } from '../../core/services/project.service';
 import { UserService } from '../../core/services/user.service';
 import { ProjectAdminChangeGQL } from '../../graphql/projects/projects.generated';
 import { User } from '../../graphql/graphql';
+import { OrganizationService } from '../../core/services/organization.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'project-user-permissions',
@@ -31,6 +33,7 @@ export class UserPermissionsComponent {
       this.activeProjectID = project ? project._id! : null;
     });
 
+    // Load the users for the current organization
     userService.getUsers().then((users) => {
       this.users = users;
     });

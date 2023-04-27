@@ -15,21 +15,19 @@ import { UserPipe } from '../shared/pipes/user.pipe';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { Project } from '../project/project.schema';
 import { Organization } from '../organization/organization.schema';
-import { OrganizationService } from '../organization/organization.service';
-import { BadRequestException } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
+import { OrganizationContext } from '../organization/organization.decorator';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(
-    private readonly datasetService: DatasetService,
-    private readonly userPipe: UserPipe,
-    private readonly orgService: OrganizationService
-  ) {}
+  constructor(private readonly datasetService: DatasetService, private readonly userPipe: UserPipe) {}
 
   // TODO: Add owner only guard
+  @UseGuards(JwtAuthGuard)
   @Query(() => [Dataset])
-  async getDatasets(@Args('organization') organization: string) {
-    return this.datasetService.findAll(organization);
+  async getDatasets(@OrganizationContext() organization: Organization) {
+    return this.datasetService.findAll(organization._id);
   }
 
   // TODO: Add guard for project access
@@ -38,17 +36,20 @@ export class DatasetResolver {
     return this.datasetService.getByProject(project);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Dataset)
   async createDataset(
     @Args('datasetCreate', { type: () => DatasetCreate }, DatasetCreatePipe)
-    datasetCreate: DatasetCreateFull
+    datasetCreate: DatasetCreateFull,
+    @OrganizationContext() organization: Organization
   ): Promise<Dataset> {
-    return this.datasetService.create(datasetCreate);
+    return this.datasetService.create({ ...datasetCreate, organization: organization._id });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => Boolean)
-  async datasetExists(@Args('name') name: string, @Args('organization') organization: string): Promise<boolean> {
-    return this.datasetService.exists(name, organization);
+  async datasetExists(@Args('name') name: string, @OrganizationContext() organization: Organization): Promise<boolean> {
+    return this.datasetService.exists(name, organization._id);
   }
 
   @Mutation(() => Boolean)
@@ -66,14 +67,5 @@ export class DatasetResolver {
       return this.userPipe.transform(dataset.creator.toString());
     }
     return dataset.creator;
-  }
-
-  @ResolveField(() => Organization)
-  async organization(@Parent() dataset: Dataset): Promise<Organization> {
-    const result = await this.orgService.findOne(dataset.organization);
-    if (!result) {
-      throw new BadRequestException(`Organaization with id ${dataset.organization} does not exist`);
-    }
-    return result;
   }
 }

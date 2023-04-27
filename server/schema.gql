@@ -23,7 +23,6 @@ scalar JSON
 
 type Dataset {
   id: ID!
-  organization: Organization!
 
   """Human readable way to idenfity the dataset, unique"""
   name: String!
@@ -40,7 +39,6 @@ type Dataset {
 type Project {
   """unique identifier for the project"""
   _id: ID!
-  organization: Organization!
 
   """name of the project, unique in an organization"""
   name: String!
@@ -83,10 +81,10 @@ type Query {
   getOrganizations: [Organization!]!
   exists(name: String!): Boolean!
   findOrganization(organization: String!): Organization!
-  getDatasets(organization: String!): [Dataset!]!
+  getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
-  datasetExists(name: String!, organization: String!): Boolean!
-  projectExists(name: String!, organization: String!): Boolean!
+  datasetExists(name: String!): Boolean!
+  projectExists(name: String!): Boolean!
   getProjects: [Project!]!
 }
 
@@ -134,7 +132,6 @@ input DatasetCreate {
 
   """The ID of the user who is creating the dataset"""
   creatorID: ID!
-  organization: ID!
 }
 
 input ProjectAccessChange {
@@ -154,7 +151,6 @@ input ProjectCreate {
 
   """description of the project"""
   description: String!
-  organization: String!
 }
 
 input ProjectAdminChange {

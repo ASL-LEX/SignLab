@@ -34,6 +34,8 @@ import { DatasetPipe } from '../shared/pipes/dataset.pipe';
 import { Dataset } from '../dataset/dataset.schema';
 import { UserPipe } from '../shared/pipes/user.pipe';
 import { User } from '../user/user.schema';
+import { OrganizationContext } from '../organization/organization.decorator';
+import { Organization } from '../organization/organization.schema';
 
 @Controller('/api/entry')
 export class EntryController {
@@ -172,13 +174,16 @@ export class EntryController {
       })
     })
   )
-  async uploadZIP(@UploadedFile() _file: Express.Multer.File): Promise<SaveAttempt> {
+  async uploadZIP(
+    @UploadedFile() _file: Express.Multer.File,
+    @OrganizationContext() organization: Organization
+  ): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
-    const result = await this.entryUploadService.uploadEntryVideos('./upload/upload.zip');
+    const result = await this.entryUploadService.uploadEntryVideos('./upload/upload.zip', organization);
 
     // Now create a EntryStudy for each entry for each study
     if (result.entries) {
-      const studies = await this.studyService.getAllStudies();
+      const studies = await this.studyService.getAllStudies(organization._id);
       await Promise.all(
         studies.map(async (study) => {
           this.entryStudyService.createEntryStudies(result.entries, study, true);
@@ -194,8 +199,8 @@ export class EntryController {
    */
   @Get('/')
   @Auth('admin')
-  async getEntries(): Promise<Entry[]> {
-    return this.entryService.getAllEntries();
+  async getEntries(@OrganizationContext() organization: Organization): Promise<Entry[]> {
+    return this.entryService.getAllEntries(organization._id);
   }
 
   /**

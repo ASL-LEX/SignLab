@@ -13,6 +13,7 @@ import { BucketStorage } from '../bucket/bucket.service';
 import { ConfigService } from '@nestjs/config';
 import { Dataset } from '../dataset/dataset.schema';
 import { User } from '../user/user.schema';
+import { Organization } from '../organization/organization.schema';
 
 const csv = require('csv-parser');
 const unzipper = require('unzipper');
@@ -128,7 +129,7 @@ export class EntryUploadService {
    *
    * @param zipFile Path to the zip file containing the videos
    */
-  async uploadEntryVideos(zipFile: string): Promise<EntryUploadResult> {
+  async uploadEntryVideos(zipFile: string, organization: Organization): Promise<EntryUploadResult> {
     // Extract the zip
     const unzipResult = await this.extractZIP(zipFile);
     if (unzipResult.type == 'error') {
@@ -177,7 +178,7 @@ export class EntryUploadService {
       }
 
       // Attempt to save the entry based on the filename
-      const entryUploadResult = await this.saveEntry(file, filePath);
+      const entryUploadResult = await this.saveEntry(file, filePath, organization);
       if (entryUploadResult.saveResult.type == 'warning') {
         fileWarnings.push(entryUploadResult.saveResult);
         continue;
@@ -259,7 +260,7 @@ export class EntryUploadService {
    * @param filename The name of the file of the video
    * @param _filePath The path to the file including the name
    */
-  private async saveEntry(filename: string, _filePath: string): Promise<EntryUploadResult> {
+  private async saveEntry(filename: string, _filePath: string, organization: Organization): Promise<EntryUploadResult> {
     // Try to find a cooresponding EntryUpload based on filename
     const entryUpload = await this.entryUploadModel.findOne({ filename: filename }).exec();
     if (!entryUpload) {
@@ -282,6 +283,7 @@ export class EntryUploadService {
     // TODO: Determine duration or have default on error
     const fileExtension = filename.slice(filename.lastIndexOf('.') + 1);
     const newEntry: Entry = {
+      organization: organization._id,
       entryID: entryUpload.entryID,
       mediaURL: 'placeholder',
       mediaType: this.supportedVideoFormats.has(fileExtension) ? 'video' : 'image',

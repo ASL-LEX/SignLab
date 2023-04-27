@@ -3,8 +3,6 @@ import { Organization } from './organization.dto';
 export interface Project {
   /** The generated project ID */
   _id: string;
-  /** The organization the project is a part of */
-  organization: Organization
   /** Name of the project, unique for an organization */
   name: string;
   /** Human readable description of the project */

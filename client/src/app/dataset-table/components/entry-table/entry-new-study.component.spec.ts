@@ -31,11 +31,7 @@ describe('EntryNewStudyTable', () => {
     _id: '1',
     name: 'test',
     description: 'test',
-    creator: creator,
-    organization: {
-      _id: '1',
-      name: 'ASL-LEX'
-    }
+    creator: creator
   };
 
   const exampleEntryData: Entry[] = [

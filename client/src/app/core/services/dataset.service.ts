@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SignLabHttpClient } from './http.service';
 import { Dataset } from '../../graphql/graphql';
 import { GetDatasetsGQL, GetDatasetsByProjectGQL } from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -18,7 +17,6 @@ export class DatasetService {
   private visibleDatasetObs: BehaviorSubject<Dataset[]> = new BehaviorSubject<Dataset[]>([]);
 
   constructor(
-    private http: SignLabHttpClient,
     private readonly getDatasetsGQL: GetDatasetsGQL,
     private readonly createDatasetGQL: CreateDatasetGQL,
     private readonly getDatasetsByProjectGQL: GetDatasetsByProjectGQL,
@@ -48,16 +46,6 @@ export class DatasetService {
     return this.visibleDatasetObs.asObservable();
   }
 
-  /** Get if the given dataset exists or not */
-  async datasetExists(datasetName: string): Promise<boolean> {
-    if (!datasetName || datasetName.length === 0) {
-      return false;
-    }
-    return this.http.get<boolean>(`/api/dataset/exists/${datasetName}`, {
-      provideToken: true
-    });
-  }
-
   async createDataset(dataset: DatasetCreate): Promise<void> {
     await firstValueFrom(this.createDatasetGQL.mutate({ datasetCreate: dataset }));
 
@@ -67,7 +55,7 @@ export class DatasetService {
   async updateDatasets() {
     const org = await firstValueFrom(this.orgService.organization);
     if (org) {
-      const allDatasets = await firstValueFrom(this.getDatasetsGQL.fetch({ organization: org._id }));
+      const allDatasets = await firstValueFrom(this.getDatasetsGQL.fetch());
       this.datasetObs.next(allDatasets.data ? allDatasets.data.getDatasets : []);
     }
 
