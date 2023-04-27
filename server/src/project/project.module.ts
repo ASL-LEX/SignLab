@@ -6,7 +6,7 @@ import { Project, ProjectSchema } from './project.schema';
 import { ProjectService } from './project.service';
 import { ProjectResolver } from './project.resolver';
 import { SharedModule } from '../shared/shared.module';
-import { ProjectChangePipe, ProjectCreatePipe } from './project.dto';
+import { ProjectChangePipe } from './project.dto';
 import { StudyModule } from '../study/study.module';
 import { OrganizationModule } from '../organization/organization.module';
 
@@ -19,7 +19,7 @@ import { OrganizationModule } from '../organization/organization.module';
     forwardRef(() => StudyModule),
     OrganizationModule
   ],
-  providers: [ProjectService, ProjectResolver, ProjectChangePipe, ProjectCreatePipe],
+  providers: [ProjectService, ProjectResolver, ProjectChangePipe],
   exports: [ProjectService]
 })
 export class ProjectModule {}

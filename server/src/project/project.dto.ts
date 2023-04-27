@@ -3,29 +3,11 @@ import { User } from '../user/user.schema';
 import { Project } from './project.schema';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { UserPipe } from '../shared/pipes/user.pipe';
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
-import { OrganizationService } from 'src/organization/organization.service';
+import { Injectable, PipeTransform } from '@nestjs/common';
 
 @InputType()
-export class ProjectCreate extends OmitType(Project, ['_id', 'created', 'organization'] as const, InputType) {
-  @Field()
-  organization: string;
-}
+export class ProjectCreate extends OmitType(Project, ['_id', 'created', 'organization'] as const, InputType) {}
 
-/** Pipe to validate the project coming in is valid */
-@Injectable()
-export class ProjectCreatePipe implements PipeTransform<ProjectCreate, Promise<ProjectCreate>> {
-  constructor(private readonly orgService: OrganizationService) {}
-
-  async transform(value: ProjectCreate): Promise<ProjectCreate> {
-    const org = await this.orgService.findOne(value.organization);
-    if (!org) {
-      throw new BadRequestException(`Organization with ID ${value.organization} does not exist`);
-    }
-
-    return value;
-  }
-}
 
 /** The DTO for requesting admin change */
 @InputType()

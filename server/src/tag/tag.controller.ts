@@ -25,6 +25,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BucketStorage } from '../bucket/bucket.service';
 import { DatasetService } from '../dataset/dataset.service';
 import { EntryService } from '../entry/entry.service';
+import { OrganizationContext } from '../organization/organization.decorator';
+import { Organization } from '../organization/organization.schema';
 
 @Controller('/api/tag')
 export class TagController {
@@ -168,6 +170,7 @@ export class TagController {
    * @param datasetID The dataset to save into
    * @param videoNumber The number of the video in the field being recorded
    */
+  @UseGuards(JwtAuthGuard)
   @Post('/video_field')
   @UseInterceptors(FileInterceptor('file'))
   async uploadVideoField(
@@ -175,7 +178,8 @@ export class TagController {
     @Body('tag') tagStr: string,
     @Body('field') field: string,
     @Body('datasetID') datasetID: string,
-    @Body('videoNumber') videoNumber: number
+    @Body('videoNumber') videoNumber: number,
+    @OrganizationContext() organization: Organization
   ): Promise<{ uri: string }> {
     const tagID = JSON.parse(tagStr)._id;
 
@@ -217,6 +221,7 @@ export class TagController {
       if (existingEntry === null) {
         // TODO: Remove concept of the `entryID`
         const entry = await this.entryService.createEntry({
+          organization: organization._id,
           entryID: 'TODO: Remove entryID',
           mediaURL: video.uri,
           mediaType: 'video',

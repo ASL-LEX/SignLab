@@ -27,6 +27,8 @@ import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
 import { DatasetService } from 'src/dataset/dataset.service';
+import { Organization } from '../organization/organization.schema';
+import { OrganizationContext } from '../organization/organization.decorator';
 
 @Controller('/api/study')
 export class StudyController {
@@ -153,7 +155,7 @@ export class StudyController {
    */
   @Post('/create')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async createStudy(@Body() studyCreation: StudyCreation, @UserContext() user: User): Promise<Study> {
+  async createStudy(@Body() studyCreation: StudyCreation, @UserContext() user: User, @OrganizationContext() organization: Organization): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {
@@ -162,6 +164,7 @@ export class StudyController {
 
     const newStudy = await this.studyService.createStudy({
       ...studyCreation.study,
+      organization: organization._id,
       project: studyCreation.projectID
     });
 

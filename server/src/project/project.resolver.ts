@@ -5,7 +5,6 @@ import {
   ProjectChangePipe,
   ProjectCreate,
   ProjectAdminChangeFull,
-  ProjectCreatePipe
 } from './project.dto';
 import { Project } from './project.schema';
 import { ProjectService } from './project.service';
@@ -27,7 +26,7 @@ export class ProjectResolver {
 
   // TODO: Add owner role guard once GraphQL role guards are supported
   @Mutation(() => Project)
-  async createProject(@Args('projectCreate', ProjectCreatePipe) projectCreate: ProjectCreate): Promise<Project> {
+  async createProject(@Args('projectCreate') projectCreate: ProjectCreate): Promise<Project> {
     return this.projectService.create(projectCreate);
   }
 

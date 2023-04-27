@@ -14,7 +14,6 @@ export class Project {
   _id: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
-  @Field(() => Organization)
   organization: string;
 
   @Prop({ required: true })

@@ -28,6 +28,9 @@ export class Study {
   /** MongoDB assigned ID */
   _id?: string;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  organization: string;
+
   /** Human readable name for identification */
   @Prop({ required: true })
   name: string;

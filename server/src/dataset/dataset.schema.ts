@@ -17,7 +17,6 @@ export class Dataset {
 
   /** The organization the dataset is a part of */
   @Prop({ type: mongoose.Schema.Types.ObjectId })
-  @Field(() => Organization)
   organization: string;
 
   /** Human readable way to idenfity the dataset, unique */

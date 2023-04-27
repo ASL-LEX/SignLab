@@ -17,6 +17,9 @@ export class Entry {
   /** MongoDB assigned ID */
   _id?: string;
 
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  organization: string;
+
   /**
    * User assigned ID. This is useful if the researcher has additional pieces
    * of information regarding this entry that is not uploaded to SignLab
