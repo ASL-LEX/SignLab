@@ -9,8 +9,7 @@ import {
   Post,
   Body,
   UseGuards,
-  Req,
-  Query
+  Req
 } from '@nestjs/common';
 import { User } from './user.schema';
 import { UserService } from './user.service';
@@ -18,6 +17,8 @@ import { Auth } from '../auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { Request } from 'express';
+import { OrganizationContext } from '../organization/organization.decorator';
+import { Organization } from '../organization/organization.schema';
 
 @Controller('/api/users')
 export class UserController {
@@ -28,8 +29,8 @@ export class UserController {
    */
   @Get('/')
   @Auth('admin')
-  async getAllUsers(@Query('organization') organization: string): Promise<User[]> {
-    return this.userService.findAll({ organization });
+  async getAllUsers(@OrganizationContext() organization: Organization): Promise<User[]> {
+    return this.userService.findAll({ organization: organization._id });
   }
 
   /**
