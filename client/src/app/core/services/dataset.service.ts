@@ -67,7 +67,7 @@ export class DatasetService {
   async updateDatasets() {
     const org = await firstValueFrom(this.orgService.organization);
     if (org) {
-      const allDatasets = await firstValueFrom(this.getDatasetsGQL.fetch({ organization: org._id }));
+      const allDatasets = await firstValueFrom(this.getDatasetsGQL.fetch());
       this.datasetObs.next(allDatasets.data ? allDatasets.data.getDatasets : []);
     }
 

@@ -48,7 +48,7 @@ export class DatasetUploadDialog {
     }
 
     const datasetExists = await firstValueFrom(
-      this.datasetExistsGQL.fetch({ name: this.name.value, organization: org._id })
+      this.datasetExistsGQL.fetch({ name: this.name.value })
     );
     if (datasetExists.data.datasetExists) {
       alert('Dataset with that name aleady exists');

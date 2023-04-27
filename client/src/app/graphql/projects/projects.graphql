@@ -4,10 +4,6 @@ query getProjects {
     name,
     description,
     created,
-    organization {
-      _id,
-      name
-    }
   }
 }
 
@@ -21,7 +17,7 @@ mutation createProject($projectCreate: ProjectCreate!) {
 }
 
 query projectExists($name: String!, $organization: String!) {
-  projectExists(name: $name, organization: $organization)
+  projectExists(name: $name)
 }
 
 mutation projectAdminChange($projectAdminChange: ProjectAdminChange!) {

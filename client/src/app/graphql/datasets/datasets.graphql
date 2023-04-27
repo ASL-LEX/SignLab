@@ -1,5 +1,5 @@
-query getDatasets($organization: String!) {
-  getDatasets(organization: $organization) {
+query getDatasets {
+  getDatasets {
     id,
     name,
     description,
@@ -13,10 +13,6 @@ query getDatasets($organization: String!) {
         _id,
         name
       }
-    },
-    organization {
-      _id,
-      name
     },
     projectAccess
   }
@@ -38,16 +34,12 @@ query getDatasetsByProject($project: ID!) {
         name
       }
     },
-    organization {
-      _id,
-      name
-    },
     projectAccess
   }
 }
 
-query datasetExists($name: String!, $organization: String!) {
-  datasetExists(name: $name, organization: $organization)
+query datasetExists($name: String!) {
+  datasetExists(name: $name)
 }
 
 mutation createDataset($datasetCreate: DatasetCreate!) {
@@ -66,10 +58,6 @@ mutation createDataset($datasetCreate: DatasetCreate!) {
         name
       }
     },
-    organization {
-      _id,
-      name
-    }
   }
 }
 
