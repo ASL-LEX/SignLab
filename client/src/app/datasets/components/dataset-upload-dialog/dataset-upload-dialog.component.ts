@@ -5,7 +5,6 @@ import { DatasetService } from '../../../core/services/dataset.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
 import { DatasetExistsGQL } from '../../../graphql/datasets/datasets.generated';
-import { OrganizationService } from '../../../core/services/organization.service';
 
 /**
  * Handles the UI to allow users to add new entries to SignLab.
@@ -20,8 +19,7 @@ export class DatasetUploadDialog {
     private datasetService: DatasetService,
     private authService: AuthService,
     private dialogRef: MatDialogRef<DatasetUploadDialog>,
-    private readonly datasetExistsGQL: DatasetExistsGQL,
-    private readonly orgService: OrganizationService
+    private readonly datasetExistsGQL: DatasetExistsGQL
   ) {}
 
   createForm = new FormGroup({
@@ -42,11 +40,6 @@ export class DatasetUploadDialog {
       return; // Nothing to submit, should not reach here with proper Validators
     }
 
-    const org = await firstValueFrom(this.orgService.organization);
-    if (!org) {
-      throw new Error('Organization is not defined');
-    }
-
     const datasetExists = await firstValueFrom(
       this.datasetExistsGQL.fetch({ name: this.name.value })
     );
@@ -58,8 +51,7 @@ export class DatasetUploadDialog {
     const dataset = {
       name: this.name!.value!,
       description: this.description!.value!,
-      creatorID: this.authService.user._id,
-      organization: org._id
+      creatorID: this.authService.user._id
     };
 
     this.datasetService.createDataset(dataset);

@@ -39,6 +39,7 @@ export class DatasetResolver {
     return this.datasetService.getByProject(project);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Dataset)
   async createDataset(
     @Args('datasetCreate', { type: () => DatasetCreate }, DatasetCreatePipe)
@@ -48,6 +49,7 @@ export class DatasetResolver {
     return this.datasetService.create({ ...datasetCreate, organization: organization._id });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => Boolean)
   async datasetExists(@Args('name') name: string, @OrganizationContext() organization: Organization): Promise<boolean> {
     return this.datasetService.exists(name, organization._id);
