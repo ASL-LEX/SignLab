@@ -24,8 +24,8 @@ export class EntryService {
   }
 
   async getAllEntriesForDatasets(datasets: Dataset[]): Promise<Entry[]> {
-    const datasetIDs = datasets.map(dataset => dataset._id);
-    return this.entryModel.find({ dataset: { $in: datasetIDs }});
+    const datasetIDs = datasets.map((dataset) => dataset._id);
+    return this.entryModel.find({ dataset: { $in: datasetIDs } });
   }
 
   /**

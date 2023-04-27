@@ -75,9 +75,7 @@ export class NewProjectComponent {
 
     // If no errors from the form, then check if the project is unique
     if (this.formValid) {
-      const projectExists = await firstValueFrom(
-        this.projectExistsGQL.fetch({ name: this.formData.name })
-      );
+      const projectExists = await firstValueFrom(this.projectExistsGQL.fetch({ name: this.formData.name }));
       if (projectExists.data.projectExists) {
         this.addProjectExistsError();
       } else {

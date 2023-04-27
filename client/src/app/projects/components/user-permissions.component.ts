@@ -26,7 +26,7 @@ export class UserPermissionsComponent {
   constructor(
     public readonly projectService: ProjectService,
     public readonly userService: UserService,
-    private readonly projectAdminChangeGQL: ProjectAdminChangeGQL,
+    private readonly projectAdminChangeGQL: ProjectAdminChangeGQL
   ) {
     /** Update activeProjectID when the active project changes. */
     projectService.activeProject.subscribe((project) => {
@@ -34,7 +34,7 @@ export class UserPermissionsComponent {
     });
 
     // Load the users for the current organization
-    userService.getUsers().then(users => {
+    userService.getUsers().then((users) => {
       this.users = users;
     });
   }

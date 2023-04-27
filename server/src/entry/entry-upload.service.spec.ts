@@ -332,7 +332,10 @@ describe('EntryService', () => {
         };
       });
 
-      const result = await entryUploadService.uploadEntryVideos('missing_entry_upload.zip', { _id: '1', name: 'ASL-LEX' });
+      const result = await entryUploadService.uploadEntryVideos('missing_entry_upload.zip', {
+        _id: '1',
+        name: 'ASL-LEX'
+      });
 
       expect(result.saveResult.type).toEqual('warning');
       expect(result.saveResult.message).toContain('Uploading video files caused warnings');

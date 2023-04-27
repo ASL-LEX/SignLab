@@ -8,7 +8,6 @@ import { Injectable, PipeTransform } from '@nestjs/common';
 @InputType()
 export class ProjectCreate extends OmitType(Project, ['_id', 'created', 'organization'] as const, InputType) {}
 
-
 /** The DTO for requesting admin change */
 @InputType()
 export class ProjectAdminChange {

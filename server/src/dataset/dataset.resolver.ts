@@ -17,14 +17,11 @@ import { Project } from '../project/project.schema';
 import { Organization } from '../organization/organization.schema';
 import { UseGuards } from '@nestjs/common';
 import { OrganizationContext } from '../organization/organization.decorator';
-import {  JwtAuthGuard } from '../auth/jwt.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
-  constructor(
-    private readonly datasetService: DatasetService,
-    private readonly userPipe: UserPipe
-  ) {}
+  constructor(private readonly datasetService: DatasetService, private readonly userPipe: UserPipe) {}
 
   // TODO: Add owner only guard
   @UseGuards(JwtAuthGuard)

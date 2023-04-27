@@ -36,7 +36,7 @@ export class StudyController {
     private entryService: EntryService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
-    private userService: UserService,
+    private userService: UserService
   ) {}
   /**
    * Get all of the studies
@@ -153,7 +153,11 @@ export class StudyController {
    */
   @Post('/create')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async createStudy(@Body() studyCreation: StudyCreation, @UserContext() user: User, @OrganizationContext() organization: Organization): Promise<Study> {
+  async createStudy(
+    @Body() studyCreation: StudyCreation,
+    @UserContext() user: User,
+    @OrganizationContext() organization: Organization
+  ): Promise<Study> {
     // Make sure the study name is unique
     const exists = await this.studyService.exists(studyCreation.study.name, studyCreation.projectID);
     if (exists) {

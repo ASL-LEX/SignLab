@@ -10,7 +10,7 @@ import {
   Body,
   Query,
   Delete,
-  Param,
+  Param
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
@@ -174,7 +174,10 @@ export class EntryController {
       })
     })
   )
-  async uploadZIP(@UploadedFile() _file: Express.Multer.File, @OrganizationContext() organization: Organization): Promise<SaveAttempt> {
+  async uploadZIP(
+    @UploadedFile() _file: Express.Multer.File,
+    @OrganizationContext() organization: Organization
+  ): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
     const result = await this.entryUploadService.uploadEntryVideos('./upload/upload.zip', organization);
 
