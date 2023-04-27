@@ -26,7 +26,6 @@ import { JwtAuthGuard } from '../auth/jwt.guard';
 import { StudyGuard } from '../auth/study.guard';
 import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
-import { DatasetService } from 'src/dataset/dataset.service';
 import { Organization } from '../organization/organization.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
 
@@ -38,7 +37,6 @@ export class StudyController {
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
     private userService: UserService,
-    private datasetService: DatasetService,
   ) {}
   /**
    * Get all of the studies
@@ -168,12 +166,8 @@ export class StudyController {
       project: studyCreation.projectID
     });
 
-    // Get all the datasets associated with the organization
-    const datasets = await this.datasetService.findAll(user.organization);
-    console.log(datasets);
-
     // Now add a EntryStudy for each entry
-    const entries = await this.entryService.getAllEntriesForDatasets(datasets);
+    const entries = await this.entryService.getAllEntries(organization._id);
     await this.entryStudyService.createEntryStudies(entries, newStudy, true);
 
     // Mark training and disabled entries

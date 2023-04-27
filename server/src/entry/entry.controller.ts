@@ -196,8 +196,8 @@ export class EntryController {
    */
   @Get('/')
   @Auth('admin')
-  async getEntries(): Promise<Entry[]> {
-    return this.entryService.getAllEntries();
+  async getEntries(@OrganizationContext() organization: Organization): Promise<Entry[]> {
+    return this.entryService.getAllEntries(organization._id);
   }
 
   /**
