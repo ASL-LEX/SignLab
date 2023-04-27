@@ -15,9 +15,10 @@ export class ProjectService {
     private readonly userService: UserService
   ) {}
 
-  async create(project: ProjectCreate): Promise<Project> {
-    const newProject: ProjectCreate & { created: Date } = {
+  async create(project: ProjectCreate, organization: string): Promise<Project> {
+    const newProject = {
       ...project,
+      organization: organization,
       created: new Date()
     };
     return await this.projectModel.create(newProject);

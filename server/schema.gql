@@ -33,7 +33,6 @@ type Dataset {
   """The user who created the dataset"""
   creator: User!
   projectAccess: JSON!
-  organization: Organization!
 }
 
 """Projects that are part of an organization"""
@@ -49,7 +48,6 @@ type Project {
 
   """organization that the project belongs to"""
   created: DateTime!
-  organization: Organization!
 }
 
 """
@@ -83,10 +81,10 @@ type Query {
   getOrganizations: [Organization!]!
   exists(name: String!): Boolean!
   findOrganization(organization: String!): Organization!
-  getDatasets(organization: String!): [Dataset!]!
+  getDatasets: [Dataset!]!
   getDatasetsByProject(project: ID!): [Dataset!]!
-  datasetExists(name: String!, organization: String!): Boolean!
-  projectExists(name: String!, organization: String!): Boolean!
+  datasetExists(name: String!): Boolean!
+  projectExists(name: String!): Boolean!
   getProjects: [Project!]!
 }
 
@@ -134,7 +132,6 @@ input DatasetCreate {
 
   """The ID of the user who is creating the dataset"""
   creatorID: ID!
-  organization: ID!
 }
 
 input ProjectAccessChange {
