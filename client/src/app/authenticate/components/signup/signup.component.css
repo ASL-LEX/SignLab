@@ -78,3 +78,7 @@ mat-form-field {
 mat-select {
   width: 100%;
 }
+
+.mat-select-value {
+  color: black;
+}
