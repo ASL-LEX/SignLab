@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Dataset } from '../../graphql/graphql';
-import { GetDatasetsGQL, GetDatasetsByProjectGQL, GetDatasetsQuery, GetDatasetsQueryVariables } from '../../graphql/datasets/datasets.generated';
+import {
+  GetDatasetsGQL,
+  GetDatasetsByProjectGQL,
+  GetDatasetsQuery,
+  GetDatasetsQueryVariables
+} from '../../graphql/datasets/datasets.generated';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DatasetCreate } from '../../graphql/graphql';
 import { CreateDatasetGQL } from '../../graphql/datasets/datasets.generated';

@@ -8,7 +8,7 @@ import {
   DeleteProjectGQL,
   DeleteProjectMutation,
   GetProjectsQuery,
-  GetProjectsQueryVariables,
+  GetProjectsQueryVariables
 } from '../../graphql/projects/projects.generated';
 import { MutationResult, QueryRef } from 'apollo-angular';
 import { OrganizationService } from './organization.service';
