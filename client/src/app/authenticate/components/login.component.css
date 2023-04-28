@@ -79,3 +79,7 @@ input {
 #browserCompatibility a {
   color: #89dbb4;
 }
+
+.mat-select-value {
+  color: black;
+}
