@@ -6,10 +6,13 @@ import {
   CreateProjectGQL,
   CreateProjectMutation,
   DeleteProjectGQL,
-  DeleteProjectMutation
+  DeleteProjectMutation,
+  GetProjectsQuery,
+  GetProjectsQueryVariables
 } from '../../graphql/projects/projects.generated';
-import { MutationResult } from 'apollo-angular';
-import { firstValueFrom } from 'rxjs';
+import { MutationResult, QueryRef } from 'apollo-angular';
+import { OrganizationService } from './organization.service';
+import { ApolloQueryResult } from '@apollo/client';
 
 @Injectable()
 export class ProjectService {
@@ -17,13 +20,22 @@ export class ProjectService {
   private projectsObs: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
   /** The actively selected project */
   private activeProjectObs: BehaviorSubject<Project | null> = new BehaviorSubject<Project | null>(null);
+  /** Project query */
+  private readonly projectQuery: QueryRef<GetProjectsQuery, GetProjectsQueryVariables>;
 
   constructor(
-    private readonly projectsGQL: GetProjectsGQL,
+    projectsGQL: GetProjectsGQL,
     private readonly createProjectGQL: CreateProjectGQL,
-    private readonly deleteProjectGQL: DeleteProjectGQL
+    private readonly deleteProjectGQL: DeleteProjectGQL,
+    orgService: OrganizationService
   ) {
-    this.updateProjectList();
+    // Watch the get projects query and update the project observable on
+    // changes
+    this.projectQuery = projectsGQL.watch({}, { errorPolicy: 'all' });
+    this.projectQuery.valueChanges.subscribe((result) => this.updateProjects(result));
+
+    // When the organization changes, refetch the projects
+    orgService.organization.subscribe(() => this.updateProjectList());
   }
 
   get projects(): Observable<Project[]> {
@@ -58,13 +70,21 @@ export class ProjectService {
     return this.deleteProjectGQL.mutate({ projectID: project._id });
   }
 
-  public async updateProjectList() {
-    const projects = await firstValueFrom(this.projectsGQL.fetch());
-    if (projects.errors) {
+  public updateProjectList() {
+    this.projectQuery.refetch();
+  }
+
+  private async updateProjects(projectResult: ApolloQueryResult<GetProjectsQuery>) {
+    // Check for any errors, on errors just clear the project list
+    if (projectResult.errors) {
       this.projectsObs.next([]);
+      this.setActiveProject(null);
       return;
     }
-    this.projectsObs.next(projects.data.getProjects);
-    this.setActiveProject(projects.data.getProjects[0] || null);
+
+    // Otherwise update the list of projects and set the active project to the
+    // first project if it exists
+    this.projectsObs.next(projectResult.data.getProjects);
+    this.setActiveProject(projectResult.data.getProjects[0] || null);
   }
 }
