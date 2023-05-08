@@ -1,14 +1,13 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
-import { BackendService } from './core/services/backend.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'SignLab';
 
   /**
@@ -19,16 +18,12 @@ export class AppComponent implements OnInit {
 
   constructor(
     private ngZone: NgZone,
-    private backend: BackendService,
     public authService: AuthService,
     private router: Router
   ) {
     this.setupComplete = this.setupComplete.bind(this);
   }
 
-  ngOnInit(): void {
-    this.backend.isInFirstTimeSetup().then((result) => (this.firstTimeSetup = result));
-  }
 
   /**
    * When setup has completed, change the view
