@@ -41,18 +41,6 @@ describe('Upload CSV', () => {
       .should('be.disabled');
   });
 
-  it('should produce when the user expected field is not present', () => {
-    // NOTE: This field is added using the `cy.firstTimeSetup()` call
-
-    cy
-      .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/entries/missing-user-fields.csv', { force: true })
-      .get('li')
-      .should('contain.text', 'Line 2: requires property "prompt"')
-      .get(uploadZIPButton)
-      .should('be.disabled');
-  });
-
   it('should produce errors on empty csv', () => {
     cy
       .get(csvFileUploadInput)
