@@ -5,8 +5,6 @@ const uploadCSVButton = '[data-cy="uploadCSVButton"]';
 const uploadZIPButton = '[data-cy="uploadZIPButton"]';
 const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
 const uploadStatusMessage = '[data-cy="uploadStatusMessage"]';
-const zipFileUploadInput = '[data-cy="zipFileUploadInput"]';
-const datasetSelect = '[data-cy="datasetSelect"]';
 
 describe('Upload CSV', () => {
   beforeEach(() => {
