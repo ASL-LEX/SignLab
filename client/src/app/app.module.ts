@@ -5,7 +5,6 @@ import { MaterialModule } from './material.module';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { FirstTimeSetupModule } from './first-time-setup/first-time-setup.module';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { NavigationModule } from './navigation/navigation.module';
@@ -27,7 +26,6 @@ import { GraphQLModule } from './graphql.module';
     AppRoutingModule,
     MaterialModule,
     HttpClientModule,
-    FirstTimeSetupModule,
     CoreModule.forRoot(),
     NavigationModule,
     GraphQLModule

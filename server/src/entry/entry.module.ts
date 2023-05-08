@@ -5,8 +5,6 @@ import { Entry, EntrySchema } from './entry.schema';
 import { EntryUpload, EntryUploadSchema } from './entry-upload.schema';
 import { EntryService } from './entry.service';
 import { EntryUploadService } from './entry-upload.service';
-import { DynamicSchema, DynamicSchemaSchema } from './dyanmicschema.schema';
-import { SchemaService } from './schema.service';
 import { BucketModule } from '../bucket/bucket.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
@@ -22,8 +20,7 @@ import { OrganizationModule } from '../organization/organization.module';
   imports: [
     MongooseModule.forFeature([
       { name: Entry.name, schema: EntrySchema },
-      { name: EntryUpload.name, schema: EntryUploadSchema },
-      { name: DynamicSchema.name, schema: DynamicSchemaSchema }
+      { name: EntryUpload.name, schema: EntryUploadSchema }
     ]),
     BucketModule,
     ConfigModule,
@@ -37,7 +34,7 @@ import { OrganizationModule } from '../organization/organization.module';
     forwardRef(() => OrganizationModule)
   ],
   controllers: [EntryController],
-  providers: [EntryService, EntryUploadService, SchemaService],
-  exports: [EntryService, SchemaService]
+  providers: [EntryService, EntryUploadService],
+  exports: [EntryService]
 })
 export class EntryModule {}

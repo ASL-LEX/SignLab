@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { EntryService } from './services/entry.service';
-import { BackendService } from './services/backend.service';
 import { StudyService } from './services/study.service';
 import { UserService } from './services/user.service';
 import { SignLabHttpClient } from './services/http.service';
@@ -30,7 +29,6 @@ export class CoreModule {
       providers: [
         AuthService,
         EntryService,
-        BackendService,
         StudyService,
         UserService,
         AuthenticatedGuard,

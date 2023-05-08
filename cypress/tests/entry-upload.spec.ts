@@ -5,8 +5,6 @@ const uploadCSVButton = '[data-cy="uploadCSVButton"]';
 const uploadZIPButton = '[data-cy="uploadZIPButton"]';
 const csvFileUploadInput = '[data-cy="csvFileUploadInput"]';
 const uploadStatusMessage = '[data-cy="uploadStatusMessage"]';
-const zipFileUploadInput = '[data-cy="zipFileUploadInput"]';
-const datasetSelect = '[data-cy="datasetSelect"]';
 
 describe('Upload CSV', () => {
   beforeEach(() => {
@@ -39,18 +37,6 @@ describe('Upload CSV', () => {
       .selectFile('cypress/fixtures/entries/missing-filenames.csv', { force: true })
       .get('li')
       .should('contain.text', ('Line 2: Path `filename` is required.'))
-      .get(uploadZIPButton)
-      .should('be.disabled');
-  });
-
-  it('should produce when the user expected field is not present', () => {
-    // NOTE: This field is added using the `cy.firstTimeSetup()` call
-
-    cy
-      .get(csvFileUploadInput)
-      .selectFile('cypress/fixtures/entries/missing-user-fields.csv', { force: true })
-      .get('li')
-      .should('contain.text', 'Line 2: requires property "prompt"')
       .get(uploadZIPButton)
       .should('be.disabled');
   });

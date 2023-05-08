@@ -1,4 +1,3 @@
-import entryMetadata from '../fixtures/entry_metadata.json';
 import user from '../fixtures/users.json';
 import datasets from '../fixtures/datasets.json';
 import { UserSignup } from '../../shared/dtos/user.dto';
@@ -69,17 +68,11 @@ Cypress.Commands.add('makeDefaultOrganization', () => {
 });
 
 Cypress.Commands.add('firstTimeSetup', () => {
-  // Submit the expected meta data
-  cy.request({
-    method: 'POST',
-    url: 'api/entry/metadata',
-    body: entryMetadata
-  });
-
   // Make the initial user and a non-admin user
   cy
     .makeDefaultOrganization()
     .signup(user.existingUser)
+    .findOneAndUpdate({ name: user.existingUser.name }, { $set: { 'roles.owner': true } }, { collection: 'users' })
     .signup(user.nonAdmin);
 
   // Add in a starting dataset
@@ -124,10 +117,14 @@ Cypress.Commands.add('makeStudy', (studyCreation: any) => {
 Cypress.Commands.add('makeDefaultDataset', () => {
   const dataset = datasets.existingDataset;
   dataset.creator = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')!).user._id;
+  const jwt = JSON.parse(localStorage.getItem('SIGNLAB_AUTH_INFO')).token;
 
   cy.request({
     method: 'POST',
     url: 'graphql',
+    headers: {
+      'Authorization': `Bearer ${jwt}`
+    },
     body: {
       query: `mutation createDataset($datasetCreate: DatasetCreate!) {
         createDataset(datasetCreate: $datasetCreate) {

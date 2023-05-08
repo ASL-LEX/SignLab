@@ -16,8 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { MetadataDefinition, SaveAttempt } from 'shared/dtos/entry.dto';
-import { SchemaService } from './schema.service';
+import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
@@ -41,7 +40,6 @@ import { Organization } from '../organization/organization.schema';
 export class EntryController {
   constructor(
     private entryService: EntryService,
-    private schemaService: SchemaService,
     private entryUploadService: EntryUploadService,
     private studyService: StudyService,
     private entryStudyService: EntryStudyService,
@@ -49,35 +47,6 @@ export class EntryController {
     private userStudyService: UserStudyService,
     private bucketStorage: BucketStorage
   ) {}
-
-  /**
-   * Handle storing the metadata schema which will be stored for
-   * every entry.
-   *
-   * NOTE: This is a one-time operation. Once the meta data is specified,
-   *       it cannot be changed.
-   */
-  @Post('/metadata')
-  async setMetadata(@Body() fields: MetadataDefinition[]) {
-    // If the schema already exists, throw an error
-    if (await this.schemaService.hasSchema('Entry')) {
-      throw new HttpException('Entry schema already exists', HttpStatus.BAD_REQUEST);
-    }
-
-    // Generate a JSON Schmea from the meta data
-    const schema = {
-      $id: 'Entry',
-      $schema: 'https://json-schema.org/draft/2020-12/schema',
-      type: 'object',
-      properties: {},
-      required: fields.map((field) => field.name)
-    };
-    for (const field of fields) {
-      (schema.properties as any)[field.name] = { type: field.type };
-    }
-
-    this.schemaService.saveSchema('Entry', schema);
-  }
 
   /**
    * Handles the process of uploading entries to SignLab. This process
@@ -111,14 +80,7 @@ export class EntryController {
   @Auth('admin')
   async getEntryCSVTemplate(): Promise<{ header: string }> {
     // Header with required arguments
-    let header = 'entryID,responderID,filename';
-
-    // Add in user provided metadata
-    for (const metadata of await this.schemaService.getFields('Entry')) {
-      header += ',';
-      header += metadata;
-    }
-
+    const header = 'entryID,responderID,filename';
     return { header: header };
   }
 
