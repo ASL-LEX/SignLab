@@ -1,6 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { app } from '../main';
 import { Dataset } from '../dataset/dataset.schema';
 import { SignLabEntryRecording, SignLabEntryRecordingSchema } from './signlab-recording.schema';
 import { User } from '../user/user.schema';
