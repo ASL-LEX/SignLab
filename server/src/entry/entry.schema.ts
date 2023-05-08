@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { app } from '../main';
-import { SchemaService } from './schema.service';
 import { Dataset } from '../dataset/dataset.schema';
 import { SignLabEntryRecording, SignLabEntryRecordingSchema } from './signlab-recording.schema';
 import { User } from '../user/user.schema';
@@ -88,15 +87,7 @@ export class Entry {
   /**
    * Stores information specific to the research and decided by the researcher.
    */
-  @Prop({
-    type: mongoose.Schema.Types.Mixed,
-    validate: {
-      validator: async (value: any) => {
-        const schemaService = app.get(SchemaService);
-        return schemaService.validate('Entry', value);
-      }
-    }
-  })
+  @Prop({ type: mongoose.Schema.Types.Mixed })
   meta: any;
 }
 

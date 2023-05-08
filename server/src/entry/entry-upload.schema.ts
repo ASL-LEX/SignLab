@@ -1,7 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { SchemaService } from './schema.service';
-import { app } from '../main';
 
 /**
  * Represents the intermediate state of a entry which is being uploaded
@@ -55,12 +53,6 @@ export class EntryUpload {
    */
   @Prop({
     type: mongoose.Schema.Types.Mixed,
-    validate: {
-      validator: async (value: any) => {
-        const schemaService = app.get(SchemaService);
-        return schemaService.validate('Entry', value);
-      }
-    }
   })
   meta: any;
 }

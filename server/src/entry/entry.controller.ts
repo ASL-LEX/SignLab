@@ -17,7 +17,6 @@ import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import { SaveAttempt } from 'shared/dtos/entry.dto';
-import { SchemaService } from './schema.service';
 import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
@@ -41,7 +40,6 @@ import { Organization } from '../organization/organization.schema';
 export class EntryController {
   constructor(
     private entryService: EntryService,
-    private schemaService: SchemaService,
     private entryUploadService: EntryUploadService,
     private studyService: StudyService,
     private entryStudyService: EntryStudyService,
@@ -83,13 +81,6 @@ export class EntryController {
   async getEntryCSVTemplate(): Promise<{ header: string }> {
     // Header with required arguments
     let header = 'entryID,responderID,filename';
-
-    // Add in user provided metadata
-    for (const metadata of await this.schemaService.getFields('Entry')) {
-      header += ',';
-      header += metadata;
-    }
-
     return { header: header };
   }
 
