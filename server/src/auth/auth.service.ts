@@ -98,10 +98,6 @@ export class AuthService {
    * @return The newly created user.
    */
   public async signup(userSignup: UserSignup): Promise<AuthResponse> {
-    // First user is always the owner
-    const numUsers = await this.userService.count();
-    const isOwner = numUsers == 0;
-
     const hashedPassword = await hash(userSignup.password, 10);
 
     const user = {
@@ -110,7 +106,10 @@ export class AuthService {
       name: userSignup.name,
       organization: userSignup.organization,
       roles: {
-        owner: isOwner,
+        // Currently the owner role is manually assigned by the developer to
+        // users, in the future the goal is for this to be handled by a system
+        // root level account
+        owner: false,
         projectAdmin: new Map<string, boolean>(),
         studyAdmin: new Map<string, boolean>(),
         studyContributor: new Map<string, boolean>(),

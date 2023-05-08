@@ -16,7 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { MetadataDefinition, SaveAttempt } from 'shared/dtos/entry.dto';
+import { SaveAttempt } from 'shared/dtos/entry.dto';
 import { SchemaService } from './schema.service';
 import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
@@ -49,35 +49,6 @@ export class EntryController {
     private userStudyService: UserStudyService,
     private bucketStorage: BucketStorage
   ) {}
-
-  /**
-   * Handle storing the metadata schema which will be stored for
-   * every entry.
-   *
-   * NOTE: This is a one-time operation. Once the meta data is specified,
-   *       it cannot be changed.
-   */
-  @Post('/metadata')
-  async setMetadata(@Body() fields: MetadataDefinition[]) {
-    // If the schema already exists, throw an error
-    if (await this.schemaService.hasSchema('Entry')) {
-      throw new HttpException('Entry schema already exists', HttpStatus.BAD_REQUEST);
-    }
-
-    // Generate a JSON Schmea from the meta data
-    const schema = {
-      $id: 'Entry',
-      $schema: 'https://json-schema.org/draft/2020-12/schema',
-      type: 'object',
-      properties: {},
-      required: fields.map((field) => field.name)
-    };
-    for (const field of fields) {
-      (schema.properties as any)[field.name] = { type: field.type };
-    }
-
-    this.schemaService.saveSchema('Entry', schema);
-  }
 
   /**
    * Handles the process of uploading entries to SignLab. This process
