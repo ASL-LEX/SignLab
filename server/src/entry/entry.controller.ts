@@ -80,7 +80,7 @@ export class EntryController {
   @Auth('admin')
   async getEntryCSVTemplate(): Promise<{ header: string }> {
     // Header with required arguments
-    let header = 'entryID,responderID,filename';
+    const header = 'entryID,responderID,filename';
     return { header: header };
   }
 

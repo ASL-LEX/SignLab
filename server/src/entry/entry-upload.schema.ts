@@ -52,7 +52,7 @@ export class EntryUpload {
    *       is used for validating it.
    */
   @Prop({
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.Mixed
   })
   meta: any;
 }

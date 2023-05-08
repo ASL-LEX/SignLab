@@ -16,14 +16,9 @@ export class AppComponent {
    */
   firstTimeSetup = false;
 
-  constructor(
-    private ngZone: NgZone,
-    public authService: AuthService,
-    private router: Router
-  ) {
+  constructor(private ngZone: NgZone, public authService: AuthService, private router: Router) {
     this.setupComplete = this.setupComplete.bind(this);
   }
-
 
   /**
    * When setup has completed, change the view
