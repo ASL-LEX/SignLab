@@ -43,7 +43,7 @@ describe('LoginComponent', () => {
       return null;
     });
 
-    orgSpy = jasmine.createSpyObj('OrganizationService', [], {
+    orgSpy = jasmine.createSpyObj('OrganizationService', ['setOrganization'], {
       organizations: new BehaviorSubject([
         {
           _id: '1',

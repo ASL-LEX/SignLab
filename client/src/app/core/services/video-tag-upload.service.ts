@@ -26,6 +26,6 @@ export class VideoTagUploadService {
     formParams.append('videoNumber', videoNumber.toString());
 
     // Submit the form
-    return (await this.signLab.post<{ uri: string }>('/api/tag/video_field', formParams)).uri;
+    return (await this.signLab.post<{ uri: string }>('/api/tag/video_field', formParams, { provideToken: true })).uri;
   }
 }

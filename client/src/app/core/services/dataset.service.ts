@@ -74,6 +74,7 @@ export class DatasetService {
 
   /** Update the dataset list used by a specific project */
   async updateDatasets() {
+    await this.datasetQuery.refetch();
     // Update the visible datasets for the project
     const currentProject = await firstValueFrom(this.projectService.activeProject);
     if (currentProject) {

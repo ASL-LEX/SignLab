@@ -15,9 +15,10 @@ import { UserPipe } from '../shared/pipes/user.pipe';
 import { ProjectPipe } from '../shared/pipes/project.pipe';
 import { Project } from '../project/project.schema';
 import { Organization } from '../organization/organization.schema';
-import { UseGuards } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { OrganizationContext } from '../organization/organization.decorator';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { DatasetPipe } from 'src/shared/pipes/dataset.pipe';
 
 @Resolver(() => Dataset)
 export class DatasetResolver {
@@ -52,12 +53,40 @@ export class DatasetResolver {
     return this.datasetService.exists(name, organization._id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => Boolean)
   async changeProjectAccess(
     @Args('projectAccessChange', { type: () => ProjectAccessChange }, ProjectAccessChangePipe)
     projectAccessChange: ProjectAccessChangeFull
   ): Promise<boolean> {
     await this.datasetService.changeProjectAccess(projectAccessChange);
+    return true;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async changeDatasetName(
+    @Args('dataset', { type: () => ID }, DatasetPipe) dataset: Dataset,
+    @Args('newName') newName: string,
+    @OrganizationContext() organization: Organization
+  ): Promise<boolean> {
+    // Ensure the dataset name is unique for the organization
+    if (await this.datasetService.exists(newName, organization._id)) {
+      throw new BadRequestException(`Dataset with name ${newName} already exists`);
+    }
+
+    // Update the name
+    await this.datasetService.changeName(dataset, newName);
+    return true;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async changeDatasetDescription(
+    @Args('dataset', { type: () => ID }, DatasetPipe) dataset: Dataset,
+    @Args('newDescription') newDescription: string
+  ): Promise<boolean> {
+    await this.datasetService.changeDescription(dataset, newDescription);
     return true;
   }
 
