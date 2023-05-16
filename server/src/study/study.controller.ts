@@ -200,7 +200,7 @@ export class StudyController {
 
   @Put('/name')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async changeName(@Body() nameChange: { study: string, newName: string }): Promise<void> {
+  async changeName(@Body() nameChange: { study: string; newName: string }): Promise<void> {
     // Get the study and ensure it exists
     const study = await this.studyService.find(nameChange.study);
     if (study === null) {
@@ -218,7 +218,7 @@ export class StudyController {
 
   @Put('/description')
   @UseGuards(JwtAuthGuard, ProjectGuard)
-  async changeDescription(@Body() nameChange: { study: string, newDescription: string }): Promise<void> {
+  async changeDescription(@Body() nameChange: { study: string; newDescription: string }): Promise<void> {
     // Get the study and ensure it exists
     const study = await this.studyService.find(nameChange.study);
     if (study === null) {
