@@ -208,7 +208,7 @@ export class StudyController {
     }
 
     // Check to make sure the study name is unique
-    if (await this.studyService.exists(study.name, study.project as string)) {
+    if (await this.studyService.exists(nameChange.newName, study.project as string)) {
       throw new BadRequestException(`Study already exists with the name ${nameChange.newName}`);
     }
 

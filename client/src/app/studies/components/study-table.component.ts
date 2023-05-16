@@ -31,7 +31,18 @@ export class StudyTable {
       .open(EditStudyDialog, { data: { field: 'name' } })
       .afterClosed()
       .subscribe(async (newName) => {
+        if (newName === null || newName === '' || newName === study.name) {
+          return;
+        }
 
+        const studyExists = await this.studyService.studyExists(newName);
+        if (studyExists) {
+          alert(`Study with the name ${newName} already exists`);
+          return;
+        }
+
+        await this.studyService.changeName(study, newName);
+        await this.studyService.updateStudies();
       });
   }
 
@@ -40,7 +51,11 @@ export class StudyTable {
       .open(EditStudyDialog, { data: { field: 'description' } })
       .afterClosed()
       .subscribe(async (newDescription) => {
-
+        if (newDescription === null || newDescription === '' || newDescription === study.description) {
+          return;
+        }
+        await this.studyService.changeDescription(study, newDescription);
+        await this.studyService.updateStudies();
       });
   }
 }
