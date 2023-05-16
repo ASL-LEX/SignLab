@@ -77,6 +77,15 @@ export class DatasetResolver {
     return true;
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => Boolean)
+  async changeDatasetDescription(@Args('dataset', { type: () => ID }, DatasetPipe) dataset: Dataset,
+                                 @Args('newDescription') newDescription: string): Promise<boolean> {
+
+    await this.datasetService.changeDescription(dataset, newDescription);
+    return true;
+  }
+
   @ResolveField()
   async creator(dataset: Dataset): Promise<User> {
     if (dataset.creator instanceof mongoose.Types.ObjectId) {
