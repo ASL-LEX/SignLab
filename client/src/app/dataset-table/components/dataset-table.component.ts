@@ -1,7 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { Dataset } from '../../graphql/graphql';
 import { DatasetService } from '../../core/services/dataset.service';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ChangeDatasetNameGQL, DatasetExistsGQL } from 'src/app/graphql/datasets/datasets.generated';
+import { firstValueFrom } from 'rxjs';
 
 /**
  * Component which wraps up displaying the different datasets with their
@@ -33,17 +35,37 @@ import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
   `
 })
 export class DatasetTable {
-  constructor(public datasetService: DatasetService, private readonly dialog: MatDialog) {}
+  constructor(public datasetService: DatasetService, private readonly dialog: MatDialog,
+              private readonly datasetExistsGQL: DatasetExistsGQL, private readonly changeNameGQL: ChangeDatasetNameGQL) {}
 
   openEditNameDialog(dataset: Dataset) {
-    this.dialog.open(EditDatasetDialog, { data: { field: 'name' } }).afterClosed().subscribe((value) => {
-      const newName = value;
-      console.log(newName);
+    this.dialog.open(EditDatasetDialog, { data: { field: 'name' } }).afterClosed().subscribe(async (newName) => {
+      // If no new name provided, do nothing
+      if (newName === null || newName === '' || dataset.name === newName) {
+        return;
+      }
+
+      // Ensure the name is unique
+      const datasetWithNameExists = await firstValueFrom(this.datasetExistsGQL.fetch({ name: newName }));
+      if (datasetWithNameExists.data.datasetExists) {
+        alert(`A dataset with the name ${newName} already exists`);
+      }
+
+      // Update the dataset
+      await firstValueFrom(this.changeNameGQL.mutate({ dataset: dataset.id, newName }));
+
+      // Refetch the datasets for the new name to appear
+      this.datasetService.updateDatasets();
     });
   }
 
   openEditDescriptionDialog(dataset: Dataset) {
-    this.dialog.open(EditDatasetDialog, { data: { field: 'description' } });
+    this.dialog.open(EditDatasetDialog, { data: { field: 'description' } }).afterClosed().subscribe((newDescription) => {
+      // If no new description provided, do nothing
+      if (newDescription === null || newDescription === '') {
+        return;
+      }
+    });
   }
 }
 
