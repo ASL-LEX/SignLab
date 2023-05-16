@@ -64,3 +64,7 @@ mutation createDataset($datasetCreate: DatasetCreate!) {
 mutation changeProjectAccess($projectAccessChange: ProjectAccessChange!) {
   changeProjectAccess(projectAccessChange: $projectAccessChange)
 }
+
+mutation changeDatasetName($dataset: ID!, $newName: String!) {
+  changeDatasetName(dataset: $dataset, newName: $newName)
+}

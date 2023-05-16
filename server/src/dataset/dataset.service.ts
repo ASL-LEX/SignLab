@@ -41,6 +41,10 @@ export class DatasetService {
     return this.datasetModel.find({ [`projectAccess.${project._id}`]: true }).exec();
   }
 
+  async changeName(dataset: Dataset, newName: string): Promise<void> {
+    await this.datasetModel.updateOne({ _id: dataset._id }, { $set: { name: newName } });
+  }
+
   async changeProjectAccess(projectAccessChange: ProjectAccessChangeFull): Promise<void> {
     await this.datasetModel
       .updateOne(
