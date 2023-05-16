@@ -3,13 +3,33 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let study">{{study.name}}</td>
+      <td mat-cell *matCellDef="let study">
+        {{study.name}}
+        <button
+          mat-mini-fab
+          aria-label="Edit Name"
+          (click)="openEditNameDialog(study)"
+          style="transform: scale(0.75)"
+        >
+          <mat-icon style="transform: scale(0.75)">edit</mat-icon>
+        </button>
+      </td>
     </ng-container>
 
     <!-- Description Column -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef>Description</th>
-      <td mat-cell *matCellDef="let study">{{study.description}}</td>
+      <td mat-cell *matCellDef="let study">
+        {{study.description}}
+        <button
+          mat-mini-fab
+          aria-label="Edit Description"
+          (click)="openEditDescriptionDialog(study)"
+          style="transform: scale(0.75)"
+        >
+          <mat-icon style="transform: scale(0.75)">edit</mat-icon>
+        </button>
+      </td>
     </ng-container>
 
     <!-- Button for deleting the entry -->

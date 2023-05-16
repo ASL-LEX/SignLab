@@ -25,6 +25,24 @@ export class StudyTable {
       }
     });
   }
+
+  openEditNameDialog(study: Study) {
+    this.dialog
+      .open(EditStudyDialog, { data: { field: 'name' } })
+      .afterClosed()
+      .subscribe(async (newName) => {
+
+      });
+  }
+
+  openEditDescriptionDialog(study: Study) {
+    this.dialog
+      .open(EditStudyDialog, { data: { field: 'description' } })
+      .afterClosed()
+      .subscribe(async (newDescription) => {
+
+      });
+  }
 }
 
 @Component({
@@ -44,4 +62,26 @@ export class StudyTable {
 })
 export class ConfirmationDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public study: Study) {}
+}
+
+@Component({
+  selector: 'study-edit-dialog',
+  template: `
+    <h1 mat-dialog-title>Change Study {{ data.field }}</h1>
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>New {{ data.field }}</mat-label>
+        <input matInput [(ngModel)]="newValue" />
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="null">Cancel</button>
+      <button mat-button [mat-dialog-close]="newValue" cdkFocusInitial>Ok</button>
+    </div>
+  `
+})
+export class EditStudyDialog {
+  public newValue = '';
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { field: string }) {}
 }
