@@ -36,7 +36,10 @@ export class DatasetTable {
   constructor(public datasetService: DatasetService, private readonly dialog: MatDialog) {}
 
   openEditNameDialog(dataset: Dataset) {
-    this.dialog.open(EditDatasetDialog, { data: { field: 'name' } });
+    this.dialog.open(EditDatasetDialog, { data: { field: 'name' } }).afterClosed().subscribe((value) => {
+      const newName = value;
+      console.log(newName);
+    });
   }
 
   openEditDescriptionDialog(dataset: Dataset) {
@@ -47,19 +50,21 @@ export class DatasetTable {
 @Component({
   selector: 'dataset-edit-dialog',
   template: `
-    <mat-dialog-content>
-      <mat-dialog-title>Change Dataset {{ data.field }}</mat-dialog-title>
-      <mat-dialog-content>
-        <mat-form-field appearance="fill">
-          <mat-label>New {{ data.field }}</mat-label>
-          <input matInput [(ngModel)]="newValue">
-        </mat-form-field>
-      </mat-dialog-content>
-    </mat-dialog-content>
+    <h1 mat-dialog-title>Change Dataset {{ data.field }}</h1>
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>New {{ data.field }}</mat-label>
+        <input matInput [(ngModel)]="newValue">
+      </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button [mat-dialog-close]="null">Cancel</button>
+      <button mat-button [mat-dialog-close]="newValue" cdkFocusInitial>Ok</button>
+    </div>
   `
 })
 export class EditDatasetDialog {
   public newValue: string = '';
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { file: string }) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { field: string }) {}
 }
