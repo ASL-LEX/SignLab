@@ -9,7 +9,8 @@ import {
   Put,
   UseGuards,
   Delete,
-  Param
+  Param,
+  BadRequestException
 } from '@nestjs/common';
 import { EntryService } from '../entry/entry.service';
 import { Study } from '../study/study.schema';
@@ -195,5 +196,36 @@ export class StudyController {
   @UseGuards(JwtAuthGuard, ProjectGuard)
   async deleteStudy(@Param('id', StudyPipe) study: Study): Promise<void> {
     await this.studyService.delete(study);
+  }
+
+  @Put('/name')
+  @UseGuards(JwtAuthGuard, ProjectGuard)
+  async changeName(@Body() nameChange: { study: string; newName: string }): Promise<void> {
+    // Get the study and ensure it exists
+    const study = await this.studyService.find(nameChange.study);
+    if (study === null) {
+      throw new BadRequestException(`Study with ID ${nameChange.study} does not exist`);
+    }
+
+    // Check to make sure the study name is unique
+    if (await this.studyService.exists(nameChange.newName, study.project as string)) {
+      throw new BadRequestException(`Study already exists with the name ${nameChange.newName}`);
+    }
+
+    // Change the name
+    await this.studyService.changeName(study, nameChange.newName);
+  }
+
+  @Put('/description')
+  @UseGuards(JwtAuthGuard, ProjectGuard)
+  async changeDescription(@Body() nameChange: { study: string; newDescription: string }): Promise<void> {
+    // Get the study and ensure it exists
+    const study = await this.studyService.find(nameChange.study);
+    if (study === null) {
+      throw new BadRequestException(`Study with ID ${nameChange.study} does not exist`);
+    }
+
+    // Change the name
+    await this.studyService.changeDescription(study, nameChange.newDescription);
   }
 }

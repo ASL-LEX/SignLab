@@ -13,7 +13,7 @@ import { TagFormPreviewDialog } from './components/new-study/tag-form-preview.co
 import { TagFieldComponent } from './components/new-study/tag-field.component';
 import { TagFieldGeneratorService } from './services/tag-field-generator.service';
 import { TagViewComponent } from './components/tag-view.component';
-import { StudyTable } from './components/study-table.component';
+import { EditStudyDialog, StudyTable } from './components/study-table.component';
 import { ConfirmationDialog } from './components/study-table.component';
 
 @NgModule({
@@ -26,7 +26,8 @@ import { ConfirmationDialog } from './components/study-table.component';
     TagFieldComponent,
     TagViewComponent,
     StudyTable,
-    ConfirmationDialog
+    ConfirmationDialog,
+    EditStudyDialog
   ],
   imports: [StudiesRoutingModule, DatasetTableModule, CoreModule, SharedModule],
   providers: [TagFieldGeneratorService]

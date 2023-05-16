@@ -133,4 +133,12 @@ export class StudyService {
     // Delete the study itself
     await this.studyModel.deleteOne({ _id: study._id });
   }
+
+  async changeName(study: Study, newName: string): Promise<void> {
+    await this.studyModel.updateOne({ _id: study._id }, { $set: { name: newName } });
+  }
+
+  async changeDescription(study: Study, newDescription: string): Promise<void> {
+    await this.studyModel.updateOne({ _id: study._id }, { $set: { description: newDescription } });
+  }
 }

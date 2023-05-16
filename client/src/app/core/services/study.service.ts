@@ -206,4 +206,12 @@ export class StudyService {
     });
     await this.updateStudies();
   }
+
+  async changeName(study: Study, newName: string): Promise<void> {
+    await this.signLab.put('api/study/name', { study: study._id, newName }, { provideToken: true });
+  }
+
+  async changeDescription(study: Study, newDescription: string): Promise<void> {
+    await this.signLab.put('api/study/description', { study: study._id, newDescription }, { provideToken: true });
+  }
 }
