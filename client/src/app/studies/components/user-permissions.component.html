@@ -25,7 +25,7 @@
         <mat-slide-toggle
           (change)="toggleStudyAdmin({user: user.user, change: $event})"
           [checked]="user.user.roles.studyAdmin[activeStudyID] || user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
-          [disabled]="user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+          [disabled]="user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner || user.user._id == currentUser._id"
         ></mat-slide-toggle>
       </td>
     </ng-container>

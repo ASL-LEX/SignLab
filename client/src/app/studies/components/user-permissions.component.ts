@@ -5,6 +5,7 @@ import { ProjectService } from '../../core/services/project.service';
 import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { Study } from 'shared/dtos/study.dto';
 import { User } from '../../graphql/graphql';
+import { AuthService } from '../../core/services/auth.service';
 
 /** TODO: Remove the need to cast to any on roles */
 @Component({
@@ -27,12 +28,15 @@ export class UserPermissionsComponent {
     'contribute',
     'taggingTrainingResults'
   ];
+  currentUser: User;
 
-  constructor(public studyService: StudyService, private projectService: ProjectService) {
+  constructor(public studyService: StudyService, private projectService: ProjectService, authService: AuthService) {
     this.studyService.activeStudy.subscribe((study) => {
       this.activeStudyID = study ? study._id! : null;
       this.loadData(study);
     });
+
+    this.currentUser = authService.user;
 
     this.projectService.activeProject.subscribe((project) => {
       this.activeProjectID = project ? project._id! : null;
