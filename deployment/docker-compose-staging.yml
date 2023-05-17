@@ -13,7 +13,7 @@ services:
       - mongo
     ports: ["6000:3000"]
     env_file:
-      - stack.env
+      - ../stack.env
 volumes:
   signlab-staging:
     external: true
