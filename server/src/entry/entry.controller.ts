@@ -22,7 +22,6 @@ import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
 import { EntryStudy } from '../entrystudy/entrystudy.schema';
-import { Auth } from '../auth/auth.guard';
 import { TagService } from '../tag/tag.service';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { BucketStorage } from '../bucket/bucket.service';
@@ -37,6 +36,7 @@ import { User } from '../user/user.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
 import { Organization } from '../organization/organization.schema';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 
 @Controller('/api/entry')
 @UseGuards(JwtAuthGuard)
@@ -66,6 +66,7 @@ export class EntryController {
    *         error messages
    */
   @Post('/upload/csv')
+  @UseGuards(OwnerGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadCSV(@UploadedFile() file: Express.Multer.File): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
@@ -98,6 +99,7 @@ export class EntryController {
    * This should be called first before uploading the metadat
    */
   @Put('/upload/dataset/:datasetID')
+  @UseGuards(OwnerGuard)
   setTargetDataset(@Param('datasetID', DatasetPipe) dataset: Dataset) {
     this.entryUploadService.setTargetDataset(dataset);
   }
@@ -106,6 +108,7 @@ export class EntryController {
    * Set the user that is making the upload
    */
   @Put('/upload/user/:userID')
+  @UseGuards(OwnerGuard)
   setUser(@Param('userID', UserPipe) user: User) {
     this.entryUploadService.setTargetUser(user);
   }
@@ -122,6 +125,7 @@ export class EntryController {
    *         error messages.
    */
   @Post('/upload/zip')
+  @UseGuards(OwnerGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       // @Auth('admin')
@@ -174,6 +178,8 @@ export class EntryController {
 
   /**
    * Change if the entry should be enabled as part of the study.
+   *
+   * TODO: Add guard for owner, project admin, or study admin
    */
   @Put('/enable')
   async setEntryStudyEnable(
@@ -218,6 +224,7 @@ export class EntryController {
    * @param entry The entry to delete
    */
   @Delete('/:id')
+  @UseGuards(OwnerGuard)
   async deleteEntry(@Param('id', EntryPipe) entry: Entry): Promise<void> {
     // First, handle the case that the entry is part of the training set,
     // this will remove the corresponding entry studies from the list of
