@@ -351,6 +351,7 @@ export class NavbarComponent {
   logout() {
     this.authService.signOut();
     this.router.navigate(['/']);
+    this.updateNavItems();
   }
 
   /**
