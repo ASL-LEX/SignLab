@@ -36,7 +36,7 @@ let configModule = ConfigModule.forRoot({
 // If a specific environment is provided, load variables from there
 if (process.env.NODE_ENV) {
   configModule = ConfigModule.forRoot({
-    envFilePath: `../.env.${process.env.NODE_ENV}`,
+    envFilePath: `.env.${process.env.NODE_ENV}`,
     load: [configuration]
   });
 }
