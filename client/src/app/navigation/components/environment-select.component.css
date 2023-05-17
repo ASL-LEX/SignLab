@@ -7,8 +7,8 @@
   color: white;
 }
 
-::ng-deep .mat-select-value {
-  color: white;
+:host ::ng-deep .mat-select-value {
+  color: white !important;
 }
 
 .select-field {
