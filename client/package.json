@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start:watch": "ng build --watch --configuration development",
