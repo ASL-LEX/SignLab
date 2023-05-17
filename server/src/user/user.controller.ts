@@ -28,7 +28,7 @@ export class UserController {
    * Get all user information for all users.
    */
   @Get('/')
-  @Auth('admin')
+  @UseGuards(JwtAuthGuard)
   async getAllUsers(@OrganizationContext() organization: Organization): Promise<User[]> {
     return this.userService.findAll({ organization: organization._id });
   }
