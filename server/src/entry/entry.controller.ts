@@ -10,7 +10,8 @@ import {
   Body,
   Query,
   Delete,
-  Param
+  Param,
+  UseGuards
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
@@ -35,8 +36,10 @@ import { UserPipe } from '../shared/pipes/user.pipe';
 import { User } from '../user/user.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
 import { Organization } from '../organization/organization.schema';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @Controller('/api/entry')
+@UseGuards(JwtAuthGuard)
 export class EntryController {
   constructor(
     private entryService: EntryService,
@@ -63,7 +66,6 @@ export class EntryController {
    *         error messages
    */
   @Post('/upload/csv')
-  @Auth('admin')
   @UseInterceptors(FileInterceptor('file'))
   async uploadCSV(@UploadedFile() file: Express.Multer.File): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
@@ -77,7 +79,6 @@ export class EntryController {
    * entries.
    */
   @Get('/template')
-  @Auth('admin')
   async getEntryCSVTemplate(): Promise<{ header: string }> {
     // Header with required arguments
     const header = 'entryID,responderID,filename';
@@ -88,7 +89,6 @@ export class EntryController {
    * Get the entries for the given dataset
    */
   @Get('/dataset/:datasetID')
-  @Auth('admin')
   async getEntriesForDataset(@Param('datasetID', DatasetPipe) dataset: Dataset): Promise<Entry[]> {
     return this.entryService.getEntriesForDataset(dataset);
   }
@@ -98,7 +98,6 @@ export class EntryController {
    * This should be called first before uploading the metadat
    */
   @Put('/upload/dataset/:datasetID')
-  @Auth('admin')
   setTargetDataset(@Param('datasetID', DatasetPipe) dataset: Dataset) {
     this.entryUploadService.setTargetDataset(dataset);
   }
@@ -107,7 +106,6 @@ export class EntryController {
    * Set the user that is making the upload
    */
   @Put('/upload/user/:userID')
-  @Auth('admin')
   setUser(@Param('userID', UserPipe) user: User) {
     this.entryUploadService.setTargetUser(user);
   }
@@ -124,7 +122,6 @@ export class EntryController {
    *         error messages.
    */
   @Post('/upload/zip')
-  @Auth('admin')
   @UseInterceptors(
     FileInterceptor('file', {
       // @Auth('admin')
@@ -160,7 +157,6 @@ export class EntryController {
    * Get all entry information
    */
   @Get('/')
-  @Auth('admin')
   async getEntries(@OrganizationContext() organization: Organization): Promise<Entry[]> {
     return this.entryService.getAllEntries(organization._id);
   }
@@ -169,7 +165,6 @@ export class EntryController {
    * Get the entry studies for a specific study.
    */
   @Get('/entriestudies')
-  @Auth('admin')
   async getEntryStudies(
     @Query('studyID', StudyPipe) study: Study,
     @Query('datasetID', DatasetPipe) dataset: Dataset
@@ -181,7 +176,6 @@ export class EntryController {
    * Change if the entry should be enabled as part of the study.
    */
   @Put('/enable')
-  @Auth('admin')
   async setEntryStudyEnable(
     @Body()
     changeRequest: {
@@ -224,7 +218,6 @@ export class EntryController {
    * @param entry The entry to delete
    */
   @Delete('/:id')
-  @Auth('admin')
   async deleteEntry(@Param('id', EntryPipe) entry: Entry): Promise<void> {
     // First, handle the case that the entry is part of the training set,
     // this will remove the corresponding entry studies from the list of
