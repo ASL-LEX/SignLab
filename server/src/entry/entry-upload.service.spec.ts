@@ -250,14 +250,14 @@ describe('EntryService', () => {
     it('single line CSV should fail', async () => {
       const testInput = Readable.from([`This is garbage and now good no commas for you`]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('error');
     });
 
     it('should not allow empty CSV', async () => {
       const testInput = Readable.from(['']);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('error');
       expect(result.message).toContain('No entries found in CSV');
     });
@@ -269,7 +269,7 @@ describe('EntryService', () => {
          1,example.mp4,tree`
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('error');
     });
 
@@ -280,7 +280,7 @@ describe('EntryService', () => {
          1,2,example.mp4,tree,butterfly`
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('error');
       expect(result.message).toContain('Failed to parse CSV');
     });
@@ -293,7 +293,7 @@ describe('EntryService', () => {
         1,3,example.mp4,bread`
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('error');
       expect(result!.where![0].message).toContain('already exists');
     });
@@ -307,7 +307,7 @@ describe('EntryService', () => {
          7,8,another.mp4,water`
       ]);
 
-      const result = await entryUploadService.uploadEntryDataCSV(testInput);
+      const result = await entryUploadService.uploadEntryDataCSV(testInput, { name: 'ASL-LEX', _id: '1' });
       expect(result.type).toEqual('success');
     });
   });
