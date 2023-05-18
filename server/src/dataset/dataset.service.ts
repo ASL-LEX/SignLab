@@ -9,9 +9,11 @@ import { EntryStudy } from '../entrystudy/entrystudy.schema';
 
 @Injectable()
 export class DatasetService {
-  constructor(@InjectModel(Dataset.name) private datasetModel: Model<Dataset>,
-             private readonly entryStudyService: EntryStudyService,
-             private readonly studyService: StudyService) {}
+  constructor(
+    @InjectModel(Dataset.name) private datasetModel: Model<Dataset>,
+    private readonly entryStudyService: EntryStudyService,
+    private readonly studyService: StudyService
+  ) {}
 
   /**
    * Get all datasets
@@ -69,14 +71,23 @@ export class DatasetService {
     const studies = await this.studyService.getStudies(projectAccessChange.project._id);
 
     // Get all impacted entry studies
-    const entryStudies: EntryStudy[] = (await Promise.all(studies.map(async (study) => {
-      return this.entryStudyService.getEntryStudies(study, projectAccessChange.dataset)
-    }))).flat();
-
+    const entryStudies: EntryStudy[] = (
+      await Promise.all(
+        studies.map(async (study) => {
+          return this.entryStudyService.getEntryStudies(study, projectAccessChange.dataset);
+        })
+      )
+    ).flat();
 
     // Update if the entry studies should still be in the study
-    await Promise.all(entryStudies.map(async (entryStudy) => {
-      await this.entryStudyService.markSingleDisabled(entryStudy.study._id!, entryStudy.entry._id!, !projectAccessChange.hasAccess);
-    }));
+    await Promise.all(
+      entryStudies.map(async (entryStudy) => {
+        await this.entryStudyService.markSingleDisabled(
+          entryStudy.study._id!,
+          entryStudy.entry._id!,
+          !projectAccessChange.hasAccess
+        );
+      })
+    );
   }
 }
