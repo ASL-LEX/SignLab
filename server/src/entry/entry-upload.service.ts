@@ -70,7 +70,7 @@ export class EntryUploadService {
    * that data as a CSV. The CSV should contain information related to series
    * of entries being uploaded.
    */
-  async uploadEntryDataCSV(stream: Readable): Promise<SaveAttempt> {
+  async uploadEntryDataCSV(stream: Readable, organization: Organization): Promise<SaveAttempt> {
     // Clear out any left over EntryUploads
     // TODO: May want some way of alerting the user that there are any
     //       remaining entry uploads
@@ -86,7 +86,7 @@ export class EntryUploadService {
         const transformed = this.transformRow(row);
 
         // Try to save this row
-        const saveResult = await this.entryUploadSave(transformed);
+        const saveResult = await this.entryUploadSave(transformed, organization);
         if (saveResult.type == 'error') {
           return {
             type: 'error',
@@ -329,7 +329,7 @@ export class EntryUploadService {
    * @return The result of attempting to save, if there is an error, a human
    *         readable error field will be present in the result
    */
-  private async entryUploadSave(entryUpload: EntryUpload): Promise<SaveAttempt> {
+  private async entryUploadSave(entryUpload: EntryUpload, organization: Organization): Promise<SaveAttempt> {
     // Make sure the schema matches the expectation
     const schemaResult = await this.validateSchema(entryUpload);
 
@@ -343,8 +343,10 @@ export class EntryUploadService {
     entryUpload.filename = entryUpload.filename.trim();
 
     // Make sure the EntryUpload ID is unique
+    // TODO: Handle upload sessions on different organizations
     const entryExists =
-      (await this.entryService.entryExists(entryUpload.entryID)) || (await this.entryUploadExists(entryUpload.entryID));
+      (await this.entryService.entryExists(entryUpload.entryID, organization)) ||
+      (await this.entryUploadExists(entryUpload.entryID));
     if (entryExists) {
       return {
         type: 'error',

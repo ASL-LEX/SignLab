@@ -4,6 +4,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { Dataset } from '../dataset/dataset.schema';
 import { Entry, EntryDocument } from './entry.schema';
 import { Tag } from '../tag/tag.schema';
+import { Organization } from '../organization/organization.schema';
 
 @Injectable()
 export class EntryService {
@@ -34,8 +35,8 @@ export class EntryService {
    * @param entryID The entryID to search for
    * @return True if the entryID is present in Entries
    */
-  async entryExists(entryID: string): Promise<boolean> {
-    const entry = await this.entryModel.findOne({ entryID: entryID }).exec();
+  async entryExists(entryID: string, organization: Organization): Promise<boolean> {
+    const entry = await this.entryModel.findOne({ entryID: entryID, organization: organization._id }).exec();
     return entry != null;
   }
 
