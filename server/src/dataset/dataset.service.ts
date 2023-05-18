@@ -37,8 +37,8 @@ export class DatasetService {
     return (await this.datasetModel.findOne({ name, organization }).exec()) !== null;
   }
 
-  async getByProject(project: Project): Promise<Dataset[]> {
-    return this.datasetModel.find({ [`projectAccess.${project._id}`]: true }).exec();
+  async getByProject(project: string): Promise<Dataset[]> {
+    return this.datasetModel.find({ [`projectAccess.${project}`]: true }).exec();
   }
 
   async changeName(dataset: Dataset, newName: string): Promise<void> {

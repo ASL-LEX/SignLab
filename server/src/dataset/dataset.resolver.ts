@@ -34,7 +34,7 @@ export class DatasetResolver {
   // TODO: Add guard for project access
   @Query(() => [Dataset])
   async getDatasetsByProject(@Args('project', { type: () => ID }, ProjectPipe) project: Project): Promise<Dataset[]> {
-    return this.datasetService.getByProject(project);
+    return this.datasetService.getByProject(project._id);
   }
 
   @UseGuards(JwtAuthGuard)

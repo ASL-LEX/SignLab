@@ -29,6 +29,7 @@ import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
 import { Organization } from '../organization/organization.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
+import { DatasetService } from '../dataset/dataset.service';
 
 @Controller('/api/study')
 export class StudyController {
@@ -37,7 +38,8 @@ export class StudyController {
     private entryService: EntryService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
-    private userService: UserService
+    private userService: UserService,
+    private datasetService: DatasetService
   ) {}
   /**
    * Get all of the studies
@@ -171,8 +173,11 @@ export class StudyController {
       project: studyCreation.projectID
     });
 
+    // Get all datasets accessible to this project
+    const datasets = await this.datasetService.getByProject(studyCreation.projectID);
+    const entries = await this.entryService.getAllEntriesForDatasets(datasets);
+
     // Now add a EntryStudy for each entry
-    const entries = await this.entryService.getAllEntries(organization._id);
     await this.entryStudyService.createEntryStudies(entries, newStudy, true);
 
     // Mark training and disabled entries
