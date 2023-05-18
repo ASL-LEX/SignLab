@@ -204,10 +204,11 @@ export class EntryController {
     }
 
     // Make sure the user has access to the study
-    const projectID = (study.project as string);
+    const projectID = study.project as string;
     const studyID = study._id!;
 
-    const userHasAccess = user.roles.owner || user.roles.projectAdmin.get(projectID) || user.roles.studyAdmin.get(studyID);
+    const userHasAccess =
+      user.roles.owner || user.roles.projectAdmin.get(projectID) || user.roles.studyAdmin.get(studyID);
     if (!userHasAccess) {
       throw new HttpException('User does not have access', HttpStatus.UNAUTHORIZED);
     }
