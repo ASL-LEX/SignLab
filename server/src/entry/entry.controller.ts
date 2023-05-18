@@ -69,11 +69,11 @@ export class EntryController {
   @Post('/upload/csv')
   @UseGuards(OwnerGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCSV(@UploadedFile() file: Express.Multer.File): Promise<SaveAttempt> {
+  async uploadCSV(@UploadedFile() file: Express.Multer.File, @OrganizationContext() organization: Organization): Promise<SaveAttempt> {
     // TODO: Add error handling on file type
     // Make a stream from the buffer in the file
     const fileStream = Readable.from(file.buffer);
-    return this.entryUploadService.uploadEntryDataCSV(fileStream);
+    return this.entryUploadService.uploadEntryDataCSV(fileStream, organization);
   }
 
   /**
