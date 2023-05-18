@@ -37,6 +37,7 @@ import { OrganizationContext } from '../organization/organization.decorator';
 import { Organization } from '../organization/organization.schema';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { OwnerGuard } from '../auth/owner.guard';
+import { UserContext } from '../user/user.decorator';
 
 @Controller('/api/entry')
 @UseGuards(JwtAuthGuard)
@@ -188,7 +189,8 @@ export class EntryController {
       studyID: string;
       entryID: string;
       isPartOfStudy: boolean;
-    }
+    },
+    @UserContext() user: User
   ): Promise<void> {
     // Get the study and entry
     // TODO: Standardized this process of existence checking and querying
@@ -199,6 +201,15 @@ export class EntryController {
     const entry = await this.entryService.find({ _id: changeRequest.entryID });
     if (!entry) {
       throw new HttpException(`The entry with id ${changeRequest.entryID} does not exist`, HttpStatus.BAD_REQUEST);
+    }
+
+    // Make sure the user has access to the study
+    const projectID = (study.project as string);
+    const studyID = study._id!;
+
+    const userHasAccess = user.roles.owner || user.roles.projectAdmin.get(projectID) || user.roles.studyAdmin.get(studyID);
+    if (!userHasAccess) {
+      throw new HttpException('User does not have access', HttpStatus.UNAUTHORIZED);
     }
 
     // This would be bad if the entry study does not exist since the
