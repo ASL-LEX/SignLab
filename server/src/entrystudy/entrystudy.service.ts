@@ -191,7 +191,7 @@ export class EntryStudyService {
   async markDisabled(studyID: string, entryIDs: string[]) {
     await Promise.all(
       entryIDs.map(async (entryID) => {
-        await this.markSingleDisabled(studyID, entryID);
+        await this.markSingleDisabled(studyID, entryID, true);
       })
     );
   }
@@ -244,7 +244,7 @@ export class EntryStudyService {
   /**
    * Mark a single entry study as being enabled/disabled
    */
-  private async markSingleDisabled(studyID: string, entryID: string) {
+  async markSingleDisabled(studyID: string, entryID: string, isDisabled: boolean) {
     await this.entryStudyModel
       .findOneAndUpdate(
         {
@@ -252,7 +252,7 @@ export class EntryStudyService {
           entry: entryID
         },
         {
-          isPartOfStudy: false
+          isPartOfStudy: !isDisabled
         }
       )
       .exec();
