@@ -86,16 +86,20 @@ export class EntryStudyService {
   async createEntryStudies(entries: Entry[], study: Study, isPartOfStudy: boolean): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
-        await this.entryStudyModel.create({
-          entry: entry,
-          study: study,
-          isPartOfStudy: isPartOfStudy,
-          isUsedForTraining: false,
-          numberTags: 0,
-          tags: []
-        });
+        await this.createEntryStudy(entry, study, isPartOfStudy);
       })
     );
+  }
+
+  async createEntryStudy(entry: Entry, study: Study, isPartOfStudy: boolean): Promise<void> {
+    await this.entryStudyModel.create({
+      entry: entry,
+      study: study,
+      isPartOfStudy: isPartOfStudy,
+      isUsedForTraining: false,
+      numberTags: 0,
+      tags: []
+    });
   }
 
   /**
@@ -187,7 +191,7 @@ export class EntryStudyService {
   async markDisabled(studyID: string, entryIDs: string[]) {
     await Promise.all(
       entryIDs.map(async (entryID) => {
-        await this.markSingleDisabled(studyID, entryID);
+        await this.markSingleDisabled(studyID, entryID, true);
       })
     );
   }
@@ -240,7 +244,7 @@ export class EntryStudyService {
   /**
    * Mark a single entry study as being enabled/disabled
    */
-  private async markSingleDisabled(studyID: string, entryID: string) {
+  async markSingleDisabled(studyID: string, entryID: string, isDisabled: boolean) {
     await this.entryStudyModel
       .findOneAndUpdate(
         {
@@ -248,7 +252,7 @@ export class EntryStudyService {
           entry: entryID
         },
         {
-          isPartOfStudy: false
+          isPartOfStudy: !isDisabled
         }
       )
       .exec();

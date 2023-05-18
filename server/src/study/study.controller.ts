@@ -29,6 +29,9 @@ import { ProjectGuard } from '../auth/project.guard';
 import { UserContext } from '../user/user.decorator';
 import { Organization } from '../organization/organization.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
+import { DatasetService } from '../dataset/dataset.service';
+import { Entry } from '../entry/entry.schema';
+import { EntryStudy } from 'src/entrystudy/entrystudy.schema';
 
 @Controller('/api/study')
 export class StudyController {
@@ -37,7 +40,8 @@ export class StudyController {
     private entryService: EntryService,
     private entryStudyService: EntryStudyService,
     private userStudyService: UserStudyService,
-    private userService: UserService
+    private userService: UserService,
+    private datasetService: DatasetService
   ) {}
   /**
    * Get all of the studies
@@ -171,9 +175,22 @@ export class StudyController {
       project: studyCreation.projectID
     });
 
-    // Now add a EntryStudy for each entry
-    const entries = await this.entryService.getAllEntries(organization._id);
-    await this.entryStudyService.createEntryStudies(entries, newStudy, true);
+    // Get all datasets
+    const datasets = await this.datasetService.findAll(organization._id);
+
+    // Make the entry studies for every entry
+    await Promise.all(
+      datasets.map(async (dataset) => {
+        // Get the entries associated with this dataset
+        const entries = await this.entryService.getEntriesForDataset(dataset);
+
+        // The entry is part of the study by default if the dataset the entry is
+        // a part of is accessible to the project the study is a part of
+        const isPartOfStudy = (dataset.projectAccess as any).get(studyCreation.projectID) || false;
+
+        await this.entryStudyService.createEntryStudies(entries, newStudy, isPartOfStudy);
+      })
+    );
 
     // Mark training and disabled entries
     await Promise.all([

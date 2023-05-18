@@ -7,6 +7,8 @@ import { Dataset, DatasetSchema } from './dataset.schema';
 import { DatasetService } from './dataset.service';
 import { ProjectModule } from '../project/project.module';
 import { OrganizationModule } from '../organization/organization.module';
+import { EntryStudyModule } from '../entrystudy/entrystudy.module';
+import { StudyModule } from '../study/study.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { OrganizationModule } from '../organization/organization.module';
     forwardRef(() => AuthModule),
     forwardRef(() => SharedModule),
     forwardRef(() => ProjectModule),
+    forwardRef(() => EntryStudyModule),
+    forwardRef(() => StudyModule),
     OrganizationModule
   ],
   providers: [DatasetService, DatasetResolver],
