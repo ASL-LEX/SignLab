@@ -86,16 +86,20 @@ export class EntryStudyService {
   async createEntryStudies(entries: Entry[], study: Study, isPartOfStudy: boolean): Promise<void> {
     await Promise.all(
       entries.map(async (entry) => {
-        await this.entryStudyModel.create({
-          entry: entry,
-          study: study,
-          isPartOfStudy: isPartOfStudy,
-          isUsedForTraining: false,
-          numberTags: 0,
-          tags: []
-        });
+        await this.createEntryStudy(entry, study, isPartOfStudy);
       })
     );
+  }
+
+  async createEntryStudy(entry: Entry, study: Study, isPartOfStudy: boolean): Promise<void> {
+    await this.entryStudyModel.create({
+      entry: entry,
+      study: study,
+      isPartOfStudy: isPartOfStudy,
+      isUsedForTraining: false,
+      numberTags: 0,
+      tags: []
+    });
   }
 
   /**
