@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0
+
+### Added
+
+* Multi-Organization support
+* Ability to rename datasets and studies
+
+### Changed
+
+* Improved dynamic reloading of projects, studies, and datasets
+* Remove old system setup
+
+### Fixed
+
+* Issue with project admin not being able to delete a study
+* Issue with navigation view not updating on logout
+
 ## 0.6.1
 
 ### Added
