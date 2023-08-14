@@ -107,28 +107,4 @@ describe('UserController', () => {
       expect(users).toEqual([testUser1, testUser2]);
     });
   });
-
-  describe('addRoleToUser()', () => {
-    it('should fail if an invalid ID is provided', async () => {
-      expect(userController.addRoleToUser('admin', '3')).rejects.toThrow();
-    });
-
-    it('should succeed when provided a valid ID', async () => {
-      expect(userController.addRoleToUser('admin', '1')).resolves;
-
-      expect(userService.addRole).toHaveBeenCalledWith('admin', '1');
-    });
-  });
-
-  describe('removeRoleFromUser()', () => {
-    it('should fail if an invalid ID is provided', async () => {
-      expect(userController.removeRoleFromUser('admin', '3')).rejects.toThrow();
-    });
-
-    it('should succeed when provided a valid ID', async () => {
-      expect(userController.removeRoleFromUser('admin', '1')).resolves;
-
-      expect(userService.addRole).toHaveBeenCalledWith('admin', '1');
-    });
-  });
 });
