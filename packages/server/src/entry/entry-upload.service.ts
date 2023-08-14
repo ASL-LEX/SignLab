@@ -4,7 +4,7 @@ import { EntryUpload, EntryUploadDocument } from './entry-upload.schema';
 import { EntryService } from './entry.service';
 import { Model } from 'mongoose';
 import { Readable } from 'stream';
-import { SaveAttempt } from 'shared/dtos/entry.dto';
+import { SaveAttempt } from '../../../shared/dtos/entry.dto';
 import { createReadStream } from 'fs';
 import { readdir, rm, stat } from 'fs/promises';
 import { join } from 'path';

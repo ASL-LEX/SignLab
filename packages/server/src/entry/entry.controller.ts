@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { EntryService } from './entry.service';
 import { Readable } from 'stream';
 import { diskStorage } from 'multer';
-import { SaveAttempt } from 'shared/dtos/entry.dto';
+import { SaveAttempt } from '../../../shared/dtos/entry.dto';
 import { EntryUploadService } from './entry-upload.service';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';

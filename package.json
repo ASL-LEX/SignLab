@@ -16,9 +16,7 @@
     "introspection": "npm run introspection --workspace=client"
   },
   "workspaces": [
-    "server",
-    "client",
-    "shared"
+    "packages/*"
   ],
   "devDependencies": {
     "@types/mocha": "^9.1.1",

@@ -1,7 +1,7 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import * as dto from 'shared/dtos/user.dto';
+import * as dto from '../../../shared/dtos/user.dto';
 
 /**
  * Stores information just on the credentials of the user, used for

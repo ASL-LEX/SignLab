@@ -1,7 +1,7 @@
-import { Dataset } from 'shared/dtos/dataset.dto';
-import { User } from 'shared/dtos/user.dto';
+import { Dataset } from '../../../shared/dtos/dataset.dto';
+import { User } from '../../../shared/dtos/user.dto';
 import { Result, Ok, Err } from '@sniptt/monads';
-import { SaveAttempt } from 'shared/dtos/entry.dto';
+import { SaveAttempt } from '../../../shared/dtos/entry.dto';
 import { EntryUpload } from './entry-upload.schema';
 import { Readable } from 'stream';
 import { ValidatorResult } from 'jsonschema';

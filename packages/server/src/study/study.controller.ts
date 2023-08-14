@@ -16,7 +16,7 @@ import { EntryService } from '../entry/entry.service';
 import { Study } from '../study/study.schema';
 import { StudyService } from '../study/study.service';
 import { EntryStudyService } from '../entrystudy/entrystudy.service';
-import { StudyCreation } from 'shared/dtos/study.dto';
+import { StudyCreation } from '../../../shared/dtos/study.dto';
 import { UserStudy } from '../userstudy/userstudy.schema';
 import { UserStudyService } from '../userstudy/userstudy.service';
 import { UserService } from '../user/user.service';
@@ -30,8 +30,6 @@ import { UserContext } from '../user/user.decorator';
 import { Organization } from '../organization/organization.schema';
 import { OrganizationContext } from '../organization/organization.decorator';
 import { DatasetService } from '../dataset/dataset.service';
-import { Entry } from '../entry/entry.schema';
-import { EntryStudy } from 'src/entrystudy/entrystudy.schema';
 
 @Controller('/api/study')
 export class StudyController {

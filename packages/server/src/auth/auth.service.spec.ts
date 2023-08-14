@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserCredentials, UserSignup } from 'shared/dtos/user.dto';
+import { UserCredentials, UserSignup } from '../../../shared/dtos/user.dto';
 import { User } from '../user/user.schema';
 import { AuthService } from './auth.service';
 import { hashSync } from 'bcrypt';
