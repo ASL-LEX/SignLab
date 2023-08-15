@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  graphqlEndpoint: 'http://localhost:3002/graphql'
+  graphqlEndpoint: 'http://localhost:3002/graphql',
+  aslLexID: '64b15233e535bc69dc95b92f'
 };
 
 /*
