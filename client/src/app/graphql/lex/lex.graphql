@@ -1,0 +1,10 @@
+query lexiconSearch($lexicon: String!, $search: String!) {
+  lexiconSearch(lexicon: $lexicon, search: $search) {
+    key,
+    primary,
+    lexicon,
+    video,
+    associates,
+    fields
+  }
+}
