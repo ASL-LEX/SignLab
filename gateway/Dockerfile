@@ -1,4 +1,4 @@
-FROM node:16-alpine AS NIST
+FROM node:18-alpine
 
 # Copy over the source
 WORKDIR /usr/src/gateway
@@ -8,7 +8,7 @@ RUN apk update && \
     npm run build
 
 # Expose the endpoint
-EXPOSE 3001
+EXPOSE 3002
 
 # Run the production build
 CMD npm run start:prod

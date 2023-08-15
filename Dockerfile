@@ -1,4 +1,4 @@
-FROM node:16-alpine AS signlab
+FROM node:18-alpine AS signlab
 
 # Copy over the source
 WORKDIR /usr/src/signlab
