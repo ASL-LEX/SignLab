@@ -1,5 +1,5 @@
 overwrite: true
-schema: http://localhost:3002/graphql
+schema: https://signlab-gateway-staging.sail.codes/graphql
 documents: src/app/graphql/**/*.graphql
 generates:
   src/app/graphql/graphql.ts:
