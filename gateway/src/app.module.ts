@@ -4,7 +4,6 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { join } from 'path';
 
 @Module({
   imports: [
@@ -16,10 +15,6 @@ import { join } from 'path';
       inject: [ConfigService],
       driver: ApolloGatewayDriver,
       useFactory: async (configService: ConfigService) => ({
-        autoSchemaFile: {
-          path: join(process.cwd(), './schema.gql'),
-          federation: 2
-        },
         gateway: {
           buildService: ({ url }) => {
             return new RemoteGraphQLDataSource({
