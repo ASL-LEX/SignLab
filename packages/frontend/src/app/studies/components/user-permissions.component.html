@@ -1,0 +1,73 @@
+<div class="user-grid">
+  <table mat-table [dataSource]="users" class="mat-elevate-z8" *ngIf="activeStudyID && activeProjectID">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let user">{{user.user.name}}</td>
+    </ng-container>
+
+    <!-- Username Column -->
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>Username</th>
+      <td mat-cell *matCellDef="let user">{{user.user.username}}</td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{user.user.email}}</td>
+    </ng-container>
+
+    <!-- Study Admin Access -->
+    <ng-container matColumnDef="studyAdmin">
+      <th mat-header-cell *matHeaderCellDef>Study Admin</th>
+      <td mat-cell *matCellDef="let user">
+        <mat-slide-toggle
+          (change)="toggleStudyAdmin({user: user.user, change: $event})"
+          [checked]="user.user.roles.studyAdmin[activeStudyID] || user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+          [disabled]="user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner || user.user._id == currentUser._id"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <!-- Study View -->
+    <ng-container matColumnDef="studyVisible">
+      <td mat-header-cell *matHeaderCellDef>Study Visible</td>
+      <td mat-cell *matCellDef="let user">
+        <mat-slide-toggle
+          (change)="toggleVisibility({ user: user.user, change: $event })"
+          [checked]="user.user.roles.studyVisible[activeStudyID] || user.user.roles.studyAdmin[activeStudyID] || user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+          [disabled]="user.user.roles.studyAdmin[activeStudyID] || user.user.roles.projectAdmin[activeProjectID] || user.user.roles.owner"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <!-- Contribute Acccess -->
+    <ng-container matColumnDef="contribute">
+      <th mat-header-cell *matHeaderCellDef>Contribute</th>
+      <td mat-cell *matCellDef="let user">
+        <mat-slide-toggle
+          (change)="toggleContribute({user: user.user, change: $event})"
+          [checked]="user.user.roles.studyContributor[activeStudyID]"
+        ></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+    <!-- Training Download -->
+    <ng-container matColumnDef="taggingTrainingResults">
+      <th mat-header-cell *matHeaderCellDef>Study Tagging Training</th>
+      <td mat-cell *matCellDef="let user">
+        <button mat-raised-button
+          [disabled]="user.trainingEntryStudies.length != 0"
+          (click)="downloadUserTraining(user.user)"
+        >
+          {{user.trainingEntryStudies.length == 0 ? "Download Results" : "Training Incomplete"}}
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+</div>

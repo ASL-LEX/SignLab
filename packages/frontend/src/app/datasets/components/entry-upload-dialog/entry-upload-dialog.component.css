@@ -1,0 +1,7 @@
+button {
+  margin: 1rem;
+}
+
+::ng-deep .mat-select-value {
+  color: black;
+}

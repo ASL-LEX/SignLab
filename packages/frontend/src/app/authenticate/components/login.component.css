@@ -1,0 +1,86 @@
+.login-container {
+  width: 100%;
+}
+
+.login-card {
+  max-width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.label {
+  padding-top: 0px;
+  font-size: 18px;
+  margin-top: 0px;
+}
+
+.form-control {
+  color: #d2476b;
+  border: none;
+  border-bottom: 3px solid #67D6DB;
+  border-radius: 0.0rem;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  font-size: 16px;
+}
+
+*:focus {
+  outline: none;
+}
+
+.button {
+  background-color: white;
+  color:teal;
+  border-color: teal;
+  margin-top: 1%;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: teal;
+  color: white;
+}
+
+.button_back {
+  background-color: white;
+  color:grey;
+  border-color:grey;
+  margin-top: 2%;
+  margin-left: 2%;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.button_back:hover {
+  background-color: grey;
+  color: black;
+}
+
+mat-form-field {
+  width: 70%;
+  margin: 1rem;
+}
+
+mat-select {
+  width: 100%;
+  color: black;
+}
+
+input {
+  width: 70%;
+  margin: 1rem;
+}
+
+#browserCompatibility {
+  margin-top:5%;
+  margin: 1rem;
+}
+
+#browserCompatibility a {
+  color: #89dbb4;
+}
+
+.mat-select-value {
+  color: black;
+}

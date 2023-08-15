@@ -1,0 +1,25 @@
+<mat-list>
+  <div>
+    <h2>{{ header }}</h2>
+  </div>
+
+  <!-- List of Options -->
+  <mat-list-item *ngFor="let option of options">
+    <div fxLayout fxFlex>
+      <!-- Handles displaying check mark for selected option -->
+      <mat-icon *ngIf="option.value === selected.value; else notSelected" fxFlex="10">check</mat-icon>
+      <ng-template #notSelected><span fxFlex="10"></span></ng-template>
+
+      <!-- Option Select -->
+      <button
+        mat-stroked-button
+        fxFlex="90"
+        (click)="selectedChange.emit(option)"
+        [attr.data-cy]="option.name + '-button'"
+      >
+        {{ option.name }}
+      </button>
+    </div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

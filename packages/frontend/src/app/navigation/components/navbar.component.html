@@ -1,0 +1,46 @@
+<div fxLayout="column" fxLayoutAlign="start" class="navbar">
+  <h1 class="software-title">ASL-LEX SignLab</h1>
+
+  <!-- Study Selection -->
+  <environment-select *ngIf="authService.isAuthenticated()"></environment-select>
+
+  <mat-card class="navigation-body">
+    <mat-card-header>
+      <mat-card-title>Navigation</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-nav-list>
+        <div *ngFor="let navItem of navItems">
+          <mat-expansion-panel class="navbar-element" *ngIf="navItem.visible">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <p class="nav-link navbar-element">{{navItem.name}}</p>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list>
+              <div *ngFor="let sublink of navItem.sublinks">
+                <a mat-list-item
+                   *ngIf="sublink.visible"
+                   routerLink="{{sublink.url}}"
+                   routerLinkActive="active-link"
+                   class="nav-link"
+                   >{{sublink.name}}</a>
+              </div>
+            </mat-nav-list>
+          </mat-expansion-panel>
+        </div>
+
+        <!-- Login/Logout -->
+        <a mat-list-item
+           routerLink="/auth"
+           routerLinkActive="active-link"
+           *ngIf="!authService.isAuthenticated()"
+           class="nav-link navbar-element">Login</a>
+        <a mat-list-item
+           *ngIf="authService.isAuthenticated()"
+           class="nav-link navbar-element" (click)="logout()">Logout</a>
+      </mat-nav-list>
+    </mat-card-content>
+  </mat-card>
+</div>

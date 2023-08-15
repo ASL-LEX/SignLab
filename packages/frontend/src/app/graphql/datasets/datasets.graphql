@@ -1,0 +1,74 @@
+query getDatasets {
+  getDatasets {
+    id,
+    name,
+    description,
+    creator {
+      _id,
+      name,
+      email,
+      username,
+      roles,
+      organization {
+        _id,
+        name
+      }
+    },
+    projectAccess
+  }
+}
+
+query getDatasetsByProject($project: ID!) {
+  getDatasetsByProject(project: $project) {
+    id,
+    name,
+    description,
+    creator {
+      _id,
+      name,
+      email,
+      username,
+      roles,
+      organization {
+        _id,
+        name
+      }
+    },
+    projectAccess
+  }
+}
+
+query datasetExists($name: String!) {
+  datasetExists(name: $name)
+}
+
+mutation createDataset($datasetCreate: DatasetCreate!) {
+  createDataset(datasetCreate: $datasetCreate) {
+    id,
+    name,
+    description,
+    creator {
+      _id,
+      name,
+      email,
+      username,
+      roles,
+      organization {
+        _id,
+        name
+      }
+    },
+  }
+}
+
+mutation changeProjectAccess($projectAccessChange: ProjectAccessChange!) {
+  changeProjectAccess(projectAccessChange: $projectAccessChange)
+}
+
+mutation changeDatasetName($dataset: ID!, $newName: String!) {
+  changeDatasetName(dataset: $dataset, newName: $newName)
+}
+
+mutation changeDatasetDescription($dataset: ID!, $newDescription: String!) {
+  changeDatasetDescription(dataset: $dataset, newDescription: $newDescription)
+}

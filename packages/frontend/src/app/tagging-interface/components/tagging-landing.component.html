@@ -1,0 +1,59 @@
+<div *ngIf="(studyService.activeStudy | async) as activeStudy; else loading">
+  <mat-card *ngIf="userStudy">
+    <mat-card-title>Study: {{activeStudy!.name}}</mat-card-title>
+    <mat-card-content>
+      <div *ngIf="activeView == 'info'">
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+          <!-- Enter Training View, shown when the user doesn't have access -->
+          <div *ngIf="!userStudy!.user.roles.studyContributor[userStudy.study._id!]">
+            <h2> Study Training </h2>
+
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
+
+            <!-- Message displayed when training is complete -->
+            <p *ngIf="userStudy!.trainingEntryStudies.length == 0">
+              Training Complete! Reach out to your study administrator to get access to tagging
+            </p>
+
+            <button mat-stroked-button
+              (click)="setView('training')"
+              [disabled]="userStudy!.trainingEntryStudies.length == 0">Enter Training</button>
+          </div>
+
+          <!-- Enter Tagging View, shown when the user has access to tagging -->
+          <div *ngIf="userStudy.user.roles.studyContributor[userStudy.study._id!]">
+            <h2> Study Tagging </h2>
+
+            <h3> <b>Study: </b> {{ activeStudy!.name }} </h3>
+            <h4> <b>Description: </b> {{ activeStudy!.description }} </h4>
+            <h4> <b>Instructions: </b> {{ activeStudy!.instructions }} </h4>
+
+            <!-- Navigation into tagging -->
+            <button mat-stroked-button
+              (click)="setView('tagging')"
+              [disabled]="!userStudy!.user.roles.studyContributor[userStudy.study._id!]">Enter Tagging</button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeView == 'tagging'">
+        <button mat-stroked (click)="setView('info')">Exit Tagging</button>
+        <tagging-interface
+          [study]="activeStudy!"
+        ></tagging-interface>
+      </div>
+
+      <div *ngIf="activeView == 'training'">
+        <button mat-stroked (click)="setView('info')">Exit Training</button>
+
+        <tagging-interface
+          [study]="activeStudy!"
+          [isTraining]="true"></tagging-interface>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+<ng-template #loading>Loading...</ng-template>

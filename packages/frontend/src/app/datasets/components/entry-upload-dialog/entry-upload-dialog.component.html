@@ -1,0 +1,70 @@
+<div>
+  <form>
+    <h1>New Entry Upload</h1>
+
+    <mat-vertical-stepper [linear]="true">
+      <!-- Select dataset placeholder -->
+      <mat-step label="Select Dataset to Upload To" [stepControl]="datasetSelectControl">
+        <div fxLayout="row" fxLayoutAlign="space-around center">
+          <div>
+            <h2>Select Existing Dataset</h2>
+            <mat-form-field *ngIf="datasetService.datasets | async as datasets">
+              <mat-select
+                  placeholder="Select dataset"
+                  (selectionChange)="datasetSelection($event)"
+                  data-cy="datasetSelect"
+                  [compareWith]="selectCompareWith"
+                  [ngModel]="dataset"
+                  [ngModelOptions]="{standalone: true}"
+                >
+                <mat-option *ngFor="let dataset of datasets" [value]="dataset">
+                  {{ dataset.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- CSV Upload -->
+      <mat-step label="Upload Information on Entries" [stepControl]="metadataUploadControl">
+        <div>
+          <input type="file" style="display: none" (change)='uploadCSV($event)' #csvUpload data-cy="csvFileUploadInput" accept=".csv">
+          <button mat-raised-button
+                  (click)='csvUpload.click()'
+                  matTooltip="Upload information on the entries"
+                  data-cy="uploadCSVButton">Upload CSV</button>
+          <button mat-icon-button
+                  matTooltip="Download a template for uploading entry information"
+                  (click)='downloadCSVTemplate()'>
+            <mat-icon>play_for_work</mat-icon>
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Video ZIP Upload -->
+      <mat-step label="Upload Entry Videos" [stepControl]="videoUploadControl">
+        <div>
+          <input type="file" style="display: none" (change)='uploadZIP($event)' #zipUpload data-cy="zipFileUploadInput" accept=".zip">
+          <button mat-raised-button
+                  (click)='zipUpload.click()'
+                  [disabled]="!csvUploadComplete"
+                  matTooltip="Upload files, the ZIP files should not contain folders"
+                  data-cy="uploadZIPButton">Upload Videos (ZIP)</button>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+
+
+    <!-- Error messages shown if the upload fails -->
+    <p [attr.data-cy]="'uploadStatusMessage'">
+    {{ uploadStatusMessage }}
+    </p>
+
+    <ul>
+      <li *ngFor="let error of errorLocations">
+        <p>{{ error.place }}: {{ error.message }}</p>
+      </li>
+    </ul>
+  </form>
+</div>
