@@ -5,8 +5,8 @@ import { HttpLink } from 'apollo-angular/http';
 import { setContext } from '@apollo/client/link/context';
 import { Router, RouterModule } from '@angular/router';
 import { onError } from '@apollo/client/link/error';
+import { environment } from '../environments/environment';
 
-const uri = `${window.location.protocol}//${window.location.host}/graphql`;
 export function createApollo(httpLink: HttpLink, router: Router): ApolloClientOptions<any> {
   // Logic to get the token from local storage
   const auth = setContext((_operation, _context) => {
@@ -34,7 +34,7 @@ export function createApollo(httpLink: HttpLink, router: Router): ApolloClientOp
   });
 
   return {
-    link: ApolloLink.from([auth, errorLink, httpLink.create({ uri })]),
+    link: ApolloLink.from([auth, errorLink, httpLink.create({ uri: environment.graphqlEndpoint })]),
     cache: new InMemoryCache()
   };
 }
