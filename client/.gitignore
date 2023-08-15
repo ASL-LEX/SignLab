@@ -49,4 +49,5 @@ ServiceAccountKey.json
 Thumbs.db
 
 src/environments/make-env.ts
+src/environments/environment.ts
 .env
