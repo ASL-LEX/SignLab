@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
 import { TagService } from '../../core/services/tag.service';
 

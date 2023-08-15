@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 import { firstValueFrom } from 'rxjs';
 

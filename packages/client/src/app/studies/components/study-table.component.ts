@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({

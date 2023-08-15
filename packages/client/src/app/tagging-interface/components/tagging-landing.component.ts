@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudyService } from '../../core/services/study.service';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SignLabHttpClient } from './http.service';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { User } from '../../graphql/graphql';
 
 /**

@@ -1,4 +1,4 @@
-import { Entry } from '../../../../../shared/dtos/entry.dto';
+import { Entry } from 'shared/dtos/entry.dto';
 
 /**
  * Information that is needed to display the table. The `isPartOfStudy` and

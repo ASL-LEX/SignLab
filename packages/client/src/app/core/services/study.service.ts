@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Project } from '../../../../../shared/dtos/project.dto';
-import { Study, StudyCreation } from '../../../../../shared/dtos/study.dto';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
-import { UserStudy } from '../../../../../shared/dtos/userstudy.dto';
+import { Project } from 'shared/dtos/project.dto';
+import { Study, StudyCreation } from 'shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
+import { UserStudy } from 'shared/dtos/userstudy.dto';
 import { SignLabHttpClient } from './http.service';
 import { ProjectService } from './project.service';
 import { firstValueFrom } from 'rxjs';

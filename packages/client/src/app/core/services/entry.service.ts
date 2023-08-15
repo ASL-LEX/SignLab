@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SaveAttempt, Entry } from '../../../../../shared/dtos/entry.dto';
-import { EntryStudy } from '../../../../../shared/dtos/entrystudy.dto';
+import { SaveAttempt, Entry } from 'shared/dtos/entry.dto';
+import { EntryStudy } from 'shared/dtos/entrystudy.dto';
 import { SignLabHttpClient } from './http.service';
-import { MetadataDefinition } from '../../../../../shared/dtos/entry.dto';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { MetadataDefinition } from 'shared/dtos/entry.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { Dataset, User } from '../../graphql/graphql';
 
 /**

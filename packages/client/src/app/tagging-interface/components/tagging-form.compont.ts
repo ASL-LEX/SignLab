@@ -14,7 +14,7 @@ import {
   AslLexSignBankField
 } from '../../shared/components/custom-fields/asl-lex-field.component';
 import { createAjv } from '@jsonforms/core';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import {
   UserVideoOption,
   userVideoOptionRendererTester

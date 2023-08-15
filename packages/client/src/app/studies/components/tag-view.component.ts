@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { take } from 'rxjs/operators';
-import { Study } from '../../../../../shared/dtos/study.dto';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { Study } from 'shared/dtos/study.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import { StudyService } from '../../core/services/study.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Tag } from '../../../../../shared/dtos/tag.dto';
+import { Tag } from 'shared/dtos/tag.dto';
 import { SignLabHttpClient } from '../../core/services/http.service';
 
 /**

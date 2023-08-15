@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Project } from '../../../../../shared/dtos/project.dto';
+import { Project } from 'shared/dtos/project.dto';
 import { SelectDialogOptions } from './selector-dialog.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProjectService } from '../../core/services/project.service';

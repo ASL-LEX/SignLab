@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EntryTableElement, EntryTableToggleChange } from '../../models/entry-table-element';
 import { EntryService } from '../../../core/services/entry.service';
-import { Study } from '../../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { Dataset } from '../../../graphql/graphql';
 
 /**

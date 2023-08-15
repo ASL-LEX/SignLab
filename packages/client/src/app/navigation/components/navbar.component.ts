@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { ProjectService } from '../../core/services/project.service';
 import { StudyService } from '../../core/services/study.service';
 import { AuthService } from '../../core/services/auth.service';
-import { Project } from '../../../../../shared/dtos/project.dto';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Project } from 'shared/dtos/project.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { User } from '../../graphql/graphql';
 
 interface NavElement {

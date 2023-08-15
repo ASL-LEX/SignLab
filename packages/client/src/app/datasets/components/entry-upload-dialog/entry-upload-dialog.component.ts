@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { EntryService } from '../../../core/services/entry.service';
-import { LocationInfo } from '../../../../../../shared/dtos/entry.dto';
+import { LocationInfo } from 'shared/dtos/entry.dto';
 import { ManualControl } from '../../../shared/helpers/manual-control';
 import { Dataset } from '../../../graphql/graphql';
 import { MatSelectChange } from '@angular/material/select';

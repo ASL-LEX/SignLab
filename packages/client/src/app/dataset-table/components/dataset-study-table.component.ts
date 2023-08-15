@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Study } from '../../../../../shared/dtos/study.dto';
+import { Study } from 'shared/dtos/study.dto';
 import { DatasetService } from '../../core/services/dataset.service';
 
 /**

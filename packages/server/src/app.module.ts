@@ -45,7 +45,7 @@ if (process.env.NODE_ENV) {
   imports: [
     configModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../../../dist/'),
+      rootPath: join(__dirname, '../../../../../packages/frontend/dist/frontend'),
       exclude: ['/api*', '/graphql']
     }),
     MongooseModule.forRootAsync({
