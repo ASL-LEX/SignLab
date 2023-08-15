@@ -1,8 +1,9 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { EnvironmentSettings } from './settings';
 
-export const environment = {
+export const environment: EnvironmentSettings = {
   production: false,
   graphqlEndpoint: 'http://localhost:3002/graphql',
   aslLexID: '64b15233e535bc69dc95b92f'
