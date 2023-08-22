@@ -18,6 +18,7 @@ services:
     restart: alawys
     depends_on:
       - signlab
+    ports: ["6002:3000"]
 volumes:
   signlab:
     external: true
