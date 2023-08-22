@@ -21,11 +21,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push SignLab
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: hicsail/signlab:${{github.ref_name}},hicsail/signlab:latest
+
+      - name: Build and push Gateway
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          file: gateway/Dockerfile
+          tags: hicsail/signlab-gateway:${{github.ref_name}},hicsail/signlab-gateway:latest
 
       - name: Push to Prod
         uses: fjogeleit/http-request-action@v1
