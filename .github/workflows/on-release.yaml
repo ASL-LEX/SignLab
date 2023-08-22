@@ -26,6 +26,10 @@ jobs:
         with:
           push: true
           tags: hicsail/signlab:${{github.ref_name}},hicsail/signlab:latest
+          build-args: |
+            PRODUCTION="true"
+            GRAPHQL_ENDPOINT=${{ secrets.GRAPHQL_ENDPOINT_PRODUCTION }}
+            ASL_LEX_ID=${{ secrets.ASL_LEX_ID_PRODUCTION }}
 
       - name: Build and push Gateway
         uses: docker/build-push-action@v3

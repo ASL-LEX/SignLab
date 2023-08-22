@@ -141,3 +141,13 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: false
+          build-args: |
+            PRODUCTION="false"
+            GRAPHQL_ENDPOINT=${{ secrets.GRAPHQL_ENDPOINT }}
+            ASL_LEX_ID=${{ secrets.ASL_LEX_ID }}
+
+      - name: Verify Build Works (Gateway)
+        uses: docker/build-push-action@v3
+        with:
+          file: gatway/Dockerfile
+          push: false
