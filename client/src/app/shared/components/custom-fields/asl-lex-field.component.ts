@@ -64,6 +64,9 @@ export class AslLexSignBankField extends JsonFormsControl implements OnInit {
    * the AslLexService to get the results.
    */
   async searchUpdate(search: string) {
+    if (search.length == 0) {
+      return;
+    }
     const signs = await this.aslLexService.getAslLexView(search);
 
     // Convert the sign data into options for the videos select field

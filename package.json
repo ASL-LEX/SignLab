@@ -18,7 +18,8 @@
   "workspaces": [
     "server",
     "client",
-    "shared"
+    "shared",
+    "gateway"
   ],
   "devDependencies": {
     "@types/mocha": "^9.1.1",

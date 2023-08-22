@@ -47,3 +47,6 @@ ServiceAccountKey.json
 # System Files
 .DS_Store
 Thumbs.db
+
+src/environments/environment.ts
+.env

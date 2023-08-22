@@ -1,5 +1,5 @@
 overwrite: true
-schema: ../server/schema.gql
+schema: https://signlab-staging-gateway.sail.codes/graphql
 documents: src/app/graphql/**/*.graphql
 generates:
   src/app/graphql/graphql.ts:

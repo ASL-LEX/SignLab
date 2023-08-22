@@ -25,7 +25,7 @@ import { BucketModule } from './bucket/bucket.module';
 import { ProjectModule } from './project/project.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { OrganizationModule } from './organization/organization.module';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
 
 // By default just use OS provided environment variables
 let configModule = ConfigModule.forRoot({
@@ -55,10 +55,12 @@ if (process.env.NODE_ENV) {
       }),
       inject: [ConfigService]
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), './schema.gql'),
-
+    GraphQLModule.forRoot<ApolloFederationDriverConfig>({
+      driver: ApolloFederationDriver,
+      autoSchemaFile: {
+        path: join(process.cwd(), './schema.gql'),
+        federation: 2
+      },
       playground: true
     }),
     AuthModule,

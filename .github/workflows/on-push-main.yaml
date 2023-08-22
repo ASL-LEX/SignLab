@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Build And Push to Docker Hub
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -21,11 +26,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push SignLab
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: hicsail/signlab:unstable
+          build-args: |
+            PRODUCTION="false"
+            GRAPHQL_ENDPOINT=${{ secrets.GRAPHQL_ENDPOINT }}
+            ASL_LEX_ID=${{ secrets.ASL_LEX_ID }}
+
+      - name: Build and push Gateway
+        uses: docker/build-push-action@v3
+        with:
+          context: ./gateway
+          push: true
+          tags: hicsail/signlab-gateway:unstable
 
       - name: Push to Staging
         uses: fjogeleit/http-request-action@v1

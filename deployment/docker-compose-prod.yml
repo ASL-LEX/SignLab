@@ -13,6 +13,14 @@ services:
     ports: ["6001:3000"]
     env_file:
       - ../stack.env
+  gateway:
+    image: hicsail/signlab-gateway:latest
+    restart: always
+    depends_on:
+      - signlab
+    ports: ["6002:3000"]
+    env_file:
+      - ../stack.env
 volumes:
   signlab:
     external: true
