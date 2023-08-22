@@ -26,7 +26,7 @@ export class AslLexService {
   async getAslLexView(search: string): Promise<TagSearchResult[]> {
     const searchResult = await firstValueFrom(this.lexiconSearchGQL.fetch({ lexicon: environment.aslLexID, search }));
     if (searchResult.data) {
-      return searchResult.data.lexiconSearch.map(lexiconEntry => ({
+      return searchResult.data.lexiconSearch.map((lexiconEntry) => ({
         code: lexiconEntry.key,
         englishTag: lexiconEntry.primary,
         videoURL: lexiconEntry.video
