@@ -88,6 +88,9 @@ jobs:
         run: npm install
         shell: bash
 
+      - name: Introspection
+        run: npm run introspection
+
       - name: Build
         run: npm run build:prod --workspace=client
 
