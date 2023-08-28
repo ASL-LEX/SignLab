@@ -6,11 +6,11 @@ services:
     volumes:
       - signlab-staging:/data/db
   signlab:
-    image: hicsail/signlab:unstable
+    image: hicsail/signlab-server:unstable
     restart: always
     depends_on:
       - mongo
-    ports: ["6000:3000"]
+    ports: ["6003:3000"]
     env_file:
       - ../stack.env
   gateway:
@@ -19,6 +19,12 @@ services:
     depends_on:
       - signlab
     ports: ["6001:3002"]
+    env_file:
+      - ../stack.env
+  signlab-client:
+    image: hicsail/signlab-client:unstable
+    restart: always
+    ports: ["6002:80"]
     env_file:
       - ../stack.env
 volumes:

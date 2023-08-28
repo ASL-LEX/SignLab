@@ -21,10 +21,8 @@ import configuration from './config/configuration';
               url,
               willSendRequest({ request, context }) {
                 if (context.req && context.req.headers) {
-                  // Copy over all headers
-                  for (const [key, value] of Object.entries(context.req.headers)) {
-                    request.http!.headers.set(key, value as string);
-                  }
+                  // Copy over authentication
+                  request.http!.headers.set('authorization', context.req.headers.authorization);
                 }
               }
             });

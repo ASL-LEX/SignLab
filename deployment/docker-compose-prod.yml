@@ -5,8 +5,8 @@ services:
     restart: "always"
     volumes:
       - signlab:/data/db
-  signlab:
-    image: hicsail/signlab:latest
+  signlab-server:
+    image: hicsail/signlab-server:latest
     restart: always
     depends_on:
       - mongo
@@ -19,6 +19,12 @@ services:
     depends_on:
       - signlab
     ports: ["6002:3000"]
+    env_file:
+      - ../stack.env
+  signlab-client:
+    image: hicsail/signlab-client:latest
+    restart: always
+    ports: ["6003:80"]
     env_file:
       - ../stack.env
 volumes:

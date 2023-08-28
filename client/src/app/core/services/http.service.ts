@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpContext, HttpParams } from '@angular/commo
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { TokenService } from './token.service';
+import { environment } from '../../../environments/environment';
 
 /**
  * Interface which represents the values that can be stored in the options
@@ -43,7 +44,7 @@ export class SignLabHttpClient {
   private baseUrl: string;
 
   constructor(private http: HttpClient, private tokenService: TokenService) {
-    const baseUrl = location.origin;
+    const baseUrl = environment.backendURL;
     // Ensure the url does not have a trailing '/'
     if (baseUrl.endsWith('/')) {
       this.baseUrl = baseUrl.substring(0, baseUrl.length - 1);

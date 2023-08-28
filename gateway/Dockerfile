@@ -3,8 +3,7 @@ FROM node:18-alpine
 # Copy over the source
 WORKDIR /usr/src/gateway
 COPY . .
-RUN apk update && \
-    npm install && \
+RUN npm install && \
     npm run build
 
 # Expose the endpoint
