@@ -4,17 +4,11 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import configuration from './config/configuration';
-import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration]
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../dist'),
-      exclude: ['/graphql']
     }),
     GraphQLModule.forRootAsync<ApolloGatewayDriverConfig>({
       imports: [ConfigModule],
