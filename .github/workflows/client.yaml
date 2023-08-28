@@ -15,12 +15,9 @@ on:
       - main
 
 jobs:
-  lint:
+  lint-test:
     runs-on: ubuntu-latest
-    name: Check for Linting Errors
-    defaults:
-      run:
-        working-directory: client
+    name: Check for Linting Errors and Unit Test Errors
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -33,44 +30,20 @@ jobs:
           node-version: 18
 
       - name: NPM Install
-        run: npm install --only-dev
+        run: npm install --force
         shell: bash
 
       - name: Build GraphQL Code
         run: npm run introspection
 
       - name: Check for Linting Issues
-        run: npm run lint
+        run: npm run lint --workspace=client
 
       - name: Check for Prettier Issues
-        run: npm run prettier
-
-  unit-tests:
-    runs-on: ubunut-latest
-    name: Unit Tests
-    defaults:
-      run:
-        working-directory: client
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: NPM Install
-        run: npm install --only-dev
-        shell: bash
-
-      - name: Build GraphQL Code
-        run: npm run introspection
+        run: npm run prettier --workspace=client
 
       - name: Run unit tests for the client
-        run: npm run test
+        run: npm run test --workspace=client
 
   docker-build:
     runs-on: ubuntu-latest

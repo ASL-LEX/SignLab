@@ -18,9 +18,6 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     name: Check for Linting Errors
-    defaults:
-      run:
-        working-directory: server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -33,38 +30,17 @@ jobs:
           node-version: 18
 
       - name: NPM Install
-        run: npm install --only-dev
+        run: npm install
         shell: bash
 
       - name: Check for Linting Issues
-        run: npm run lint
+        run: npm run lint --workspace=server
 
       - name: Check for Prettier Issues
-        run: npm run prettier
-
-  unit-tests:
-    runs-on: ubunut-latest
-    name: Unit Tests
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: NPM Install
-        run: npm install --only-dev
-        shell: bash
+        run: npm run prettier --workspace=server
 
       - name: Run unit tests
-        run: npm run test
+        run: npm run test --workspace=server
 
   docker-build:
     runs-on: ubuntu-latest
