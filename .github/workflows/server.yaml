@@ -69,9 +69,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
-    defaults:
-      run:
-        working-directory: server
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -86,7 +83,7 @@ jobs:
         shell: bash
 
       - name: Build
-        run: npm run build:prod
+        run: npm run build:prod --workspace=server
 
   docker-build:
     runs-on: ubuntu-latest

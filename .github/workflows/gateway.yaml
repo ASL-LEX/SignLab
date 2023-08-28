@@ -84,7 +84,7 @@ jobs:
       - name: Build & Push Docker Test Build
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: ./gateway/
           push: ${{ github.event_name != 'pull_request' }}
           tags: hicsail/signlab-gateway:unstable
 
@@ -92,7 +92,7 @@ jobs:
         uses: docker/build-push-action@v4
         if: startsWith(github.ref, 'refs/tags/v')
         with:
-          context: .
+          context: ./gateway/
           push: ${{ github.event_name != 'pull_request' }}
           tags: hicsail/signlab-gateway:latest,hicsail/signlab-gateway:${{github.ref_name}}
 
