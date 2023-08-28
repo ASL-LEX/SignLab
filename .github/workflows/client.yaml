@@ -97,9 +97,6 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     name: Docker Build (and Deploy)
-    defaults:
-      run:
-        working-directory: client
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -115,6 +112,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: client/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: hicsail/signlab-client:unstable
           build-args: |
@@ -127,6 +125,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         with:
           context: .
+          file: client/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: hicsail/signlab-client:latest,hicsail/signlab-client:${{github.ref_name}}
           build-args: |

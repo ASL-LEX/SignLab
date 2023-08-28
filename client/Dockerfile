@@ -1,7 +1,10 @@
 ## Angular Builder
 FROM node:18-alpine as builder
 
-WORKDIR /app
+# NOTE: Building has to take place at the top level due to the use of the
+#       shared package. In the future, when the shared package is no longer
+#       needed, building can take place directly in the client package
+WORKDIR /app/
 COPY . .
 
 # Take in build arguments
@@ -14,14 +17,14 @@ ENV GRAPHQL_ENDPOINT ${GRAPHQL_ENDPOINT}
 ENV ASL_LEX_ID ${ASL_LEX_ID}
 
 # Build code
-RUN npm install &&\
+RUN npm install --force &&\
     npm run build:prod
 
 ## NGINX Server
 FROM nginx:1.25-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY client/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/client/dist /usr/share/nginx/html
 
 CMD ["/bin/bash", "-c", "nginx -g 'daemon off;'"]

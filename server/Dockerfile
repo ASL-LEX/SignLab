@@ -1,7 +1,7 @@
 FROM node:18-alpine AS signlab
 
 # Copy over the source
-WORKDIR /usr/src/signlab
+WORKDIR /app/
 COPY . .
 
 # Install required packages and build for prod
@@ -10,4 +10,4 @@ RUN npm install && \
 
 EXPOSE 3000
 
-CMD npm run start:prod
+CMD npm run start:prod --workspace=server
