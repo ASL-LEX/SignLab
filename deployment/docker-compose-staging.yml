@@ -21,6 +21,12 @@ services:
     ports: ["6001:3002"]
     env_file:
       - ../stack.env
+  signlab-client:
+    image: hicsail/signlab-client:unstable
+    restart: always
+    ports: ["6003:80"]
+    env_file:
+      - ../stack.env
 volumes:
   signlab-staging:
     external: true
