@@ -92,7 +92,7 @@ jobs:
         shell: bash
 
       - name: Build
-        run: npm run build
+        run: npm run build:prod
 
   docker-build:
     runs-on: ubuntu-latest
