@@ -18,7 +18,8 @@ const saveEnvironmentFile = async () => {
     export const environment = {
       production: '${process.env.PRODUCTION || false}',
       graphqlEndpoint: '${process.env.GRAPHQL_ENDPOINT}',
-      aslLexID: '${process.env.ASL_LEX_ID}'
+      aslLexID: '${process.env.ASL_LEX_ID}',
+      backendURL: '${process.env.BACKEND_URL}'
     };
   `;
 
