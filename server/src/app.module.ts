@@ -2,7 +2,6 @@ import { join } from 'path';
 
 // Modules
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 
@@ -44,10 +43,6 @@ if (process.env.NODE_ENV) {
 @Module({
   imports: [
     configModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../dist/'),
-      exclude: ['/api*', '/graphql']
-    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
