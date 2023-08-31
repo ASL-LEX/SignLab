@@ -18,7 +18,7 @@ export class GCPBucketStorage extends BucketStorage {
     this.bucket = this.storage.bucket(bucketName);
   }
 
-  async objectUpload(path: string, target: string): Promise<BucketFile> {
+  async objectUpload(path: string, target: string, contentType: string): Promise<BucketFile> {
     const result = await this.bucket.upload(path, { destination: target });
     return { name: result[0].name, uri: result[0].cloudStorageURI.toString() };
   }

@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "config": "ts-node src/environments/make-env.ts",
-    "start:watch": "npm run config && ng build --watch --configuration development",
+    "start:watch": "npm run config && ng serve",
     "build:dev": "npm run config && ng build --configuration development",
     "build:prod": "npm run config && ng build --configuration production",
     "test": "npm run config && ng test --browsers=ChromeHeadless --watch=false --code-coverage",

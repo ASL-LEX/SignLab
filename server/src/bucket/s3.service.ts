@@ -28,7 +28,7 @@ export class S3Storage extends BucketStorage {
     this.baseURL = config.baseURL;
   }
 
-  async objectUpload(file: string | Buffer, target: string): Promise<BucketFile> {
+  async objectUpload(file: string | Buffer, target: string, contentType: string): Promise<BucketFile> {
     let body: Buffer;
     if (typeof file === 'string') {
       body = await readFile(file);
@@ -39,7 +39,8 @@ export class S3Storage extends BucketStorage {
     const params = {
       Bucket: this.bucketName,
       Key: target,
-      Body: body
+      Body: body,
+      ContentType: contentType
     };
     const result = await this.s3.putObject(params);
 

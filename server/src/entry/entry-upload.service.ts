@@ -295,10 +295,23 @@ export class EntryUploadService {
     };
     const entry = await this.entryService.createEntry(newEntry);
 
+
+    // Determine the content type from the file extension
+    const contentTypeMapping = new Map<string, string>([
+      ['webm', 'video/webm'],
+      ['mp4', 'video/mp4'],
+      ['ogg', 'video/ogg'],
+      ['png', 'image/png'],
+      ['jpg', 'image/jpg'],
+      ['jpeg', 'image/jpg'],
+      ['gif', 'image/gif']
+    ]);
+
     // Move the file into the bucket
     const uploadResult = await this.bucketService.objectUpload(
       `upload/entries/${entryUpload.filename}`,
-      `Entries/${entry._id!}.${fileExtension}`
+      `Entries/${entry._id!}.${fileExtension}`,
+      contentTypeMapping.get(fileExtension)!
     );
     this.entryService.updateMediaURL(entry, uploadResult.uri);
 

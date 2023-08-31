@@ -205,8 +205,17 @@ export class TagController {
 
     // Save the file
     const fileExtension = file.originalname.split('.').pop();
+    const contentTypeMapping = new Map<string, string>([
+      ['webm', 'video/webm'],
+      ['mp4', 'video/mp4'],
+      ['ogg', 'video/ogg'],
+      ['png', 'image/png'],
+      ['jpg', 'image/jpg'],
+      ['jpeg', 'image/jpg'],
+      ['gif', 'image/gif']
+    ]);
     const target = `Tag/videos/${existingTag._id}/${videoNumber}/${encodedField}.${fileExtension}`;
-    const video = await this.bucketService.objectUpload(file.buffer, target);
+    const video = await this.bucketService.objectUpload(file.buffer, target, contentTypeMapping.get(fileExtension!)!);
 
     // Only make entries of non-tagging videos
     if (!existingTag.isTraining) {

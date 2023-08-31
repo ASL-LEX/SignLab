@@ -21,9 +21,10 @@ export abstract class BucketStorage {
    *
    * @param file Path to the locally stored file to upload or the contents of the file
    * @param target The target location to store the file in the bucket
+   * @param contentType MimeType of the object
    * @return The generated bucket file
    */
-  abstract objectUpload(file: string | Buffer, target: string): Promise<BucketFile>;
+  abstract objectUpload(file: string | Buffer, target: string, contentType: string): Promise<BucketFile>;
 
   /**
    * Download a file from the bucket to local storage
